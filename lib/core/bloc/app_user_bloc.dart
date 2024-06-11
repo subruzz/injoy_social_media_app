@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/bloc/app_user_event.dart';
 import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/core/usecases/usecase.dart';
-import 'package:social_media_app/features/auth/domain/repostiories/auth_repository.dart';
 import 'package:social_media_app/features/auth/domain/usecases/current_user.dart';
 
 part 'app_user_state.dart';

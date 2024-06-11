@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
 class CustomTextField extends StatefulWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hintText;
   final TextInputType? keyboardType;
   final bool obsecureText;
@@ -13,11 +13,13 @@ class CustomTextField extends StatefulWidget {
   final bool showSuffixIcon;
   final bool showPrefixIcon;
   final int? maxLine;
+  final bool? readOnly;
   final void Function()? datePicker;
   const CustomTextField(
       {super.key,
       required this.controller,
       this.maxLine,
+      this.readOnly,
       required this.showPrefixIcon,
       required this.showSuffixIcon,
       required this.hintText,
@@ -44,6 +46,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: widget.readOnly??false,
       maxLines: widget.maxLine ?? 1,
       controller: widget.controller,
       obscureText: isPassWordVisible,

@@ -7,7 +7,7 @@ abstract interface class AuthRepository {
   Future<Either<Failure, AppUser>> login(String email, String password);
   Future<Either<Failure, AppUser>> signup(String email, String password);
   Future<Either<Failure, AppUser>> googleSignIn();
-  Future<Either<Failure, AppUser>> forgotPassword(String email);
+  Future<Either<Failure, Unit>> forgotPassword(String email);
   Future<Either<Failure, AppUser>> verifyPassword(
       String code, String newPassword);
   Future<Either<Failure, AppUser>> getCurrentUser();

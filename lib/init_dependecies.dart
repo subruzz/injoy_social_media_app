@@ -4,7 +4,13 @@ import 'package:social_media_app/features/auth/data/datasources/remote/auth_remo
 import 'package:social_media_app/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:social_media_app/features/auth/domain/repostiories/auth_repository.dart';
 import 'package:social_media_app/features/auth/domain/usecases/current_user.dart';
+import 'package:social_media_app/features/auth/domain/usecases/forgot_password.dart';
+import 'package:social_media_app/features/auth/domain/usecases/google_auth.dart';
+import 'package:social_media_app/features/auth/domain/usecases/login_user.dart';
 import 'package:social_media_app/features/auth/domain/usecases/user_signup.dart';
+import 'package:social_media_app/features/auth/presentation/bloc/forgot_password/forgot_password_bloc.dart';
+import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
+import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
 import 'package:social_media_app/features/profile/data/data_source/user_profile_data_source.dart';
 import 'package:social_media_app/features/profile/data/repository/profile_repository_impl.dart';
@@ -47,6 +53,30 @@ void _initAuth() {
         appUserBloc: serviceLocator(),
         userSignUp: serviceLocator(),
       ),
+    )
+    ..registerFactory(
+      () => GoogleAuthUseCase(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => GoogleAuthBloc(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => LoginUserUseCase(
+        authRepository: serviceLocator(),
+      ),
+    )
+    ..registerLazySingleton(
+      () => LoginBloc(
+        serviceLocator(),
+      ),
+    )
+    ..registerFactory(() => ForgotPasswordUseCase(serviceLocator()))
+    ..registerLazySingleton(
+      () => ForgotPasswordBloc(serviceLocator()),
     );
 }
 

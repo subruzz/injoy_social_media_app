@@ -4,8 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/bloc/app_user_bloc.dart';
 import 'package:social_media_app/core/bloc/app_user_event.dart';
+import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/theme/app_theme.dart';
+import 'package:social_media_app/features/auth/presentation/bloc/forgot_password/forgot_password_bloc.dart';
+import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
+import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:social_media_app/features/home.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/profile_bloc.dart';
@@ -47,9 +52,19 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) =>
                   serviceLocator<AppUserBloc>()..add(AppGetCurrentUser()),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<GoogleAuthBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<LoginBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<ForgotPasswordBloc>(),
             )
           ],
           child: MaterialApp(
+            scaffoldMessengerKey: Messenger.scaffoldKey,
             debugShowCheckedModeBanner: false,
             title: 'First Method',
             // You can use the library anywhere in the app even in theme
@@ -58,7 +73,7 @@ class MyApp extends StatelessWidget {
               listener: (context, state) {
                 if (state is UserModelNotFoundState) {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignupPage()));
+                      MaterialPageRoute(builder: (context) => LoginPage()));
                 }
                 if (state is AppUserLoggedIn) {
                   if (state.user.fullName == null) {

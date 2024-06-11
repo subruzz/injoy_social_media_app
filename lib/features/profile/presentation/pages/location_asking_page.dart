@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/home.dart';
 import 'package:social_media_app/features/profile/domain/entities/user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/profile_bloc.dart';
@@ -38,6 +40,7 @@ class LocationAskingPage extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -64,6 +67,34 @@ class LocationAskingPage extends StatelessWidget {
                         ),
                       )
                     ],
+                  ),
+                  AppSizedBox.sizedBox15H,
+                  TextField(
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      // _debouncer.run(
+                      //   () => locationBloc.add(
+                      //     SearchLocationsEvent(query: value),
+                      //   ),
+                      // );
+                    },
+                    // autofocus: true,
+                    textCapitalization: TextCapitalization.sentences,
+                    // cursorColor: AppDarkColor().primaryText,
+                    decoration: InputDecoration(
+                      prefixIcon: const Padding(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.white,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: AppDarkColor().fillColor,
+                      hintText: 'Search Manually...',
+                      // hintStyle: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                   Center(
                     child: Lottie.asset('assets/images/location_lottie.json',

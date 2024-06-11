@@ -22,15 +22,11 @@ class InterestSelectionPage extends StatefulWidget {
   State<InterestSelectionPage> createState() => _InterestSelectionPageState();
 }
 
-final List<String> selectedInterests = ['hola', 'mama  mia'];
-
 class _InterestSelectionPageState extends State<InterestSelectionPage> {
-  int _visibleInterestCount = 10; // Initially, show 10 interests
-
+  final ValueNotifier<bool> _isSelected = ValueNotifier(false);
+  final List<String> _selectedInterests = [];
   @override
   Widget build(BuildContext context) {
-    print(widget.profilePic);
-
     return BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
         if (state is ProfileInterestsSet) {
@@ -50,7 +46,7 @@ class _InterestSelectionPageState extends State<InterestSelectionPage> {
           onpressed: () {
             context.read<ProfileBloc>().add(
                   ProfileSetUpInterestsEvent(
-                      interests: selectedInterests,
+                      interests: _selectedInterests,
                       userProfile: widget.userProfil),
                 );
           },
@@ -104,36 +100,44 @@ class _InterestSelectionPageState extends State<InterestSelectionPage> {
                   Wrap(
                     spacing: 10.w,
                     runSpacing: 10.h,
-                    children:
-                        interests.take(_visibleInterestCount).map((interest) {
-                      return CustomChoiceChip(
-                        chipLabel: interest,
-                        isSelected: false,
-                        onSelected: (value) {},
+                    children: interests.map((interest) {
+                      return ValueListenableBuilder(
+                        valueListenable: _isSelected,
+                        builder: (context, isSelected, child) {
+                          return CustomChoiceChip(
+                            selected: _selectedInterests,
+                            chipLabel: interest,
+                            isSelected: isSelected,
+                            onSelected: (value) {
+                              // _isSelected.value = value;
+                              // print(_selectedInterests);
+                            },
+                          );
+                        },
                       );
                     }).toList(),
                   ),
-                  if (_visibleInterestCount <
-                      interests
-                          .length) // Show expand button if there are more interests
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _visibleInterestCount +=
-                                10; // Show next 10 interests
-                            if (_visibleInterestCount > interests.length) {
-                              _visibleInterestCount = interests
-                                  .length; // Ensure not to exceed the total interest count
-                            }
-                          });
-                        },
-                        child: const Text(
-                          'Show More',
-                        ),
-                      ),
-                    ),
+                  // if (_visibleInterestCount <
+                  //     interests
+                  //         .length) // Show expand button if there are more interests
+                  //   Padding(
+                  //     padding: const EdgeInsets.only(top: 20.0),
+                  //     child: TextButton(
+                  //       onPressed: () {
+                  //         setState(() {
+                  //           _visibleInterestCount +=
+                  //               10; // Show next 10 interests
+                  //           if (_visibleInterestCount > interests.length) {
+                  //             _visibleInterestCount = interests
+                  //                 .length; // Ensure not to exceed the total interest count
+                  //           }
+                  //         });
+                  //       },
+                  //       child: const Text(
+                  //         'Show More',
+                  //       ),
+                  //     ),
+                  //   ),
                 ],
               ),
             ),

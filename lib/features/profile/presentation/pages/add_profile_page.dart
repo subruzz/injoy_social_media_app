@@ -1,18 +1,20 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:social_media_app/core/const/app_sizedbox.dart';
-import 'package:social_media_app/core/extensions/datetime_to_string.dart';
+import 'package:social_media_app/core/extensions/number_only_string.dart';
+import 'package:social_media_app/core/utils/functions/date_picker.dart';
+import 'package:social_media_app/core/utils/functions/image_picker.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/wigets/text_field.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/profile_event.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/profile_state.dart';
 import 'package:social_media_app/features/profile/presentation/pages/interest_selection_page.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/next_button.dart';
+
+import '../../../../core/wigets/text_field.dart';
 
 class AddProfilePage extends StatefulWidget {
   const AddProfilePage({super.key});
@@ -22,44 +24,34 @@ class AddProfilePage extends StatefulWidget {
 }
 
 class _AddProfilePageState extends State<AddProfilePage> {
+  final ValueNotifier<File?> _selectedImage = ValueNotifier(null);
+  final ValueNotifier<TextEditingController> _selectedDate =
+      ValueNotifier(TextEditingController());
   final _nameController = TextEditingController();
   final _userNameController = TextEditingController();
   final _phoneNoController = TextEditingController();
   final _occupationController = TextEditingController();
   final _aboutController = TextEditingController();
-  File? _selectedImage;
-  String _selectedDate = '';
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  void selecteImage() async {
-    final ImagePicker imgPicker = ImagePicker();
-    final result = await imgPicker.pickImage(source: ImageSource.gallery);
+  Future<void> pickImage() async {
+    final result = await selecteImage();
     if (result != null) {
-      setState(() {
-        _selectedImage = File(result.path);
-      });
-    } else {
-      // User canceled the picker
-    }
+      _selectedImage.value = File(result.path);
+    } else {}
   }
 
   void sumbitData() {
-    if (_nameController.text.isEmpty || _userNameController.text.isEmpty) {
+    if (_formKey.currentState!.validate()) {
       return;
     }
   }
 
   Future<void> _pickDate() async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
+    final String? pickedDate = await pickDate(context);
     if (pickedDate != null) {
-      setState(() {
-        _selectedDate = pickedDate.toFormattedString();
-      });
+      _selectedDate.value.text = pickedDate;
     }
   }
 
@@ -83,38 +75,24 @@ class _AddProfilePageState extends State<AddProfilePage> {
         floatingActionButton: NextButton(
           onpressed: () {
             if (_formKey.currentState!.validate()) {
-              final String fullName = _nameController.text.trim();
-              final String userName = _userNameController.text.trim();
-              final String? phoneNumber = _phoneNoController.text.isNotEmpty
-                  ? _phoneNoController.text.trim()
-                  : null;
-              final String? occupation = _occupationController.text.isNotEmpty
-                  ? _occupationController.text.trim()
-                  : null;
-              final String? about = _aboutController.text.isNotEmpty
-                  ? _aboutController.text.trim()
-                  : null;
-
-              // Dispatch an event to the ProfileBloc to submit the data
               context.read<ProfileBloc>().add(
                     ProfileSetUpUserDetailsEvent(
-                      fullName: fullName,
-                      userName: userName,
-                      dob: _selectedDate, // Use the selected date
-                      phoneNumber:
-                          phoneNumber != null ? int.parse(phoneNumber) : null,
-                      occupation: occupation,
-                      about: about,
-                      profilePic: _selectedImage,
+                      fullName: _nameController.text.trim(),
+                      userName: _userNameController.text.trim(),
+                      dob: _selectedDate.value.text
+                          .trim(), // Use the selected date
+                      phoneNumber: _phoneNoController.text.isNotEmpty
+                          ? int.parse(_phoneNoController.text.trim())
+                          : null,
+                      occupation: _occupationController.text.isNotEmpty
+                          ? _occupationController.text.trim()
+                          : null,
+                      about: _aboutController.text.isNotEmpty
+                          ? _aboutController.text.trim()
+                          : null,
+                      profilePic: _selectedImage.value,
                     ),
                   );
-
-              // // Navigate to the next page
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) => InterestSelectionPage(),
-              //   ),
-              // );
             }
           },
         ),
@@ -135,20 +113,25 @@ class _AddProfilePageState extends State<AddProfilePage> {
                     Center(
                       child: Stack(
                         children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.black,
-                            radius: 70,
-                            backgroundImage: _selectedImage == null
-                                ? const AssetImage(
-                                    'assets/images/profile_icon.png')
-                                : FileImage(_selectedImage!),
+                          ValueListenableBuilder(
+                            valueListenable: _selectedImage,
+                            builder: (context, value, child) {
+                              return CircleAvatar(
+                                backgroundColor: Colors.black,
+                                radius: 70,
+                                backgroundImage: value == null
+                                    ? const AssetImage(
+                                        'assets/images/profile_icon.png')
+                                    : FileImage(value),
+                              );
+                            },
                           ),
                           Positioned(
                             right: 20,
                             bottom: 0,
                             child: GestureDetector(
                               onTap: () {
-                                selecteImage();
+                                pickImage();
                               },
                               child: Container(
                                 height: 20,
@@ -195,21 +178,41 @@ class _AddProfilePageState extends State<AddProfilePage> {
                         },
                         obsecureText: false),
                     AppSizedBox.sizedBox15H,
-                    CustomTextField(
-                        showPrefixIcon: false,
-                        controller: _nameController,
-                        showSuffixIcon: true,
-                        hintText: _selectedDate.isEmpty
-                            ? 'Date of birth'
-                            : _selectedDate,
-                        datePicker: _pickDate,
-                        obsecureText: false),
+                    ValueListenableBuilder(
+                      valueListenable: _selectedDate,
+                      builder: (context, value, child) {
+                        return CustomTextField(
+                          showPrefixIcon: false,
+                          readOnly: true,
+                          controller: value,
+                          showSuffixIcon: true,
+                          hintText: 'Date of birth',
+                          datePicker: _pickDate,
+                          obsecureText: false,
+                          validation: (val) {
+                            if (val!.isEmpty) {
+                              return "Please fill in this field";
+                            }
+                            return null;
+                          },
+                        );
+                      },
+                    ),
                     AppSizedBox.sizedBox15H,
                     CustomTextField(
                         showPrefixIcon: false,
                         controller: _phoneNoController,
                         showSuffixIcon: false,
                         hintText: 'Phone Number',
+                        validation: (val) {
+                          if (val!.isEmpty) {
+                            return null;
+                          }
+                          if (!val.isPhoneNo()) {
+                            return "Please fill in this field";
+                          }
+                          return null;
+                        },
                         obsecureText: false),
                     AppSizedBox.sizedBox15H,
                     CustomTextField(

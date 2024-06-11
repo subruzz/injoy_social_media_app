@@ -1,6 +1,6 @@
 extension StringExtension on String {
-  bool isNumeric() {
-    return double.tryParse(this) != null;
+  bool isPhoneNo() {
+    return( double.tryParse(this) != null)&&(length==10);
   }
 }
 

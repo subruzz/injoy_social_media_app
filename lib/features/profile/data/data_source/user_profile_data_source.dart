@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/utils/firebase_functions.dart';
+import 'package:social_media_app/core/utils/functions/firebase_functions.dart';
 import 'package:social_media_app/features/profile/data/model/user_profile_model.dart';
 
 abstract interface class UserProfileDataSource {

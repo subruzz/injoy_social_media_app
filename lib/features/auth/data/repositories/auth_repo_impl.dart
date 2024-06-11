@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:fpdart/src/either.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_media_app/core/errors/auth_errors.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
@@ -12,20 +15,60 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<Either<Failure, AppUser>> forgotPassword(String email) async {
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> forgotPassword(String email) async {
+    try {
+      await _remoteDataSource.forgotPassword(email);
+      return right(unit); 
+    } on AuthError catch (e) {
+      return left(
+        Failure(
+          e.dialogTitle,
+          e.dialogText,
+        ),
+      );
+    } on MainException catch (e) {
+      return left(
+        Failure(e.errorMsg),
+      );
+    }
   }
 
   @override
   Future<Either<Failure, AppUser>> googleSignIn() async {
-    // TODO: implement googleSignIn
-    throw UnimplementedError();
+    try {
+      final user = await _remoteDataSource.googleSignIn();
+      return right(user);
+    } on AuthError catch (e) {
+      return left(
+        Failure(
+          e.dialogTitle,
+          e.dialogText,
+        ),
+      );
+    } on MainException catch (e) {
+      return left(
+        Failure(e.errorMsg),
+      );
+    }
   }
 
   @override
   Future<Either<Failure, AppUser>> login(String email, String password) async {
-    // TODO: implement login
-    throw UnimplementedError();
+    try {
+      final user = await _remoteDataSource.login(email, password);
+      return right(user);
+    } on AuthError catch (e) {
+      return left(
+        Failure(
+          e.dialogTitle,
+          e.dialogText,
+        ),
+      );
+    } on MainException catch (e) {
+      return left(
+        Failure(e.errorMsg),
+      );
+    }
   }
 
   @override

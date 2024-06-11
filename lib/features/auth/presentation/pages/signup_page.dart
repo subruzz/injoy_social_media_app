@@ -1,11 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_media_app/core/const/app_padding.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth_button.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth_form.dart';
+import 'package:social_media_app/features/auth/presentation/widgets/separating_divider.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/welcome_msg/welcome_msg.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
 
@@ -24,6 +30,7 @@ class _LoginScreenState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Padding(
@@ -38,14 +45,9 @@ class _LoginScreenState extends State<SignupPage> {
                 child: BlocConsumer<SignupBloc, SignupState>(
                   listener: (context, state) {
                     if (state is SignupFailure) {
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentMaterialBanner()
-                        ..showSnackBar(
-                          SnackBar(
-                            content:
-                                Text('${state.errorMsg}\n${state.details}'),
-                          ),
-                        );
+                      Messenger.showSnackBar(
+                          message: '${state.errorMsg}\n${state.details}',
+                          color: AppDarkColor().buttonBackground);
                     }
                     if (state is SignupSuccess) {
                       Navigator.of(context).pushReplacement(
@@ -91,34 +93,36 @@ class _LoginScreenState extends State<SignupPage> {
                             },
                           ),
                           AppSizedBox.sizedBox10H,
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Divider(
-                                      color:
-                                          AppDarkColor().secondaryBackground),
-                                ),
-                                AppSizedBox.sizedBox10W,
-                                const Text(
-                                  'or',
-                                  style: TextStyle(),
-                                ),
-                                AppSizedBox.sizedBox10W,
-                                Expanded(
-                                  child: Divider(
-                                      color:
-                                          AppDarkColor().secondaryBackground),
-                                ),
-                              ],
-                            ),
-                          ),
+                          const SeparatingDivider(),
                           AppSizedBox.sizedBox10H,
-                          AuthButton(
-                            isGoogleAuth: true,
-                            title: 'Continue with google',
-                            onClick: () {},
+                          BlocConsumer<GoogleAuthBloc, GoogleAuthState>(
+                            listener: (context, state) {
+                              if (state is GoogleAuthSuccess) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AddProfilePage(),
+                                    ));
+                              }
+                              if (state is GoogleAuthFailure) {
+                                Messenger.showSnackBar(message: state.details);
+                              }
+                            },
+                            builder: (context, state) {
+                              if (state is GoogleAuthLoading) {
+                                return const CircularProgressIndicator();
+                              }
+                              return AuthButton(
+                                isGoogleAuth: true,
+                                title: 'Continue with google',
+                                onClick: () {
+                                  context
+                                      .read<GoogleAuthBloc>()
+                                      .add(GoogleAuthStartEvent());
+                                },
+                              );
+                            },
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -131,7 +135,15 @@ class _LoginScreenState extends State<SignupPage> {
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginPage(),
+                                        ),
+                                      );
+                                    },
                                     child: Text(
                                       ' Log In',
                                       style: Theme.of(context)
