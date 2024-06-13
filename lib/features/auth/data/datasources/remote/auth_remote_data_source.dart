@@ -69,10 +69,12 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         .collection('users')
         .doc(userCredential.user!.uid);
     AppUserModel userModel = AppUserModel(
-      id: userCredential.user!.uid,
-      email: userCredential.user!.email ?? '',
-      hasPremium: false,
-    );
+        id: userCredential.user!.uid,
+        email: userCredential.user!.email ?? '',
+        hasPremium: false,
+        fullName: '',
+        dob: '',
+        userName: '');
     try {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         transaction.set(
@@ -129,10 +131,12 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       final userDocRef =
           FirebaseFirestore.instance.collection('users').doc(user.uid);
       AppUserModel userModel = AppUserModel(
-        id: user.uid,
-        email: email,
-        hasPremium: false,
-      );
+          id: user.uid,
+          email: email,
+          hasPremium: false,
+          fullName: '',
+          dob: '',
+          userName: '');
       try {
         await FirebaseFirestore.instance.runTransaction((transaction) async {
           transaction.set(

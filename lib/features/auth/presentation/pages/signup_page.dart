@@ -52,7 +52,9 @@ class _LoginScreenState extends State<SignupPage> {
                     if (state is SignupSuccess) {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => const AddProfilePage(),
+                          builder: (context) => AddProfilePage(
+                            appUser: state.user,
+                          ),
                         ),
                       );
                     }
@@ -101,8 +103,9 @@ class _LoginScreenState extends State<SignupPage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const AddProfilePage(),
+                                      builder: (context) => AddProfilePage(
+                                        appUser: state.user,
+                                      ),
                                     ));
                               }
                               if (state is GoogleAuthFailure) {

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/bloc/app_user_event.dart';
 import 'package:social_media_app/core/common/entities/user.dart';
+import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/usecases/usecase.dart';
 import 'package:social_media_app/features/auth/domain/usecases/current_user.dart';
 
@@ -22,8 +23,9 @@ class AppUserBloc extends Bloc<AppUserEvent, AppUserState> {
     );
     on<AppGetCurrentUser>((event, emit) async {
       final res = await _currentUser(NoParams());
-      res.fold((failure) => emit(UserModelNotFoundState()),
-          (success) => emit(AppUserLoggedIn(user: success)));
+      res.fold((failure) => emit(UserModelNotFoundState()), (success) {
+        emit(AppUserLoggedIn(user: success));
+      });
     });
   }
 }

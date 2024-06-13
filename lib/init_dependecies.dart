@@ -12,6 +12,11 @@ import 'package:social_media_app/features/auth/presentation/bloc/forgot_password
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/location/data/datasource/local/location_local_datasource.dart';
+import 'package:social_media_app/features/location/data/repositories/location_repository_impl.dart';
+import 'package:social_media_app/features/location/domain/repositories/location_repository.dart';
+import 'package:social_media_app/features/location/domain/usecases/get_location.dart';
+import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/profile/data/data_source/user_profile_data_source.dart';
 import 'package:social_media_app/features/profile/data/repository/profile_repository_impl.dart';
 import 'package:social_media_app/features/profile/domain/repository/profile_repository.dart';
@@ -23,6 +28,7 @@ final serviceLocator = GetIt.instance;
 Future<void> initDependencies() async {
   _initAuth();
   _initProfile();
+  _initLocation();
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(serviceLocator()),
   );
@@ -70,9 +76,7 @@ void _initAuth() {
       ),
     )
     ..registerLazySingleton(
-      () => LoginBloc(
-        serviceLocator(),
-      ),
+      () => LoginBloc(serviceLocator(), serviceLocator()),
     )
     ..registerFactory(() => ForgotPasswordUseCase(serviceLocator()))
     ..registerLazySingleton(
@@ -89,6 +93,17 @@ void _initProfile() {
       () => CreateUserProfileUseCase(profileRepository: serviceLocator()),
     )
     ..registerLazySingleton(
-      () => ProfileBloc(serviceLocator()),
+      () => ProfileBloc(serviceLocator(), serviceLocator()),
     );
+}
+
+void _initLocation() {
+  serviceLocator
+    ..registerFactory<LocationLocalDataSource>(
+        () => LocationLocalDataSourceImpl())
+    ..registerFactory<LocationRepository>(
+        () => LocationRepositoryImpl(locationLocalDataSource: serviceLocator()))
+    ..registerFactory(
+        () => GetLocationUseCase(locationRepository: serviceLocator()))
+    ..registerLazySingleton(() => LocationBloc(serviceLocator()));
 }

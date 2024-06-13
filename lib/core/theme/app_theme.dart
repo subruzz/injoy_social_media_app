@@ -92,7 +92,7 @@ final class AppDarkTheme {
         fontSize: 15.sp,
       ),
       labelMedium: TextStyle(
-        color: _color.primaryText,
+        color: _color.secondaryText,
         fontSize: _screenUtil.setSp(14),
       ),
       labelSmall: TextStyle(
@@ -112,6 +112,7 @@ final class AppDarkTheme {
         fontSize: 12.sp,
       ),
     ),
+    
     chipTheme: ChipThemeData(
         shape: const StadiumBorder(
           side: BorderSide(style: BorderStyle.none),
@@ -154,6 +155,7 @@ final class AppDarkTheme {
     //   }),
     //   indicatorColor: _color.primaryText,
     // ),
+    
     inputDecorationTheme: InputDecorationTheme(
       fillColor: AppDarkColor().fillColor,
       border: OutlineInputBorder(

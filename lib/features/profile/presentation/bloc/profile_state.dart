@@ -12,24 +12,26 @@ abstract class ProfileState extends Equatable {
 
 class ProfileInitial extends ProfileState {}
 
-class ProfileUserDetailsSet extends ProfileState {
-  final UserProfile userProfile;
-  final File? profileImag;
-  const ProfileUserDetailsSet(this.userProfile, this.profileImag);
+// class ProfileUserDetailsSet extends ProfileState {
+//   final UserProfile userProfile;
+//   final File? profileImag;
+//   const ProfileUserDetailsSet(this.userProfile, this.profileImag);
 
-  @override
-  List<Object> get props => [userProfile];
-}
+//   @override
+//   List<Object> get props => [userProfile];
+// }
 
-class ProfileInterestsSet extends ProfileState {
-  final UserProfile userProfile;
-  final File? profileImag;
+final class ProfileSetUpLoading extends ProfileState {}
 
-  const ProfileInterestsSet(this.userProfile, this.profileImag);
+// class ProfileInterestsSet extends ProfileState {
+//   final UserProfile userProfile;
+//   final File? profileImag;
 
-  @override
-  List<Object> get props => [userProfile];
-}
+//   const ProfileInterestsSet(this.userProfile, this.profileImag);
+
+//   @override
+//   List<Object> get props => [userProfile];
+// }
 
 class ProfileLocationSet extends ProfileState {
   final UserProfile userProfile;

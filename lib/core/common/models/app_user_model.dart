@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:social_media_app/core/common/entities/user.dart';
 
 class AppUserModel extends AppUser {
@@ -5,9 +7,9 @@ class AppUserModel extends AppUser {
     required super.id,
     required super.email,
     required super.hasPremium,
-    super.fullName,
-    super.userName,
-    super.dob,
+    required super.fullName,
+    required super.userName,
+    required super.dob,
     super.phoneNumber,
     super.occupation,
     super.about,
@@ -15,6 +17,10 @@ class AppUserModel extends AppUser {
     super.location,
     super.latitude,
     super.longitude,
+    super.followers,
+    super.following,
+    super.posts,
+    super.interests,
   });
 
   AppUserModel copyWith({
@@ -31,6 +37,10 @@ class AppUserModel extends AppUser {
     String? location,
     double? latitude,
     double? longitude,
+    List<String>? followers,
+    List<String>? following,
+    List<String>? posts,
+    List<String>? interests,
   }) {
     return AppUserModel(
       id: id ?? this.id,
@@ -46,6 +56,10 @@ class AppUserModel extends AppUser {
       location: location ?? this.location,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      followers: followers ?? this.followers,
+      following: following ?? this.following,
+      posts: posts ?? this.posts,
+      interests: interests ?? this.interests,
     );
   }
 
@@ -56,7 +70,7 @@ class AppUserModel extends AppUser {
       hasPremium: json['hasPremium'],
       fullName: json['fullName'],
       userName: json['userName'],
-      dob: json['dob'] ,
+      dob: json['dob'],
       phoneNumber: json['phoneNumber'],
       occupation: json['occupation'],
       about: json['about'],
@@ -64,6 +78,10 @@ class AppUserModel extends AppUser {
       location: json['location'],
       latitude: json['latitude'],
       longitude: json['longitude'],
+      followers: List<String>.from(json['followers'] ?? []),
+      following: List<String>.from(json['following'] ?? []),
+      posts: List<String>.from(json['posts'] ?? []),
+      interests: List<String>.from(json['interests'] ?? []),
     );
   }
 
@@ -82,6 +100,10 @@ class AppUserModel extends AppUser {
       'location': location,
       'latitude': latitude,
       'longitude': longitude,
+      'followers': followers,
+      'following': following,
+      'posts': posts,
+      'interests': interests,
     };
   }
 }

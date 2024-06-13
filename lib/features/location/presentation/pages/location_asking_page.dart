@@ -3,9 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/home.dart';
+import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
+import 'package:social_media_app/features/location/presentation/widgets/popup.dart';
 import 'package:social_media_app/features/profile/domain/entities/user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/profile_event.dart';
@@ -15,7 +18,7 @@ import 'package:social_media_app/features/profile/presentation/pages/add_profile
 class LocationAskingPage extends StatelessWidget {
   const LocationAskingPage(
       {super.key, required this.userProfil, this.profilePic});
-  final UserProfile userProfil;
+  final AppUser userProfil;
   final File? profilePic;
   @override
   Widget build(BuildContext context) {
@@ -39,6 +42,11 @@ class LocationAskingPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        if (state is ProfileSetUpLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
         return Scaffold(
           resizeToAvoidBottomInset: false,
           body: SafeArea(
@@ -104,36 +112,58 @@ class LocationAskingPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                       'We need your location to enhance your experience by providing personalized services and recommendations. Your location data will be kept confidential and secure'),
                   const Spacer(),
-                  SizedBox(
-                    height: 50,
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context.read<ProfileBloc>().add(
-                              ProfileSetUpLocationEvent(
-                                  latitude: 6735434,
-                                  longitude: 354345,
-                                  location: 'kea3453453ra',
-                                  userProfile: userProfil,
-                                  profilePic: profilePic),
-                            );
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Continue',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                  BlocConsumer<LocationBloc, LocationState>(
+                    listener: (context, state) {
+                      if (state is LocationSuccess) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => LocationPopup(
+                            currentLocation: state
+                                .locationName, // Replace with your current location
+                            onSave: () {
+                              userProfil.location = state.locationName;
+                              userProfil.latitude = state.latitue;
+                              userProfil.longitude = state.longitude;
+                              context.read<ProfileBloc>().add(
+                                  ProfileSetUpLocationEvent(
+                                      userProfile: userProfil,
+                                      profilePic: profilePic));
+                            },
                           ),
-                        ],
-                      ),
-                    ),
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is LocationLoading) {
+                        return CircularProgressIndicator();
+                      }
+                      return SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            context
+                                .read<LocationBloc>()
+                                .add(LocationCurrentEvent());
+                            FocusManager.instance.primaryFocus?.unfocus();
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Allow',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

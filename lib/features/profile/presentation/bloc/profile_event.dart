@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/features/profile/domain/entities/user_profile.dart';
 
 sealed class ProfileEvent extends Equatable {
@@ -53,21 +54,15 @@ class ProfileSetUpInterestsEvent extends ProfileEvent {
 }
 
 class ProfileSetUpLocationEvent extends ProfileEvent {
-  final String location;
-  final double latitude;
-  final double longitude;
-  final UserProfile userProfile;
+  final AppUser userProfile;
   final File? profilePic;
   const ProfileSetUpLocationEvent({
     required this.userProfile,
     this.profilePic,
-    required this.location,
-    required this.latitude,
-    required this.longitude,
   });
 
   @override
-  List<Object> get props => [location, latitude, longitude];
+  List<Object> get props => [];
 }
 
 class ProfileSubmitEvent extends ProfileEvent {}

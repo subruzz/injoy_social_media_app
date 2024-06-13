@@ -28,8 +28,9 @@ if (flutterVersionName == null) {
 
 android {
     namespace = "com.example.social_media_app"
-    compileSdk = 33
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 34
+    ndkVersion = "25.1.8937393"
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

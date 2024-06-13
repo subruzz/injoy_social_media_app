@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/bottom_nav.dart';
 import 'package:social_media_app/core/bloc/app_user_bloc.dart';
 import 'package:social_media_app/core/bloc/app_user_event.dart';
 import 'package:social_media_app/core/const/messenger.dart';
@@ -13,8 +14,10 @@ import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/sig
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:social_media_app/features/home.dart';
+import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
+import 'package:social_media_app/features/profile/presentation/pages/profile_page.dart';
 
 import 'package:social_media_app/firebase_options.dart';
 import 'package:social_media_app/init_dependecies.dart';
@@ -61,6 +64,9 @@ class MyApp extends StatelessWidget {
             ),
             BlocProvider(
               create: (context) => serviceLocator<ForgotPasswordBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<LocationBloc>(),
             )
           ],
           child: MaterialApp(
@@ -78,12 +84,16 @@ class MyApp extends StatelessWidget {
                 if (state is AppUserLoggedIn) {
                   if (state.user.fullName == null) {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => AddProfilePage()));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddProfilePage(
+                          appUser: state.user,
+                        ),
+                      ),
+                    );
                   } else {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomsCreen()));
+                        MaterialPageRoute(builder: (context) => ProfilePage()));
                   }
                 }
               },

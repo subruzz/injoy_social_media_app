@@ -54,7 +54,9 @@ class _LoginScreenState extends State<LoginPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const AddProfilePage(),
+                                  builder: (context) => AddProfilePage(
+                                    appUser: state.user,
+                                  ),
                                 ),
                               );
                             }
