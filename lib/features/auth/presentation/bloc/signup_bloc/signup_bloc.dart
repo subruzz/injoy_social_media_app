@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/bloc/app_user_bloc.dart';
-import 'package:social_media_app/core/bloc/app_user_event.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_event.dart';
 import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/features/auth/domain/usecases/user_signup.dart';
 

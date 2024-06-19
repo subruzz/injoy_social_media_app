@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/extensions/email_val.dart';
-import 'package:social_media_app/core/wigets/text_field.dart';
+import 'package:social_media_app/core/widgets/textfields/text_field.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth_button.dart';
 

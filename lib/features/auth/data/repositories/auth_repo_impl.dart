@@ -15,10 +15,16 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._remoteDataSource);
 
   @override
+  Future<Either<Failure, String>> getCurrentUserId() {
+    // TODO: implement getCurrentUserId
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Either<Failure, Unit>> forgotPassword(String email) async {
     try {
       await _remoteDataSource.forgotPassword(email);
-      return right(unit); 
+      return right(unit);
     } on AuthError catch (e) {
       return left(
         Failure(
@@ -91,13 +97,6 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, AppUser>> verifyPassword(
-      String code, String newPassword) async {
-    // TODO: implement verifyPassword
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<Failure, AppUser>> getCurrentUser() async {
     try {
       final user = await _remoteDataSource.getCurrentUser();
@@ -110,5 +109,12 @@ class AuthRepositoryImpl implements AuthRepository {
         Failure(e.errorMsg),
       );
     }
+  }
+
+  @override
+  Future<Either<Failure, AppUser>> verifyPassword(
+      String code, String newPassword) async {
+    // TODO: implement verifyPassword
+    throw UnimplementedError();
   }
 }

@@ -2,21 +2,21 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/bloc/app_user_bloc.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/entities/user.dart';
 
 import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/number_only_string.dart';
 import 'package:social_media_app/core/utils/functions/date_picker.dart';
-import 'package:social_media_app/core/utils/functions/image_picker.dart';
+import 'package:social_media_app/core/services/image_pick_services/image_picker.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/profile_event.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/profile_state.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
 import 'package:social_media_app/features/profile/presentation/pages/interest_selection_page.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/next_button.dart';
 
-import '../../../../core/wigets/text_field.dart';
+import '../../../../core/widgets/textfields/text_field.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key, required this.appUser});
@@ -41,16 +41,16 @@ class _AddProfilePageState extends State<EditProfilePage> {
   void initState() {
     super.initState();
     _profileImage = widget.appUser.profilePic;
-    _nameController.text = widget.appUser.fullName;
-    _userNameController.text = widget.appUser.userName;
-    _phoneNoController.text = widget.appUser.phoneNumber.toString();
+    _nameController.text = widget.appUser.fullName ?? '';
+    _userNameController.text = widget.appUser.userName ?? '';
+    _phoneNoController.text = widget.appUser.phoneNumber?.toString() ?? '';
     _occupationController.text = widget.appUser.occupation ?? '';
-    _selectedDate.value.text = widget.appUser.dob;
+    _selectedDate.value.text = widget.appUser.dob ?? '';
     _aboutController.text = widget.appUser.about ?? '';
   }
 
   Future<void> pickImage() async {
-    final result = await selecteImage();
+    final result = await ImagePickerService.pickOneImage();
     if (result != null) {
       _selectedImage.value = File(result.path);
       _profileImage = null;

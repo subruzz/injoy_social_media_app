@@ -21,7 +21,7 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
     try {
       try {
         final imageUrl =
-            await _userProfileDataSource.uploadUserImage(profilePic);
+            await _userProfileDataSource.uploadUserImage(profilePic,user.id);
         user.profilePic = imageUrl;
       } catch (e) {
         // FirebaseStorage storage = FirebaseStorage.instance;

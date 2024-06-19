@@ -4,20 +4,23 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_media_app/core/errors/auth_errors.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
-import 'package:social_media_app/core/utils/functions/firebase_functions.dart';
 
 abstract interface class AuthRemoteDataSource {
-  Future<String?> getCurrentUserId();
-
   Future<AppUserModel> login(String email, String password);
   Future<AppUserModel> signup(String email, String password);
   Future<AppUserModel> googleSignIn();
   Future<void> forgotPassword(String email);
   Future<AppUserModel> verifyPassword(String code, String newPassword);
   Future<AppUserModel?> getCurrentUser();
+  Future<String?> getCurrentUserId();
 }
 
 class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
+  @override
+  Future<String?> getCurrentUserId() async {
+    return FirebaseAuth.instance.currentUser?.uid;
+  }
+
   @override
   Future<void> forgotPassword(String email) async {
     try {
@@ -27,12 +30,6 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       throw MainException(errorMsg: e.toString());
     }
-  }
-
-  @override
-  Future<String?> getCurrentUserId() {
-    // TODO: implement getCurrentUserId
-    throw UnimplementedError();
   }
 
   @override
@@ -69,12 +66,10 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         .collection('users')
         .doc(userCredential.user!.uid);
     AppUserModel userModel = AppUserModel(
-        id: userCredential.user!.uid,
-        email: userCredential.user!.email ?? '',
-        hasPremium: false,
-        fullName: '',
-        dob: '',
-        userName: '');
+      id: userCredential.user!.uid,
+      email: userCredential.user!.email ?? '',
+      hasPremium: false,
+    );
     try {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         transaction.set(
@@ -131,12 +126,10 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       final userDocRef =
           FirebaseFirestore.instance.collection('users').doc(user.uid);
       AppUserModel userModel = AppUserModel(
-          id: user.uid,
-          email: email,
-          hasPremium: false,
-          fullName: '',
-          dob: '',
-          userName: '');
+        id: user.uid,
+        email: email,
+        hasPremium: false,
+      );
       try {
         await FirebaseFirestore.instance.runTransaction((transaction) async {
           transaction.set(
@@ -163,7 +156,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<AppUserModel?> getCurrentUser() async {
-    final userCred = await getCurrentUserToken();
+    final userCred = await getCurrentUserId();
     if (userCred == null) {
       return null;
     }

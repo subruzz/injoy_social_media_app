@@ -12,7 +12,7 @@ abstract interface class UserProfileDataSource {
   Future<AppUser> createUserProfile({
     required AppUser userProfile,
   });
-  Future<String> uploadUserImage(File? profileImage);
+  Future<String> uploadUserImage(File? profileImage, String uid);
 }
 
 class UserProfileDataSourceImpl implements UserProfileDataSource {
@@ -20,41 +20,31 @@ class UserProfileDataSourceImpl implements UserProfileDataSource {
   Future<AppUserModel> createUserProfile({
     required AppUser userProfile,
   }) async {
-    final uid = await getCurrentUserToken();
-    if (uid == null) {
-      throw const MainException(errorMsg: 'User is not authenticated');
-    }
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
-      await firestore.collection('users').doc(uid).update(
+      await firestore.collection('users').doc(userProfile.id).update(
             userProfile.toJson(),
           );
       DocumentSnapshot docSnapshot =
-          await firestore.collection('users').doc(uid).get();
-      return AppUserModel.fromJson(
-          docSnapshot.data() as Map<String, dynamic>);
+          await firestore.collection('users').doc(userProfile.id).get();
+      return AppUserModel.fromJson(docSnapshot.data() as Map<String, dynamic>);
     } catch (e) {
-    
       throw const MainException(
           errorMsg: 'Error while creating profile please try again!');
     }
   }
 
   @override
-  Future<String> uploadUserImage(File? profileImage) async {
-    final uid = await getCurrentUserToken();
-    if (uid == null) {
-      throw const MainException(errorMsg: 'User is not authenticated');
-    }
+  Future<String> uploadUserImage(File? profileImag, String uid) async {
     try {
-      if (profileImage == null) {
+      if (profileImag == null) {
         throw const MainException(
             errorMsg: 'Error while setting profile Picture ');
       }
       final FirebaseStorage storage = FirebaseStorage.instance;
 
       Reference ref = storage.ref().child('UserProfile').child(uid);
-      UploadTask task = ref.putFile(profileImage);
+      UploadTask task = ref.putFile(profileImag);
       TaskSnapshot snapshot = await task;
       String downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;

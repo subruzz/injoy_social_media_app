@@ -12,7 +12,7 @@ const Map<String, AuthError> authErrorMapping = {
 };
 
 
- class AuthError implements Exception {
+abstract  class AuthError implements Exception {
   final String dialogTitle;
   final String dialogText;
 

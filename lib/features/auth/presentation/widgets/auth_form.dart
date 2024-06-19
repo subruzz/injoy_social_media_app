@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/email_val.dart';
-import 'package:social_media_app/core/wigets/text_field.dart';
+import 'package:social_media_app/core/widgets/textfields/text_field.dart';
 
 class AuthForm extends StatelessWidget {
   const AuthForm(

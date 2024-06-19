@@ -5,10 +5,10 @@ class LocationPopup extends StatelessWidget {
   final Function() onSave;
 
   const LocationPopup({
-    Key? key,
+    super.key,
     required this.currentLocation,
     required this.onSave,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +49,9 @@ class LocationPopup extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                'Current Location',
+                currentLocation,
                 style: TextStyle(
+                  color: Colors.black,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),

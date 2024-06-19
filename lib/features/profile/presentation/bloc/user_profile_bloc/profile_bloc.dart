@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/bloc/app_user_bloc.dart';
-import 'package:social_media_app/core/bloc/app_user_event.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_event.dart';
 import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/features/profile/domain/entities/user_profile.dart';
 import 'package:social_media_app/features/profile/domain/usecases/create_user_profile.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/profile_event.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/profile_state.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AppUserBloc _appUserBloc;

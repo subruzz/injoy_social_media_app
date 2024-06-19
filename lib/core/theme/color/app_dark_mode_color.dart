@@ -9,9 +9,14 @@ class AppDarkColor extends AppColor {
   }
   AppDarkColor._()
       : super(
+          iconSoftColor: const Color(0xFF1A1A22),
+          iconPrimaryColor: const Color(0xFFFFFFFF),
+          iconSecondarycolor: const Color(0xFFFF4D67),
+          indicatorColor: const Color(0xFFFF4D67),
+          loadingColor: const Color(0xFFFF4D67),
           choiceChipSelectedolor: const Color(0xFFFF4D67),
           background: const Color(0xFF000000),
-          softBackground: const Color(0xFF1D1D1D),
+          softBackground: const Color(0xFF292C35),
           secondaryBackground: const Color(0xFF1a1a22),
           lightBackground: const Color(0xFF2C2C2C),
           pure: const Color(0xFF000000),

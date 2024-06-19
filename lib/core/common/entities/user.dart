@@ -5,9 +5,9 @@ class AppUser extends Equatable {
   final String email;
   final bool hasPremium;
 
-  String fullName;
-  String userName;
-  String dob;
+  String? fullName;
+  String? userName;
+  String? dob;
   int? phoneNumber;
   String? occupation;
   String? about;

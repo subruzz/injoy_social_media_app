@@ -3,6 +3,11 @@ part 'app_dark_mode_color.dart';
 
 /// Interface for defining colors used in the application's UI.
 abstract interface class AppColor {
+  final Color indicatorColor;
+  final Color iconSoftColor;
+  final Color iconPrimaryColor;
+  final Color iconSecondarycolor;
+  final Color loadingColor;
   final Color background; // Background color.
   final Color softBackground; // Soft background color.
   final Color secondaryBackground; // Secondary background color.
@@ -36,11 +41,16 @@ abstract interface class AppColor {
 
   /// Constructs an [AppColor] instance with specified colors.
   AppColor({
+    required this.iconSoftColor,
+    required this.iconPrimaryColor,
+    required this.iconSecondarycolor,
+    required this.indicatorColor,
     required this.choiceChipSelectedolor,
     required this.secondaryPrimaryText,
     required this.buttonSecondaryColor,
     required this.background,
     required this.softBackground,
+    required this.loadingColor,
     required this.secondaryBackground,
     required this.lightBackground,
     required this.pure,

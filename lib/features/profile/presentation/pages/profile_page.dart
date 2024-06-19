@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:social_media_app/core/bloc/app_user_bloc.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/pages/edit_profile_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -21,7 +23,7 @@ class ProfilePage extends StatelessWidget {
             return Scaffold(
               appBar: AppBar(
                 title: Text(
-                  state.user.userName,
+                  context.read<AppUserBloc>().appUser!.userName ?? '',
                   style: Theme.of(context)
                       .textTheme
                       .headlineMedium
@@ -30,10 +32,10 @@ class ProfilePage extends StatelessWidget {
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.more_vert),
-                    onPressed: ()async {
+                    onPressed: () async {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            EditProfilePage(appUser: state.user),
+                        builder: (context) => EditProfilePage(
+                            appUser: context.read<AppUserBloc>().appUser!),
                       ));
                     },
                   ),
@@ -46,40 +48,47 @@ class ProfilePage extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        Stack(
-                          children: [
-                            CircleAvatar(
-                                backgroundColor: Colors.black,
-                                radius: 55,
-                                backgroundImage: state.user.profilePic != null
-                                    ? NetworkImage(state.user.profilePic!)
-                                    : const AssetImage(
-                                        'assets/images/profile_icon.png')),
-                            Positioned(
-                              right: 20,
-                              bottom: 0,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2.0),
-                                    color: AppDarkColor().buttonBackground,
-                                  ),
-                                  child: const Icon(
-                                    Icons.edit,
-                                    color: Colors.black,
-                                    size: 13,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Stack(
+                        //   children: [
+                        //     CircleAvatar(
+                        //         backgroundColor: Colors.black,
+                        //         radius: 55,
+                        //         backgroundImage: context
+                        //                     .read<AppUserBloc>()
+                        //                     .appUser!
+                        //                     .profilePic !=
+                        //                 null
+                        //             ? NetworkImage(context
+                        //                 .read<AppUserBloc>()
+                        //                 .appUser!
+                        //                 .profilePic!)
+                        //             : const AssetImage(
+                        //                 'assets/images/profile_icon.png')),
+                        //     Positioned(
+                        //       right: 20,
+                        //       bottom: 0,
+                        //       child: GestureDetector(
+                        //         onTap: () {},
+                        //         child: Container(
+                        //           height: 20,
+                        //           width: 20,
+                        //           decoration: BoxDecoration(
+                        //             borderRadius: BorderRadius.circular(2.0),
+                        //             color: AppDarkColor().buttonBackground,
+                        //           ),
+                        //           child: const Icon(
+                        //             Icons.edit,
+                        //             color: Colors.black,
+                        //             size: 13,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         const SizedBox(height: 8),
                         Text(
-                          state.user.fullName,
+                          context.read<AppUserBloc>().appUser!.fullName ?? '',
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium
@@ -88,11 +97,12 @@ class ProfilePage extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                             textAlign: TextAlign.center,
-                            state.user.occupation ?? '',
+                            context.read<AppUserBloc>().appUser!.occupation ??
+                                '',
                             style: Theme.of(context).textTheme.bodySmall),
                         Text(
                             textAlign: TextAlign.center,
-                            state.user.about ?? '',
+                            context.read<AppUserBloc>().appUser!.about ?? '',
                             style: Theme.of(context).textTheme.bodySmall),
                         const SizedBox(height: 16),
                         Row(
@@ -101,7 +111,12 @@ class ProfilePage extends StatelessWidget {
                             Column(
                               children: [
                                 Text(
-                                  state.user.posts.length.toString(),
+                                  context
+                                      .read<AppUserBloc>()
+                                      .appUser!
+                                      .posts
+                                      .length
+                                      .toString(),
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -129,7 +144,12 @@ class ProfilePage extends StatelessWidget {
                             Column(
                               children: [
                                 Text(
-                                  state.user.followers.length.toString(),
+                                  context
+                                      .read<AppUserBloc>()
+                                      .appUser!
+                                      .followers
+                                      .length
+                                      .toString(),
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -157,7 +177,12 @@ class ProfilePage extends StatelessWidget {
                             Column(
                               children: [
                                 Text(
-                                  state.user.following.length.toString(),
+                                  context
+                                      .read<AppUserBloc>()
+                                      .appUser!
+                                      .following
+                                      .length
+                                      .toString(),
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -230,19 +255,43 @@ class ProfilePage extends StatelessWidget {
 }
 
 class PhotosTab extends StatelessWidget {
+  const PhotosTab({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MasonryGridView.count(
-      crossAxisCount: 2,
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
-      itemBuilder: (context, index) {
-        return Container(
-          height: 123 + (index * 50),
-          color: Colors.grey,
-        );
+    return BlocBuilder<GetUserPostsBloc, GetUserPostsState>(
+      builder: (context, state) {
+        if (state is GetUserPostsLoading) {
+          return CircularProgressIndicator();
+        } else if (state is GetUserPostsError) {
+          return Text(state.errorMsg);
+        } else if (state is GetUserPostsSuccess) {
+          return Expanded(
+            child: ListView.builder(
+              itemCount: state.userPosts.length,
+              itemBuilder: (context, index) =>
+                  Text(state.userPosts[index].postId),
+            ),
+          );
+        }
+        return SizedBox.shrink();
       },
     );
+
+    // MasonryGridView.count(
+    //   crossAxisCount: 2,
+    //   mainAxisSpacing: 4,
+    //   crossAxisSpacing: 4,
+    //   itemBuilder: (context, index) {
+    //     return Container(
+    //       height: 123 + (index * 50),
+    //       child: Image.network(
+    //         'https://gratisography.com/wp-content/uploads/2024/01/gratisography-cyber-kitty-800x525.jpg',
+    //         fit: BoxFit.cover,
+    //       ),
+    //     );
+    //   },
+    // );
   }
 }
 

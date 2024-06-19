@@ -100,19 +100,19 @@ final class AppDarkTheme {
         fontSize: 13.sp,
       ),
       bodyLarge: TextStyle(
-        color: _color.secondaryText,
+        color: _color.primaryText,
         fontSize: _screenUtil.setSp(14),
       ),
       bodyMedium: TextStyle(
-        color: _color.secondaryText,
+        color: _color.primaryText,
         fontSize: 13.sp,
       ),
       bodySmall: TextStyle(
-        color: _color.secondaryText,
+        color: _color.primaryText,
         fontSize: 12.sp,
       ),
     ),
-    
+
     chipTheme: ChipThemeData(
         shape: const StadiumBorder(
           side: BorderSide(style: BorderStyle.none),
@@ -120,7 +120,7 @@ final class AppDarkTheme {
         selectedColor: _color.choiceChipSelectedolor,
         backgroundColor: _color.secondaryBackground),
     iconTheme: IconThemeData(
-      color: _color.iconColor,
+      color: Colors.white,
     ),
     dividerTheme: DividerThemeData(color: _color.secondaryBackground),
     appBarTheme: AppBarTheme(
@@ -155,7 +155,7 @@ final class AppDarkTheme {
     //   }),
     //   indicatorColor: _color.primaryText,
     // ),
-    
+
     inputDecorationTheme: InputDecorationTheme(
       fillColor: AppDarkColor().fillColor,
       border: OutlineInputBorder(
@@ -177,7 +177,6 @@ final class AppDarkTheme {
         selectionColor: _color.boxShadow,
         cursorColor: _color.primaryText,
         selectionHandleColor: _color.primaryText),
-
     drawerTheme: DrawerThemeData(
       backgroundColor: _color.background,
       surfaceTintColor: Colors.transparent,
@@ -242,7 +241,7 @@ final class AppDarkTheme {
           AppRadius.borderRound,
         ),
       ),
-      backgroundColor: _color.bottomBar,
+      backgroundColor: _color.buttonBackground,
     ),
     sliderTheme: SliderThemeData(
       activeTickMarkColor: _color.success,

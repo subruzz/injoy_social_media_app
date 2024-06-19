@@ -5,15 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/features/home.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/location/presentation/widgets/popup.dart';
-import 'package:social_media_app/features/profile/domain/entities/user_profile.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/profile_event.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/profile_state.dart';
-import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
+import 'package:social_media_app/home.dart';
 
 class LocationAskingPage extends StatelessWidget {
   const LocationAskingPage(
@@ -29,13 +28,13 @@ class LocationAskingPage extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HomsCreen(),
+                builder: (context) => HomePage(),
               ));
         }
         if (state is ProfileSubmissionFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('failure mother fuckeer'),
+              content: Text('failure'),
               duration: Duration(seconds: 2), // Adjust the duration as needed
             ),
           );
@@ -132,6 +131,10 @@ class LocationAskingPage extends StatelessWidget {
                           ),
                         );
                       }
+                      if (state is LocationNotOnState) {
+                        Messenger.showSnackBar(
+                            message: 'please turn on location on your phone');
+                      }
                     },
                     builder: (context, state) {
                       if (state is LocationLoading) {
@@ -154,7 +157,7 @@ class LocationAskingPage extends StatelessWidget {
                                 'Allow',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .labelMedium
+                                    .titleSmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),

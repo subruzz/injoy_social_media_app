@@ -22,8 +22,8 @@ class AuthButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FadeInUp(
-      delay: Duration(milliseconds: animate ? 800 : 0),
-      duration: Duration(milliseconds: animate ? 900 : 0),
+      delay: Duration(milliseconds: 0),
+      duration: Duration(milliseconds: 0),
       child: SizedBox(
         height: 50,
         width: double.infinity,
@@ -52,7 +52,7 @@ class AuthButton extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: isGoogleAuth != null
                         ? AppDarkColor().background
-                        : null),
+                        : AppDarkColor().primaryText),
               ),
             ],
           ),

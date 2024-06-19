@@ -11,8 +11,8 @@ class WelcomeTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FadeInDown(
-      delay: const Duration(milliseconds: 800),
-      duration: const Duration(milliseconds: 900),
+      delay: const Duration(milliseconds: 0),
+      duration: const Duration(milliseconds: 0),
       child: Text(
         text,
         style: Theme.of(context).textTheme.displayLarge,

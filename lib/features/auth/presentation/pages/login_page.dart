@@ -10,8 +10,8 @@ import 'package:social_media_app/features/auth/presentation/pages/signup_page.da
 import 'package:social_media_app/features/auth/presentation/widgets/auth_button.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth_form.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/welcome_msg/welcome_msg.dart';
-import 'package:social_media_app/features/home.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
+import 'package:social_media_app/home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const HomsCreen(),
+                                  builder: (context) => const HomePage(),
                                 ),
                               );
                             } else {

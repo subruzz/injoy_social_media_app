@@ -11,4 +11,5 @@ abstract interface class AuthRepository {
   Future<Either<Failure, AppUser>> verifyPassword(
       String code, String newPassword);
   Future<Either<Failure, AppUser>> getCurrentUser();
+  Future<Either<Failure, String>> getCurrentUserId();
 }
