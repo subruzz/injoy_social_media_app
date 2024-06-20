@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/create_post/domain/enitities/hash_tag.dart';
-import 'package:social_media_app/features/create_post/domain/enitities/post.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 
 abstract interface class PostRepository {
   Future<Either<Failure, Unit>> createPost(

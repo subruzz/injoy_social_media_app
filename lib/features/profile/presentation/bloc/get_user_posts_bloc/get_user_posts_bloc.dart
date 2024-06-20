@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:social_media_app/features/create_post/domain/enitities/post.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/profile/domain/usecases/get_user_posts.dart';
 
 part 'get_user_posts_event.dart';
@@ -23,10 +23,12 @@ class GetUserPostsBloc extends Bloc<GetUserPostsEvent, GetUserPostsState> {
 
   FutureOr<void> _getUserPostsrequestedEvent(
       GetUserPostsrequestedEvent event, Emitter<GetUserPostsState> emit) async {
-final result =
+    final result =
         await _getUserPostsUseCase(GetUserPostsUseCaseParams(uid: event.uid));
     result.fold(
         ((failure) => emit(GetUserPostsError(errorMsg: failure.message))),
-        (success) => emit(GetUserPostsSuccess(userPosts: success)));
+        (success) => emit(GetUserPostsSuccess(
+            userPosts: success.userPosts,
+            userAllPostImages: success.userPostImages)));
   }
 }

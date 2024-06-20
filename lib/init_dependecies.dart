@@ -23,15 +23,25 @@ import 'package:social_media_app/features/create_post/domain/repositories/post_r
 import 'package:social_media_app/features/create_post/domain/usecases/create_posts.dart';
 import 'package:social_media_app/features/create_post/domain/usecases/get_assets.dart';
 import 'package:social_media_app/features/create_post/domain/usecases/searh_hashtag.dart';
-import 'package:social_media_app/features/create_post/features/bloc/assset_bloc/asset_bloc_bloc.dart';
-import 'package:social_media_app/features/create_post/features/bloc/create_post/create_post_bloc.dart';
-import 'package:social_media_app/features/create_post/features/bloc/search_hashtag/search_hashtag_bloc.dart';
-import 'package:social_media_app/features/create_post/features/bloc/select_tags_cubit/select_tags_cubit.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/assset_bloc/asset_bloc_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/create_post/create_post_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/select_tags_cubit/select_tags_cubit.dart';
+import 'package:social_media_app/features/create_status/data/datasource/status_remote_datasource.dart';
+import 'package:social_media_app/features/create_status/data/repository/create_status_repository_impl.dart';
+import 'package:social_media_app/features/create_status/domain/repository/create_status_repository.dart';
+import 'package:social_media_app/features/create_status/domain/usecases/create_status.dart';
+import 'package:social_media_app/features/create_status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/location/data/datasource/local/location_local_datasource.dart';
 import 'package:social_media_app/features/location/data/repositories/location_repository_impl.dart';
 import 'package:social_media_app/features/location/domain/repositories/location_repository.dart';
 import 'package:social_media_app/features/location/domain/usecases/get_location.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
+import 'package:social_media_app/features/post_feed/data/datasource/post_feed_remote_datasource.dart';
+import 'package:social_media_app/features/post_feed/data/repository/post_feed_repository_impl.dart';
+import 'package:social_media_app/features/post_feed/domain/repositories/post_feed_repository.dart';
+import 'package:social_media_app/features/post_feed/domain/usecases/get_following_posts.dart';
+import 'package:social_media_app/features/post_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/profile/data/data_source/user_profile_data_source.dart';
 import 'package:social_media_app/features/profile/data/data_source/user_posts_remote_datasource.dart';
 import 'package:social_media_app/features/profile/data/repository/profile_repository_impl.dart';
@@ -53,6 +63,8 @@ Future<void> initDependencies() async {
   _localAsset();
   _post();
   _getUserPosts();
+  _postFeed();
+  _statusCreation();
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(serviceLocator()),
   );
@@ -170,4 +182,26 @@ void _getUserPosts() {
     ..registerFactory(
         () => GetUserPostsUseCase(userPostRepository: serviceLocator()))
     ..registerLazySingleton(() => GetUserPostsBloc(serviceLocator()));
+}
+
+void _postFeed() {
+  serviceLocator
+    ..registerFactory<PostFeedRemoteDatasource>(
+        () => PostFeedRemoteDatasourceImpl())
+    ..registerFactory<PostFeedRepository>(
+        () => PostFeedRepositoryImpl(feedRemoteDatasource: serviceLocator()))
+    ..registerFactory(
+        () => GetFollowingPostsUseCase(postFeedRepository: serviceLocator()))
+    ..registerLazySingleton(() => (FollowingPostFeedBloc(serviceLocator())));
+}
+
+void _statusCreation() {
+  serviceLocator
+    ..registerFactory<StatusRemoteDatasource>(
+        () => StatusRemoteDatasourceImpl())
+    ..registerFactory<CreateStatusRepository>(() =>
+        CreateStatusRepositoryImpl(statusRemoteDatasource: serviceLocator()))
+    ..registerFactory(
+        () => CreateStatusUseCase(createStatusRepository: serviceLocator()))
+    ..registerLazySingleton(() => (StatusBloc(serviceLocator())));
 }

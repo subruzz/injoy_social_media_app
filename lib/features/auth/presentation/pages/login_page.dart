@@ -11,7 +11,7 @@ import 'package:social_media_app/features/auth/presentation/widgets/auth_button.
 import 'package:social_media_app/features/auth/presentation/widgets/auth_form.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/welcome_msg/welcome_msg.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
-import 'package:social_media_app/home.dart';
+import 'package:social_media_app/features/post_feed/presentation/pages/home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

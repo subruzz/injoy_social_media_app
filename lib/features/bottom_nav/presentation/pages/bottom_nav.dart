@@ -4,7 +4,7 @@ import 'package:rive/rive.dart';
 import 'package:social_media_app/explore.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_page.dart';
-import 'package:social_media_app/home.dart';
+import 'package:social_media_app/features/post_feed/presentation/pages/home.dart';
 import 'package:social_media_app/model.dart';
 
 const Color bottonNavBgColor = Color(0xFF17203A);

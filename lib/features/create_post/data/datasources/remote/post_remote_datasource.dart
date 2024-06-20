@@ -1,16 +1,13 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/features/create_post/data/models/hashtag_model.dart';
-import 'package:social_media_app/features/create_post/data/models/post_model.dart';
+import 'package:social_media_app/core/common/models/hashtag_model.dart';
+import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/features/create_post/domain/enitities/hash_tag.dart';
-import 'package:social_media_app/features/create_post/domain/enitities/post.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:uuid/uuid.dart';
 
 abstract interface class PostRemoteDatasource {
@@ -38,6 +35,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
     try {
       final postUrls = await uploadUserImage(postImage, post.postId);
       final newPost = PostModel(
+          userFullName: post.userFullName,
           postId: post.postId,
           creatorUid: post.creatorUid,
           createAt: Timestamp.now(),
@@ -132,6 +130,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
     try {
       final postUrls = await uploadUserImage(postImage, post.postId);
       final newPost = PostModel(
+          userFullName: post.userFullName,
           postId: post.postId,
           creatorUid: post.creatorUid,
           createAt: Timestamp.now(),

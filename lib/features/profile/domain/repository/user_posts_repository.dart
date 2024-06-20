@@ -1,7 +1,10 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/features/create_post/domain/enitities/post.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 
 abstract class UserPostsRepository {
-  Future<Either<Failure, List<PostEntity>>> getAllPostsByUser(String userId);
+  Future<
+          Either<Failure,
+              ({List<PostEntity> userPosts, List<String> userPostImages})>>
+      getAllPostsByUser(String userId);
 }

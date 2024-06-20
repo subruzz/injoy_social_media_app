@@ -17,16 +17,18 @@ import 'package:social_media_app/features/auth/presentation/bloc/google_auth/goo
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
-import 'package:social_media_app/features/create_post/features/bloc/create_post/create_post_bloc.dart';
-import 'package:social_media_app/features/create_post/features/bloc/search_hashtag/search_hashtag_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/create_post/create_post_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
+import 'package:social_media_app/features/create_status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
+import 'package:social_media_app/features/post_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_page.dart';
 
 import 'package:social_media_app/firebase_options.dart';
-import 'package:social_media_app/home.dart';
+import 'package:social_media_app/features/post_feed/presentation/pages/home.dart';
 import 'package:social_media_app/init_dependecies.dart';
 
 void main() async {
@@ -87,6 +89,12 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) => serviceLocator<GetUserPostsBloc>(),
             ),
+            BlocProvider(
+              create: (context) => serviceLocator<FollowingPostFeedBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<StatusBloc>(),
+            ),
           ],
           child: MaterialApp(
             scaffoldMessengerKey: Messenger.scaffoldKey,
@@ -101,6 +109,9 @@ class MyApp extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => LoginPage()));
                 }
                 if (state is AppUserLoggedIn) {
+                  context
+                      .read<FollowingPostFeedBloc>()
+                      .add(FollowingPostFeedGetEvent(uId: state.user.id));
                   context
                       .read<GetUserPostsBloc>()
                       .add(GetUserPostsrequestedEvent(uid: state.user.id));

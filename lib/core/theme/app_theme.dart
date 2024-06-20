@@ -62,7 +62,7 @@ final class AppDarkTheme {
       ),
       headlineLarge: TextStyle(
         color: _color.primaryText,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.bold,
         fontSize: 22.sp,
       ),
       headlineMedium: TextStyle(
@@ -84,9 +84,9 @@ final class AppDarkTheme {
         fontSize: 17.sp,
       ),
       titleSmall: TextStyle(
-        color: _color.primaryText,
-        fontSize: 16.sp,
-      ),
+          color: _color.primaryText,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold),
       labelLarge: TextStyle(
         color: _color.secondaryPrimaryText,
         fontSize: 15.sp,

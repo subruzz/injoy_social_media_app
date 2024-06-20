@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:fpdart/src/either.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/usecases/usecase.dart';
-import 'package:social_media_app/features/create_post/domain/enitities/post.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/create_post/domain/repositories/post_repository.dart';
 
 class DeletePostsUseCase implements UseCase<Unit, DeletePostsUseCaseParams> {

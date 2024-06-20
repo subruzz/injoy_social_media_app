@@ -7,7 +7,7 @@ import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/create_post/data/datasources/remote/post_remote_datasource.dart';
 import 'package:social_media_app/features/create_post/domain/enitities/hash_tag.dart';
-import 'package:social_media_app/features/create_post/domain/enitities/post.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/create_post/domain/repositories/post_repository.dart';
 
 class PostRepostioryImpl implements PostRepository {

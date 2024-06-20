@@ -19,6 +19,10 @@ final class GetUserPostsError extends GetUserPostsState {
 
 final class GetUserPostsSuccess extends GetUserPostsState {
   final List<PostEntity> userPosts;
+  final List<String> userAllPostImages;
 
-  const GetUserPostsSuccess({required this.userPosts});
+  const GetUserPostsSuccess({
+    required this.userPosts,
+    required this.userAllPostImages,
+  });
 }
