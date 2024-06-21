@@ -3,166 +3,211 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:social_media_app/core/extensions/time_stamp_to_string.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/widgets/post/post_action_bar.dart';
+import 'package:social_media_app/core/widgets/post/post_owner_image.dart';
+import 'package:social_media_app/core/widgets/post/post_option_button.dart';
+import 'package:social_media_app/core/widgets/post/post_description.dart';
+import 'package:social_media_app/core/widgets/post/post_hashtag.dart';
+import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
+import 'package:social_media_app/core/widgets/post/post_single_image.dart';
 
-class ViewPost extends StatefulWidget {
+class ViewPost extends StatelessWidget {
   final PostEntity post;
   const ViewPost({super.key, required this.post});
 
-  @override
-  State<ViewPost> createState() => _ViewPostState();
-}
-
-class _ViewPostState extends State<ViewPost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Post'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 25,
-                  ),
-                  AppSizedBox.sizedBox5W,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                      Text(
-                        widget.post.userFullName,
-                        style: Theme.of(context).textTheme.titleSmall,
+                      PostOwnerImage(ownerImage: post.userProfileUrl),
+                      AppSizedBox.sizedBox5W,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            post.userFullName,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          Text(
+                            '@${post.username}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                    color: AppDarkColor().primaryTextBlur),
+                          )
+                        ],
                       ),
-                      Text(
-                        '@${widget.post.username}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(color: AppDarkColor().primaryTextBlur),
-                      )
+                      const Spacer(),
+                      const PostOptionButton(),
                     ],
                   ),
-                  const Spacer(),
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.more_horiz_rounded))
-                ],
-              ),
-              AppSizedBox.sizedBox10H,
-              if (widget.post.description != null) Text(widget.post.description!),
-              if (widget.post.hashtags.isNotEmpty) Text(widget.post.hashtags.join('#')),
-              AppSizedBox.sizedBox10H,
-              SizedBox(
-                  width: double.infinity,
-                  height: .5.sh,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      widget.post.postImageUrl[0]!,
-                      fit: BoxFit.cover,
+                  AppSizedBox.sizedBox10H,
+                  if (post.description != null)
+                    PostDescription(
+                      description: post.description ?? '',
+                      seeFull: true,
                     ),
-                  )),
-              AppSizedBox.sizedBox10H,
-              Text('21:31 .14 jun 24'),
-              Row(
-                children: [
-                  _buildIconWithCount(Icons.favorite, 435, Colors.red),
-                  AppSizedBox.sizedBox10W,
-                  _buildIconWithCount(Icons.chat_bubble_outline, 89),
-                  AppSizedBox.sizedBox10W,
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.send,
-                      size: 18,
-                    ),
-                    color: Colors.white, // White color for the share icon
-                  ),
-                ],
-              ),
-              const Divider(),
-              AppSizedBox.sizedBox20H,
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 25,
-                  ),
-                  AppSizedBox.sizedBox5W,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  if (post.hashtags.isNotEmpty) Text(post.hashtags.join('#')),
+                  AppSizedBox.sizedBox10H,
+                  if (post.hashtags.isNotEmpty)
+                    PostHashtag(hashtags: post.hashtags),
+                  if (post.postImageUrl.isNotEmpty)
+                    if (post.postImageUrl.isNotEmpty)
+                      post.postImageUrl.length == 1
+                          ? PostSingleImage(
+                              imgUrl: post.postImageUrl[0],
+                              size: .5,
+                            )
+                          : PostMultipleImages(
+                              postImageUrls: post.postImageUrl,
+                              size: .5,
+                            ),
+                  AppSizedBox.sizedBox10H,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'sarah_virsson',
-                        style: Theme.of(context).textTheme.titleSmall,
+                      Text(post.createAt.toDate().toCustomFormat()),
+                      const PostActionBar(),
+                    ],
+                  ),
+                  const Divider(),
+                  AppSizedBox.sizedBox20H,
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 25,
                       ),
-                      Text(
-                        '@sarah',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(color: AppDarkColor().primaryTextBlur),
+                      AppSizedBox.sizedBox5W,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'sarah_virsson',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          Text(
+                            '@sarah',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                    color: AppDarkColor().primaryTextBlur),
+                          )
+                        ],
                       )
                     ],
-                  )
-                ],
-              ),
-              AppSizedBox.sizedBox5H,
-              Text(
-                  'how many paragraphs are enough, and how many are too many? For historical writing, there should be between four and six paragraphs in a two-page paper, or ..'),
-              Row(
-                children: [
-                  _buildIconWithCount(Icons.favorite, 435, Colors.red),
-                  AppSizedBox.sizedBox10W,
-                  TextButton(onPressed: () {}, child: Text('Reply')),
-                  AppSizedBox.sizedBox10W,
-                  Text('5 hours ago')
-                ],
-              ),
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 25,
                   ),
-                  AppSizedBox.sizedBox5W,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  AppSizedBox.sizedBox5H,
+                  const Text(
+                      'how many paragraphs are enough, and how many are too many? For historical writing, there should be between four and six paragraphs in a two-page paper, or ..'),
+                  Row(
                     children: [
-                      Text(
-                        'sarah_virsson',
-                        style: Theme.of(context).textTheme.titleSmall,
+                      _buildIconWithCount(Icons.favorite, 435, Colors.red),
+                      AppSizedBox.sizedBox10W,
+                      TextButton(onPressed: () {}, child: const Text('Reply')),
+                      AppSizedBox.sizedBox10W,
+                      const Text('5 hours ago')
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 25,
                       ),
-                      Text(
-                        '@sarah',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(color: AppDarkColor().primaryTextBlur),
+                      AppSizedBox.sizedBox5W,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'sarah_virsson',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          Text(
+                            '@sarah',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                    color: AppDarkColor().primaryTextBlur),
+                          )
+                        ],
                       )
                     ],
-                  )
+                  ),
+                  AppSizedBox.sizedBox5H,
+                  const Text(
+                      'how many paragraphs are enough, and how many are too many? For historical writing, there should be between four and six paragraphs in a two-page paper, or ..'),
+                  Row(
+                    children: [
+                      _buildIconWithCount(Icons.favorite, 435, Colors.red),
+                      AppSizedBox.sizedBox10W,
+                      TextButton(onPressed: () {}, child: Text('Reply')),
+                      AppSizedBox.sizedBox10W,
+                      Text('5 hours ago')
+                    ],
+                  ),
                 ],
               ),
-              AppSizedBox.sizedBox5H,
-              Text(
-                  'how many paragraphs are enough, and how many are too many? For historical writing, there should be between four and six paragraphs in a two-page paper, or ..'),
-              Row(
-                children: [
-                  _buildIconWithCount(Icons.favorite, 435, Colors.red),
-                  AppSizedBox.sizedBox10W,
-                  TextButton(onPressed: () {}, child: Text('Reply')),
-                  AppSizedBox.sizedBox10W,
-                  Text('5 hours ago')
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              height: 60,
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              color: Colors.black, // Set the background color of the container
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      style: TextStyle(color: Colors.white), // Text color
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Write a comment...',
+                          enabledBorder: InputBorder.none,
+                          filled: true,
+                          focusedBorder:
+                              InputBorder.none, // No border when focused
+
+                          fillColor:
+                              AppDarkColor().background // Background color
+                          ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  TextButton(
+                    onPressed: () {
+                      // Handle posting comment logic here
+                    },
+                    child: Text(
+                      'Post',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge, // Button text color
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

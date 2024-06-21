@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
-import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
@@ -10,7 +8,6 @@ import 'package:social_media_app/features/post_status_feed/presentation/bloc/fol
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/each_post.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/floating_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_selection_button.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/top_bar.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/user_status.dart';
 
 class HomePage extends StatelessWidget {

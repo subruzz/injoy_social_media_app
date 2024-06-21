@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PostMultipleImages extends StatelessWidget {
-  const PostMultipleImages({super.key, required this.postImageUrls});
+  const PostMultipleImages(
+      {super.key, required this.postImageUrls, this.size = .3});
   final List<String> postImageUrls;
+  final double size;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200.h,
+      height: size.sh,
       width: double.infinity,
       child: PageView.builder(
         itemCount: postImageUrls.length,

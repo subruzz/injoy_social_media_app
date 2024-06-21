@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_attributes.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_description.dart';
+import 'package:social_media_app/core/widgets/post/post_action_bar.dart';
+import 'package:social_media_app/core/widgets/post/post_attributes.dart';
+import 'package:social_media_app/core/widgets/post/post_description.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_dot.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_hashtag.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_multiple_images.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_option_button.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_owner_image.dart';
+import 'package:social_media_app/core/widgets/post/post_hashtag.dart';
+import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
+import 'package:social_media_app/core/widgets/post/post_option_button.dart';
+import 'package:social_media_app/core/widgets/post/post_owner_image.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_owner_username.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_single_image.dart';
+import 'package:social_media_app/core/widgets/post/post_single_image.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_time.dart';
 import 'package:social_media_app/view_post.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -76,29 +77,7 @@ class EachPost extends StatelessWidget {
                         borderRadius:
                             BorderRadius.circular(10), // Rounded corners
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const PostAttributes(
-                              icon: Icons.favorite_border, count: 335),
-                          AppSizedBox.sizedBox10W,
-                          const PostAttributes(
-                              icon: Icons.chat_bubble_outline, count: 98),
-                          Transform.rotate(
-                            angle: 0,
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.send_outlined,
-                                size: 17,
-                              ),
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: const PostActionBar()
                     ),
                   ),
                 ],
