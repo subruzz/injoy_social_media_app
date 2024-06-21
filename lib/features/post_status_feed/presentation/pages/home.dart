@@ -9,8 +9,9 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/create_post/presentation/pages/create_post_page.dart';
 import 'package:social_media_app/features/create_status/presentation/pages/create_statsus_page.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
-import 'package:social_media_app/features/post_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/view_post.dart';
+import 'package:social_media_app/view_status_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -72,42 +73,49 @@ class HomePage extends StatelessWidget {
                       if (index == 0) {
                         return Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 65,
-                                height: 65.0,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xff7c94b6),
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s',
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewStatusPage(),
+                              ));
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 65,
+                                  height: 65.0,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xff7c94b6),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s',
+                                      ),
+                                      fit: BoxFit.cover,
                                     ),
-                                    fit: BoxFit.cover,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(50.0)),
                                   ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(50.0)),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Transform.translate(
-                                    offset: const Offset(15, 15),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.add_circle,
-                                          color: Colors.white),
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              StatusCreationPage(),
-                                        ));
-                                      },
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Transform.translate(
+                                      offset: const Offset(15, 15),
+                                      child: IconButton(
+                                        icon: const Icon(Icons.add_circle,
+                                            color: Colors.white),
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                StatusCreationPage(),
+                                          ));
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const Text('You')
-                            ],
+                                const Text('You')
+                              ],
+                            ),
                           ),
                         );
                       }

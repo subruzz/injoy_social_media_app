@@ -65,6 +65,12 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
     final userDocRef = FirebaseFirestore.instance
         .collection('users')
         .doc(userCredential.user!.uid);
+    DocumentSnapshot userSnapshot = await userDocRef.get();
+    if (userSnapshot.exists) {
+      final data = userSnapshot.data() as Map<String, dynamic>;
+      final authUser = AppUserModel.fromJson(data);
+      return authUser;
+    }
     AppUserModel userModel = AppUserModel(
       id: userCredential.user!.uid,
       email: userCredential.user!.email ?? '',

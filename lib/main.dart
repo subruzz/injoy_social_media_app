@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/shared_providers/cubits/Pick_multiple_image/pick_multiple_image_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
+import 'package:social_media_app/features/auth/domain/usecases/current_user.dart';
+import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
@@ -21,14 +23,15 @@ import 'package:social_media_app/features/create_post/presentation/bloc/create_p
 import 'package:social_media_app/features/create_post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
 import 'package:social_media_app/features/create_status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
-import 'package:social_media_app/features/post_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/bloc/view_status/view_status_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_page.dart';
 
 import 'package:social_media_app/firebase_options.dart';
-import 'package:social_media_app/features/post_feed/presentation/pages/home.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/init_dependecies.dart';
 
 void main() async {
@@ -62,8 +65,7 @@ class MyApp extends StatelessWidget {
               create: (context) => serviceLocator<ProfileBloc>(),
             ),
             BlocProvider(
-              create: (context) =>
-                  serviceLocator<AppUserBloc>()..add(AppGetCurrentUser()),
+              create: (context) => serviceLocator<AppUserBloc>(),
             ),
             BlocProvider(
               create: (context) => serviceLocator<GoogleAuthBloc>(),
@@ -95,6 +97,13 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) => serviceLocator<StatusBloc>(),
             ),
+            BlocProvider(
+              create: (context) => serviceLocator<ViewStatusBloc>(),
+            ),
+            BlocProvider(
+              create: (context) =>
+                  serviceLocator<AuthBloc>()..add(AuthCurrentUser()),
+            ),
           ],
           child: MaterialApp(
             scaffoldMessengerKey: Messenger.scaffoldKey,
@@ -102,36 +111,34 @@ class MyApp extends StatelessWidget {
             title: 'First Method',
             // You can use the library anywhere in the app even in theme
             theme: AppDarkTheme.darkTheme,
-            home: BlocListener<AppUserBloc, AppUserState>(
+            home: BlocListener<AuthBloc, AuthState>(
               listener: (context, state) {
-                if (state is UserModelNotFoundState) {
+                if (state is AuthNotLoggedIn) {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LoginPage()));
                 }
-                if (state is AppUserLoggedIn) {
+                if (state is AuthLoggedInOrUpdate) {
                   context
                       .read<FollowingPostFeedBloc>()
                       .add(FollowingPostFeedGetEvent(uId: state.user.id));
                   context
                       .read<GetUserPostsBloc>()
                       .add(GetUserPostsrequestedEvent(uid: state.user.id));
-                  if (state.user.fullName == null) {
-                    Navigator.push(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AddProfilePage(
-                          appUser: state.user,
-                        ),
-                      ),
-                    );
-                  } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                BottonNavWithAnimatedIcons()));
-                  }
+                          builder: (context) => BottonNavWithAnimatedIcons()));
                 }
+                if (state is AuthLoggedInButProfileNotSet) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddProfilePage(
+                        appUser: state.user,
+                      ),
+                    ),
+                  );
+                } 
               },
               child: const Center(
                 child: CircularProgressIndicator(),

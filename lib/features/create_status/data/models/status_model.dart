@@ -12,7 +12,7 @@ class StatusModel extends StatusEntity {
     required super.userName,
   });
 
-  factory StatusModel.fromMap(Map<String, dynamic> data, String id) {
+  factory StatusModel.fromMap(Map<String, dynamic> data) {
     return StatusModel(
         userName: data['userName'],
         sId: data['sId'],

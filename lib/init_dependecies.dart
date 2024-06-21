@@ -10,6 +10,7 @@ import 'package:social_media_app/features/auth/domain/usecases/forgot_password.d
 import 'package:social_media_app/features/auth/domain/usecases/google_auth.dart';
 import 'package:social_media_app/features/auth/domain/usecases/login_user.dart';
 import 'package:social_media_app/features/auth/domain/usecases/user_signup.dart';
+import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
@@ -37,11 +38,13 @@ import 'package:social_media_app/features/location/data/repositories/location_re
 import 'package:social_media_app/features/location/domain/repositories/location_repository.dart';
 import 'package:social_media_app/features/location/domain/usecases/get_location.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
-import 'package:social_media_app/features/post_feed/data/datasource/post_feed_remote_datasource.dart';
-import 'package:social_media_app/features/post_feed/data/repository/post_feed_repository_impl.dart';
-import 'package:social_media_app/features/post_feed/domain/repositories/post_feed_repository.dart';
-import 'package:social_media_app/features/post_feed/domain/usecases/get_following_posts.dart';
-import 'package:social_media_app/features/post_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
+import 'package:social_media_app/features/post_status_feed/data/datasource/post_feed_remote_datasource.dart';
+import 'package:social_media_app/features/post_status_feed/data/repository/post_feed_repository_impl.dart';
+import 'package:social_media_app/features/post_status_feed/domain/repositories/post_feed_repository.dart';
+import 'package:social_media_app/features/post_status_feed/domain/usecases/get_following_posts.dart';
+import 'package:social_media_app/features/post_status_feed/domain/usecases/view_current_user_status.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/bloc/view_status/view_status_bloc.dart';
 import 'package:social_media_app/features/profile/data/data_source/user_profile_data_source.dart';
 import 'package:social_media_app/features/profile/data/data_source/user_posts_remote_datasource.dart';
 import 'package:social_media_app/features/profile/data/repository/profile_repository_impl.dart';
@@ -66,7 +69,7 @@ Future<void> initDependencies() async {
   _postFeed();
   _statusCreation();
   serviceLocator.registerLazySingleton(
-    () => AppUserBloc(serviceLocator()),
+    () => AppUserBloc(),
   );
 }
 
@@ -123,7 +126,8 @@ void _initAuth() {
     ..registerFactory(() => ForgotPasswordUseCase(serviceLocator()))
     ..registerLazySingleton(
       () => ForgotPasswordBloc(serviceLocator()),
-    );
+    )
+    ..registerFactory(() => AuthBloc(serviceLocator(), serviceLocator()));
 }
 
 void _initProfile() {
@@ -192,7 +196,10 @@ void _postFeed() {
         () => PostFeedRepositoryImpl(feedRemoteDatasource: serviceLocator()))
     ..registerFactory(
         () => GetFollowingPostsUseCase(postFeedRepository: serviceLocator()))
-    ..registerLazySingleton(() => (FollowingPostFeedBloc(serviceLocator())));
+    ..registerFactory(() =>
+        ViewCurrentUserStatusUseCase(postFeedRepository: serviceLocator()))
+    ..registerLazySingleton(() => (FollowingPostFeedBloc(serviceLocator())))
+    ..registerLazySingleton(() => ViewStatusBloc(serviceLocator()));
 }
 
 void _statusCreation() {

@@ -4,14 +4,14 @@ import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
 class AuthButton extends StatelessWidget {
-  final String title;
+  final Widget child;
   final VoidCallback onClick;
   final bool animate;
   final bool? isGoogleAuth;
   final Color? backgroundColor;
 
   const AuthButton({
-    required this.title,
+    required this.child,
     required this.onClick,
     this.animate = true,
     this.isGoogleAuth,
@@ -22,8 +22,8 @@ class AuthButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FadeInUp(
-      delay: Duration(milliseconds: 0),
-      duration: Duration(milliseconds: 0),
+      delay: const Duration(milliseconds: 0),
+      duration: const Duration(milliseconds: 0),
       child: SizedBox(
         height: 50,
         width: double.infinity,
@@ -31,7 +31,7 @@ class AuthButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: isGoogleAuth != null
                 ? Colors.white.withOpacity(.9)
-                : AppDarkColor().buttonSecondaryColor,
+                : AppDarkColor().buttonBackground,
           ),
           onPressed: () {
             FocusManager.instance.primaryFocus?.unfocus();
@@ -46,14 +46,7 @@ class AuthButton extends StatelessWidget {
                   height: 25,
                 ),
               if (isGoogleAuth != null) AppSizedBox.sizedBox15W,
-              Text(
-                title,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: isGoogleAuth != null
-                        ? AppDarkColor().background
-                        : AppDarkColor().primaryText),
-              ),
+              child
             ],
           ),
         ),

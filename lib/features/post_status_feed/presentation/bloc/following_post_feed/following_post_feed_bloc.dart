@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/features/post_feed/domain/usecases/get_following_posts.dart';
+import 'package:social_media_app/features/post_status_feed/domain/usecases/get_following_posts.dart';
 
 part 'following_post_feed_event.dart';
 part 'following_post_feed_state.dart';

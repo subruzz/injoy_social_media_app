@@ -12,7 +12,7 @@ import 'package:social_media_app/features/location/presentation/widgets/popup.da
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
-import 'package:social_media_app/features/post_feed/presentation/pages/home.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 
 class LocationAskingPage extends StatelessWidget {
   const LocationAskingPage(
