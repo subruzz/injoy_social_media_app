@@ -28,12 +28,12 @@ class _CustomChoiceChipState extends State<CustomChoiceChip> {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Text(
           widget.chipLabel,
-          style: Theme.of(context).textTheme.labelMedium,
         ),
       ),
       selected: widget.selected.contains(widget.chipLabel),
       onSelected: (value) {
         {
+          
           if (widget.selected.contains(widget.chipLabel)) {
             widget.selected.remove(widget.chipLabel);
           } else {

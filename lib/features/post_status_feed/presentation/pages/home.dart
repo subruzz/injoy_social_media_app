@@ -1,17 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get_it/get_it.dart';
+import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/features/create_post/presentation/pages/create_post_page.dart';
-import 'package:social_media_app/features/create_status/presentation/pages/create_statsus_page.dart';
-import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
-import 'package:social_media_app/view_post.dart';
-import 'package:social_media_app/view_status_page.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/each_post.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/floating_button.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_selection_button.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/top_bar.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/user_status.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -21,349 +21,61 @@ class HomePage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        floatingActionButton: SpeedDial(
-          overlayOpacity: .5,
-          icon: Icons.add,
-          activeIcon: Icons.close,
-          children: [
-            SpeedDialChild(child: const Icon(Icons.circle), label: 'Status'),
-            SpeedDialChild(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => CreatePostScreen(
-                        locationBloc: GetIt.instance<LocationBloc>()),
-                  ));
-                },
-                child: const Icon(Icons.add_to_photos_sharp),
-                label: 'Post'),
+        floatingActionButton: const FloatingButton(),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              pinned: true,
+              title: Text(
+                'INJOY',
+                style: Theme.of(context)
+                    .textTheme
+                    .displayMedium
+                    ?.copyWith(letterSpacing: 5),
+              ),
+              actions: [
+                if (context.read<AppUserBloc>().appUser!.profilePic != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: CircleAvatar(
+                        backgroundColor: AppDarkColor().background,
+                        radius: 23,
+                        backgroundImage: CachedNetworkImageProvider(
+                            context.read<AppUserBloc>().appUser!.profilePic!)),
+                  )
+              ],
+            ),
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  AppSizedBox.sizedBox10H,
+                  const UserStatus(),
+                  const PostSelectionButton(),
+                  AppSizedBox.sizedBox10H,
+                ],
+              ),
+            ),
+            BlocBuilder<FollowingPostFeedBloc, FollowingPostFeedState>(
+              builder: (context, state) {
+                if (state is FollowingPostFeedSuccess) {
+                  return SliverList.builder(
+                    itemCount: state.followingPosts.length,
+                    itemBuilder: (context, index) {
+                      final currentPost = state.followingPosts[index];
+
+                      return EachPost(currentPost: currentPost);
+                    },
+                  );
+                }
+                return const SliverToBoxAdapter(
+                  child: SizedBox(),
+                );
+              },
+            ),
           ],
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'INJOY',
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayMedium
-                          ?.copyWith(letterSpacing: 5),
-                    ),
-                    const CircleAvatar(
-                      radius: 23,
-                      backgroundImage: NetworkImage(
-                          'https://imgv3.fotor.com/images/slider-image/A-clear-close-up-photo-of-a-woman.jpg'),
-                    )
-                  ],
-                ),
-              ),
-              AppSizedBox.sizedBox10H,
-              SizedBox(
-                height: 110,
-                child: ListView(
-                  padding: EdgeInsets.only(left: 10),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    ...List.generate(10, (index) {
-                      if (index == 0) {
-                        return Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewStatusPage(),
-                              ));
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 65,
-                                  height: 65.0,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xff7c94b6),
-                                    image: DecorationImage(
-                                      image: NetworkImage(
-                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s',
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(50.0)),
-                                  ),
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Transform.translate(
-                                      offset: const Offset(15, 15),
-                                      child: IconButton(
-                                        icon: const Icon(Icons.add_circle,
-                                            color: Colors.white),
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) =>
-                                                StatusCreationPage(),
-                                          ));
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const Text('You')
-                              ],
-                            ),
-                          ),
-                        );
-                      }
-                      return Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 65,
-                              height: 65.0,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff7c94b6),
-                                image: const DecorationImage(
-                                  image: NetworkImage(
-                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(50.0)),
-                                border: Border.all(
-                                  color: Colors.red,
-                                  width: 3.0,
-                                ),
-                              ),
-                            ),
-                            const Text('Dasha')
-                          ],
-                        ),
-                      );
-                    })
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  children: [
-                    AnimatedContainer(
-                      duration: const Duration(seconds: 2),
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'For you',
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        FirebaseAuth.instance.signOut();
-                      },
-                      child: Text(
-                        'Follwing',
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              AppSizedBox.sizedBox10H,
-              BlocBuilder<FollowingPostFeedBloc, FollowingPostFeedState>(
-                builder: (context, state) {
-                  if (state is FollowingPostFeedSuccess) {
-                    return Expanded(
-                        child: ListView.builder(
-                      itemCount: state.followingPosts.length,
-                      itemBuilder: (context, index) {
-                        final currentPost = state.followingPosts[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ViewPost(post: currentPost),
-                            ));
-                          },
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 20.0, right: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.network(
-                                    'https://imgv3.fotor.com/images/slider-image/A-clear-close-up-photo-of-a-woman.jpg',
-                                    height: 50.0,
-                                    width: 50.0,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                AppSizedBox.sizedBox5W,
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                currentPost.username,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 13.sp),
-                                              ),
-                                              AppSizedBox.sizedBox5W,
-                                              // const Text(
-                                              //   '•',
-                                              //   style: TextStyle(
-                                              //       color: Colors.white,
-                                              //       fontSize: 30),
-                                              // ),
-                                              // AppSizedBox.sizedBox5W,
-                                              // Text(
-                                              //   '@Maria',
-                                              //   style: Theme.of(context)
-                                              //       .textTheme
-                                              //       .titleSmall
-                                              //       ?.copyWith(fontSize: 13.sp),
-                                              // ),
-                                              const Text(
-                                                '•',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 30),
-                                              ),
-                                              AppSizedBox.sizedBox5W,
-                                              Text(
-                                                '2h',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall
-                                                    ?.copyWith(fontSize: 13.sp),
-                                              ),
-                                            ],
-                                          ),
-                                          const Spacer(),
-                                          IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(
-                                              Icons.more_horiz_rounded,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Text(currentPost.description ?? '',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium),
-                                      Text(
-                                        currentPost.hashtags.join(' # '),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall
-                                            ?.copyWith(
-                                                fontSize: 13.sp,
-                                                color: Colors.blue),
-                                      ),
-                                      AppSizedBox.sizedBox5H,
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: Image.network(
-                                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s',
-                                          height: 130.h,
-                                          width: double.infinity,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      AppSizedBox.sizedBox5H,
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Container(
-                                          width: 150,
-                                          height: 40,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 3,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: AppDarkColor()
-                                                .softBackground, // Dark background color
-                                            borderRadius: BorderRadius.circular(
-                                                10), // Rounded corners
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              _buildIconWithCount(
-                                                  Icons.favorite,
-                                                  435,
-                                                  Colors.red),
-                                              _buildIconWithCount(
-                                                  Icons.chat_bubble_outline,
-                                                  89),
-                                              IconButton(
-                                                onPressed: () {},
-                                                icon: const Icon(
-                                                  Icons.send,
-                                                  size: 18,
-                                                ),
-                                                color: Colors
-                                                    .white, // White color for the share icon
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ));
-                  }
-                  return SizedBox();
-                },
-              )
-            ],
-          ),
         ),
       ),
     );
   }
-}
-
-Widget _buildIconWithCount(IconData icon, int count, [Color? iconColor]) {
-  return Row(
-    children: [
-      Icon(
-        icon,
-        size: 18,
-        color: iconColor ?? Colors.white,
-      ),
-      const SizedBox(width: 5),
-      Text(
-        count.toString(),
-        style: const TextStyle(fontSize: 12, color: Colors.white),
-      ),
-    ],
-  );
 }

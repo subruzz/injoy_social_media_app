@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/entities/user.dart';
 
 import 'package:social_media_app/core/const/app_sizedbox.dart';
@@ -13,7 +12,6 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
-import 'package:social_media_app/features/profile/presentation/pages/interest_selection_page.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/next_button.dart';
 
 import '../../../../core/widgets/textfields/text_field.dart';

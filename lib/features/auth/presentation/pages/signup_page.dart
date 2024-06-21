@@ -6,7 +6,7 @@ import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_ch
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_form.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/google_auth.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/separating_divider.dart';
-import 'package:social_media_app/features/auth/presentation/widgets/welcome_msg/welcome_msg.dart';
+import 'package:social_media_app/core/widgets/welcome_msg/welcome_msg.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});

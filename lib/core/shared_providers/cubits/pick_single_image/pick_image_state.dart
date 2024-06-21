@@ -3,14 +3,18 @@ part of 'pick_image_cubit.dart';
 @immutable
 abstract class PickSingleImageState {}
 
-class PickImageInitial extends PickSingleImageState {}
+class PickSingleImageInitial extends PickSingleImageState {}
 
-class PickImageLoading extends PickSingleImageState {}
+class PickSingleImageLoading extends PickSingleImageState {}
 
-class PickImageSuccess extends PickSingleImageState {}
+class PickSingleImageSuccess extends PickSingleImageState {
+  final File img;
 
-class PickImageFailure extends PickSingleImageState {
+  PickSingleImageSuccess({required this.img});
+}
+
+class PickSingleImageFailure extends PickSingleImageState {
   final String error;
 
-  PickImageFailure(this.error);
+  PickSingleImageFailure(this.error);
 }

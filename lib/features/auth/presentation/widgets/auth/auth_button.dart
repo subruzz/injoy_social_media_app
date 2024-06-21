@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/const/app_asset_images.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
@@ -42,7 +43,7 @@ class AuthButton extends StatelessWidget {
             children: [
               if (isGoogleAuth != null)
                 Image.asset(
-                  'assets/images/google.png',
+                  AppAssetImages.googleImg,
                   height: 25,
                 ),
               if (isGoogleAuth != null) AppSizedBox.sizedBox15W,

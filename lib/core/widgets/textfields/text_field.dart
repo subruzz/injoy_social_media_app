@@ -40,13 +40,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   void initState() {
     super.initState();
-    isPassWordVisible = widget.showSuffixIcon;
+    isPassWordVisible = widget.obsecureText;
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      readOnly: widget.readOnly??false,
+      readOnly: widget.readOnly ?? false,
       maxLines: widget.maxLine ?? 1,
       controller: widget.controller,
       obscureText: isPassWordVisible,

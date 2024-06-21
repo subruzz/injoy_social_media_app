@@ -8,7 +8,7 @@ import 'package:social_media_app/features/auth/presentation/widgets/auth/google_
 import 'package:social_media_app/features/auth/presentation/widgets/login/forgot_password_text.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/login/login_button.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/separating_divider.dart';
-import 'package:social_media_app/features/auth/presentation/widgets/welcome_msg/welcome_msg.dart';
+import 'package:social_media_app/core/widgets/welcome_msg/welcome_msg.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

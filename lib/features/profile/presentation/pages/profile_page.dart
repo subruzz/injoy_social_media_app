@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/pages/edit_profile_page.dart';
@@ -17,13 +16,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: BlocConsumer<AppUserBloc, AppUserState>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
-        builder: (context, state) {
-          if (state is AppUserLoggedIn) {
-            return Scaffold(
+      child: Scaffold(
               appBar: AppBar(
                 title: Text(
                   context.read<AppUserBloc>().appUser!.userName ?? '',
@@ -245,14 +238,8 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ],
               ),
-            );
-          } else {
-            return const Center(
-              child: Text('not logged In'),
-            );
-          }
-        },
-      ),
+            )
+         
     );
   }
 }

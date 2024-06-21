@@ -14,7 +14,7 @@ final class CreatePostClickEvent extends CreatePostEvent {
   final String? description;
   final String userFullName;
   final String? userProfileUrl;
-  final List<String?> hashtags;
+  final List<String> hashtags;
   final double? latitude;
   final double? longitude;
   final String? location;

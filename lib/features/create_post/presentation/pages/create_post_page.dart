@@ -33,6 +33,16 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final PageController _pageController = PageController();
   final List<String> hashTags = [];
   final _debouncer = Debouncer(delay: const Duration(milliseconds: 1000));
+  @override
+  void dispose() {
+    _descriptionController.dispose();
+    _hashtagcontroller.dispose();
+    _pickMultipleImageCubit
+        .close(); 
+    _selectTagsCubit.close();
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

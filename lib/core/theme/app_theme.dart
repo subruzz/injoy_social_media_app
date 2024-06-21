@@ -96,11 +96,11 @@ final class AppDarkTheme {
         fontSize: _screenUtil.setSp(14),
       ),
       labelSmall: TextStyle(
-        color: _color.primaryText,
-        fontSize: 13.sp,
-      ),
+          color: _color.primaryText,
+          fontSize: 13.sp,
+          fontWeight: FontWeight.bold),
       bodyLarge: TextStyle(
-        color: _color.primaryText,
+        color: _color.secondaryText,
         fontSize: _screenUtil.setSp(14),
       ),
       bodyMedium: TextStyle(

@@ -54,6 +54,7 @@ import 'package:social_media_app/features/profile/domain/repository/user_posts_r
 import 'package:social_media_app/features/profile/domain/usecases/create_user_profile.dart';
 import 'package:social_media_app/features/profile/domain/usecases/get_user_posts.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/select_interest_cubit/select_interest_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 
 final serviceLocator = GetIt.instance;
@@ -111,9 +112,7 @@ void _initAuth() {
       ),
     )
     ..registerFactory(
-      () => GoogleAuthBloc(
-        serviceLocator(),
-      ),
+      () => GoogleAuthBloc(serviceLocator(), serviceLocator()),
     )
     ..registerFactory(
       () => LoginUserUseCase(
@@ -140,7 +139,8 @@ void _initProfile() {
     )
     ..registerLazySingleton(
       () => ProfileBloc(serviceLocator(), serviceLocator()),
-    );
+    )
+    ..registerLazySingleton(() => SelectInterestCubit());
 }
 
 void _initLocation() {

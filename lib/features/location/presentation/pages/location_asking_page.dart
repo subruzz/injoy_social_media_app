@@ -6,13 +6,16 @@ import 'package:lottie/lottie.dart';
 import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/location/presentation/widgets/popup.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 
 class LocationAskingPage extends StatelessWidget {
   const LocationAskingPage(
@@ -21,14 +24,20 @@ class LocationAskingPage extends StatelessWidget {
   final File? profilePic;
   @override
   Widget build(BuildContext context) {
-    print(profilePic);
     return BlocConsumer<ProfileBloc, ProfileState>(
       listener: (context, state) {
         if (state is ProfileSubmissionSuccess) {
+          final user = context.read<AppUserBloc>().appUser!;
+          context
+              .read<FollowingPostFeedBloc>()
+              .add(FollowingPostFeedGetEvent(uId: user.id));
+          context
+              .read<GetUserPostsBloc>()
+              .add(GetUserPostsrequestedEvent(uid: user.id));
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HomePage(),
+                builder: (context) => const BottonNavWithAnimatedIcons(),
               ));
         }
         if (state is ProfileSubmissionFailure) {

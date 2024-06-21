@@ -9,19 +9,20 @@ part 'pick_image_state.dart';
 class PickSingleImageCubit extends Cubit<PickSingleImageState> {
   File? img;
 
-  PickSingleImageCubit() : super(PickImageInitial());
+  PickSingleImageCubit() : super(PickSingleImageInitial());
 
   Future<void> pickImage() async {
     try {
-      emit(PickImageLoading());
+      emit(PickSingleImageLoading());
       final image = await ImagePickerService.pickOneImage();
       if (image != null) {
         img = image;
+        emit(PickSingleImageSuccess(img: image));
       } else {
-        emit(PickImageFailure('No image selected'));
+        emit(PickSingleImageFailure('No image selected'));
       }
     } catch (e) {
-      emit(PickImageFailure(e.toString()));
+      emit(PickSingleImageFailure(e.toString()));
     }
   }
 }
