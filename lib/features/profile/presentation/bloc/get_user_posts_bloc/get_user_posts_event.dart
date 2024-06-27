@@ -12,3 +12,17 @@ final class GetUserPostsrequestedEvent extends GetUserPostsEvent {
 
   const GetUserPostsrequestedEvent({required this.uid});
 }
+
+final class GetUserPostsAterPostUpdate extends GetUserPostsEvent {
+  final PostEntity updatedPost;
+  final List<PostEntity> allUsePosts;
+  final List<String> userAllPostImages;
+
+  final int index;
+
+  const GetUserPostsAterPostUpdate(
+      {required this.updatedPost,
+      required this.index,
+      required this.userAllPostImages,
+      required this.allUsePosts});
+}

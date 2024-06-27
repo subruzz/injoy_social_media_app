@@ -13,10 +13,12 @@ class SearchHashtagBloc extends Bloc<SearchHashtagEvent, SearchHashtagState> {
   SearchHashtagBloc(
     this._searchHashTagUseCase,
   ) : super(SearchHashtagInitial()) {
-    on<SearchHashtagEvent>((event, emit) {
-      emit(SearchHashtagloading());
+    on<SearchHashTagReset>((event, emit) {
+      emit(SearchHashtagInitial());
     });
     on<SeachHashTagGetEvent>((event, emit) async {
+      emit(SearchHashtagloading());
+
       if (event.query.isEmpty) {
         emit(SearchHashtagInitial());
         return;

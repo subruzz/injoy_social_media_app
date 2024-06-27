@@ -9,10 +9,13 @@ class Debouncer {
   Debouncer({required this.delay});
 
   void run(VoidCallback action) {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
+    cancel(); // Cancel any previous debounce action
 
     _timer = Timer(delay, action);
+  }
+
+  void cancel() {
+    _timer?.cancel();
+    _timer = null;
   }
 }

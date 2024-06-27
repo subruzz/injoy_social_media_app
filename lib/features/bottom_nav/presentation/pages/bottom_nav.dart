@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
+import 'package:social_media_app/chat_page.dart';
 import 'package:social_media_app/explore.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/model.dart';
+import 'package:social_media_app/notification_page.dart';
 
 const Color bottonNavBgColor = Color(0xFF17203A);
 
@@ -24,8 +26,8 @@ class _BottonNavWithAnimatedIconsState
   List<Widget> pages = [
     const HomePage(),
     ExplorePage(),
-    ExplorePage(),
-    const HomePage(),
+    ChatPage(),
+    const NotificationPage(),
     const ProfilePage()
   ];
 

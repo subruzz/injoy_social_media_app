@@ -64,6 +64,7 @@ class _StatusCreationPageState extends State<StatusCreationPage> {
                             context.read<AppUserBloc>().appUser!;
                         context.read<StatusBloc>().add(CreateStatusEvent(
                             userId: currentUser.id,
+                            profilePic: currentUser.profilePic,
                             userName: currentUser.userName ?? '',
                             content: _controller.text.trim(),
                             color: colorCubit.color.value,

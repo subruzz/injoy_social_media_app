@@ -12,3 +12,4 @@ final class SeachHashTagGetEvent extends SearchHashtagEvent {
 
   const SeachHashTagGetEvent({required this.query});
 }
+final class SearchHashTagReset extends SearchHashtagEvent{}

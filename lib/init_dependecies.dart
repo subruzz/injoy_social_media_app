@@ -22,12 +22,18 @@ import 'package:social_media_app/features/create_post/data/repository/post_repos
 import 'package:social_media_app/features/create_post/domain/repositories/asset_repository.dart';
 import 'package:social_media_app/features/create_post/domain/repositories/post_repository.dart';
 import 'package:social_media_app/features/create_post/domain/usecases/create_posts.dart';
+import 'package:social_media_app/features/create_post/domain/usecases/delete_post.dart';
 import 'package:social_media_app/features/create_post/domain/usecases/get_assets.dart';
+import 'package:social_media_app/features/create_post/domain/usecases/like_post.dart';
 import 'package:social_media_app/features/create_post/domain/usecases/searh_hashtag.dart';
+import 'package:social_media_app/features/create_post/domain/usecases/update_post.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/assset_bloc/asset_bloc_bloc.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/create_post/create_post_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/delte_post/delete_post_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/like_post/like_post_bloc.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/select_tags_cubit/select_tags_cubit.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/update_post/update_post_bloc.dart';
 import 'package:social_media_app/features/create_status/data/datasource/status_remote_datasource.dart';
 import 'package:social_media_app/features/create_status/data/repository/create_status_repository_impl.dart';
 import 'package:social_media_app/features/create_status/domain/repository/create_status_repository.dart';
@@ -76,7 +82,7 @@ Future<void> initDependencies() async {
 
 void _commonProviders() {
   serviceLocator
-    ..registerFactory(() => PickMultipleImageCubit())
+    ..registerLazySingleton(() => PickMultipleImageCubit())
     ..registerFactory(() => PickSingleImageCubit());
 }
 
@@ -170,10 +176,16 @@ void _post() {
         () => PostRepostioryImpl(serviceLocator()))
     ..registerFactory(
         () => SearchHashTagUseCase(postRepository: serviceLocator()))
-    ..registerFactory(() => SearchHashtagBloc(serviceLocator()))
+    ..registerLazySingleton(() => SearchHashtagBloc(serviceLocator()))
     ..registerFactory(
         () => CreatePostsUseCase(postRepository: serviceLocator()))
     ..registerLazySingleton(() => CreatePostBloc(serviceLocator()))
+    ..registerLazySingleton(() => UpdatePostBloc(serviceLocator()))
+    ..registerFactory(
+        () => DeletePostsUseCase(postRepository: serviceLocator()))
+    ..registerLazySingleton(() => DeletePostBloc(serviceLocator()))
+    ..registerFactory(() => LikePostsUseCase(postRepository: serviceLocator()))
+    ..registerLazySingleton(() => LikePostBloc(serviceLocator()))
     ..registerFactory(() => SelectTagsCubit());
 }
 
@@ -185,6 +197,8 @@ void _getUserPosts() {
         UserPostRepositoryImpl(userPostsRemoteDataSource: serviceLocator()))
     ..registerFactory(
         () => GetUserPostsUseCase(userPostRepository: serviceLocator()))
+    ..registerFactory(
+        () => UpdatePostsUseCase(postRepository: serviceLocator()))
     ..registerLazySingleton(() => GetUserPostsBloc(serviceLocator()));
 }
 

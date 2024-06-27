@@ -13,9 +13,10 @@ final class CreateStatusEvent extends StatusEvent {
   final String? content;
   final int color;
   final File? statusImage;
-
+  final String? profilePic;
   const CreateStatusEvent(
       {required this.userId,
+      this.profilePic,
       required this.userName,
       required this.content,
       required this.color,

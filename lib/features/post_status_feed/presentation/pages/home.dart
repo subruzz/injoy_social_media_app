@@ -5,7 +5,7 @@ import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/each_post.dart';
+import 'package:social_media_app/core/widgets/post/each_post.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/floating_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_selection_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/user_status.dart';
@@ -60,7 +60,7 @@ class HomePage extends StatelessWidget {
                     itemCount: state.followingPosts.length,
                     itemBuilder: (context, index) {
                       final currentPost = state.followingPosts[index];
-
+                      print(currentPost.likes.length);
                       return EachPost(currentPost: currentPost);
                     },
                   );

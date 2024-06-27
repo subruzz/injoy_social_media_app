@@ -1,7 +1,5 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
 
 abstract class AssetLocalSource {
   Future<List<AssetEntity>> loadAssets();

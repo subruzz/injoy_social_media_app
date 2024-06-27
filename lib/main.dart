@@ -20,7 +20,10 @@ import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/sig
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/create_post/create_post_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/delte_post/delete_post_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/like_post/like_post_bloc.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/update_post/update_post_bloc.dart';
 import 'package:social_media_app/features/create_status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
@@ -104,6 +107,21 @@ class MyApp extends StatelessWidget {
               create: (context) =>
                   serviceLocator<AuthBloc>()..add(AuthCurrentUser()),
             ),
+            BlocProvider(
+              create: (context) => serviceLocator<UpdatePostBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<DeletePostBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<PickMultipleImageCubit>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<SearchHashtagBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<LikePostBloc>(),
+            ),
           ],
           child: MaterialApp(
             scaffoldMessengerKey: Messenger.scaffoldKey,
@@ -138,7 +156,7 @@ class MyApp extends StatelessWidget {
                       ),
                     ),
                   );
-                } 
+                }
               },
               child: const Center(
                 child: CircularProgressIndicator(),

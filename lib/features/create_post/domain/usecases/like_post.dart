@@ -4,7 +4,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:fpdart/src/either.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/usecases/usecase.dart';
-import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/create_post/domain/repositories/post_repository.dart';
 
 class LikePostsUseCase implements UseCase<Unit, LikePostsUseCaseParams> {
@@ -14,11 +13,11 @@ class LikePostsUseCase implements UseCase<Unit, LikePostsUseCaseParams> {
       : _postRepository = postRepository;
   @override
   Future<Either<Failure, Unit>> call(params) async {
-    return await _postRepository.likePost(params.post);
+    return await _postRepository.likePost(params.postId);
   }
 }
 
 class LikePostsUseCaseParams {
-  final PostEntity post;
-  LikePostsUseCaseParams({required this.post});
+  final String postId;
+  LikePostsUseCaseParams({required this.postId});
 }

@@ -146,7 +146,7 @@ class _AddProfilePageState extends State<AddProfilePage> {
                       showSuffixIcon: false,
                       hintText: 'About',
                       maxLine: 3,
-                      obsecureText: false),
+                      obsecureText: false ),
                   AppSizedBox.sizedBox15H,
                 ],
               ),

@@ -10,7 +10,9 @@ class PickImageLoading extends PickMultipleImageState {}
 class PickImageSuccess extends PickMultipleImageState {
   final List<File?> images;
 
-  PickImageSuccess({required this.images});
+  PickImageSuccess({
+    required this.images,
+  });
 }
 
 class PickImageFailure extends PickMultipleImageState {

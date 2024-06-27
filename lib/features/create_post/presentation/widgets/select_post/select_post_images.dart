@@ -8,16 +8,14 @@ import 'package:social_media_app/features/create_post/presentation/widgets/selec
 import 'package:social_media_app/features/create_post/presentation/widgets/select_post/page_view_indicator.dart';
 
 class SelectPostImages extends StatelessWidget {
-  const SelectPostImages(
-      {super.key,
-      required this.pageController,
-      required this.pickMultipleImageCubit});
+  const SelectPostImages({
+    super.key,
+    required this.pageController,
+  });
   final PageController pageController;
-  final PickMultipleImageCubit pickMultipleImageCubit;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PickMultipleImageCubit, PickMultipleImageState>(
-      bloc: pickMultipleImageCubit,
       builder: (context, state) {
         if (state is PickImageSuccess) {
           final images = state.images;
@@ -28,15 +26,17 @@ class SelectPostImages extends StatelessWidget {
                 ? CreatePostImage(
                     selectedImage: images[0],
                     onTap: () {
-                      pickMultipleImageCubit.removeImage(images[0]);
+                      context
+                          .read<PickMultipleImageCubit>()
+                          .removeImage(images[0]);
                     })
                 : Column(
                     children: [
                       PageViewPosts(
-                          pageController: pageController,
-                          images: images,
-                          pickMultipleImageCubit: pickMultipleImageCubit),
-                          AppSizedBox.sizedBox5H,
+                        pageController: pageController,
+                        images: images,
+                      ),
+                      AppSizedBox.sizedBox5H,
                       PageViewIndicator(
                           pageController: pageController, images: images)
                     ],

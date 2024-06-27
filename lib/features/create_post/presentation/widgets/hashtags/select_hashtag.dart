@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/const/debouncer.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
@@ -7,7 +8,11 @@ import 'package:social_media_app/features/create_post/presentation/bloc/select_t
 import 'package:social_media_app/features/create_post/presentation/widgets/hashtags/search_hashtag.dart';
 
 class SelectHashtag extends StatelessWidget {
-  const SelectHashtag({super.key, required this.selectTagsCubit, required this.debouncer, required this.hashtagcontroller});
+  const SelectHashtag(
+      {super.key,
+      required this.selectTagsCubit,
+      required this.debouncer,
+      required this.hashtagcontroller});
   final SelectTagsCubit selectTagsCubit;
   final Debouncer debouncer;
   final TextEditingController hashtagcontroller;
@@ -18,11 +23,9 @@ class SelectHashtag extends StatelessWidget {
       child: InkWell(
         onTap: () {
           showModalBottomSheet(
-            isScrollControlled: false,
             context: context,
             builder: (context) {
               return SearchHashTagSheet(
-                  searchHashtagBloc: GetIt.instance<SearchHashtagBloc>(),
                   addToUi: (value) {
                     selectTagsCubit.addTag(value);
                   },
@@ -32,7 +35,11 @@ class SelectHashtag extends StatelessWidget {
                     selectTagsCubit.addTag(hashtagcontroller.text.trim());
                   });
             },
-          );
+          ).then((result) {
+            debouncer.cancel();
+            hashtagcontroller.clear();
+            context.read<SearchHashtagBloc>().add(SearchHashTagReset());
+          });
         },
         child: Container(
           padding: const EdgeInsets.all(5),

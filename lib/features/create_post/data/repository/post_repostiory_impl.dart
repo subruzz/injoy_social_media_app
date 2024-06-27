@@ -8,6 +8,7 @@ import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/create_post/data/datasources/remote/post_remote_datasource.dart';
 import 'package:social_media_app/features/create_post/domain/enitities/hash_tag.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/features/create_post/domain/enitities/update_post.dart';
 import 'package:social_media_app/features/create_post/domain/repositories/post_repository.dart';
 
 class PostRepostioryImpl implements PostRepository {
@@ -23,14 +24,14 @@ class PostRepostioryImpl implements PostRepository {
       await _postRemoteDatasource.createPost(post, postImage);
       return right(unit);
     } on MainException catch (e) {
-      return left(Failure(e.errorMsg,e.details));
+      return left(Failure(e.errorMsg, e.details));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> deletePost(PostEntity post)async {
+  Future<Either<Failure, Unit>> deletePost(String postId) async {
     try {
-      await _postRemoteDatasource.deletePost(post);
+      await _postRemoteDatasource.deletePost(postId);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -44,9 +45,9 @@ class PostRepostioryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> likePost(PostEntity post)async {
+  Future<Either<Failure, Unit>> likePost(String postId) async {
     try {
-      await _postRemoteDatasource.likePost(post);
+      await _postRemoteDatasource.likePost(postId);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -64,10 +65,11 @@ class PostRepostioryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> updatePost(PostEntity post ,List<File?> postImage)async {
-      try {
-      await _postRemoteDatasource.updatePost(post, postImage);
-      return right(unit);
+  Future<Either<Failure, PostEntity>> updatePost(
+      UpdatePostEntity post, String postId, ) async {
+    try {
+    final res=  await _postRemoteDatasource.updatePost(post, postId);
+      return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
     }

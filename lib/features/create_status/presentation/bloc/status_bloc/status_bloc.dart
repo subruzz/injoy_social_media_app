@@ -5,8 +5,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
+import 'package:social_media_app/features/create_status/domain/entities/status_user_entity.dart';
 
 import 'package:social_media_app/features/create_status/domain/usecases/create_status.dart';
 import 'package:uuid/uuid.dart';
@@ -27,15 +27,22 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
 
   FutureOr<void> _createStatus(
       CreateStatusEvent event, Emitter<StatusState> emit) async {
+    final currentTime = Timestamp.now();
     final newPost = StatusEntity(
         sId: const Uuid().v4(),
         content: event.content,
-        userId: event.userId,
-        userName: event.userName,
-        timestamp: Timestamp.now(),
-        color: event.color);
+        timestamp: currentTime,
+        color: event.color,
+        viewers: []);
+    final statusUser = StatusUserAttribute(
+        uid: event.userId,
+        username: event.userName,
+        profilePictureUrl: event.profilePic,
+        lastCreated: currentTime);
     final res = await _createStatusUseCase(CreateStatusUseCaseParams(
-        status: newPost, statusImage: event.statusImage));
+        status: newPost,
+        statusUserAttributes: statusUser,
+        statusImage: event.statusImage));
     res.fold((failure) => emit(StatusCreateFailure(errorMsg: failure.message)),
         (success) => emit(StatusCreateSuccess()));
   }

@@ -8,18 +8,21 @@ part 'pick_multiple_image_state.dart';
 
 class PickMultipleImageCubit extends Cubit<PickMultipleImageState> {
   List<File?> images = [];
-
-  PickMultipleImageCubit() : super(PickImageInitial()); 
+  PickMultipleImageCubit() : super(PickImageInitial());
+  // void alreadySelectedImage(List<String> alredyAvailableImages) {
+  //   emit(PickImageLoading());
+  //   if (alredyAvailableImages.isEmpty) {
+  //     return;
+  //   }
+  //   alreadyImages = alredyAvailableImages;
+  // }
 
   Future<void> pickImage() async {
     try {
-      emit(PickImageLoading());
       final imagess = await ImagePickerService.pickMultipleImages();
       if (imagess.isNotEmpty) {
-        images = imagess;
+        images.addAll(imagess);
         emit(PickImageSuccess(images: images));
-      } else {
-        emit(PickImageFailure('No image selected'));
       }
     } catch (e) {
       emit(PickImageFailure(e.toString()));
@@ -34,5 +37,10 @@ class PickMultipleImageCubit extends Cubit<PickMultipleImageState> {
       return;
     }
     emit(PickImageSuccess(images: images));
+  }
+
+  void clearState() {
+    images.clear();
+    emit(PickImageInitial());
   }
 }

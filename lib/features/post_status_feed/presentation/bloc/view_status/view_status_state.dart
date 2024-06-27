@@ -14,7 +14,7 @@ final class ViewStatusLoading extends ViewStatusState {}
 final class ViewStatusError extends ViewStatusState {}
 
 final class ViewStatusSuccess extends ViewStatusState {
-  final List<StatusEntity> statuses;
+  final List<StatusUserStatus> statuses;
 
   const ViewStatusSuccess({required this.statuses});
 }

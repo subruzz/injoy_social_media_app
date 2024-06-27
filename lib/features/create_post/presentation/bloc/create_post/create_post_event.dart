@@ -19,12 +19,14 @@ final class CreatePostClickEvent extends CreatePostEvent {
   final double? longitude;
   final String? location;
   final List<File?> postPics;
+  final bool isCommentOff;
 
   const CreatePostClickEvent(
       {required this.postPics,
       required this.creatorUid,
       required this.userFullName,
       required this.username,
+      required this.isCommentOff,
       required this.description,
       required this.userProfileUrl,
       required this.hashtags,

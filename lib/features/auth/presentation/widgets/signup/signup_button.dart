@@ -5,8 +5,9 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_button.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_button_text.dart';
-import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_loading.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
+
+import '../../../../../core/widgets/loading/circular_loading.dart';
 
 class SignupButton extends StatelessWidget {
   const SignupButton(
@@ -39,7 +40,7 @@ class SignupButton extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is SignupLoading) {
-            return const AuthLoading();
+            return const CircularLoading();
           }
           return const AuthButtonText(title: 'Sign Up');
         },

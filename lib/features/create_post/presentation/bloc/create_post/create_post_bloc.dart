@@ -19,6 +19,7 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
     on<CreatePostClickEvent>((event, emit) async {
       print(event.latitude);
       final newPost = PostEntity(
+          isCommentOff: event.isCommentOff,
           userFullName: event.userFullName,
           postId: const Uuid().v4(),
           creatorUid: event.creatorUid,

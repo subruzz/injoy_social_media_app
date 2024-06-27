@@ -2,11 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/features/create_status/data/models/status_model.dart';
+import 'package:social_media_app/features/create_status/domain/entities/single_status_entity.dart';
+import 'package:social_media_app/features/create_status/domain/entities/status_user_entity.dart';
 
 abstract class PostFeedRemoteDatasource {
   Future<List<PostModel>> fetchFollowedPosts(String userId);
   Future<List<PostModel>> fetchSuggestedPosts(String userId);
-  Future<List<StatusModel>> fetchStatus(String userId);
+  Future<StatusUserStatus> fetchCurrentUserStatus(String userId);
+  Future<List<StatusUserStatus>> fetchCurrentUserAndFollowingStatuses(
+      String currentUserId);
 }
 
 class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
@@ -39,52 +43,101 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
   }
 
   @override
-  Future<List<StatusModel>> fetchStatus(String userId) async {
+  Future<StatusUserStatus> fetchCurrentUserStatus(String userId) async {
     try {
-      // Fetch current user's following data
-      // final userDoc = await FirebaseFirestore.instance
-      //     .collection('users')
-      //     .doc(userId)
-      //     .get();
+      // Fetch the user's profile information
+      final userDocSnapshot = await FirebaseFirestore.instance
+          .collection('allStatus')
+          .doc(userId)
+          .get();
 
-      // final List<String>? followingData =
-      //     userDoc.data()?['followings'] as List<String>?;
+      if (!userDocSnapshot.exists) {
+        throw Exception('User not found');
+      }
 
-      // // Initialize list for user's following statuses
-      // List<StatusModel> userFollowingStatuses = [];
-
-      // if (followingData != null && followingData.isNotEmpty) {
-      //   // Fetch statuses from users the current user is following
-      //   final statusQuery = await FirebaseFirestore.instance
-      //       .collection('status')
-      //       .where('userId', whereIn: followingData)
-      //       .orderBy('timestamp', descending: true)
-      //       .get();
-
-      //   userFollowingStatuses = statusQuery.docs
-      //       .map((doc) => StatusModel.fromMap(doc.data()))
-      //       .toList();
-      // }
-
-      // Fetch current user's own statuses
-      final currentStatusesSnapshot = await FirebaseFirestore.instance
-          .collection('status')
-          .where("userId", isEqualTo: userId)
+      final statusUserAttribute = StatusUserAttribute.fromJson(
+          userDocSnapshot.data() as Map<String, dynamic>);
+      // Fetch the user's statuses
+      final statusesSnapshot = await FirebaseFirestore.instance
+          .collection('allStatus')
+          .doc(userId)
+          .collection('statuses')
           .orderBy('timestamp', descending: true)
           .get();
 
-      final List<StatusModel> userStatuses = currentStatusesSnapshot.docs
+      final List<StatusModel> userStatuses = statusesSnapshot.docs
           .map((doc) => StatusModel.fromMap(doc.data()))
           .toList();
-      return userStatuses;
 
-      // return (
-      //   userStatus: userStatuses,
-      //   userFollowingStatus: userFollowingStatuses,
-      // );
+      return StatusUserStatus(
+        statusUserAttribute: statusUserAttribute,
+        userStatus: userStatuses,
+      );
     } catch (e) {
       print('Error: ${e.toString()}');
-      throw MainException(errorMsg: 'Error while loading statuses!');
+      throw const MainException(errorMsg: 'Error while loading statuses!');
+    }
+  }
+
+  @override
+  Future<List<StatusUserStatus>> fetchCurrentUserAndFollowingStatuses(
+      String currentUserId) async {
+    try {
+      // Fetch the current user's document to get the list of followed users
+      final currentUserDocSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserId)
+          .get();
+
+      if (!currentUserDocSnapshot.exists) {
+        throw Exception('Current user not found');
+      }
+
+      // Extract the list of followed user IDs
+      final List<dynamic> following =
+          currentUserDocSnapshot.data()?['following'] ?? [];
+
+      // Initialize a list to hold all the followed users' statuses
+      List<StatusUserStatus> allStatuses = [];
+
+      // Fetch the statuses of each followed user
+      for (String userId in following) {
+        final userDocSnapshot = await FirebaseFirestore.instance
+            .collection('allStatus')
+            .doc(userId)
+            .get();
+
+        if (!userDocSnapshot.exists) {
+          continue;
+        }
+
+        final userStatusUserAttribute = StatusUserAttribute.fromJson(
+            userDocSnapshot.data() as Map<String, dynamic>);
+
+        final userStatusesSnapshot = await FirebaseFirestore.instance
+            .collection('allStatus')
+            .doc(userId)
+            .collection('statuses')
+            .orderBy('timestamp', descending: true)
+            .get();
+
+        final List<StatusModel> userStatuses = userStatusesSnapshot.docs
+            .map((doc) =>
+                StatusModel.fromMap(doc.data()))
+            .toList();
+
+        final model = StatusUserStatus(
+          statusUserAttribute: userStatusUserAttribute,
+          userStatus: userStatuses,
+        );
+
+        allStatuses.add(model);
+      }
+
+      return allStatuses;
+    } catch (e) {
+      print('Error fetching statuses: $e');
+      rethrow;
     }
   }
 }

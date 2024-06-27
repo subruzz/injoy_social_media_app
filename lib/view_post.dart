@@ -15,8 +15,8 @@ import 'package:social_media_app/core/widgets/post/post_single_image.dart';
 
 class ViewPost extends StatelessWidget {
   final PostEntity post;
-  const ViewPost({super.key, required this.post});
-
+  const ViewPost({super.key, required this.post, this.isEdit = false});
+  final bool isEdit;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +53,9 @@ class ViewPost extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      const PostOptionButton(),
+                      PostOptionButton(
+                        isEdit: isEdit,
+                      ),
                     ],
                   ),
                   AppSizedBox.sizedBox10H,
@@ -82,131 +84,100 @@ class ViewPost extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(post.createAt.toDate().toCustomFormat()),
-                      const PostActionBar(),
+                       PostActionBar(post: post,),
                     ],
                   ),
                   const Divider(),
                   AppSizedBox.sizedBox20H,
-                  Row(
-                    children: [
-                      const CircleAvatar(
-                        radius: 25,
-                      ),
-                      AppSizedBox.sizedBox5W,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'sarah_virsson',
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          Text(
-                            '@sarah',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                    color: AppDarkColor().primaryTextBlur),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                  if (!post.isCommentOff)
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 25,
+                        ),
+                        AppSizedBox.sizedBox5W,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'sarah_virsson',
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            Text(
+                              '@sarah',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      color: AppDarkColor().primaryTextBlur),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   AppSizedBox.sizedBox5H,
-                  const Text(
-                      'how many paragraphs are enough, and how many are too many? For historical writing, there should be between four and six paragraphs in a two-page paper, or ..'),
-                  Row(
-                    children: [
-                      _buildIconWithCount(Icons.favorite, 435, Colors.red),
-                      AppSizedBox.sizedBox10W,
-                      TextButton(onPressed: () {}, child: const Text('Reply')),
-                      AppSizedBox.sizedBox10W,
-                      const Text('5 hours ago')
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const CircleAvatar(
-                        radius: 25,
-                      ),
-                      AppSizedBox.sizedBox5W,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'sarah_virsson',
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          Text(
-                            '@sarah',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                    color: AppDarkColor().primaryTextBlur),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  AppSizedBox.sizedBox5H,
-                  const Text(
-                      'how many paragraphs are enough, and how many are too many? For historical writing, there should be between four and six paragraphs in a two-page paper, or ..'),
-                  Row(
-                    children: [
-                      _buildIconWithCount(Icons.favorite, 435, Colors.red),
-                      AppSizedBox.sizedBox10W,
-                      TextButton(onPressed: () {}, child: Text('Reply')),
-                      AppSizedBox.sizedBox10W,
-                      Text('5 hours ago')
-                    ],
-                  ),
+                  if (!post.isCommentOff)
+                    const Text(
+                        'how many paragraphs are enough, and how many are too many? For historical writing, there should be between four and six paragraphs in a two-page paper, or ..'),
+                  if (!post.isCommentOff)
+                    Row(
+                      children: [
+                        _buildIconWithCount(Icons.favorite, 435, Colors.red),
+                        AppSizedBox.sizedBox10W,
+                        TextButton(
+                            onPressed: () {}, child: const Text('Reply')),
+                        AppSizedBox.sizedBox10W,
+                        const Text('5 hours ago')
+                      ],
+                    ),
                 ],
               ),
             ),
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              height: 60,
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              color: Colors.black, // Set the background color of the container
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      style: TextStyle(color: Colors.white), // Text color
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Write a comment...',
-                          enabledBorder: InputBorder.none,
-                          filled: true,
-                          focusedBorder:
-                              InputBorder.none, // No border when focused
+          if (!post.isCommentOff)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                height: 60,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                color:
+                    Colors.black, // Set the background color of the container
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        style: TextStyle(color: Colors.white), // Text color
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Write a comment...',
+                            enabledBorder: InputBorder.none,
+                            filled: true,
+                            focusedBorder:
+                                InputBorder.none, // No border when focused
 
-                          fillColor:
-                              AppDarkColor().background // Background color
-                          ),
+                            fillColor:
+                                AppDarkColor().background // Background color
+                            ),
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  TextButton(
-                    onPressed: () {
-                      // Handle posting comment logic here
-                    },
-                    child: Text(
-                      'Post',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge, // Button text color
+                    SizedBox(width: 10),
+                    TextButton(
+                      onPressed: () {
+                        // Handle posting comment logic here
+                      },
+                      child: Text(
+                        'Post',
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge, // Button text color
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

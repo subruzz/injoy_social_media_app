@@ -7,8 +7,9 @@ import 'package:social_media_app/core/services/image_pick_services/image_picker.
 part 'pick_image_state.dart';
 
 class PickSingleImageCubit extends Cubit<PickSingleImageState> {
-  File? img;
-
+  File? _img;
+  File? get img => _img;
+  
   PickSingleImageCubit() : super(PickSingleImageInitial());
 
   Future<void> pickImage() async {
@@ -16,7 +17,7 @@ class PickSingleImageCubit extends Cubit<PickSingleImageState> {
       emit(PickSingleImageLoading());
       final image = await ImagePickerService.pickOneImage();
       if (image != null) {
-        img = image;
+        _img = image;
         emit(PickSingleImageSuccess(img: image));
       } else {
         emit(PickSingleImageFailure('No image selected'));

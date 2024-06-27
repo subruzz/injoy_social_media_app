@@ -17,11 +17,13 @@ class PostModel extends PostEntity {
     super.latitude,
     super.location,
     super.longitude,
+    required super.isCommentOff,
   });
 
   // 1. From JSON (Firestore)
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
+      isCommentOff: json['isCommentOff'],
       userFullName: json['userFullName'],
       latitude: json['latitude'],
       longitude: json['longitude'],
@@ -42,6 +44,7 @@ class PostModel extends PostEntity {
   // 2. To JSON (Firestore)
   Map<String, dynamic> toJson() {
     return {
+      'isCommentOff': isCommentOff,
       'userFullName': userFullName,
       'location': location,
       'latitude': latitude,
@@ -60,30 +63,32 @@ class PostModel extends PostEntity {
   }
 
   // 3. CopyWith (for immutability)
-  PostModel copyWith(
-      {String? postId,
-      String? creatorUid,
-      String? username,
-      String? description,
-      List<String>? postImageUrl,
-      List<String>? likes,
-      num? totalComments,
-      Timestamp? createAt,
-      String? userProfileUrl,
-      List<String>? hashtags,
-      String? userFullName}) {
-    return PostModel(
-      userFullName: userFullName ?? this.userFullName,
-      postId: postId ?? this.postId,
-      creatorUid: creatorUid ?? this.creatorUid,
-      username: username ?? this.username,
-      description: description ?? this.description,
-      postImageUrl: postImageUrl ?? this.postImageUrl,
-      likes: likes ?? this.likes,
-      totalComments: totalComments ?? this.totalComments,
-      createAt: createAt ?? this.createAt,
-      userProfileUrl: userProfileUrl ?? this.userProfileUrl,
-      hashtags: hashtags ?? this.hashtags,
-    );
-  }
+  // PostModel copyWith(
+  //     {String? postId,
+  //     String? creatorUid,
+  //     String? username,
+  //     String? description,
+  //     List<String>? postImageUrl,
+  //     List<String>? likes,
+  //     num? totalComments,
+  //     Timestamp? createAt,
+  //     String? userProfileUrl,
+  //     List<String>? hashtags,
+  //     bool? isCommentoff,
+  //     String? userFullName}) {
+  //   return PostModel(
+  //     isCommentOff: isCommentOff ?? this.isCommentOff,
+  //     userFullName: userFullName ?? this.userFullName,
+  //     postId: postId ?? this.postId,
+  //     creatorUid: creatorUid ?? this.creatorUid,
+  //     username: username ?? this.username,
+  //     description: description ?? this.description,
+  //     postImageUrl: postImageUrl ?? this.postImageUrl,
+  //     likes: likes ?? this.likes,
+  //     totalComments: totalComments ?? this.totalComments,
+  //     createAt: createAt ?? this.createAt,
+  //     userProfileUrl: userProfileUrl ?? this.userProfileUrl,
+  //     hashtags: hashtags ?? this.hashtags,
+  //   );
+  // }
 }

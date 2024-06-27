@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_button.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_button_text.dart';
-import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_loading.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
 
@@ -28,7 +28,7 @@ class LoginButton extends StatelessWidget {
                );
           }
           if (state is LoginSuccess) {
-            if (state.isProfileCompleted) {
+            if (state.user.fullName!=null) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -49,7 +49,7 @@ class LoginButton extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is LoginLoading) {
-            return const AuthLoading();
+            return const CircularLoading();
           }
           return const AuthButtonText(title: 'Login');
         },

@@ -1,37 +1,44 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
+import 'package:social_media_app/features/create_status/domain/entities/single_status_entity.dart';
 
 class StatusModel extends StatusEntity {
   StatusModel({
     required super.sId,
-    required super.userId,
-    super.content,
-    super.statusImage,
-    required super.timestamp,
-    required super.color,
+    required super.uId,
     required super.userName,
+    super.profilePic,
+    required super.lastCreated,
+    required super.statuses,
   });
 
-  factory StatusModel.fromMap(Map<String, dynamic> data) {
+  factory StatusModel.fromJson(Map<String, dynamic> json) {
+    var statusList = <SingleStatusEntity>[];
+    if (json['statuses'] != null) {
+      var list = json['statuses'] as List;
+      statusList = list.map((e) => SingleStatusEntity.fromJson(e)).toList();
+    }
     return StatusModel(
-        userName: data['userName'],
-        sId: data['sId'],
-        userId: data['userId'] ?? '',
-        content: data['content'] ?? '',
-        timestamp: (data['timestamp'] as Timestamp),
-        color: data['color'] ?? 0,
-        statusImage: data['statusImage']);
+      sId: json['sId'],
+      uId: json['uId'],
+      userName: json['userName'],
+      profilePic: json['profilePic'],
+      lastCreated: json['lastCreated'] as Timestamp,
+      statuses: statusList,
+    );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
+    List<Map<String, dynamic>> statusJsonList =
+        statuses.map((status) => status.toJson()).toList();
+
     return {
       'sId': sId,
+      'uId': uId,
       'userName': userName,
-      'statusImage': statusImage,
-      'userId': userId,
-      'content': content,
-      'timestamp': timestamp,
-      'color': color,
+      'profilePic': profilePic,
+      'lastCreated': lastCreated,
+      'statuses': statusJsonList,
     };
   }
 }

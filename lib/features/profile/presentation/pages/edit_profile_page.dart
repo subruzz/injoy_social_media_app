@@ -1,18 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/common/entities/user.dart';
-
 import 'package:social_media_app/core/const/app_sizedbox.dart';
-import 'package:social_media_app/core/extensions/number_only_string.dart';
+import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
 import 'package:social_media_app/core/utils/functions/date_picker.dart';
-import 'package:social_media_app/core/services/image_pick_services/image_picker.dart';
-import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/validations/validations.dart';
+import 'package:social_media_app/core/widgets/button/custom_button.dart';
+import 'package:social_media_app/core/widgets/loading/loading_bar.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
-import 'package:social_media_app/features/profile/presentation/widgets/next_button.dart';
+import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_profile_pic.dart';
 
 import '../../../../core/widgets/textfields/text_field.dart';
 
@@ -24,7 +23,6 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _AddProfilePageState extends State<EditProfilePage> {
-  final ValueNotifier<File?> _selectedImage = ValueNotifier(null);
   final ValueNotifier<TextEditingController> _selectedDate =
       ValueNotifier(TextEditingController());
   final _nameController = TextEditingController();
@@ -33,11 +31,14 @@ class _AddProfilePageState extends State<EditProfilePage> {
   final _occupationController = TextEditingController();
   final _aboutController = TextEditingController();
   String? _profileImage;
+  final _selectImageCuit = GetIt.instance<PickSingleImageCubit>();
+  List<String> _selectedInterest = [];
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
+    _selectedInterest = widget.appUser.interests;
     _profileImage = widget.appUser.profilePic;
     _nameController.text = widget.appUser.fullName ?? '';
     _userNameController.text = widget.appUser.userName ?? '';
@@ -45,20 +46,6 @@ class _AddProfilePageState extends State<EditProfilePage> {
     _occupationController.text = widget.appUser.occupation ?? '';
     _selectedDate.value.text = widget.appUser.dob ?? '';
     _aboutController.text = widget.appUser.about ?? '';
-  }
-
-  Future<void> pickImage() async {
-    final result = await ImagePickerService.pickOneImage();
-    if (result != null) {
-      _selectedImage.value = File(result.path);
-      _profileImage = null;
-    } else {}
-  }
-
-  void sumbitData() {
-    if (_formKey.currentState!.validate()) {
-      return;
-    }
   }
 
   Future<void> _pickDate() async {
@@ -77,26 +64,6 @@ class _AddProfilePageState extends State<EditProfilePage> {
           style: Theme.of(context).textTheme.displaySmall,
         ),
       ),
-      floatingActionButton: NextButton(
-        onpressed: () {
-          if (_formKey.currentState!.validate()) {
-            widget.appUser.fullName = _nameController.text.trim();
-            widget.appUser.userName = _userNameController.text.trim();
-            widget.appUser.dob = _selectedDate.value.text.trim();
-            widget.appUser.phoneNumber = _phoneNoController.text.isNotEmpty
-                ? int.parse(_phoneNoController.text.trim())
-                : null;
-            widget.appUser.occupation = _occupationController.text.isNotEmpty
-                ? _occupationController.text.trim()
-                : null;
-            widget.appUser.about = _aboutController.text.isNotEmpty
-                ? _aboutController.text.trim()
-                : null;
-            context.read<ProfileBloc>().add(ProfileSetUpLocationEvent(
-                userProfile: widget.appUser, profilePic: _selectedImage.value));
-          }
-        },
-      ),
       body: BlocConsumer<ProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfileSubmissionSuccess) {
@@ -104,6 +71,9 @@ class _AddProfilePageState extends State<EditProfilePage> {
           }
         },
         builder: (context, state) {
+          if (state is ProfileSetUpLoading) {
+            return const LoadingBar();
+          }
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -114,48 +84,12 @@ class _AddProfilePageState extends State<EditProfilePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppSizedBox.sizedBox20H,
-                      Center(
-                        child: Stack(
-                          children: [
-                            ValueListenableBuilder(
-                              valueListenable: _selectedImage,
-                              builder: (context, value, child) {
-                                return CircleAvatar(
-                                  backgroundColor: Colors.black,
-                                  radius: 70,
-                                  backgroundImage: _profileImage != null
-                                      ? NetworkImage(_profileImage!)
-                                      : value == null
-                                          ? const AssetImage(
-                                              'assets/images/profile_icon.png')
-                                          : FileImage(value),
-                                );
-                              },
-                            ),
-                            Positioned(
-                              right: 20,
-                              bottom: 0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  pickImage();
-                                },
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2.0),
-                                    color: AppDarkColor().buttonBackground,
-                                  ),
-                                  child: const Icon(
-                                    Icons.edit,
-                                    color: Colors.black,
-                                    size: 13,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      UserProfilePicSelect(
+                        clearImage: () {
+                          _profileImage = null;
+                        },
+                        selectImageCuit: _selectImageCuit,
+                        userImage: _profileImage,
                       ),
                       AppSizedBox.sizedBox15H,
                       CustomTextField(
@@ -163,12 +97,7 @@ class _AddProfilePageState extends State<EditProfilePage> {
                           controller: _nameController,
                           showSuffixIcon: false,
                           hintText: 'Full Name',
-                          validation: (val) {
-                            if (val!.isEmpty) {
-                              return "Please fill in this field";
-                            }
-                            return null;
-                          },
+                          validation: Validation.simpleValidation,
                           obsecureText: false),
                       AppSizedBox.sizedBox20H,
                       CustomTextField(
@@ -176,12 +105,7 @@ class _AddProfilePageState extends State<EditProfilePage> {
                           controller: _userNameController,
                           showSuffixIcon: false,
                           hintText: 'Username',
-                          validation: (val) {
-                            if (val!.isEmpty) {
-                              return "Please fill in this field";
-                            }
-                            return null;
-                          },
+                          validation: Validation.simpleValidation,
                           obsecureText: false),
                       AppSizedBox.sizedBox15H,
                       ValueListenableBuilder(
@@ -195,12 +119,7 @@ class _AddProfilePageState extends State<EditProfilePage> {
                             hintText: 'Date of birth',
                             datePicker: _pickDate,
                             obsecureText: false,
-                            validation: (val) {
-                              if (val!.isEmpty) {
-                                return "Please fill in this field";
-                              }
-                              return null;
-                            },
+                            validation: Validation.simpleValidation,
                           );
                         },
                       ),
@@ -210,15 +129,7 @@ class _AddProfilePageState extends State<EditProfilePage> {
                           controller: _phoneNoController,
                           showSuffixIcon: false,
                           hintText: 'Phone Number',
-                          validation: (val) {
-                            if (val!.isEmpty) {
-                              return null;
-                            }
-                            if (!val.isPhoneNo()) {
-                              return "Please fill in this field";
-                            }
-                            return null;
-                          },
+                          validation: Validation.phoneNoValidation,
                           obsecureText: false),
                       AppSizedBox.sizedBox15H,
                       CustomTextField(
@@ -236,6 +147,35 @@ class _AddProfilePageState extends State<EditProfilePage> {
                           maxLine: 3,
                           obsecureText: false),
                       AppSizedBox.sizedBox15H,
+                      CustomButton(
+                        text: 'Update',
+                        callback: () {
+                          if (_formKey.currentState!.validate()) {
+                            widget.appUser.fullName =
+                                _nameController.text.trim();
+                            widget.appUser.userName =
+                                _userNameController.text.trim();
+                            widget.appUser.dob =
+                                _selectedDate.value.text.trim();
+                            widget.appUser.phoneNumber =
+                                _phoneNoController.text.isNotEmpty
+                                    ? int.parse(_phoneNoController.text.trim())
+                                    : null;
+                            widget.appUser.occupation =
+                                _occupationController.text.isNotEmpty
+                                    ? _occupationController.text.trim()
+                                    : null;
+                            widget.appUser.about =
+                                _aboutController.text.isNotEmpty
+                                    ? _aboutController.text.trim()
+                                    : null;
+                            context.read<ProfileBloc>().add(
+                                ProfileSetUpLocationEvent(
+                                    userProfile: widget.appUser,
+                                    profilePic: _selectImageCuit.img));
+                          }
+                        },
+                      )
                     ],
                   ),
                 ),

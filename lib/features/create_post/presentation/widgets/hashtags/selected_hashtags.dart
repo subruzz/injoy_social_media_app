@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/select_tags_cubit/select_tags_cubit.dart';
 
 class SelectedHashtags extends StatelessWidget {
@@ -23,11 +22,9 @@ class SelectedHashtags extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(5),
                         margin: const EdgeInsets.only(right: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: AppDarkColor().secondaryBackground,
-                        ),
-                        child: Text('#$s'),
+                      
+                        child:
+                            Text('#$s', style: const TextStyle(color: Colors.blue)),
                       ),
                       Positioned(
                         bottom: 0,

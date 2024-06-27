@@ -19,6 +19,7 @@ class GetUserPostsBloc extends Bloc<GetUserPostsEvent, GetUserPostsState> {
       emit(GetUserPostsLoading());
     });
     on<GetUserPostsrequestedEvent>(_getUserPostsrequestedEvent);
+    on<GetUserPostsAterPostUpdate>(_getUserPostsAterPostUpdate);
   }
 
   FutureOr<void> _getUserPostsrequestedEvent(
@@ -30,5 +31,13 @@ class GetUserPostsBloc extends Bloc<GetUserPostsEvent, GetUserPostsState> {
         (success) => emit(GetUserPostsSuccess(
             userPosts: success.userPosts,
             userAllPostImages: success.userPostImages)));
+  }
+
+  FutureOr<void> _getUserPostsAterPostUpdate(
+      GetUserPostsAterPostUpdate event, Emitter<GetUserPostsState> emit) async {
+    event.allUsePosts[event.index] = event.updatedPost;
+    emit(GetUserPostsSuccess(
+        userPosts: event.allUsePosts,
+        userAllPostImages: event.userAllPostImages));
   }
 }
