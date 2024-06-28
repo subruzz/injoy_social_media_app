@@ -11,7 +11,7 @@ class GetMyStatusInitial extends GetMyStatusState {}
 class GetMyStatusLoading extends GetMyStatusState {}
 
 class GetMyStatusSuccess extends GetMyStatusState {
-  final AllStatusEntity myStatus;
+  final StatusEntity myStatus;
   @override
   List<Object> get props => [myStatus];
   const GetMyStatusSuccess({required this.myStatus});

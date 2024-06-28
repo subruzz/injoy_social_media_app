@@ -13,7 +13,7 @@ class GetAllStatusInitial extends GetAllStatusState {}
 class GetAllStatusLoading extends GetAllStatusState {}
 
 class GetAllStatusSuccess extends GetAllStatusState {
-  final List<AllStatusEntity> allStatus;
+final List<StatusEntity> allStatus;
   @override
   List<Object> get props => [allStatus];
   const GetAllStatusSuccess({required this.allStatus});

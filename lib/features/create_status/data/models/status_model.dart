@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
+import 'package:social_media_app/features/create_status/domain/entities/single_status_entity.dart';
 
 class StatusModel extends StatusEntity {
   StatusModel({
@@ -7,26 +7,29 @@ class StatusModel extends StatusEntity {
     required super.userName,
     super.profilePic,
     required super.lastCreated,
+    required super.statuses,
   });
-
-  factory StatusModel.fromJson(Map<String, dynamic> json) {
-  
-    return StatusModel(
-      uId: json['uId'],
-      userName: json['userName'],
-      profilePic: json['profilePic'],
-      lastCreated: json['lastCreated'] as Timestamp,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-
-
+  Map<String, dynamic> toMap() {
     return {
       'uId': uId,
       'userName': userName,
       'profilePic': profilePic,
       'lastCreated': lastCreated,
+      'statuses': statuses.map((status) => status.toJson()).toList(),
     };
+  }
+
+  static StatusModel fromMap(Map<String, dynamic> map) {
+    var statusesList = map['statuses'] as List<dynamic>;
+    List<SingleStatusEntity> parsedStatuses = statusesList
+        .map((status) => SingleStatusEntity.fromJson(status))
+        .toList();
+    return StatusModel(
+      uId: map['uId'],
+      userName: map['userName'],
+      profilePic: map['profilePic'],
+      lastCreated: map['lastCreated'],
+      statuses: parsedStatuses,
+    );
   }
 }

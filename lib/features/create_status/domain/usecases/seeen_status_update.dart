@@ -14,17 +14,17 @@ class SeeenStatusUpdateUseCase
   Future<Either<Failure, Unit>> call(
       SeeenStatusUpdateUseCaseParams params) async {
     return await _statusRepository.seenStatusUpdate(
-        params.sId, params.uId, params.viewedUid);
+        params.index, params.uId, params.viewedUid);
   }
 }
 
 class SeeenStatusUpdateUseCaseParams {
   final String uId;
-  final String sId;
+  final int index;
   final String viewedUid;
   SeeenStatusUpdateUseCaseParams({
     required this.uId,
-    required this.sId,
+    required this.index,
     required this.viewedUid,
   });
 }

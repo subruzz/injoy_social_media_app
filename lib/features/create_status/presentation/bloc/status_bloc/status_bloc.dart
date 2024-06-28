@@ -45,6 +45,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
         color: event.color,
         viewers: []);
     final userEntity = StatusEntity(
+      statuses: [newStatus],
       uId: event.userId,
       userName: event.userName,
       lastCreated: currentTime,
@@ -67,7 +68,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
   FutureOr<void> _seeenStatusUpdate(
       SeenStatusUpateEvent event, Emitter<StatusState> emit) async {
     final res = await _seeenStatusUpdateUseCase(SeeenStatusUpdateUseCaseParams(
-        uId: event.uId, sId: event.sId, viewedUid: event.viewedUid));
+        uId: event.uId, viewedUid: event.viewedUid,  index: event.index));
     res.fold((failure) => emit(StatusSeenUpdateFailure()),
         (success) => emit(StatusSeenUpdateSuccess()));
   }

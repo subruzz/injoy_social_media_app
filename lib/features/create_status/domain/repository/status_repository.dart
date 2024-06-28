@@ -10,9 +10,9 @@ abstract interface class StatusRepository {
   Future<Either<Failure, Unit>> updateStatus(StatusEntity status);
   Future<Either<Failure, Unit>> updateOnlyImageStatus(StatusEntity status);
   Future<Either<Failure, Unit>> seenStatusUpdate(
-      String statusId, String userId, String viewedUserId);
+      int index, String userId, String viewedUserId);
   Future<Either<Failure, Unit>> deleteStatus(String statusId, String uId);
-  Stream<List<AllStatusEntity>> getStatuses(String uId);
-  Stream<AllStatusEntity> getMyStatus(String uid);
+  Stream<List<StatusEntity>> getStatuses(String uId);
+  Stream<StatusEntity> getMyStatus(String uid);
   Future<Either<Failure, List<StatusEntity>>> getMyStatusFuture(String uid);
 }

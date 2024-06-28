@@ -1,40 +1,42 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:social_media_app/core/common/entities/status_entity.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:social_media_app/core/common/entities/status_entity.dart';
 
-class StatusUserAttribute {
-  final String uid;
-  final String username;
-  final String? profilePictureUrl;
-  final Timestamp lastCreated;
-  // final List<StatusEntity> statuses;
+// class StatusUserAttribute {
+//   final String uid;
+//   final String username;
+//   final String? profilePictureUrl;
+//   final Timestamp lastCreated;
+//   final List<StatusEntity> statuses;
 
-  StatusUserAttribute({
-    required this.uid,
-    required this.username,
-    required this.profilePictureUrl,
-    required this.lastCreated,
-    // required this.statuses,
-  });
+//   StatusUserAttribute({
+//     required this.uid,
+//     required this.username,
+//     required this.profilePictureUrl,
+//     required this.lastCreated,
+//     required this.statuses,
+//   });
 
+//   factory StatusUserAttribute.fromJson(Map<String, dynamic> json) {
+//     var statusesList = json['statuses'] as List<dynamic>;
+//     List<StatusEntity> parsedStatuses =
+//         statusesList.map((status) => StatusEntity.fromMap(status)).toList();
 
-  factory StatusUserAttribute.fromJson(
-      Map<String, dynamic> json,) {
-    return StatusUserAttribute(
-      uid: json['uid'],
-      username: json['username'],
-      profilePictureUrl: json['profilePictureUrl'],
-      lastCreated: json['lastCreated'],
-      // statuses: statuses,
-    );
-  }
+//     return StatusUserAttribute(
+//       uid: json['uid'] as String,
+//       username: json['username'] as String,
+//       profilePictureUrl: json['profilePictureUrl'] as String?,
+//       lastCreated: json['lastCreated'] as Timestamp,
+//       statuses: parsedStatuses,
+//     );
+//   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'uid': uid,
-      'username': username,
-      'profilePictureUrl': profilePictureUrl,
-      'lastCreated': lastCreated,
-      // 'statuses': statuses.map((status) => status.toJson()).toList(),
-    };
-  }
-}
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'uid': uid,
+//       'username': username,
+//       'profilePictureUrl': profilePictureUrl,
+//       'lastCreated': lastCreated,
+//       'statuses': statuses.map((status) => status.toMap()).toList(),
+//     };
+//   }
+// }

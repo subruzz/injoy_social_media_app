@@ -37,7 +37,7 @@ class CreateStatusRepositoryImpl implements StatusRepository {
   }
 
   @override
-  Stream<AllStatusEntity> getMyStatus(String uid) {
+  Stream<StatusEntity> getMyStatus(String uid) {
     return _statusRemoteDatasource.getMyStatus(uid);
   }
 
@@ -48,16 +48,16 @@ class CreateStatusRepositoryImpl implements StatusRepository {
   }
 
   @override
-  Stream<List<AllStatusEntity>> getStatuses(String uId) {
+  Stream<List<StatusEntity>> getStatuses(String uId) {
     return _statusRemoteDatasource.getStatuses(uId);
   }
 
   @override
   Future<Either<Failure, Unit>> seenStatusUpdate(
-      String statusId, String userId, String viewedUserId) async {
+  int index, String userId, String viewedUserId) async {
     try {
      await _statusRemoteDatasource.seenStatusUpdate(
-          statusId, userId, viewedUserId);
+           index, userId, viewedUserId);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

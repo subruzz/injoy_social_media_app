@@ -24,7 +24,6 @@ class GetMyStatusBloc extends Bloc<GetMyStatusEvent, GetMyStatusState> {
       await for (var value in streamRes) {
         print('enfdgdfgdftered here');
         print('gotfgh the value');
-        print(value.allStatuses.length);
         emit(GetMyStatusSuccess(myStatus: value));
       }
     } on SocketException {

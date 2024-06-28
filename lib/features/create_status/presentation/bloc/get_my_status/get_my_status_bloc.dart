@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/features/create_status/domain/entities/all_status_entity.dart';
 import 'package:social_media_app/features/create_status/domain/usecases/get_my_status.dart';
 
@@ -25,7 +26,6 @@ class GetMyStatusBloc extends Bloc<GetMyStatusEvent, GetMyStatusState> {
       await for (var value in streamRes) {
         print('enfdgdfgdftered here');
         print('gotfgh the value');
-        print(value.allStatuses.length);
         emit(GetMyStatusSuccess(myStatus: value));
       }
     } on SocketException {

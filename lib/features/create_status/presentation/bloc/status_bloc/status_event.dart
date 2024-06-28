@@ -32,9 +32,9 @@ final class DeleteStatusEvent extends StatusEvent {
 
 final class SeenStatusUpateEvent extends StatusEvent {
   final String uId;
-  final String sId;
+  final int index;
   final String viewedUid;
 
   const SeenStatusUpateEvent(
-      {required this.uId, required this.sId, required this.viewedUid});
+      {required this.uId, required this.index, required this.viewedUid});
 }

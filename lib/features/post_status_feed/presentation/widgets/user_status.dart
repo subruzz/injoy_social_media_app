@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/border_widget.dart';
+import 'package:social_media_app/core/common/entities/user.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/create_status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
 import 'package:social_media_app/features/create_status/presentation/bloc/get_my_status/get_my_status_bloc.dart';
@@ -13,18 +15,16 @@ class UserStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     final userData = context.read<AppUserBloc>().appUser!;
     return SizedBox(
-        height: 110,
+        height: 100,
         child: Padding(
           padding: const EdgeInsets.only(left: 15.0),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //       if (index == 0) {
               BlocBuilder<GetMyStatusBloc, GetMyStatusState>(
                   builder: (context, state) {
                 if (state is GetMyStatusSuccess) {
-                  final lastIndex = state.myStatus.allStatuses.lastIndexWhere(
-                      (element) => element.viewers.contains(userData.id));
-                  print('our last index of seen is $lastIndex');
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
@@ -32,7 +32,7 @@ class UserStatus extends StatelessWidget {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ViewStatusPage(
                             statusEntity: state.myStatus,
-                            index: lastIndex,
+                            index: 0,
                           ),
                         ));
                       },
@@ -44,9 +44,12 @@ class UserStatus extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: const Color(0xff7c94b6),
                               image: DecorationImage(
-                                image: NetworkImage(
-                                  userData.profilePic!,
-                                ),
+                                image: userData.profilePic != null
+                                    ? NetworkImage(
+                                        userData.profilePic!,
+                                      )
+                                    : const AssetImage(
+                                        'assets/images/profile_icon.png'),
                                 fit: BoxFit.cover,
                               ),
                               borderRadius:
@@ -70,7 +73,6 @@ class UserStatus extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const Text('You')
                         ],
                       ),
                     ),
@@ -88,51 +90,105 @@ class UserStatus extends StatelessWidget {
               BlocBuilder<GetAllStatusBloc, GetAllStatusState>(
                 builder: (context, state) {
                   if (state is GetAllStatusSuccess) {
+                    print('mama mia');
+                    print('we have this much shits ${state.allStatus.length}');
                     return Expanded(
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: state.allStatus.length,
                           itemBuilder: (context, index) {
-                            final userAttribute =
-                                state.allStatus[index].statusEntity;
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) => ViewStatusPage(
-                                          index: 0,
-                                          statusEntity:
-                                              state.allStatus[index],
-                                        ),
-                                      ));
-                                    },
-                                    child: Container(
-                                      width: 65,
-                                      height: 65.0,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xff7c94b6),
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              userAttribute.profilePic!),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(50.0)),
-                                        border: Border.all(
-                                          color: Colors.red,
-                                          width: 3.0,
+                            final userAttribute = state.allStatus[index];
+                            return GestureDetector(
+                              onTap: () {
+                                //       GestureDetector(
+                                //         onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ViewStatusPage(
+                                    index: 0,
+                                    statusEntity: userAttribute,
+                                  ),
+                                ));
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: SizedBox(
+                                  width: 65,
+                                  height: 65,
+                                  child: Column(
+                                    children: [
+                                      CustomPaint(
+                                        painter: StatusDottedBordersWidget(
+                                            numberOfStories:
+                                                userAttribute.statuses.length,
+                                            isMe: false,
+                                            spaceLength: 6,
+                                            images: userAttribute.statuses,
+                                            uid: context
+                                                .read<AppUserBloc>()
+                                                .appUser!
+                                                .id),
+                                        child: Container(
+                                          margin: const EdgeInsets.all(3),
+                                          width: 55,
+                                          height: 55,
+                                          child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              child: Image.asset(
+                                                  'assets/images/profile_icon.png')),
                                         ),
                                       ),
-                                    ),
+                                      Text(userAttribute.userName)
+                                    ],
                                   ),
-                                  Text(userAttribute.userName)
-                                ],
+                                ),
                               ),
                             );
+
+                            //  Padding(
+                            //   padding: const EdgeInsets.all(8.0),
+                            //   child: Column(
+                            //     children: [
+                            //       GestureDetector(
+                            //         onTap: () {
+                            //           Navigator.of(context)
+                            //               .push(MaterialPageRoute(
+                            //             builder: (context) => ViewStatusPage(
+                            //               index: 0,
+                            //               statusEntity: userAttribute,
+                            //             ),
+                            //           ));
+                            //         },
+                            //         child: Container(
+                            //           width: 65,
+                            //           height: 65.0,
+                            //           decoration: BoxDecoration(
+                            //             color: const Color(0xff7c94b6),
+                            //             image: DecorationImage(
+                            //               image: state.allStatus[index]
+                            //                           .profilePic !=
+                            //                       null
+                            //                   ? NetworkImage(
+                            //                       state.allStatus[index]
+                            //                           .profilePic!,
+                            //                     )
+                            //                   : const AssetImage(
+                            //                       'assets/images/profile_icon.png'),
+                            //               fit: BoxFit.cover,
+                            //             ),
+                            //             borderRadius: const BorderRadius.all(
+                            //                 Radius.circular(50.0)),
+                            //             border: Border.all(
+                            //               color: Colors.red,
+                            //               width: 3.0,
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //       Text(userAttribute.userName)
+                            //     ],
+                            //   ),
+                            // );
                           }),
                     );
                   }

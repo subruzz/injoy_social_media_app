@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/features/create_status/data/models/status_model.dart';
 import 'package:social_media_app/features/create_status/domain/entities/all_status_entity.dart';
 import 'package:social_media_app/features/create_status/domain/entities/single_status_entity.dart';
 
@@ -9,11 +10,10 @@ abstract interface class StatusRemoteDatasource {
       StatusEntity status, SingleStatusEntity singleStatus);
   Future<void> updateStatus(StatusEntity status);
   Future<void> updateOnlyImageStatus(StatusEntity status);
-  Future<void> seenStatusUpdate(
-      String statusId, String userId, String viewedUserId);
+  Future<void> seenStatusUpdate(int index, String userId, String viewedUserId);
   Future<void> deleteStatus(String statusId, String uId);
-  Stream<List<AllStatusEntity>> getStatuses(String uid);
-  Stream<AllStatusEntity> getMyStatus(String uid);
+  Stream<List<StatusEntity>> getStatuses(String uid);
+  Stream<StatusModel> getMyStatus(String uid);
   Future<List<StatusEntity>> getMyStatusFuture(String uid);
 }
 
@@ -25,43 +25,27 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
         FirebaseFirestore.instance.collection('allStatus');
 
     try {
-      final currentUserStatus = allStatusCollection.doc(status.uId);
-      final userStatusRef = await currentUserStatus.get();
-      if (userStatusRef.exists) {
-        await currentUserStatus.update({'lastCreated': status.lastCreated});
+      final userRef = await allStatusCollection.doc(status.uId).get();
+      if (!userRef.exists) {
+        final newStatus = StatusModel(
+            uId: status.uId,
+            profilePic: status.profilePic,
+            userName: status.userName,
+            lastCreated: status.lastCreated,
+            statuses: status.statuses);
+        await allStatusCollection.doc(status.uId).set(newStatus.toMap());
       } else {
-        await currentUserStatus.set(status.toMap());
-      }
-      await currentUserStatus
-          .collection('statuses')
-          .doc(singleStatus.statusId)
-          .set(singleStatus.toJson());
-    } catch (e) {
-      throw MainException(
-          errorMsg: 'Error creating post', details: e.toString());
-    }
-    // try {
-    //   final userRef = await allStatusCollection.doc(status.uId).get();
-    //   if (!userRef.exists) {
-    //     final newStatus = StatusModel(
-    //         uId: status.uId,
-    //         profilePic: status.profilePic,
-    //         userName: status.userName,
-    //         lastCreated: status.lastCreated,
-    //        );
-    //     await allStatusCollection.doc(status.uId).set(newStatus.toJson());
-    //   } else {
-    //     final List<dynamic> allStatusesData = userRef['statuses'];
+        final List<dynamic> allStatusesData = userRef['statuses'];
 
-    //     allStatusesData.add(singleStatus.toJson());
-    //     await allStatusCollection
-    //         .doc(status.uId)
-    //         .update({'statuses': allStatusesData});
-    //   }
-    // } catch (e) {
-    //   print(e.toString());
-    //   throw MainException(errorMsg: e.toString());
-    // }
+        allStatusesData.add(singleStatus.toJson());
+        await allStatusCollection
+            .doc(status.uId)
+            .update({'statuses': allStatusesData});
+      }
+    } catch (e) {
+      print(e.toString());
+      throw MainException(errorMsg: e.toString());
+    }
   }
 
   @override
@@ -76,57 +60,23 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
   }
 
   @override
-  Stream<AllStatusEntity> getMyStatus(String uid) async* {
+  Stream<StatusModel> getMyStatus(String uid) {
     try {
       final userDocument =
           FirebaseFirestore.instance.collection('allStatus').doc(uid);
 
-      // Stream for listening to changes in the user document
-      final userDocStream =
-          userDocument.snapshots().asyncMap((docSnapshot) async {
-        print('myran ivde ethi');
-
-        if (!docSnapshot.exists) {
-          return null;
-        }
-        final statusUserEntity =
-            StatusEntity.fromMap(docSnapshot.data() as Map<String, dynamic>);
-        return statusUserEntity;
+      return userDocument.snapshots().map((docSnapshot) {
+        // Parse document snapshot data into StatusEntity
+        return StatusModel.fromMap(docSnapshot.data() as Map<String, dynamic>);
       });
-      //listening to the allStatus collection
-      await for (final statusUserEntity in userDocStream) {
-        print('myran ivde ethiya');
-
-        if (statusUserEntity == null) {
-          continue;
-        }
-
-        // Stream for listening to changes in the statuses subcollection
-        yield* userDocument
-            .collection('statuses')
-            .orderBy('timestamp', descending: false)
-            .where('timestamp',
-                isGreaterThan:
-                    DateTime.now().subtract(const Duration(hours: 24)))
-            .snapshots()
-            .asyncMap((statusSnapshot) async {
-          final allStatuses = statusSnapshot.docs.map((statusDoc) {
-            return SingleStatusEntity.fromJson(statusDoc.data());
-          }).toList();
-
-          return AllStatusEntity(
-            statusEntity: statusUserEntity,
-            allStatuses: allStatuses,
-          );
-        });
-      }
     } catch (e) {
-      throw const MainException(errorMsg: 'An unexpected error occurred!');
+      // Handle exceptions or errors
+      throw MainException(errorMsg: 'Error fetching status: $e');
     }
   }
 
   @override
-  Stream<List<AllStatusEntity>> getStatuses(String uid) async* {
+  Stream<List<StatusEntity>> getStatuses(String uid) async* {
     try {
       final currentUserDoc =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
@@ -136,47 +86,23 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
 
       if (followings.isEmpty) {
         yield [];
-        return;
       }
+      // final List<String> followings = ['hZ84imarGjWH7fI9GjlvdHgblYz2'];
 
-      List<AllStatusEntity> allFollowingStatuses = [];
+      final statusCollection = FirebaseFirestore.instance
+          .collection('allStatus')
+          .orderBy('lastCreated', descending: true)
+          .where('uId', whereIn: followings);
 
-      for (var follow in followings) {
-        final userDocument =
-            FirebaseFirestore.instance.collection('allStatus').doc(follow);
-        final userData = await userDocument.get();
-
-        if (!userData.exists) continue;
-
-        final statusUserEntity =
-            StatusEntity.fromMap(userData.data() as Map<String, dynamic>);
-
-        final statusStream = userDocument
-            .collection('statuses')
-            .orderBy('timestamp', descending: false)
-            .where("timestamp",
-                isGreaterThan:
-                    DateTime.now().subtract(const Duration(hours: 24)))
-            .snapshots()
-            .asyncMap((statusSnapshot) async {
-          final allStatuses = statusSnapshot.docs.map((statusDoc) {
-            return SingleStatusEntity.fromJson(statusDoc.data());
-          }).toList();
-
-          return AllStatusEntity(
-            statusEntity: statusUserEntity,
-            allStatuses: allStatuses,
-          );
-        });
-
-        await for (var statusData in statusStream) {
-          allFollowingStatuses.add(statusData);
-          yield allFollowingStatuses;
-        }
-      }
+      yield* statusCollection.snapshots().map((docSnapShot) {
+        return docSnapShot.docs
+            .where((doc) => doc.data()['statuses'].isNotEmpty)
+            .map((e) => StatusModel.fromMap(e.data()))
+            .toList();
+      });
     } catch (e) {
-      yield [];
-      rethrow;
+      print('error ${e.toString()}');
+      throw MainException(errorMsg: e.toString());
     }
   }
 
@@ -188,20 +114,20 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
 
   @override
   Future<void> seenStatusUpdate(
-      String statusId, String userId, String viewedUserId) async {
+      int index, String userId, String viewedUserId) async {
     try {
       final allStatusCollection =
           FirebaseFirestore.instance.collection('allStatus').doc(userId);
-      final statusDoc =
-          await allStatusCollection.collection('statuses').doc(statusId).get();
-      final viewersList = List<String>.from(statusDoc.get('viewers'));
+      final statusDoc = await allStatusCollection.get();
+      final statuses =
+          List<Map<String, dynamic>>.from(statusDoc.get('statuses'));
+      final viewersList = List<String>.from(statuses[index]['viewers']);
+      print('this is the fucking thisn ${(List<String>.from(statuses[index]['viewers']))}');
       if (!viewersList.contains(viewedUserId)) {
         viewersList.add(viewedUserId);
+        statuses[index]['viewers'] = viewersList;
+        await allStatusCollection.update({'statuses': statuses});
       }
-      await allStatusCollection
-          .collection('statuses')
-          .doc(statusId)
-          .update({'viewers': viewersList});
     } catch (e) {
       throw const MainException(errorMsg: 'unexpected error');
     }
