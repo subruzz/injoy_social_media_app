@@ -36,8 +36,14 @@ import 'package:social_media_app/features/create_post/presentation/bloc/select_t
 import 'package:social_media_app/features/create_post/presentation/bloc/update_post/update_post_bloc.dart';
 import 'package:social_media_app/features/create_status/data/datasource/status_remote_datasource.dart';
 import 'package:social_media_app/features/create_status/data/repository/create_status_repository_impl.dart';
-import 'package:social_media_app/features/create_status/domain/repository/create_status_repository.dart';
+import 'package:social_media_app/features/create_status/domain/repository/status_repository.dart';
 import 'package:social_media_app/features/create_status/domain/usecases/create_status.dart';
+import 'package:social_media_app/features/create_status/domain/usecases/delete_status.dart';
+import 'package:social_media_app/features/create_status/domain/usecases/get_all_statuses.dart';
+import 'package:social_media_app/features/create_status/domain/usecases/get_my_status.dart';
+import 'package:social_media_app/features/create_status/domain/usecases/seeen_status_update.dart';
+import 'package:social_media_app/features/create_status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
+import 'package:social_media_app/features/create_status/presentation/bloc/get_my_status/get_my_status_bloc.dart';
 import 'package:social_media_app/features/create_status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/location/data/datasource/local/location_local_datasource.dart';
 import 'package:social_media_app/features/location/data/repositories/location_repository_impl.dart';
@@ -210,19 +216,30 @@ void _postFeed() {
         () => PostFeedRepositoryImpl(feedRemoteDatasource: serviceLocator()))
     ..registerFactory(
         () => GetFollowingPostsUseCase(postFeedRepository: serviceLocator()))
-    ..registerFactory(() =>
-        ViewCurrentUserStatusUseCase(postFeedRepository: serviceLocator()))
-    ..registerLazySingleton(() => (FollowingPostFeedBloc(serviceLocator())))
-    ..registerLazySingleton(() => ViewStatusBloc(serviceLocator()));
+    // ..registerFactory(() =>
+    //     ViewCurrentUserStatusUseCase(postFeedRepository: serviceLocator()))
+    ..registerLazySingleton(() => (FollowingPostFeedBloc(serviceLocator())));
+  // ..registerLazySingleton(() => ViewStatusBloc(serviceLocator()));
 }
 
 void _statusCreation() {
   serviceLocator
     ..registerFactory<StatusRemoteDatasource>(
         () => StatusRemoteDatasourceImpl())
-    ..registerFactory<CreateStatusRepository>(() =>
+    ..registerFactory<StatusRepository>(() =>
         CreateStatusRepositoryImpl(statusRemoteDatasource: serviceLocator()))
     ..registerFactory(
         () => CreateStatusUseCase(createStatusRepository: serviceLocator()))
-    ..registerLazySingleton(() => (StatusBloc(serviceLocator())));
+    ..registerFactory(() => GetMyStatusUseCase(repository: serviceLocator()))
+    ..registerFactory(
+        () => DeleteStatuseCase(statusRepository: serviceLocator()))
+    ..registerFactory(
+        () => SeeenStatusUpdateUseCase(statusRepository: serviceLocator()))
+    ..registerLazySingleton(() => GetMyStatusBloc(
+          serviceLocator(),
+        ))
+    ..registerFactory(() => GetAllStatusesUseCase(repository: serviceLocator()))
+    ..registerLazySingleton(() => GetAllStatusBloc(serviceLocator()))
+    ..registerLazySingleton(() =>
+        (StatusBloc(serviceLocator(), serviceLocator(), serviceLocator())));
 }

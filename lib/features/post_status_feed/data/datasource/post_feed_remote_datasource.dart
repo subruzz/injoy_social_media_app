@@ -8,9 +8,7 @@ import 'package:social_media_app/features/create_status/domain/entities/status_u
 abstract class PostFeedRemoteDatasource {
   Future<List<PostModel>> fetchFollowedPosts(String userId);
   Future<List<PostModel>> fetchSuggestedPosts(String userId);
-  Future<StatusUserStatus> fetchCurrentUserStatus(String userId);
-  Future<List<StatusUserStatus>> fetchCurrentUserAndFollowingStatuses(
-      String currentUserId);
+ 
 }
 
 class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
@@ -42,102 +40,102 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
     throw UnimplementedError();
   }
 
-  @override
-  Future<StatusUserStatus> fetchCurrentUserStatus(String userId) async {
-    try {
-      // Fetch the user's profile information
-      final userDocSnapshot = await FirebaseFirestore.instance
-          .collection('allStatus')
-          .doc(userId)
-          .get();
+  // @override
+  // Future<StatusUserStatus> fetchCurrentUserStatus(String userId) async {
+  //   try {
+  //     // Fetch the user's profile information
+  //     final userDocSnapshot = await FirebaseFirestore.instance
+  //         .collection('allStatus')
+  //         .doc(userId)
+  //         .get();
 
-      if (!userDocSnapshot.exists) {
-        throw Exception('User not found');
-      }
+  //     if (!userDocSnapshot.exists) {
+  //       throw Exception('User not found');
+  //     }
 
-      final statusUserAttribute = StatusUserAttribute.fromJson(
-          userDocSnapshot.data() as Map<String, dynamic>);
-      // Fetch the user's statuses
-      final statusesSnapshot = await FirebaseFirestore.instance
-          .collection('allStatus')
-          .doc(userId)
-          .collection('statuses')
-          .orderBy('timestamp', descending: true)
-          .get();
+  //     final statusUserAttribute = StatusUserAttribute.fromJson(
+  //         userDocSnapshot.data() as Map<String, dynamic>);
+  //     // Fetch the user's statuses
+  //     final statusesSnapshot = await FirebaseFirestore.instance
+  //         .collection('allStatus')
+  //         .doc(userId)
+  //         .collection('statuses')
+  //         .orderBy('timestamp', descending: true)
+  //         .get();
 
-      final List<StatusModel> userStatuses = statusesSnapshot.docs
-          .map((doc) => StatusModel.fromMap(doc.data()))
-          .toList();
+  //     final List<StatusModel> userStatuses = statusesSnapshot.docs
+  //         .map((doc) => StatusModel.fromMap(doc.data()))
+  //         .toList();
 
-      return StatusUserStatus(
-        statusUserAttribute: statusUserAttribute,
-        userStatus: userStatuses,
-      );
-    } catch (e) {
-      print('Error: ${e.toString()}');
-      throw const MainException(errorMsg: 'Error while loading statuses!');
-    }
-  }
+  //     return StatusUserStatus(
+  //       statusUserAttribute: statusUserAttribute,
+  //       userStatus: userStatuses,
+  //     );
+  //   } catch (e) {
+  //     print('Error: ${e.toString()}');
+  //     throw const MainException(errorMsg: 'Error while loading statuses!');
+  //   }
+  // }
 
-  @override
-  Future<List<StatusUserStatus>> fetchCurrentUserAndFollowingStatuses(
-      String currentUserId) async {
-    try {
-      // Fetch the current user's document to get the list of followed users
-      final currentUserDocSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(currentUserId)
-          .get();
+  // @override
+  // Future<List<StatusUserStatus>> fetchCurrentUserAndFollowingStatuses(
+  //     String currentUserId) async {
+  //   try {
+  //     // Fetch the current user's document to get the list of followed users
+  //     final currentUserDocSnapshot = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(currentUserId)
+  //         .get();
 
-      if (!currentUserDocSnapshot.exists) {
-        throw Exception('Current user not found');
-      }
+  //     if (!currentUserDocSnapshot.exists) {
+  //       throw Exception('Current user not found');
+  //     }
 
-      // Extract the list of followed user IDs
-      final List<dynamic> following =
-          currentUserDocSnapshot.data()?['following'] ?? [];
+  //     // Extract the list of followed user IDs
+  //     final List<dynamic> following =
+  //         currentUserDocSnapshot.data()?['following'] ?? [];
 
-      // Initialize a list to hold all the followed users' statuses
-      List<StatusUserStatus> allStatuses = [];
+  //     // Initialize a list to hold all the followed users' statuses
+  //     List<StatusUserStatus> allStatuses = [];
 
-      // Fetch the statuses of each followed user
-      for (String userId in following) {
-        final userDocSnapshot = await FirebaseFirestore.instance
-            .collection('allStatus')
-            .doc(userId)
-            .get();
+  //     // Fetch the statuses of each followed user
+  //     for (String userId in following) {
+  //       final userDocSnapshot = await FirebaseFirestore.instance
+  //           .collection('allStatus')
+  //           .doc(userId)
+  //           .get();
 
-        if (!userDocSnapshot.exists) {
-          continue;
-        }
+  //       if (!userDocSnapshot.exists) {
+  //         continue;
+  //       }
 
-        final userStatusUserAttribute = StatusUserAttribute.fromJson(
-            userDocSnapshot.data() as Map<String, dynamic>);
+  //       final userStatusUserAttribute = StatusUserAttribute.fromJson(
+  //           userDocSnapshot.data() as Map<String, dynamic>);
 
-        final userStatusesSnapshot = await FirebaseFirestore.instance
-            .collection('allStatus')
-            .doc(userId)
-            .collection('statuses')
-            .orderBy('timestamp', descending: true)
-            .get();
+  //       final userStatusesSnapshot = await FirebaseFirestore.instance
+  //           .collection('allStatus')
+  //           .doc(userId)
+  //           .collection('statuses')
+  //           .orderBy('timestamp', descending: true)
+  //           .get();
 
-        final List<StatusModel> userStatuses = userStatusesSnapshot.docs
-            .map((doc) =>
-                StatusModel.fromMap(doc.data()))
-            .toList();
+  //       final List<StatusModel> userStatuses = userStatusesSnapshot.docs
+  //           .map((doc) =>
+  //               StatusModel.fromMap(doc.data()))
+  //           .toList();
 
-        final model = StatusUserStatus(
-          statusUserAttribute: userStatusUserAttribute,
-          userStatus: userStatuses,
-        );
+  //       final model = StatusUserStatus(
+  //         statusUserAttribute: userStatusUserAttribute,
+  //         userStatus: userStatuses,
+  //       );
 
-        allStatuses.add(model);
-      }
+  //       allStatuses.add(model);
+  //     }
 
-      return allStatuses;
-    } catch (e) {
-      print('Error fetching statuses: $e');
-      rethrow;
-    }
-  }
+  //     return allStatuses;
+  //   } catch (e) {
+  //     print('Error fetching statuses: $e');
+  //     rethrow;
+  //   }
+  // }
 }

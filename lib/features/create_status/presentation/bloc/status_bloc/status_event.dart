@@ -10,10 +10,10 @@ sealed class StatusEvent extends Equatable {
 final class CreateStatusEvent extends StatusEvent {
   final String userId;
   final String userName;
+  final String? profilePic;
   final String? content;
   final int color;
   final File? statusImage;
-  final String? profilePic;
   const CreateStatusEvent(
       {required this.userId,
       this.profilePic,
@@ -21,4 +21,20 @@ final class CreateStatusEvent extends StatusEvent {
       required this.content,
       required this.color,
       required this.statusImage});
+}
+
+final class DeleteStatusEvent extends StatusEvent {
+  final String sId;
+  final String uId;
+
+  const DeleteStatusEvent({required this.sId, required this.uId});
+}
+
+final class SeenStatusUpateEvent extends StatusEvent {
+  final String uId;
+  final String sId;
+  final String viewedUid;
+
+  const SeenStatusUpateEvent(
+      {required this.uId, required this.sId, required this.viewedUid});
 }

@@ -34,26 +34,5 @@ class PostFeedRepositoryImpl implements PostFeedRepository {
     throw UnimplementedError();
   }
 
-  @override
-  Future<Either<Failure, StatusUserStatus>> fetchCurrentUserStatus(
-      String userId) async {
-    try {
-      final res = await _feedRemoteDatasource.fetchCurrentUserStatus(userId);
-      return right(res);
-    } on MainException catch (e) {
-      return left(Failure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<StatusUserStatus>>>
-      fetchCurrentUserAndFollowingStatuses(String currentUserId) async {
-    try {
-      final res = await _feedRemoteDatasource
-          .fetchCurrentUserAndFollowingStatuses(currentUserId);
-      return right(res);
-    } on MainException catch (e) {
-      return left(Failure(e.toString()));
-    }
-  }
+ 
 }

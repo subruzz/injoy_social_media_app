@@ -18,3 +18,18 @@ final class StatusCreateFailure extends StatusState {
 }
 
 final class StatusCreateLoading extends StatusState {}
+
+//states for deleting status
+final class StatusDeleteLoading extends StatusState {}
+
+final class StatusDeleteSuccess extends StatusState {}
+
+final class StatusDeleteFailure extends StatusState {
+  final String errorMsg;
+
+  const StatusDeleteFailure({required this.errorMsg});
+}
+
+final class StatusSeenUpdateSuccess extends StatusState {}
+
+final class StatusSeenUpdateFailure extends StatusState {}

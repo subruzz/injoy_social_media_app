@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SingleStatusEntity {
+  final String statusId;
   final String? content;
   final Timestamp timestamp;
   final int color;
@@ -11,6 +12,7 @@ class SingleStatusEntity {
 
   SingleStatusEntity({
     this.content,
+    required this.statusId,
     required this.timestamp,
     required this.color,
     this.statusImage,
@@ -23,6 +25,7 @@ class SingleStatusEntity {
       viewers = List<String>.from(json['viewers']);
     }
     return SingleStatusEntity(
+      statusId: json['statusId'],
       content: json['content'],
       timestamp: json['timestamp'] as Timestamp,
       color: json['color'] as int,
@@ -33,6 +36,7 @@ class SingleStatusEntity {
 
   Map<String, dynamic> toJson() {
     return {
+      'statusId': statusId,
       'content': content,
       'timestamp': timestamp,
       'color': color,

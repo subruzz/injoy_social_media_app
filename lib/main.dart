@@ -24,6 +24,8 @@ import 'package:social_media_app/features/create_post/presentation/bloc/delte_po
 import 'package:social_media_app/features/create_post/presentation/bloc/like_post/like_post_bloc.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/update_post/update_post_bloc.dart';
+import 'package:social_media_app/features/create_status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
+import 'package:social_media_app/features/create_status/presentation/bloc/get_my_status/get_my_status_bloc.dart';
 import 'package:social_media_app/features/create_status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
@@ -101,9 +103,6 @@ class MyApp extends StatelessWidget {
               create: (context) => serviceLocator<StatusBloc>(),
             ),
             BlocProvider(
-              create: (context) => serviceLocator<ViewStatusBloc>(),
-            ),
-            BlocProvider(
               create: (context) =>
                   serviceLocator<AuthBloc>()..add(AuthCurrentUser()),
             ),
@@ -122,6 +121,15 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) => serviceLocator<LikePostBloc>(),
             ),
+            BlocProvider(
+              create: (context) => serviceLocator<GetMyStatusBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<GetMyStatusBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<GetAllStatusBloc>(),
+            ),
           ],
           child: MaterialApp(
             scaffoldMessengerKey: Messenger.scaffoldKey,
@@ -136,6 +144,12 @@ class MyApp extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => LoginPage()));
                 }
                 if (state is AuthLoggedInOrUpdate) {
+                  context
+                      .read<GetAllStatusBloc>()
+                      .add(GetAllstatusesEvent(uId: state.user.id));
+                  context
+                      .read<GetMyStatusBloc>()
+                      .add(GetAllMystatusesEvent(uId: state.user.id));
                   context
                       .read<FollowingPostFeedBloc>()
                       .add(FollowingPostFeedGetEvent(uId: state.user.id));

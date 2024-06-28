@@ -1,14 +1,14 @@
-part of 'view_status_bloc.dart';
+// part of 'view_status_bloc.dart';
 
-sealed class ViewStatusEvent extends Equatable {
-  const ViewStatusEvent();
+// sealed class ViewStatusEvent extends Equatable {
+//   const ViewStatusEvent();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-final class ViewCurrentUserStatusEvent extends ViewStatusEvent {
-  final String uId;
+// final class ViewCurrentUserStatusEvent extends ViewStatusEvent {
+//   final String uId;
 
- const  ViewCurrentUserStatusEvent({required this.uId});
-}
+//  const  ViewCurrentUserStatusEvent({required this.uId});
+// }
