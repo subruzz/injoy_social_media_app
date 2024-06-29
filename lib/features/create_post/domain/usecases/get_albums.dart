@@ -6,21 +6,19 @@ import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/usecases/usecase.dart';
 import 'package:social_media_app/features/create_post/domain/repositories/asset_repository.dart';
 
-class LoadAssetsUseCase
-    implements UseCase<List<AssetEntity>, LoadAssetsUseCaseParams> {
+class LoadAlbumsUseCase implements UseCase<List<AssetPathEntity>, NoParams> {
   final AssetRepository repository;
 
-  LoadAssetsUseCase(this.repository);
+  LoadAlbumsUseCase(this.repository);
   @override
-  Future<Either<Failure, List<AssetEntity>>> call(
-      LoadAssetsUseCaseParams params) async {
-    return await repository.loadAssets(params.selectedAlbum);
+  Future<Either<Failure, List<AssetPathEntity>>> call(NoParams params) async {
+    return await repository.fetchAlbums();
   }
 }
 
-class LoadAssetsUseCaseParams {
+class LoadAlbumsUseCaseParams {
   final AssetPathEntity selectedAlbum;
-  LoadAssetsUseCaseParams({
+  LoadAlbumsUseCaseParams({
     required this.selectedAlbum,
   });
 }

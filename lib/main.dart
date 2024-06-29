@@ -19,6 +19,8 @@ import 'package:social_media_app/features/auth/presentation/bloc/google_auth/goo
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/album_bloc/album_bloc.dart';
+import 'package:social_media_app/features/create_post/presentation/bloc/assets_bloc/assets_bloc.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/create_post/create_post_bloc.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/delte_post/delete_post_bloc.dart';
 import 'package:social_media_app/features/create_post/presentation/bloc/like_post/like_post_bloc.dart';
@@ -37,6 +39,7 @@ import 'package:social_media_app/features/profile/presentation/pages/profile_pag
 
 import 'package:social_media_app/firebase_options.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
+import 'package:social_media_app/image_picker_bloc.dart';
 import 'package:social_media_app/init_dependecies.dart';
 
 void main() async {
@@ -130,6 +133,15 @@ class MyApp extends StatelessWidget {
             BlocProvider(
               create: (context) => serviceLocator<GetAllStatusBloc>(),
             ),
+            BlocProvider(
+              create: (context) => ImagePickerBloc(),
+            ),
+            BlocProvider(
+                create: (context) =>
+                    serviceLocator<AlbumBloc>()..add(GetAlbumsEvent())),
+            BlocProvider(
+                create: (context) =>
+                    serviceLocator<AssetsBloc>()),
           ],
           child: MaterialApp(
             scaffoldMessengerKey: Messenger.scaffoldKey,

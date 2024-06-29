@@ -1,13 +1,15 @@
 import 'dart:io';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/services/image_pick_services/image_picker.dart';
 
 part 'pick_multiple_image_state.dart';
 
 class PickMultipleImageCubit extends Cubit<PickMultipleImageState> {
-  List<File?> images = [];
+  List<AssetEntity> images = [];
   PickMultipleImageCubit() : super(PickImageInitial());
   // void alreadySelectedImage(List<String> alredyAvailableImages) {
   //   emit(PickImageLoading());
@@ -17,26 +19,40 @@ class PickMultipleImageCubit extends Cubit<PickMultipleImageState> {
   //   alreadyImages = alredyAvailableImages;
   // }
 
-  Future<void> pickImage() async {
-    try {
-      final imagess = await ImagePickerService.pickMultipleImages();
-      if (imagess.isNotEmpty) {
-        images.addAll(imagess);
-        emit(PickImageSuccess(images: images));
-      }
-    } catch (e) {
-      emit(PickImageFailure(e.toString()));
+  Future<void> addImages(List<AssetEntity> assets) async {
+    if (assets.isEmpty) {
+      emit(PickImageInitial());
+      return;
     }
+    images.addAll(assets);
+    emit(PickImageSuccess(images: images));
+    print('addess sucess');
+    // final imagess = await ImagePickerService.pickMultipleImages();
+    // if (imagess.isNotEmpty) {
+    //   images.addAll(imagess);
+    //   emit(PickImageSuccess(images: images));
+    // }
   }
 
-  void removeImage(File? img) {
+  void clearImage() {
+    images.clear();
+    emit(PickImageSuccess(images: images));
+  }
+
+  void removeImage(int index) {
     emit(PickImageLoading());
-    images.remove(img);
+    images.removeAt(index);
     if (images.isEmpty) {
       emit(PickImageInitial());
       return;
     }
     emit(PickImageSuccess(images: images));
+  }
+
+  @override
+  Future<void> close() {
+    emit(PickImageInitial());
+    return super.close();
   }
 
   void clearState() {

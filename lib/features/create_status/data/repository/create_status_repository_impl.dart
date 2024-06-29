@@ -37,7 +37,7 @@ class CreateStatusRepositoryImpl implements StatusRepository {
   }
 
   @override
-  Stream<StatusEntity> getMyStatus(String uid) {
+  Stream<StatusEntity?> getMyStatus(String uid) {
     return _statusRemoteDatasource.getMyStatus(uid);
   }
 

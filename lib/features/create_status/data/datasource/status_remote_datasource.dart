@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/features/create_status/data/models/status_model.dart';
-import 'package:social_media_app/features/create_status/domain/entities/all_status_entity.dart';
 import 'package:social_media_app/features/create_status/domain/entities/single_status_entity.dart';
 
 abstract interface class StatusRemoteDatasource {
@@ -13,7 +12,7 @@ abstract interface class StatusRemoteDatasource {
   Future<void> seenStatusUpdate(int index, String userId, String viewedUserId);
   Future<void> deleteStatus(String statusId, String uId);
   Stream<List<StatusEntity>> getStatuses(String uid);
-  Stream<StatusModel> getMyStatus(String uid);
+  Stream<StatusModel?> getMyStatus(String uid);
   Future<List<StatusEntity>> getMyStatusFuture(String uid);
 }
 
@@ -60,19 +59,22 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
   }
 
   @override
-  Stream<StatusModel> getMyStatus(String uid) {
-    try {
-      final userDocument =
-          FirebaseFirestore.instance.collection('allStatus').doc(uid);
+  Stream<StatusModel?> getMyStatus(String uid) {
+    final myStatusCollection = FirebaseFirestore.instance
+        .collection('allStatus')
+        .where('uId', isEqualTo: uid)
+        .limit(1);
 
-      return userDocument.snapshots().map((docSnapshot) {
-        // Parse document snapshot data into StatusEntity
-        return StatusModel.fromMap(docSnapshot.data() as Map<String, dynamic>);
-      });
-    } catch (e) {
-      // Handle exceptions or errors
-      throw MainException(errorMsg: 'Error fetching status: $e');
-    }
+    return myStatusCollection.snapshots().map((querySnapshot) {
+      if (querySnapshot.docs.isEmpty) {
+        return null;
+      }
+      print('dlisteinging hnew vlaue cming bro');
+      return StatusModel.fromMap(querySnapshot.docs.first.data());
+    }).handleError((error) {
+      print('Error fetching status: ${error.toString()}');
+      throw MainException(errorMsg: 'Error fetching status: $error');
+    });
   }
 
   @override
@@ -122,7 +124,8 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
       final statuses =
           List<Map<String, dynamic>>.from(statusDoc.get('statuses'));
       final viewersList = List<String>.from(statuses[index]['viewers']);
-      print('this is the fucking thisn ${(List<String>.from(statuses[index]['viewers']))}');
+      print(
+          'this is the fucking thisn ${(List<String>.from(statuses[index]['viewers']))}');
       if (!viewersList.contains(viewedUserId)) {
         viewersList.add(viewedUserId);
         statuses[index]['viewers'] = viewersList;

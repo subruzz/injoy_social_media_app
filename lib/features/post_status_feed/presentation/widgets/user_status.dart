@@ -25,13 +25,15 @@ class UserStatus extends StatelessWidget {
               BlocBuilder<GetMyStatusBloc, GetMyStatusState>(
                   builder: (context, state) {
                 if (state is GetMyStatusSuccess) {
+                  print('users bitches are here');
+                  print(state.myStatus);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ViewStatusPage(
-                            statusEntity: state.myStatus,
+                            statusEntity: state.myStatus!,
                             index: 0,
                           ),
                         ));

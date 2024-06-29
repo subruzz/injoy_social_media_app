@@ -7,7 +7,7 @@ class GetMyStatusUseCase {
 
   const GetMyStatusUseCase({required this.repository});
 
-  Stream< StatusEntity> call(String uid) {
+  Stream< StatusEntity?> call(String uid) {
     return repository.getMyStatus(uid);
   }
 }

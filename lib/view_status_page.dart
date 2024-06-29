@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
@@ -149,14 +150,29 @@ class _MoreStoriesState extends State<ViewStatusPage> {
                           ValueListenableBuilder(
                             builder: (context, value, child) {
                               return IconButton(
-                                onPressed: () {
-                                  _statusControls.value =
-                                      !_statusControls.value;
-                                  if (_statusControls.value) {
-                                    _storyController.pause();
-                                  } else {
-                                    _storyController.play();
+                                onPressed: () async {
+                                  try {
+                                    await FirebaseFirestore.instance
+                                        .collection('allStatus')
+                                        .doc(widget.statusEntity.uId)
+                                        .update({
+                                      'statuses': FieldValue.arrayRemove([
+                                      
+                                          widget.statusEntity.statuses.first
+                                              .toJson()
+                                        
+                                      ])
+                                    });
+                                  } catch (e) {
+                                    print('erros is this ${e.toString()}');
                                   }
+                                  // _statusControls.value =
+                                  //     !_statusControls.value;
+                                  // if (_statusControls.value) {
+                                  //   _storyController.pause();
+                                  // } else {
+                                  //   _storyController.play();
+                                  // }
                                 },
                                 icon: Icon(
                                   value ? Icons.play_arrow : Icons.pause,

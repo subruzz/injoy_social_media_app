@@ -13,9 +13,19 @@ class AssetRepositoryImpl implements AssetRepository {
 
   @override
   Future<Either<Failure, List<AssetEntity>>> loadAssets(
-    ) async {
+      AssetPathEntity selectedAlbum) async {
     try {
-      final assets = await _assetLocalSource.loadAssets();
+      final assets = await _assetLocalSource.loadAssets(selectedAlbum);
+      return right(assets);
+    } on MainException catch (e) {
+      return left(Failure(e.errorMsg, e.details));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<AssetPathEntity>>> fetchAlbums() async {
+    try {
+      final assets = await _assetLocalSource.fetchAlbums();
       return right(assets);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg, e.details));

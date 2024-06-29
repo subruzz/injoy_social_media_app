@@ -14,7 +14,7 @@ class PostAttributesSelect extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () async {
-            context.read<PickMultipleImageCubit>().pickImage();
+            // context.read<PickMultipleImageCubit>().pickImage();
           },
           icon: const Icon(
             Icons.photo_camera_outlined,
