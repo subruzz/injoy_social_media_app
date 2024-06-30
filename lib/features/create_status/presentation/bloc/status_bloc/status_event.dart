@@ -38,3 +38,17 @@ final class SeenStatusUpateEvent extends StatusEvent {
   const SeenStatusUpateEvent(
       {required this.uId, required this.index, required this.viewedUid});
 }
+
+final class CreateMultipleStatusEvent extends StatusEvent {
+  final String userId;
+  final String userName;
+  final String? profilePic;
+  final List<String> captions;
+  final List<AssetEntity> statusImages;
+  const CreateMultipleStatusEvent(
+      {required this.userId,
+      this.profilePic,
+      required this.userName,
+      required this.captions,
+      required this.statusImages});
+}

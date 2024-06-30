@@ -1,4 +1,5 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:photo_manager/src/types/entity.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
@@ -54,10 +55,10 @@ class CreateStatusRepositoryImpl implements StatusRepository {
 
   @override
   Future<Either<Failure, Unit>> seenStatusUpdate(
-  int index, String userId, String viewedUserId) async {
+      int index, String userId, String viewedUserId) async {
     try {
-     await _statusRemoteDatasource.seenStatusUpdate(
-           index, userId, viewedUserId);
+      await _statusRemoteDatasource.seenStatusUpdate(
+          index, userId, viewedUserId);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -74,5 +75,17 @@ class CreateStatusRepositoryImpl implements StatusRepository {
   Future<Either<Failure, Unit>> updateStatus(StatusEntity status) {
     // TODO: implement updateStatus
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, Unit>> createMultipleStatus(StatusEntity status,
+      List<String> caption, List<AssetEntity> assets) async {
+    try {
+      await _statusRemoteDatasource.createMultipleStatus(
+          status, caption, assets);
+      return right(unit);
+    } on MainException catch (e) {
+      return left(Failure(e.errorMsg));
+    }
   }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/create_post/presentation/widgets/select_post/page_view_indicator.dart';
+import 'package:social_media_app/features/create_status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/sample.dart';
 
 class MyPageViewScreen extends StatefulWidget {
@@ -153,7 +156,15 @@ class _MyPageViewScreenState extends State<MyPageViewScreen> {
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        final user = context.read<AppUserBloc>().appUser!;
+                        context.read<StatusBloc>().add(
+                            CreateMultipleStatusEvent(
+                                userId: user.id,
+                                userName: user.userName ?? '',
+                                captions: _captions,
+                                statusImages: _selectedAssets.value));
+                      },
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(5),

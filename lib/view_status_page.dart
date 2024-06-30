@@ -71,14 +71,18 @@ class _MoreStoriesState extends State<ViewStatusPage> {
               StoryView(
                 storyItems: [
                   for (final status in widget.statusEntity.statuses)
-                    StoryItem.text(
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      title: status.content ?? '',
-                      backgroundColor: Color(status.color),
+                
+                     status.statusImage != null? StoryItem.inlineProviderImage(
+                          NetworkImage(status.statusImage!),
+                          caption: Text(status.content ?? '')):
+                 StoryItem.text(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
+                    title: status.content ?? '',
+                    backgroundColor: Color(status.color!),
+                  ),
                 ],
                 onStoryShow: (storyItem, index) {
                   _currentStoryIndex.value = index;
@@ -157,10 +161,8 @@ class _MoreStoriesState extends State<ViewStatusPage> {
                                         .doc(widget.statusEntity.uId)
                                         .update({
                                       'statuses': FieldValue.arrayRemove([
-                                      
-                                          widget.statusEntity.statuses.first
-                                              .toJson()
-                                        
+                                        widget.statusEntity.statuses.first
+                                            .toJson()
                                       ])
                                     });
                                   } catch (e) {

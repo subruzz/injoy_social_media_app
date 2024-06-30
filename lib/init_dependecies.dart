@@ -39,6 +39,7 @@ import 'package:social_media_app/features/create_post/presentation/bloc/update_p
 import 'package:social_media_app/features/create_status/data/datasource/status_remote_datasource.dart';
 import 'package:social_media_app/features/create_status/data/repository/create_status_repository_impl.dart';
 import 'package:social_media_app/features/create_status/domain/repository/status_repository.dart';
+import 'package:social_media_app/features/create_status/domain/usecases/create_multiple_status.dart';
 import 'package:social_media_app/features/create_status/domain/usecases/create_status.dart';
 import 'package:social_media_app/features/create_status/domain/usecases/delete_status.dart';
 import 'package:social_media_app/features/create_status/domain/usecases/get_all_statuses.dart';
@@ -245,7 +246,9 @@ void _statusCreation() {
           serviceLocator(),
         ))
     ..registerFactory(() => GetAllStatusesUseCase(repository: serviceLocator()))
+    ..registerFactory(() =>
+        CreateMultipleStatusUseCase(createStatusRepository: serviceLocator()))
     ..registerLazySingleton(() => GetAllStatusBloc(serviceLocator()))
-    ..registerLazySingleton(() =>
-        (StatusBloc(serviceLocator(), serviceLocator(), serviceLocator())));
+    ..registerLazySingleton(() => (StatusBloc(serviceLocator(),
+        serviceLocator(), serviceLocator(), serviceLocator())));
 }

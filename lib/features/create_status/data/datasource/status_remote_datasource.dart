@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/features/create_status/data/models/status_model.dart';
 import 'package:social_media_app/features/create_status/domain/entities/single_status_entity.dart';
+import 'package:uuid/uuid.dart';
 
 abstract interface class StatusRemoteDatasource {
   Future<void> createStatus(
@@ -14,6 +19,10 @@ abstract interface class StatusRemoteDatasource {
   Stream<List<StatusEntity>> getStatuses(String uid);
   Stream<StatusModel?> getMyStatus(String uid);
   Future<List<StatusEntity>> getMyStatusFuture(String uid);
+  Future<void> createMultipleStatus(
+      StatusEntity status, List<String> caption, List<AssetEntity> assets);
+  Future<List<Map<String, String>>> uploadStatusImages(
+      List<AssetEntity> postImages, String pId);
 }
 
 class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
@@ -37,6 +46,47 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
         final List<dynamic> allStatusesData = userRef['statuses'];
 
         allStatusesData.add(singleStatus.toJson());
+        await allStatusCollection
+            .doc(status.uId)
+            .update({'statuses': allStatusesData});
+      }
+    } catch (e) {
+      print(e.toString());
+      throw MainException(errorMsg: e.toString());
+    }
+  }
+
+  @override
+  Future<void> createMultipleStatus(StatusEntity status, List<String> caption,
+      List<AssetEntity> assets) async {
+    try {
+      final allStatusCollection =
+          FirebaseFirestore.instance.collection('allStatus');
+      final images = await uploadStatusImages(assets, status.uId);
+      List<SingleStatusEntity> newStatuses = [];
+      final currentTime = Timestamp.now();
+      for (int i = 0; i < images.length; i++) {
+        final newStatus = SingleStatusEntity(
+            statusImage: images[i]['downloadUrl']!,
+            content: caption[i].isEmpty ? null : caption[i],
+            statusId: images[i]['imageId']!,
+            timestamp: currentTime,
+            viewers: []);
+        newStatuses.add(newStatus);
+      }
+      final userRef = await allStatusCollection.doc(status.uId).get();
+      if (!userRef.exists) {
+        final newStatus = StatusModel(
+            uId: status.uId,
+            profilePic: status.profilePic,
+            userName: status.userName,
+            lastCreated: status.lastCreated,
+            statuses: newStatuses);
+        await allStatusCollection.doc(status.uId).set(newStatus.toMap());
+      } else {
+        final List<dynamic> allStatusesData = userRef['statuses'];
+
+        allStatusesData.addAll(newStatuses);
         await allStatusCollection
             .doc(status.uId)
             .update({'statuses': allStatusesData});
@@ -146,6 +196,39 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
   Future<void> updateStatus(StatusEntity status) {
     // TODO: implement updateStatus
     throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Map<String, String>>> uploadStatusImages(
+      List<AssetEntity> postImages, String uId) async {
+    try {
+      if (postImages.isEmpty) {
+        return [];
+      }
+
+      final FirebaseStorage storage = FirebaseStorage.instance;
+      List<Map<String, String>> postImageUrls = [];
+      Reference ref = storage.ref().child('statusImages').child(uId);
+
+      for (var image in postImages) {
+        File? file = await image.file;
+        if (file == null) continue;
+
+        String imageId = const Uuid().v4();
+        UploadTask task = ref.child(imageId).putFile(file);
+        TaskSnapshot snapshot = await task;
+
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        postImageUrls.add({
+          'imageId': imageId,
+          'downloadUrl': downloadUrl,
+        });
+      }
+
+      return postImageUrls;
+    } catch (e) {
+      throw MainException(errorMsg: 'Error while uploading status images: $e');
+    }
   }
   // @override
   // Future<void> createStatus(StatusEntity status,

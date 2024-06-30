@@ -6,15 +6,14 @@ class SingleStatusEntity {
   final String statusId;
   final String? content;
   final Timestamp timestamp;
-  final int color;
+  final int? color;
   final String? statusImage;
   final List<String> viewers;
-
   SingleStatusEntity({
     this.content,
     required this.statusId,
     required this.timestamp,
-    required this.color,
+     this.color,
     this.statusImage,
     required this.viewers,
   });
