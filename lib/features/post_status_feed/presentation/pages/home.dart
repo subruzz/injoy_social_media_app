@@ -8,7 +8,7 @@ import 'package:social_media_app/features/post_status_feed/presentation/bloc/fol
 import 'package:social_media_app/core/widgets/post/each_post.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/floating_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_selection_button.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/user_status.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/status/user_status.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

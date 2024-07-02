@@ -6,7 +6,7 @@ import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/post/post_attributes.dart';
-import 'package:social_media_app/features/create_post/presentation/bloc/like_post/like_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/like_post/like_post_bloc.dart';
 
 class PostActionBar extends StatelessWidget {
   const PostActionBar({super.key, required this.post});

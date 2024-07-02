@@ -11,7 +11,6 @@ class AppUserBloc extends Bloc<AppUserEvent, AppUserState> {
   AppUserBloc() : super(AppUserInitial()) {
     on<UpdateUserModelEvent>(
       (event, emit) {
-        emit(AppUserLoading());
         _appUser = event.userModel;
         if (_appUser == null) {
           emit(AppUserInitial());

@@ -13,7 +13,7 @@ import 'package:social_media_app/features/profile/presentation/bloc/user_profile
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_profile_pic.dart';
 
-import '../../../../core/widgets/textfields/text_field.dart';
+import '../../../../core/widgets/textfields/details_add_text.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key, required this.appUser});

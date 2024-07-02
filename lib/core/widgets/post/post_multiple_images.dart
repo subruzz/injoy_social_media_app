@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:social_media_app/features/create_post/presentation/widgets/edit_post/edit_screen_feed_option.dart';
+import 'package:social_media_app/features/post/presentation/widgets/edit_post/edit_screen_feed_option.dart';
 
 class PostMultipleImages extends StatelessWidget {
   const PostMultipleImages(

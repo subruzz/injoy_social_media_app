@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Messenger {
   static final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+
   static showSnackBar({required String message, Color? color}) {
     Size size = MediaQuery.of(scaffoldKey.currentState!.context).size;
     scaffoldKey.currentState!.clearSnackBars();
@@ -13,7 +14,7 @@ class Messenger {
         duration: const Duration(milliseconds: 3000),
         behavior: SnackBarBehavior.floating,
         backgroundColor: color,
-        margin: const EdgeInsets.only(right: 20, left: 20, bottom: 30),
+        margin: const EdgeInsets.only(right: 20, left: 20, top: 30), // Adjust top margin
         content: Text(
           message,
         ),

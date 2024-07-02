@@ -4,7 +4,7 @@ import 'package:social_media_app/core/const/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/post/post_action_bar.dart';
 import 'package:social_media_app/core/widgets/post/post_description.dart';
-import 'package:social_media_app/features/create_post/presentation/pages/edit_post.dart';
+import 'package:social_media_app/features/post/presentation/pages/edit_post.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_dot.dart';
 import 'package:social_media_app/core/widgets/post/post_hashtag.dart';
 import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
@@ -13,7 +13,7 @@ import 'package:social_media_app/core/widgets/post/post_owner_image.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_owner_username.dart';
 import 'package:social_media_app/core/widgets/post/post_single_image.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_time.dart';
-import 'package:social_media_app/view_post.dart';
+import 'package:social_media_app/features/post/presentation/pages/view_post.dart';
 
 class EachPost extends StatelessWidget {
   const EachPost({

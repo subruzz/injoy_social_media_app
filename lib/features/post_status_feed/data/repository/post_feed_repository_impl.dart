@@ -1,9 +1,7 @@
 import 'package:fpdart/src/either.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/features/create_status/domain/entities/single_status_entity.dart';
 import 'package:social_media_app/features/post_status_feed/data/datasource/post_feed_remote_datasource.dart';
 import 'package:social_media_app/features/post_status_feed/domain/repositories/post_feed_repository.dart';
 

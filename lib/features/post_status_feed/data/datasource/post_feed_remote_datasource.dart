@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
-import 'package:social_media_app/features/create_status/data/models/status_model.dart';
-import 'package:social_media_app/features/create_status/domain/entities/single_status_entity.dart';
-import 'package:social_media_app/features/create_status/domain/entities/status_user_entity.dart';
 
 abstract class PostFeedRemoteDatasource {
   Future<List<PostModel>> fetchFollowedPosts(String userId);

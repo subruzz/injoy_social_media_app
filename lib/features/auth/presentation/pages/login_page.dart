@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_padding.dart';
 import 'package:social_media_app/core/const/app_sizedbox.dart';
-import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_choosing_text.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_form.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/google_auth.dart';
@@ -33,7 +32,7 @@ class _LoginScreenState extends State<LoginPage> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(AppPadding.authPadding),
+          padding: const EdgeInsets.all(40),
           child: LayoutBuilder(
             builder: (context, constraints) {
               return SingleChildScrollView(

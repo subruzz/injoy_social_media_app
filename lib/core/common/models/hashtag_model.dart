@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:social_media_app/features/create_post/domain/enitities/hash_tag.dart';
+import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';
 
 class HashTagModel extends HashTag {
   HashTagModel({

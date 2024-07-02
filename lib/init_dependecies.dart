@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/shared_providers/cubits/Pick_multiple_image/pick_multiple_image_cubit.dart';
@@ -15,39 +17,44 @@ import 'package:social_media_app/features/auth/presentation/bloc/forgot_password
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
-import 'package:social_media_app/features/create_post/data/datasources/local/asset_local_source.dart';
-import 'package:social_media_app/features/create_post/data/datasources/remote/post_remote_datasource.dart';
-import 'package:social_media_app/features/create_post/data/repository/asset_repository_impl.dart';
-import 'package:social_media_app/features/create_post/data/repository/post_repostiory_impl.dart';
-import 'package:social_media_app/features/create_post/domain/repositories/asset_repository.dart';
-import 'package:social_media_app/features/create_post/domain/repositories/post_repository.dart';
-import 'package:social_media_app/features/create_post/domain/usecases/create_posts.dart';
-import 'package:social_media_app/features/create_post/domain/usecases/delete_post.dart';
-import 'package:social_media_app/features/create_post/domain/usecases/get_albums.dart';
-import 'package:social_media_app/features/create_post/domain/usecases/get_assets.dart';
-import 'package:social_media_app/features/create_post/domain/usecases/like_post.dart';
-import 'package:social_media_app/features/create_post/domain/usecases/searh_hashtag.dart';
-import 'package:social_media_app/features/create_post/domain/usecases/update_post.dart';
-import 'package:social_media_app/features/create_post/presentation/bloc/album_bloc/album_bloc.dart';
-import 'package:social_media_app/features/create_post/presentation/bloc/assets_bloc/assets_bloc.dart';
-import 'package:social_media_app/features/create_post/presentation/bloc/create_post/create_post_bloc.dart';
-import 'package:social_media_app/features/create_post/presentation/bloc/delte_post/delete_post_bloc.dart';
-import 'package:social_media_app/features/create_post/presentation/bloc/like_post/like_post_bloc.dart';
-import 'package:social_media_app/features/create_post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
-import 'package:social_media_app/features/create_post/presentation/bloc/select_tags_cubit/select_tags_cubit.dart';
-import 'package:social_media_app/features/create_post/presentation/bloc/update_post/update_post_bloc.dart';
-import 'package:social_media_app/features/create_status/data/datasource/status_remote_datasource.dart';
-import 'package:social_media_app/features/create_status/data/repository/create_status_repository_impl.dart';
-import 'package:social_media_app/features/create_status/domain/repository/status_repository.dart';
-import 'package:social_media_app/features/create_status/domain/usecases/create_multiple_status.dart';
-import 'package:social_media_app/features/create_status/domain/usecases/create_status.dart';
-import 'package:social_media_app/features/create_status/domain/usecases/delete_status.dart';
-import 'package:social_media_app/features/create_status/domain/usecases/get_all_statuses.dart';
-import 'package:social_media_app/features/create_status/domain/usecases/get_my_status.dart';
-import 'package:social_media_app/features/create_status/domain/usecases/seeen_status_update.dart';
-import 'package:social_media_app/features/create_status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
-import 'package:social_media_app/features/create_status/presentation/bloc/get_my_status/get_my_status_bloc.dart';
-import 'package:social_media_app/features/create_status/presentation/bloc/status_bloc/status_bloc.dart';
+import 'package:social_media_app/features/post/data/datasources/local/asset_local_source.dart';
+import 'package:social_media_app/features/post/data/datasources/remote/post_remote_datasource.dart';
+import 'package:social_media_app/features/post/data/repository/asset_repository_impl.dart';
+import 'package:social_media_app/features/post/data/repository/post_repostiory_impl.dart';
+import 'package:social_media_app/features/post/domain/repositories/asset_repository.dart';
+import 'package:social_media_app/features/post/domain/repositories/post_repository.dart';
+import 'package:social_media_app/features/post/domain/usecases/create_posts.dart';
+import 'package:social_media_app/features/post/domain/usecases/delete_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/get_albums.dart';
+import 'package:social_media_app/features/post/domain/usecases/get_assets.dart';
+import 'package:social_media_app/features/post/domain/usecases/like_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/searh_hashtag.dart';
+import 'package:social_media_app/features/post/domain/usecases/update_post.dart';
+import 'package:social_media_app/features/post/presentation/bloc/album_bloc/album_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/assets_bloc/assets_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/create_post/create_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/delte_post/delete_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/like_post/like_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/select_tags_cubit/select_tags_cubit.dart';
+import 'package:social_media_app/features/post/presentation/bloc/update_post/update_post_bloc.dart';
+import 'package:social_media_app/features/post_status_feed/data/datasource/status_feed_remote_datasource.dart';
+import 'package:social_media_app/features/post_status_feed/data/repository/status_feed_repository_impl.dart';
+import 'package:social_media_app/features/post_status_feed/domain/repositories/status_feed_repository.dart';
+import 'package:social_media_app/features/status/data/datasource/status_remote_datasource.dart';
+import 'package:social_media_app/features/status/data/repository/create_status_repository_impl.dart';
+import 'package:social_media_app/features/status/domain/repository/status_repository.dart';
+import 'package:social_media_app/features/status/domain/usecases/create_multiple_status.dart';
+import 'package:social_media_app/features/status/domain/usecases/create_status.dart';
+import 'package:social_media_app/features/status/domain/usecases/delete_status.dart';
+import 'package:social_media_app/features/post_status_feed/domain/usecases/get_all_statuses.dart';
+import 'package:social_media_app/features/post_status_feed/domain/usecases/get_my_status.dart';
+import 'package:social_media_app/features/status/domain/usecases/seeen_status_update.dart';
+import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
+import 'package:social_media_app/features/status/presentation/bloc/delete_status/delete_status_bloc.dart';
+import 'package:social_media_app/features/status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
+import 'package:social_media_app/features/status/presentation/bloc/get_my_status/get_my_status_bloc.dart';
+import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/location/data/datasource/local/location_local_datasource.dart';
 import 'package:social_media_app/features/location/data/repositories/location_repository_impl.dart';
 import 'package:social_media_app/features/location/domain/repositories/location_repository.dart';
@@ -57,9 +64,7 @@ import 'package:social_media_app/features/post_status_feed/data/datasource/post_
 import 'package:social_media_app/features/post_status_feed/data/repository/post_feed_repository_impl.dart';
 import 'package:social_media_app/features/post_status_feed/domain/repositories/post_feed_repository.dart';
 import 'package:social_media_app/features/post_status_feed/domain/usecases/get_following_posts.dart';
-import 'package:social_media_app/features/post_status_feed/domain/usecases/view_current_user_status.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/bloc/view_status/view_status_bloc.dart';
 import 'package:social_media_app/features/profile/data/data_source/user_profile_data_source.dart';
 import 'package:social_media_app/features/profile/data/data_source/user_posts_remote_datasource.dart';
 import 'package:social_media_app/features/profile/data/repository/profile_repository_impl.dart';
@@ -184,7 +189,9 @@ void _localAsset() {
 
 void _post() {
   serviceLocator
-    ..registerFactory<PostRemoteDatasource>(() => PostRemoteDataSourceImpl())
+    ..registerFactory<PostRemoteDatasource>(() => PostRemoteDataSourceImpl(
+        firestore: FirebaseFirestore.instance,
+        firebaseStorage: FirebaseStorage.instance))
     ..registerFactory<PostRepository>(
         () => PostRepostioryImpl(serviceLocator()))
     ..registerFactory(
@@ -223,32 +230,42 @@ void _postFeed() {
         () => PostFeedRepositoryImpl(feedRemoteDatasource: serviceLocator()))
     ..registerFactory(
         () => GetFollowingPostsUseCase(postFeedRepository: serviceLocator()))
-    // ..registerFactory(() =>
-    //     ViewCurrentUserStatusUseCase(postFeedRepository: serviceLocator()))
-    ..registerLazySingleton(() => (FollowingPostFeedBloc(serviceLocator())));
-  // ..registerLazySingleton(() => ViewStatusBloc(serviceLocator()));
+    ..registerLazySingleton(() => (FollowingPostFeedBloc(serviceLocator())))
+    ..registerFactory<StatusFeedRemoteDatasource>(() =>
+        StatusFeedRemoteDatasourceimpl(
+            firebasefirestore: FirebaseFirestore.instance))
+    ..registerFactory<StatusFeedRepository>(() =>
+        StatusFeedRepositoryImpl(statusFeedRemoteDatasource: serviceLocator()))
+    ..registerFactory(() => GetMyStatusUseCase(repository: serviceLocator()))
+    ..registerLazySingleton(() => GetMyStatusBloc(
+          getMyStatusUseCase: serviceLocator(),
+        ))
+    ..registerFactory(() => GetAllStatusesUseCase(repository: serviceLocator()))
+    ..registerLazySingleton(
+        () => GetAllStatusBloc(getAllStatusesUseCase: serviceLocator()));
 }
 
 void _statusCreation() {
   serviceLocator
-    ..registerFactory<StatusRemoteDatasource>(
-        () => StatusRemoteDatasourceImpl())
+    ..registerFactory<StatusRemoteDatasource>(() => StatusRemoteDatasourceImpl(
+        firestore: FirebaseFirestore.instance,
+        firebaseStorage: FirebaseStorage.instance))
     ..registerFactory<StatusRepository>(() =>
         CreateStatusRepositoryImpl(statusRemoteDatasource: serviceLocator()))
     ..registerFactory(
         () => CreateStatusUseCase(createStatusRepository: serviceLocator()))
-    ..registerFactory(() => GetMyStatusUseCase(repository: serviceLocator()))
     ..registerFactory(
         () => DeleteStatuseCase(statusRepository: serviceLocator()))
     ..registerFactory(
         () => SeeenStatusUpdateUseCase(statusRepository: serviceLocator()))
-    ..registerLazySingleton(() => GetMyStatusBloc(
-          serviceLocator(),
-        ))
-    ..registerFactory(() => GetAllStatusesUseCase(repository: serviceLocator()))
     ..registerFactory(() =>
         CreateMultipleStatusUseCase(createStatusRepository: serviceLocator()))
-    ..registerLazySingleton(() => GetAllStatusBloc(serviceLocator()))
-    ..registerLazySingleton(() => (StatusBloc(serviceLocator(),
-        serviceLocator(), serviceLocator(), serviceLocator())));
+    ..registerLazySingleton(
+        () => DeleteStatusBloc(deleteStatusUseCase: serviceLocator()))
+    ..registerLazySingleton(() => (StatusBloc(
+        createStatusUseCase: serviceLocator(),
+        deleteStatuseCase: serviceLocator(),
+        seeenStatusUpdateUseCase: serviceLocator(),
+        createMultipleStatusUseCase: serviceLocator())))
+    ..registerLazySingleton(() => SelectColorCubit());
 }

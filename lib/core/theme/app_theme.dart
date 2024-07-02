@@ -3,11 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:social_media_app/core/const/app_radius.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/theme/widget_themes/floating_action_theme.dart';
+import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 
 /// Defines the dark theme for the application.
 final class AppDarkTheme {
   static final AppDarkColor _color = AppDarkColor();
-  static final ScreenUtil _screenUtil = ScreenUtil();
 
   static final _outlineInputBorder = OutlineInputBorder(
     borderSide: BorderSide(color: _color.primaryText.withOpacity(0.3)),
@@ -43,75 +44,7 @@ final class AppDarkTheme {
         ),
       ),
     ),
-    textTheme: TextTheme(
-      displayLarge: TextStyle(
-        color: _color.primaryText,
-        fontWeight: FontWeight.w600,
-        fontSize: 30.sp,
-      ),
-      displayMedium: TextStyle(
-        color: _color.primaryText,
-        fontWeight: FontWeight.w600,
-        letterSpacing: .5,
-        fontSize: 25.sp,
-      ),
-      displaySmall: TextStyle(
-        color: _color.primaryText,
-        fontWeight: FontWeight.w600,
-        fontSize: 23.sp,
-      ),
-      headlineLarge: TextStyle(
-        color: _color.primaryText,
-        fontWeight: FontWeight.bold,
-        fontSize: 22.sp,
-      ),
-      headlineMedium: TextStyle(
-        color: _color.primaryText,
-        fontWeight: FontWeight.w500,
-        fontSize: 20.sp,
-      ),
-      headlineSmall: TextStyle(
-        color: _color.primaryText,
-        fontWeight: FontWeight.w500,
-        fontSize: 19.sp,
-      ),
-      titleLarge: TextStyle(
-        color: _color.primaryText,
-        fontSize: 18.sp,
-      ),
-      titleMedium: TextStyle(
-        color: _color.primaryText,
-        fontSize: 17.sp,
-      ),
-      titleSmall: TextStyle(
-          color: _color.primaryText,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.bold),
-      labelLarge: TextStyle(
-        color: _color.secondaryPrimaryText,
-        fontSize: 15.sp,
-      ),
-      labelMedium: TextStyle(
-        color: _color.secondaryText,
-        fontSize: _screenUtil.setSp(14),
-      ),
-      labelSmall: TextStyle(
-          color: _color.primaryText,
-          fontSize: 13.sp,
-          fontWeight: FontWeight.bold),
-      bodyLarge: TextStyle(
-        color: _color.secondaryText,
-        fontSize: _screenUtil.setSp(14),
-      ),
-      bodyMedium: TextStyle(
-        color: _color.primaryText,
-        fontSize: 13.sp,
-      ),
-      bodySmall: TextStyle(
-        color: _color.primaryText,
-        fontSize: 12.sp,
-      ),
-    ),
+    textTheme: AppTextTheme.appTextTheme,
 
     chipTheme: ChipThemeData(
         shape: const StadiumBorder(
@@ -119,7 +52,7 @@ final class AppDarkTheme {
         ),
         selectedColor: _color.choiceChipSelectedolor,
         backgroundColor: _color.secondaryBackground),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: Colors.white,
     ),
     dividerTheme: DividerThemeData(color: _color.secondaryBackground),
@@ -235,14 +168,8 @@ final class AppDarkTheme {
         borderRadius: BorderRadius.circular(10),
       ),
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          AppRadius.borderRound,
-        ),
-      ),
-      backgroundColor: _color.buttonBackground,
-    ),
+    floatingActionButtonTheme:
+        AppFloationActionButtonTheme.floatingActionButtonTheme,
     sliderTheme: SliderThemeData(
       activeTickMarkColor: _color.success,
       activeTrackColor: _color.success,

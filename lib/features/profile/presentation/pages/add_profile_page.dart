@@ -10,7 +10,7 @@ import 'package:social_media_app/features/profile/presentation/widgets/add_profi
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_profile_pic.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/next_button.dart';
 
-import '../../../../core/widgets/textfields/text_field.dart';
+import '../../../../core/widgets/textfields/details_add_text.dart';
 
 class AddProfilePage extends StatefulWidget {
   const AddProfilePage({super.key, required this.appUser});
