@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/const/app_radius.dart';
+import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
 final class AppFloationActionButtonTheme {
@@ -7,10 +7,10 @@ final class AppFloationActionButtonTheme {
   static final AppDarkColor _color = AppDarkColor();
 
   static final floatingActionButtonTheme = FloatingActionButtonThemeData(
+    
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(
-        AppRadius.borderRound,
-      ),
+      
+      borderRadius: AppBorderRadius.extraLarge
     ),
     backgroundColor: _color.buttonBackground,
   );

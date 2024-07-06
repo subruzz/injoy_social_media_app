@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/theme/color/app_colors.dart';
-// Make sure to import your app colors or any other dependencies
-// import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
+import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 
 class CustomChoiceChip extends StatefulWidget {
   final String chipLabel;
@@ -24,8 +24,8 @@ class _CustomChoiceChipState extends State<CustomChoiceChip> {
   @override
   Widget build(BuildContext context) {
     return FilterChip(
-      label: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+      label: CustomAppPadding(
+        padding: AppPadding.horizontalExtraSmall,
         child: Text(
           widget.chipLabel,
         ),
@@ -33,13 +33,11 @@ class _CustomChoiceChipState extends State<CustomChoiceChip> {
       selected: widget.selected.contains(widget.chipLabel),
       onSelected: (value) {
         {
-          
           if (widget.selected.contains(widget.chipLabel)) {
             widget.selected.remove(widget.chipLabel);
           } else {
             widget.selected.add(widget.chipLabel);
           }
-          print(widget.selected);
           setState(() {});
         }
       },

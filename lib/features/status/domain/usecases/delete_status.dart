@@ -3,7 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:fpdart/src/either.dart';
 
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/core/usecases/usecase.dart';
+import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/status/domain/repository/status_repository.dart';
 
 class DeleteStatuseCase implements UseCase<Unit, DeleteStatusUseCaseParams> {

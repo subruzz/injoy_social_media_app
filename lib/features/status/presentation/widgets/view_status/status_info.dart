@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
-import 'package:social_media_app/core/common/entities/user.dart';
-import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/time_ago.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 

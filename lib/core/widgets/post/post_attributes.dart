@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 
 class PostAttributes extends StatelessWidget {
   const PostAttributes(

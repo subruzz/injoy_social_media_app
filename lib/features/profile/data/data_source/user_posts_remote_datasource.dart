@@ -19,8 +19,7 @@ class UserPostsRemoteDatasourceImpl implements UserPostsRemoteDataSource {
           .get();
       List<String> postImages = [];
       final userAllPosts = posts.docs.map((posts) {
-        if (posts['postImageUrl'] != null &&
-            posts['postImageUrl'] is List) {
+        if (posts['postImageUrl'] != null && posts['postImageUrl'] is List) {
           final currentPostImages = List<String>.from(posts['postImageUrl']);
           postImages.addAll(currentPostImages);
         }
@@ -30,8 +29,9 @@ class UserPostsRemoteDatasourceImpl implements UserPostsRemoteDataSource {
       }).toList();
       return (userPosts: userAllPosts, userPostImages: postImages);
     } catch (e) {
-      print('error is this ${e.toString()}');
       throw const MainException(errorMsg: 'Error while loading the posts!');
     }
   }
+
+  
 }

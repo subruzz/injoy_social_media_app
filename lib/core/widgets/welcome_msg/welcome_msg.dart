@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/widgets/welcome_msg/welcom_text.dart';
 
 class WelcomeMessage extends StatelessWidget {

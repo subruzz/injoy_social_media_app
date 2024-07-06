@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:social_media_app/core/const/app_radius.dart';
+import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/theme/widget_themes/elevated_button_theme.dart';
 import 'package:social_media_app/core/theme/widget_themes/floating_action_theme.dart';
+import 'package:social_media_app/core/theme/widget_themes/text_field_theme.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 
 /// Defines the dark theme for the application.
 final class AppDarkTheme {
   static final AppDarkColor _color = AppDarkColor();
-
-  static final _outlineInputBorder = OutlineInputBorder(
-    borderSide: BorderSide(color: _color.primaryText.withOpacity(0.3)),
-    borderRadius: BorderRadius.circular(AppRadius.borderRadius),
-  );
 
   /// Dark theme configuration.
   static final ThemeData darkTheme = ThemeData(
@@ -22,18 +19,7 @@ final class AppDarkTheme {
     colorScheme: ColorScheme.dark(
       surface: _color.background,
     ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: _color.buttonBackground,
-        foregroundColor: _color.buttonForground,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        minimumSize: Size(50.sp, 50.sp),
-        maximumSize: Size(500.sp, 100.sp),
-        animationDuration: const Duration(milliseconds: 200),
-      ),
-    ),
+    elevatedButtonTheme: AppElevatedButtonTheme.elevatedButtonTheme,
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         foregroundColor: WidgetStatePropertyAll(
@@ -89,23 +75,7 @@ final class AppDarkTheme {
     //   indicatorColor: _color.primaryText,
     // ),
 
-    inputDecorationTheme: InputDecorationTheme(
-      fillColor: AppDarkColor().fillColor,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: _outlineInputBorder,
-      errorBorder: _outlineInputBorder,
-      focusedErrorBorder: _outlineInputBorder,
-      errorStyle: TextStyle(
-        color: _color.primaryTextSoft,
-      ),
-      counterStyle: TextStyle(
-        color: _color.primaryTextBlur,
-      ),
-      hintStyle: TextStyle(color: _color.secondaryText, fontSize: 12.sp),
-    ),
+    inputDecorationTheme: AppTextFieldTheme.textFieldTheme,
     textSelectionTheme: TextSelectionThemeData(
         selectionColor: _color.boxShadow,
         cursorColor: _color.primaryText,
@@ -122,9 +92,11 @@ final class AppDarkTheme {
     ),
     dialogBackgroundColor: _color.softBackground,
     dialogTheme: DialogTheme(
+      shape: RoundedRectangleBorder(borderRadius: AppBorderRadius.medium),
       backgroundColor: _color.softBackground,
       surfaceTintColor: Colors.transparent,
     ),
+    dividerColor: Colors.red,
     popupMenuTheme: PopupMenuThemeData(
       color: _color.softBackground,
       shadowColor: _color.softBackground,

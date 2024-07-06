@@ -1,188 +1,161 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
-import 'package:social_media_app/core/common/entities/user.dart';
-import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:go_router/go_router.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/const/app_info_dialog.dart';
+import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
+import 'package:social_media_app/core/const/assets/app_assets.dart';
+import 'package:social_media_app/core/const/location_enum.dart';
 import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
+import 'package:social_media_app/core/widgets/animated/app_lottie_animation.dart';
+import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
+import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
+import 'package:social_media_app/core/widgets/app_related/common_text.dart';
+import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
+import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
+import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
+import 'package:social_media_app/features/location/domain/entities/location.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
-import 'package:social_media_app/features/location/presentation/widgets/popup.dart';
+import 'package:social_media_app/features/location/presentation/widgets/location_dialog.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
+import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
 
 class LocationAskingPage extends StatelessWidget {
-  const LocationAskingPage(
-      {super.key, required this.userProfil, this.profilePic});
-  final AppUser userProfil;
-  final File? profilePic;
+  const LocationAskingPage({super.key});
+
+  void submitProfile(BuildContext context, UserLocation? location) {
+    context.read<ProfileBloc>().add(CompleteProfileSetup(
+        location: location, uid: context.read<AppUserBloc>().appUser.id));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileBloc, ProfileState>(
-      listener: (context, state) {
-        if (state is ProfileSubmissionSuccess) {
-          final user = context.read<AppUserBloc>().appUser!;
-          context
-              .read<FollowingPostFeedBloc>()
-              .add(FollowingPostFeedGetEvent(uId: user.id));
-          context
-              .read<GetUserPostsBloc>()
-              .add(GetUserPostsrequestedEvent(uid: user.id));
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const BottonNavWithAnimatedIcons(),
-              ));
-        }
-        if (state is ProfileSubmissionFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('failure'),
-              duration: Duration(seconds: 2), // Adjust the duration as needed
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        if (state is ProfileSetUpLoading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<ProfileBloc, ProfileState>(
+          listener: (context, state) {
+            if (state is CompleteProfileSetupSuceess) {
+              final user = context.read<AppUserBloc>().appUser;
+              context
+                  .read<FollowingPostFeedBloc>()
+                  .add(FollowingPostFeedGetEvent(uId: user.id));
+              context
+                  .read<GetUserPostsBloc>()
+                  .add(GetUserPostsrequestedEvent(uid: user.id));
+              context.goNamed(MyAppRouteConst.bottomNavRoute);
+            }
+            if (state is CompleteProfileSetupFailure) {
+              Messenger.showSnackBar(message: state.errorMsg);
+            }
+          },
+        ),
+        BlocListener<LocationBloc, LocationState>(
+          listener: (context, state) {
+            if (state is LocationSuccess) {
+              AppInfoDialog.showInfoDialog(
+                  context: context,
+                  callBack: () {
+                    submitProfile(context, state.location);
+                  },
+                  title: 'Selected Location',
+                  subtitle: state.location.currentLocation ?? '',
+                  buttonText: 'Continue');
+            }
+            if (state is LocationNotOnState) {
+              showLocationDialog(
+                  context: context,
+                  locationStatus: LocationStatus.locationNotEnabled);
+            }
+            if (state is LocationPermissionDenied ||
+                state is LocatonPermissionForeverDenied) {
+              showLocationDialog(
+                  context: context,
+                  locationStatus: LocationStatus.locationPermissionDenied);
+            }
+          },
+        ),
+      ],
+      child: BlocBuilder<ProfileBloc, ProfileState>(
+        builder: (context, state) {
+          if (state is CompleteProfileSetupLoading) {
+            return const ProfileLoading();
+          }
+          return Scaffold(
+            appBar: AppCustomAppbar(
+              showLeading: true,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    AppInfoDialog.showInfoDialog(
+                        context: context,
+                        callBack: () {
+                          submitProfile(context, null);
                         },
-                        icon: const Icon(
-                          Icons.arrow_back_ios_outlined,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Skip',
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                      )
-                    ],
+                        title: 'Are You Sure?',
+                        subtitle: AppIngoMsg.locationSkip,
+                        buttonText: 'Skip');
+                  },
+                  child: CustomText(
+                    'Skip',
+                    style:
+                        TextStyle(color: AppDarkColor().secondaryPrimaryText),
                   ),
-                  AppSizedBox.sizedBox15H,
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) {
-                      // _debouncer.run(
-                      //   () => locationBloc.add(
-                      //     SearchLocationsEvent(query: value),
-                      //   ),
-                      // );
-                    },
-                    // autofocus: true,
-                    textCapitalization: TextCapitalization.sentences,
-                    // cursorColor: AppDarkColor().primaryText,
-                    decoration: InputDecoration(
-                      prefixIcon: const Padding(
-                        padding: EdgeInsets.only(left: 5),
-                        child: Icon(
-                          Icons.search,
-                          color: Colors.white,
-                        ),
-                      ),
-                      filled: true,
-                      fillColor: AppDarkColor().fillColor,
-                      hintText: 'Search Manually...',
-                      // hintStyle: Theme.of(context).textTheme.labelLarge,
+                )
+              ],
+            ),
+            resizeToAvoidBottomInset: false,
+            body: SafeArea(
+              child: CustomAppPadding(
+                child: Column(
+                  children: [
+                    AppSizedBox.sizedBox15H,
+                    const CustomTextField(
+                      hintText: 'Search manually..',
+                      prefixIcon: Icons.search,
                     ),
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  Center(
-                    child: Lottie.asset('assets/images/location_lottie.json',
-                        fit: BoxFit.cover, width: double.infinity),
-                  ),
-                  const Text(
+                    const AppLottieAnimation(
+                      lottie: AppAssetsConst.location,
+                    ),
+                    const CustomText(
                       textAlign: TextAlign.center,
-                      'We need your location to enhance your experience by providing personalized services and recommendations. Your location data will be kept confidential and secure'),
-                  const Spacer(),
-                  BlocConsumer<LocationBloc, LocationState>(
-                    listener: (context, state) {
-                      if (state is LocationSuccess) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => LocationPopup(
-                            currentLocation: state
-                                .locationName, // Replace with your current location
-                            onSave: () {
-                              userProfil.location = state.locationName;
-                              userProfil.latitude = state.latitue;
-                              userProfil.longitude = state.longitude;
-                              context.read<ProfileBloc>().add(
-                                  ProfileSetUpLocationEvent(
-                                      userProfile: userProfil,
-                                      profilePic: profilePic));
-                            },
-                          ),
-                        );
-                      }
-                      if (state is LocationNotOnState) {
-                        Messenger.showSnackBar(
-                            message: 'please turn on location on your phone');
-                      }
-                    },
-                    builder: (context, state) {
-                      if (state is LocationLoading) {
-                        return CircularProgressIndicator();
-                      }
-                      return SizedBox(
-                        height: 50,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            context
-                                .read<LocationBloc>()
-                                .add(LocationCurrentEvent());
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Allow',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                      AppIngoMsg.locationinfo,
+                    ),
+                    const Spacer(),
+                    BlocBuilder<LocationBloc, LocationState>(
+                      buildWhen: (previous, current) =>
+                          current is LocationLoading ||
+                          current is LocationSuccess,
+                      builder: (context, state) {
+                        if (state is LocationLoading) {
+                          return CustomAppPadding(
+                              padding: AppPadding.onlyBottomMedium,
+                              child: const CircularLoading());
+                        }
+                        return CustomButton(
+                            child: CustomText(
+                              'Use current location',
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            onClick: () {
+                              context
+                                  .read<LocationBloc>()
+                                  .add(LocationCurrentEvent());
+                            });
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

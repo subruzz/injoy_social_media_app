@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/const/app_padding.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/widgets/animated_border.dart';
-import 'package:social_media_app/core/widgets/border_widget.dart';
+import 'package:social_media_app/core/widgets/animated/animated_border.dart';
+import 'package:social_media_app/core/widgets/animated/border_widget.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/status/create_status_button.dart';
 import 'package:social_media_app/features/status/presentation/bloc/get_my_status/get_my_status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/pages/view_status_page.dart';
 
-import '../../../../../core/const/app_sizedbox.dart';
+import '../../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../../core/widgets/user_profile.dart';
 import '../../../../status/presentation/pages/create_status_page.dart';
 

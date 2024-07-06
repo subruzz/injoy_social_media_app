@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/const/app_sizedbox.dart';
-import 'package:social_media_app/core/const/debouncer.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/loading/loading_bar.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets_indicator.dart';
-import 'package:social_media_app/core/widgets/rotated_icon.dart';
+import 'package:social_media_app/core/widgets/app_related/rotated_icon.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/create_post/create_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/select_tags_cubit/select_tags_cubit.dart';
@@ -69,15 +69,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   hashtags: selectedHashtags is SelectdTagsSuccess
                       ? selectedHashtags.tags
                       : [],
-                  latitude: locationState is LocationSuccess
-                      ? locationState.latitue
-                      : null,
-                  longitude: locationState is LocationSuccess
-                      ? locationState.longitude
-                      : null,
-                  location: locationState is LocationSuccess
-                      ? locationState.locationName
-                      : null));
+                  latitude: null,
+                  location: null,
+                  longitude: null
+                  // latitude: locationState is LocationSuccess
+                  //     ? locationState.latitue
+                  //     : null,
+                  // longitude: locationState is LocationSuccess
+                  //     ? locationState.longitude
+                  //     : null,
+                  // location: locationState is LocationSuccess
+                  //     ? locationState.locationName
+                  //     : null
+
+                  ));
             },
             icon: const RotatedIcon(
               icon: Icons.send_outlined,

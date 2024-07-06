@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
-import 'package:social_media_app/core/const/custom_error_msg.dart';
+import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/utils/id_generator.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/features/status/domain/usecases/create_multiple_status.dart';

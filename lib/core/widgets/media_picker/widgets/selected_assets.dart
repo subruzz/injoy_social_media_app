@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/core/widgets/empty_display.dart';
+import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/page_view.dart';
 
 class SelectedAssetsPageView extends StatelessWidget {

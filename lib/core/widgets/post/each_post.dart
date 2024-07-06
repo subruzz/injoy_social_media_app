@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/post/post_action_bar.dart';
 import 'package:social_media_app/core/widgets/post/post_description.dart';
-import 'package:social_media_app/features/post/presentation/pages/edit_post.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_dot.dart';
 import 'package:social_media_app/core/widgets/post/post_hashtag.dart';
 import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';

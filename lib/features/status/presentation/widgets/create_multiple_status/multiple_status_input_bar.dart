@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/core/const/app_padding.dart';
-import 'package:social_media_app/core/const/app_success_msg.dart';
-import 'package:social_media_app/core/const/custom_error_msg.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/const/app_msg/app_success_msg.dart';
+import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';

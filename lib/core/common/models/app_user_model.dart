@@ -1,15 +1,13 @@
-import 'dart:convert';
-
-import 'package:social_media_app/core/common/entities/user.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
 
 class AppUserModel extends AppUser {
-  AppUserModel({
+  const AppUserModel({
     required super.id,
     required super.email,
     required super.hasPremium,
-     super.fullName,
-     super.userName,
-     super.dob,
+    super.fullName,
+    super.userName,
+    super.dob,
     super.phoneNumber,
     super.occupation,
     super.about,
@@ -21,50 +19,52 @@ class AppUserModel extends AppUser {
     super.following,
     super.posts,
     super.interests,
+   super.viewedSetupIndex,
   });
 
-  AppUserModel copyWith({
-    String? id,
-    String? email,
-    bool? hasPremium,
-    String? fullName,
-    String? userName,
-    String? dob,
-    int? phoneNumber,
-    String? occupation,
-    String? about,
-    String? profilePic,
-    String? location,
-    double? latitude,
-    double? longitude,
-    List<String>? followers,
-    List<String>? following,
-    List<String>? posts,
-    List<String>? interests,
-  }) {
-    return AppUserModel(
-      id: id ?? this.id,
-      email: email ?? this.email,
-      hasPremium: hasPremium ?? this.hasPremium,
-      fullName: fullName ?? this.fullName,
-      userName: userName ?? this.userName,
-      dob: dob ?? this.dob,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      occupation: occupation ?? this.occupation,
-      about: about ?? this.about,
-      profilePic: profilePic ?? this.profilePic,
-      location: location ?? this.location,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      followers: followers ?? this.followers,
-      following: following ?? this.following,
-      posts: posts ?? this.posts,
-      interests: interests ?? this.interests,
-    );
-  }
+  // AppUserModel copyWith({
+  //   String? id,
+  //   String? email,
+  //   bool? hasPremium,
+  //   String? fullName,
+  //   String? userName,
+  //   String? dob,
+  //   String? phoneNumber,
+  //   String? occupation,
+  //   String? about,
+  //   String? profilePic,
+  //   String? location,
+  //   double? latitude,
+  //   double? longitude,
+  //   List<String>? followers,
+  //   List<String>? following,
+  //   List<String>? posts,
+  //   List<String>? interests,
+  // }) {
+  //   return AppUserModel(
+  //     id: id ?? this.id,
+  //     email: email ?? this.email,
+  //     hasPremium: hasPremium ?? this.hasPremium,
+  //     fullName: fullName ?? this.fullName,
+  //     userName: userName ?? this.userName,
+  //     dob: dob ?? this.dob,
+  //     phoneNumber: phoneNumber ?? this.phoneNumber,
+  //     occupation: occupation ?? this.occupation,
+  //     about: about ?? this.about,
+  //     profilePic: profilePic ?? this.profilePic,
+  //     location: location ?? this.location,
+  //     latitude: latitude ?? this.latitude,
+  //     longitude: longitude ?? this.longitude,
+  //     followers: followers ?? this.followers,
+  //     following: following ?? this.following,
+  //     posts: posts ?? this.posts,
+  //     interests: interests ?? this.interests, isInterestPageSeen: interestp,
+  //   );
+  // }
 
   factory AppUserModel.fromJson(Map<String, dynamic> json) {
     return AppUserModel(
+      viewedSetupIndex: json['viewedSetupIndex'],
       id: json['id'],
       email: json['email'],
       hasPremium: json['hasPremium'],
@@ -87,6 +87,7 @@ class AppUserModel extends AppUser {
 
   Map<String, dynamic> toJson() {
     return {
+      'viewedSetupIndex': viewedSetupIndex,
       'id': id,
       'email': email,
       'hasPremium': hasPremium,

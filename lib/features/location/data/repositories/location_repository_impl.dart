@@ -2,11 +2,9 @@
 
 import 'package:fpdart/fpdart.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:social_media_app/core/const/location_enum.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/location/data/datasource/local/location_local_datasource.dart';
-import 'package:social_media_app/features/location/data/models/loation_model.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';
 import '../../domain/repositories/location_repository.dart';
 

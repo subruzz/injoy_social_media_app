@@ -1,9 +1,8 @@
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
-import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/core/usecases/usecase.dart';
+import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/features/status/domain/repository/status_repository.dart';
 

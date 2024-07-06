@@ -1,6 +1,6 @@
 import 'package:fpdart/src/either.dart';
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/core/usecases/usecase.dart';
+import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';
 import 'package:social_media_app/features/location/domain/repositories/location_repository.dart';
 

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
-import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_button.dart';
-import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_button_text.dart';
-import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
+import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 
 import '../../../../../core/widgets/loading/circular_loading.dart';
 
@@ -20,7 +21,7 @@ class SignupButton extends StatelessWidget {
   final TextEditingController passwordController;
   @override
   Widget build(BuildContext context) {
-    return AuthButton(
+    return CustomButton(
       child: BlocConsumer<SignupBloc, SignupState>(
         listener: (context, state) {
           if (state is SignupFailure) {
@@ -29,20 +30,18 @@ class SignupButton extends StatelessWidget {
                 color: AppDarkColor().buttonBackground);
           }
           if (state is SignupSuccess) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => AddProfilePage(
-                  appUser: state.user,
-                ),
-              ),
-            );
+            context.pushReplacementNamed(MyAppRouteConst.addProfilePage,
+                extra: state.user);
           }
         },
         builder: (context, state) {
           if (state is SignupLoading) {
             return const CircularLoading();
           }
-          return const AuthButtonText(title: 'Sign Up');
+          return CustomText(
+            'Sign Up',
+            style: Theme.of(context).textTheme.labelSmall,
+          );
         },
       ),
       onClick: () {

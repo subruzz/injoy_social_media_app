@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/core/const/app_padding.dart';
-import 'package:social_media_app/core/const/app_success_msg.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/const/app_msg/app_success_msg.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/widgets/app_custom_appbar.dart';
-import 'package:social_media_app/core/widgets/app_custom_floating_button.dart';
+import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
+import 'package:social_media_app/core/widgets/app_related/app_custom_floating_button.dart';
+import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
-import 'package:social_media_app/core/widgets/loading/loading_bar.dart';
 import 'package:social_media_app/core/widgets/media_picker/custom_media_picker_page.dart';
-import 'package:social_media_app/core/widgets/rotated_icon.dart';
-import 'package:social_media_app/core/widgets/welcome_msg/app_custom_padding.dart';
-import 'package:social_media_app/features/post/presentation/bloc/create_post/create_post_bloc.dart';
+import 'package:social_media_app/core/widgets/app_related/rotated_icon.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/widgets/create_text_status/create_text_status_background.dart';
@@ -33,7 +31,7 @@ class CreateTextStatusPage extends StatelessWidget {
       bloc: colorCubit,
       builder: (context, state) {
         return Scaffold(
-            floatingActionButton: AppCustomPadding(
+            floatingActionButton: CustomAppPadding(
               padding: AppPadding.floatingActionBottomPaddng,
               child: AppCustomFloatingButton(
                   onPressed: () async {

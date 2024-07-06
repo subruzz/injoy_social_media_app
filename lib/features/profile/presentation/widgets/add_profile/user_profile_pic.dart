@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
+import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/edit_profile.dart';
 
 class UserProfilePicSelect extends StatelessWidget {
@@ -21,18 +23,14 @@ class UserProfilePicSelect extends StatelessWidget {
           BlocBuilder<PickSingleImageCubit, PickSingleImageState>(
             bloc: selectImageCuit,
             builder: (context, state) {
-              return CircleAvatar(
-                  backgroundColor: Colors.black,
-                  radius: 70,
-                  backgroundImage: state is PickSingleImageSuccess
-                      ? FileImage(state.img)
-                      : userImage != null
-                          ? CachedNetworkImageProvider(userImage!)
-                          : const AssetImage('assets/images/profile_icon.png'));
+              return CircularUserProfile(
+                fileImg: selectImageCuit.img,
+                size: 70,
+              );
             },
           ),
           Positioned(
-            right: 20,
+            right: 20.r,
             bottom: 0,
             child: GestureDetector(
                 onTap: () {

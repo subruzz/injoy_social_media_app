@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/location_enum.dart';
-import 'package:social_media_app/core/usecases/usecase.dart';
+import 'package:social_media_app/core/common/usecases/usecase.dart';
+import 'package:social_media_app/features/location/domain/entities/location.dart';
 import 'package:social_media_app/features/location/domain/usecases/get_location.dart';
 part 'location_event.dart';
 part 'location_state.dart';
@@ -23,19 +24,19 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     res.fold((failure) {
       emit(LocationFailure());
     }, (success) {
-      if (success.locationStatus == LocationStatus.locationNotEnabled) {
-        emit(LocationNotOnState());
-      } else if (success.locationStatus ==
-          LocationStatus.locationPermissionDenied) {
-        emit(LocationPermissionDenied());
-      } else if (success.locationStatus ==
-          LocationStatus.locationPermissionDeniedForever) {
-        emit(LocatonPermissionForeverDenied());
-      } else {
-        emit(LocationSuccess(
-            locationName: success.currentLocation ?? '',
-            latitue: success.latitude ?? 0,
-            longitude: success.longitude ?? 0));
+      switch (success.locationStatus) {
+        case LocationStatus.locationNotEnabled:
+          emit(LocationNotOnState());
+          break;
+        case LocationStatus.locationPermissionDenied:
+          emit(LocationPermissionDenied());
+          break;
+        case LocationStatus.locationPermissionDeniedForever:
+          emit(LocatonPermissionForeverDenied());
+          break;
+        case LocationStatus.locationPermissionAllowed:
+          emit(LocationSuccess(location: success));
+          break;
       }
     });
   }

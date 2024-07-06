@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:social_media_app/core/common/entities/user.dart';
-import 'package:social_media_app/features/profile/domain/entities/user_profile.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/features/location/domain/entities/location.dart';
 
 sealed class ProfileEvent extends Equatable {
   const ProfileEvent();
@@ -15,11 +15,11 @@ class ProfileSetUpUserDetailsEvent extends ProfileEvent {
   final String fullName;
   final String userName;
   final String dob;
-  final int? phoneNumber;
+  final String? phoneNumber;
   final String? occupation;
   final String? about;
   final File? profilePic;
-
+  final String uid;
   const ProfileSetUpUserDetailsEvent({
     required this.fullName,
     required this.userName,
@@ -28,13 +28,13 @@ class ProfileSetUpUserDetailsEvent extends ProfileEvent {
     required this.occupation,
     required this.about,
     required this.profilePic,
+    required this.uid,
   });
 
   @override
   List<Object> get props => [
         fullName,
         userName,
-        dob,
         if (phoneNumber != null) phoneNumber!,
         if (occupation != null) occupation!,
         if (about != null) about!,
@@ -42,15 +42,18 @@ class ProfileSetUpUserDetailsEvent extends ProfileEvent {
       ];
 }
 
-class ProfileSetUpInterestsEvent extends ProfileEvent {
+class ProfileInterestSelectedEvent extends ProfileEvent {
   final List<String> interests;
-  final UserProfile userProfile;
-  final File? profilePic;
-  const ProfileSetUpInterestsEvent(
-      {required this.interests, required this.userProfile, this.profilePic});
-
   @override
   List<Object> get props => [interests];
+  const ProfileInterestSelectedEvent({required this.interests});
+}
+
+final class CompleteProfileSetup extends ProfileEvent {
+  final UserLocation? location;
+  final String uid;
+
+  const CompleteProfileSetup({ this.location, required this.uid});
 }
 
 class ProfileSetUpLocationEvent extends ProfileEvent {
@@ -66,3 +69,15 @@ class ProfileSetUpLocationEvent extends ProfileEvent {
 }
 
 class ProfileSubmitEvent extends ProfileEvent {}
+
+class DateOfBirthSelected extends ProfileEvent {
+  final Future<String?> Function() onDateSelected;
+
+  const DateOfBirthSelected({required this.onDateSelected});
+}
+
+class UserNameExistCheckEvent extends ProfileEvent {
+  final String userName;
+
+  const UserNameExistCheckEvent({required this.userName});
+}

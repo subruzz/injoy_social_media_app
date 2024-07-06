@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/const/app_sizedbox.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
-import 'package:social_media_app/core/widgets/textfields/details_add_text.dart';
+import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
 
 class AuthForm extends StatelessWidget {
   const AuthForm(
@@ -20,17 +20,13 @@ class AuthForm extends StatelessWidget {
       child: Column(
         children: [
           CustomTextField(
-              showPrefixIcon: true,
-              obsecureText: false,
               controller: emailController,
               prefixIcon: Icons.email_outlined,
               keyboardType: TextInputType.emailAddress,
               hintText: 'Email',
-              showSuffixIcon: false,
               validation: Validation.validateEmail),
           AppSizedBox.sizedBox15H,
           CustomTextField(
-              showPrefixIcon: true,
               showSuffixIcon: true,
               controller: passwordController,
               prefixIcon: Icons.password,

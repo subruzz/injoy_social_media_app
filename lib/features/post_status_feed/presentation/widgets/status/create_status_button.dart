@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/const/app_padding.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/status/presentation/pages/create_status_page.dart';
 

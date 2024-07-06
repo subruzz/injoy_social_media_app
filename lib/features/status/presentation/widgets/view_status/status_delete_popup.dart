@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/const/app_info_msg.dart';
+import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/features/status/presentation/bloc/delete_status/delete_status_bloc.dart';
 

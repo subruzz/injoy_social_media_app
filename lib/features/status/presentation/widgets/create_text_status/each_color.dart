@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:social_media_app/core/const/app_padding.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
 
 class ColorSelectWidget extends StatelessWidget {

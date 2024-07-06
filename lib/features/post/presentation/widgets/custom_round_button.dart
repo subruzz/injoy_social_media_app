@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/const/app_padding.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
 
 class CustomRoundButton extends StatelessWidget {
   const CustomRoundButton(

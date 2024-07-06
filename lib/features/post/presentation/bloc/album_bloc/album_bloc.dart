@@ -2,7 +2,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/core/usecases/usecase.dart';
+import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/post/domain/usecases/get_albums.dart';
 
 part 'album_event.dart';

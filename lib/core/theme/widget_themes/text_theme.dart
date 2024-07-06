@@ -11,13 +11,13 @@ final class AppTextTheme {
       color: _color.primaryText,
       fontWeight: FontWeight.w600,
       fontSize: 30.sp,
+      letterSpacing: 1.5,
     ),
     displayMedium: TextStyle(
-      color: _color.primaryText,
-      fontWeight: FontWeight.w600,
-      fontSize: 25.sp,
-      height: 1.5
-    ),
+        color: _color.primaryText,
+        fontWeight: FontWeight.w600,
+        fontSize: 25.sp,
+        height: 1.5),
     displaySmall: TextStyle(
       color: _color.primaryText,
       fontWeight: FontWeight.w600,
@@ -54,17 +54,17 @@ final class AppTextTheme {
         fontSize: 16.sp,
         fontWeight: FontWeight.bold),
     labelLarge: TextStyle(
-      color: _color.secondaryPrimaryText,
-      fontSize: 15.sp,
-    ),
-    labelMedium: TextStyle(color: _color.secondaryText, fontSize: 15.sp),
+        color: _color.primaryText,
+        fontSize: 15.sp,
+        fontWeight: FontWeight.bold),
+    labelMedium: TextStyle(color: _color.secondaryPrimaryText, fontSize: 15.sp),
     labelSmall: TextStyle(
         color: _color.primaryText,
-        fontSize: 13.sp,
+        fontSize: 14.sp,
         fontWeight: FontWeight.bold),
     bodyLarge: TextStyle(
-      color: _color.secondaryText,
-      fontSize: 13.sp,
+      color: _color.primaryText,
+      fontSize: 14.sp,
     ),
     bodyMedium: TextStyle(
       color: _color.primaryText,

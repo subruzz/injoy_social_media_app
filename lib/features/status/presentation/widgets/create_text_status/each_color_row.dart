@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:social_media_app/core/const/app_padding.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/features/status/domain/entities/color_entity.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
 import 'package:social_media_app/features/status/presentation/widgets/create_text_status/each_color.dart';

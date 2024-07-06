@@ -13,10 +13,14 @@ class TextStatusInputField extends StatelessWidget {
       textAlign: TextAlign.center,
       maxLines: null,
       style: Theme.of(context).textTheme.displayMedium,
-      decoration: InputDecoration(
+      decoration: 
+      
+      InputDecoration(
         hintStyle: TextStyle(
             fontWeight: FontWeight.bold, color: AppDarkColor().primaryText),
         hintText: 'Write your thought\n with others',
+        focusedErrorBorder: InputBorder.none,
+        filled: false,
         border: InputBorder.none,
         focusedBorder: InputBorder.none,
       ),

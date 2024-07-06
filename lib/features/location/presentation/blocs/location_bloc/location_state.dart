@@ -20,12 +20,9 @@ final class LocationNotOnState extends LocationState {}
 final class LocationFailure extends LocationState {}
 
 final class LocationSuccess extends LocationState {
-  final String locationName;
-  final double latitue;
-  final double longitude;
+  final UserLocation location;
 
   const LocationSuccess(
-      {required this.locationName,
-      required this.latitue,
-      required this.longitude});
+      {required this.location
+  });
 }

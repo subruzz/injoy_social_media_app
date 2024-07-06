@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/core/const/app_sizedbox.dart';
-import 'package:social_media_app/core/const/debouncer.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';

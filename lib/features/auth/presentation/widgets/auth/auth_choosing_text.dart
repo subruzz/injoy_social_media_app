@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
-import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
 
 class AuthChoosingText extends StatelessWidget {
   const AuthChoosingText({super.key, this.islogin = false});
@@ -14,31 +15,17 @@ class AuthChoosingText extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              islogin ? 'Don\'t have an Account?' : 'Already have an account?',
-            ),
+            Text(islogin
+                ? AppUiStringConst.dontHaveAccount
+                : AppUiStringConst.haveAccount),
             TextButton(
               onPressed: () {
                 islogin
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const SignupPage();
-                          },
-                        ),
-                      )
-                    : Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const LoginPage();
-                          },
-                        ),
-                      );
+                    ? context.pushNamed(MyAppRouteConst.signUpRoute)
+                    : context.goNamed(MyAppRouteConst.loginRoute);
               },
               child: Text(
-                islogin ? 'Sign Up' : ' Log In',
+                islogin ? AppUiStringConst.signUp : AppUiStringConst.login,
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium

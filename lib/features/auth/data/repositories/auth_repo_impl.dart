@@ -1,22 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:fpdart/src/either.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:social_media_app/core/errors/auth_errors.dart';
+import 'package:social_media_app/core/errors/firebase_auth_errors.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/auth/data/datasources/remote/auth_remote_data_source.dart';
-import 'package:social_media_app/core/common/entities/user.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/features/auth/domain/repostiories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
 
-  AuthRepositoryImpl(this._remoteDataSource);
+  AuthRepositoryImpl({required AuthRemoteDataSource authremoteDataSource})
+      : _remoteDataSource = authremoteDataSource;
 
   @override
   Future<Either<Failure, String>> getCurrentUserId() {
-    // TODO: implement getCurrentUserId
     throw UnimplementedError();
   }
 
@@ -34,7 +32,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
     } on MainException catch (e) {
       return left(
-        Failure(e.errorMsg),
+        Failure(e.errorMsg, e.details),
       );
     }
   }
@@ -53,7 +51,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
     } on MainException catch (e) {
       return left(
-        Failure(e.errorMsg),
+        Failure(e.errorMsg, e.details),
       );
     }
   }
@@ -72,7 +70,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
     } on MainException catch (e) {
       return left(
-        Failure(e.errorMsg),
+        Failure(e.errorMsg, e.details),
       );
     }
   }
@@ -91,7 +89,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
     } on MainException catch (e) {
       return left(
-        Failure(e.errorMsg),
+        Failure(e.errorMsg, e.details),
       );
     }
   }
@@ -106,7 +104,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(user);
     } on MainException catch (e) {
       return Left(
-        Failure(e.errorMsg),
+        Failure(e.errorMsg, e.details),
       );
     }
   }
@@ -117,4 +115,6 @@ class AuthRepositoryImpl implements AuthRepository {
     // TODO: implement verifyPassword
     throw UnimplementedError();
   }
+
+  
 }

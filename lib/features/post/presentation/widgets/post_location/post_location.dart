@@ -15,11 +15,11 @@ class PostLocation extends StatelessWidget {
         return ListTile(
           leading: const Icon(Icons.location_on_outlined, color: Colors.white),
           title: Text(
-              state is LocationSuccess
-                  ? state.locationName
-                  : location != null
-                      ? location!
-                      : 'Location',
+              // state is LocationSuccess
+              //     ? state.locationName
+              //     : location != null
+              //         ? location!
+                      'Location',
               style: TextStyle(
                   color: (state is LocationSuccess || location != null)
                       ? AppDarkColor().secondaryPrimaryText

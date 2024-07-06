@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
+import 'package:social_media_app/core/widgets/app_related/app_custom_floating_button.dart';
+import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 
 class NextButton extends StatelessWidget {
-  const NextButton({super.key, required this.onpressed});
+  const NextButton({super.key, required this.onpressed,required this.child});
   final void Function() onpressed;
+  final Widget child;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 80,
-      child: FloatingActionButton(
-        backgroundColor: AppDarkColor().buttonBackground,
-        shape: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+      width: 80.w,
+      child: AppCustomFloatingButton(
+        shape: OutlineInputBorder(borderRadius: AppBorderRadius.small),
         onPressed: onpressed,
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-          child: Icon(
-            Icons.arrow_forward,
-            color: Colors.white,
-            size: 40,
-          ),
+        child: CustomAppPadding(
+          child:child
         ),
       ),
     );

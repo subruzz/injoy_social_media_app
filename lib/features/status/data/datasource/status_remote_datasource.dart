@@ -3,10 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
-import 'package:social_media_app/core/const/custom_error_msg.dart';
-import 'package:social_media_app/core/const/firebase_collection.dart';
-import 'package:social_media_app/core/const/firebase_field_const.dart';
-import 'package:social_media_app/core/const/firebase_storage_const.dart';
+import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
+import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
+import 'package:social_media_app/core/const/fireabase_const/firebase_field_const.dart';
+import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/utils/compress_image.dart';
 import 'package:social_media_app/core/utils/id_generator.dart';
@@ -114,7 +114,6 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
   @override
   Future<void> deleteStatus(String statusId, String? imgUrl) async {
     try {
-      print(imgUrl);
 
       //deleting the status using the status id
       final statusRef =

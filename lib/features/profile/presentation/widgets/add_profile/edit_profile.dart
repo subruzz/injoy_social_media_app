@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-
 
 class EditProfileIcon extends StatelessWidget {
   const EditProfileIcon({super.key});
@@ -8,16 +8,16 @@ class EditProfileIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 20,
-      width: 20,
+      height: 20.h,
+      width: 20.w,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(2.0),
         color: AppDarkColor().buttonBackground,
       ),
-      child: const Icon(
+      child: Icon(
         Icons.edit,
-        color: Colors.black,
-        size: 13,
+        color: AppDarkColor().background,
+        size: 13.w,
       ),
     );
   }

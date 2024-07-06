@@ -12,3 +12,4 @@ Future<String?> pickDate(BuildContext context) async {
   if (pickedDate == null) return null;
   return pickedDate.toFormattedString();
 }
+typedef DatePickerFunction = Future<String?> Function(BuildContext context);

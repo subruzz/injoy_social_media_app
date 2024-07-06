@@ -3,6 +3,8 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:social_media_app/core/const/location_enum.dart';
+import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/extensions/placemark.dart';
 
 abstract interface class LocationLocalDataSource {
   Future<LocationStatus> handleLocationPermission();
@@ -45,10 +47,15 @@ class LocationLocalDataSourceImpl implements LocationLocalDataSource {
 
   @override
   Future<String> getAddressFromLatLng(Position position) async {
-    List<Placemark> placeMarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    Placemark place = placeMarks[0];
-    return "${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}";
+    try {
+      List<Placemark> placeMarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+      Placemark place = placeMarks[0];
+
+      return place.toReadableString();
+    } catch (e) {
+      throw const MainException();
+    }
   }
 
   // Future<List<LocationModel>> searchLocation(String query) async {

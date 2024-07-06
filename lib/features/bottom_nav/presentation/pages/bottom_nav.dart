@@ -4,7 +4,7 @@ import 'package:rive/rive.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_page.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
-import 'package:social_media_app/features/profile/presentation/pages/profile_page.dart';
+import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/profile_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/core/utils/rive/model.dart';
 import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';

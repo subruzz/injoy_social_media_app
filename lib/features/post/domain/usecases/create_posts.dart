@@ -4,7 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:fpdart/src/either.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/core/usecases/usecase.dart';
+import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/post/domain/repositories/post_repository.dart';
 

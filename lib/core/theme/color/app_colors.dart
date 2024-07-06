@@ -38,10 +38,12 @@ abstract interface class AppColor {
   final Color userChatColor; // User chat color.
   final Color recipientChatColor; // Recipient chat color.
   final Color bottomSheet; // Bottom sheet background color.
+  final Color buttonWhitishBackground;
 
   /// Constructs an [AppColor] instance with specified colors.
   AppColor({
     required this.iconSoftColor,
+    required this.buttonWhitishBackground,
     required this.iconPrimaryColor,
     required this.iconSecondarycolor,
     required this.indicatorColor,

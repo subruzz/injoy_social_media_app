@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
 class ForgotPasswordText extends StatelessWidget {
@@ -18,12 +19,9 @@ class ForgotPasswordText extends StatelessWidget {
           //   ),
           // );
         },
-        child: Text(
-          'Forgot password?',
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: AppDarkColor().secondaryPrimaryText),
+        child: CustomText(
+          'Forgot Password?',
+          color: AppDarkColor().secondaryPrimaryText,
         ),
       ),
     );

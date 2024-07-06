@@ -2,24 +2,52 @@ import 'package:social_media_app/features/profile/domain/entities/user_profile.d
 
 class UserProfileModel extends UserProfile {
   UserProfileModel({
-    required super.fullName,
-    required super.userName,
-    required super.dob,
-    super.phoneNumber,
-    super.occupation,
-    super.about,
-    super.profilePic,
-    super.location,
-    super.latitude,
-    super.longitude,
-    super.interests,
-  });
+    required String fullName,
+    required String userName,
+    required String dob,
+    String? phoneNumber,
+    String? occupation,
+    String? about,
+    String? profilePic,
+    String? location,
+    double? latitude,
+    double? longitude,
+    List<String>? interests,
+  }) : super(
+          fullName: fullName,
+          userName: userName,
+          dob: dob,
+          phoneNumber: phoneNumber,
+          occupation: occupation,
+          about: about,
+          profilePic: profilePic,
+          location: location,
+          latitude: latitude,
+          longitude: longitude,
+          interests: interests ?? [],
+        );
+
+  factory UserProfileModel.fromUserProfile(UserProfile userProfile) {
+    return UserProfileModel(
+      fullName: userProfile.fullName,
+      userName: userProfile.userName,
+      dob: userProfile.dob,
+      phoneNumber: userProfile.phoneNumber,
+      occupation: userProfile.occupation,
+      about: userProfile.about,
+      profilePic: userProfile.profilePic,
+      location: userProfile.location,
+      latitude: userProfile.latitude,
+      longitude: userProfile.longitude,
+      interests: userProfile.interests,
+    );
+  }
 
   UserProfileModel copyWith({
     String? fullName,
     String? userName,
     String? dob,
-    int? phoneNumber,
+    String? phoneNumber,
     String? occupation,
     String? about,
     String? profilePic,
@@ -29,7 +57,7 @@ class UserProfileModel extends UserProfile {
     List<String>? interests,
   }) {
     return UserProfileModel(
-      fullName: fullName ?? super.fullName,
+      fullName: fullName ?? this.fullName,
       userName: userName ?? this.userName,
       dob: dob ?? this.dob,
       phoneNumber: phoneNumber ?? this.phoneNumber,
@@ -57,7 +85,7 @@ class UserProfileModel extends UserProfile {
       longitude: (json['longitude'] as num?)?.toDouble(),
       interests: json['interests'] != null
           ? List<String>.from(json['interests'])
-          : null,
+          : [],
     );
   }
 

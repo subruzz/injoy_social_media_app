@@ -1,7 +1,7 @@
 // auth_repository.dart
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/core/common/entities/user.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
 
 abstract interface class AuthRepository {
   Future<Either<Failure, AppUser>> login(String email, String password);

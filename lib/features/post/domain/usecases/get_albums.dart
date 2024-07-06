@@ -3,7 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/core/usecases/usecase.dart';
+import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/post/domain/repositories/asset_repository.dart';
 
 class LoadAlbumsUseCase implements UseCase<List<AssetPathEntity>, NoParams> {

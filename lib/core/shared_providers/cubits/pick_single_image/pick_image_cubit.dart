@@ -26,4 +26,5 @@ class PickSingleImageCubit extends Cubit<PickSingleImageState> {
       emit(PickSingleImageFailure(e.toString()));
     }
   }
+  
 }

@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubits/Pick_multiple_image/pick_multiple_image_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
 import 'package:social_media_app/features/auth/data/datasources/remote/auth_remote_data_source.dart';
@@ -41,6 +43,8 @@ import 'package:social_media_app/features/post/presentation/bloc/update_post/upd
 import 'package:social_media_app/features/post_status_feed/data/datasource/status_feed_remote_datasource.dart';
 import 'package:social_media_app/features/post_status_feed/data/repository/status_feed_repository_impl.dart';
 import 'package:social_media_app/features/post_status_feed/domain/repositories/status_feed_repository.dart';
+import 'package:social_media_app/features/profile/domain/usecases/add_interest.dart';
+import 'package:social_media_app/features/profile/domain/usecases/check_username_exist.dart';
 import 'package:social_media_app/features/status/data/datasource/status_remote_datasource.dart';
 import 'package:social_media_app/features/status/data/repository/create_status_repository_impl.dart';
 import 'package:social_media_app/features/status/domain/repository/status_repository.dart';
@@ -59,7 +63,6 @@ import 'package:social_media_app/features/location/data/datasource/local/locatio
 import 'package:social_media_app/features/location/data/repositories/location_repository_impl.dart';
 import 'package:social_media_app/features/location/domain/repositories/location_repository.dart';
 import 'package:social_media_app/features/location/domain/usecases/get_location.dart';
-import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/data/datasource/post_feed_remote_datasource.dart';
 import 'package:social_media_app/features/post_status_feed/data/repository/post_feed_repository_impl.dart';
 import 'package:social_media_app/features/post_status_feed/domain/repositories/post_feed_repository.dart';
@@ -74,7 +77,7 @@ import 'package:social_media_app/features/profile/domain/repository/user_posts_r
 import 'package:social_media_app/features/profile/domain/usecases/create_user_profile.dart';
 import 'package:social_media_app/features/profile/domain/usecases/get_user_posts.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/select_interest_cubit/select_interest_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/add_interests/select_interest_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 
 final serviceLocator = GetIt.instance;
@@ -92,6 +95,11 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(),
   );
+  serviceLocator.registerLazySingleton(() => InitialSetupCubit(
+      getAllStatusBloc: serviceLocator(),
+      getMyStatusBloc: serviceLocator(),
+      followingPostFeedBloc: serviceLocator(),
+      getUserPostsBloc: serviceLocator()));
 }
 
 void _commonProviders() {
@@ -104,12 +112,14 @@ void _initAuth() {
   //Auth remote data source
   serviceLocator
     ..registerFactory<AuthRemoteDataSource>(
-      () => AuthremoteDataSourceImpl(),
+      () => AuthremoteDataSourceImpl(
+          firebaseAuth: FirebaseAuth.instance,
+          firebaseStorage: FirebaseFirestore.instance),
     )
     //Auth repository
     ..registerFactory<AuthRepository>(
       () => AuthRepositoryImpl(
-        serviceLocator(),
+        authremoteDataSource: serviceLocator(),
       ),
     )
     //usecase for signup for the user
@@ -151,16 +161,22 @@ void _initAuth() {
 
 void _initProfile() {
   serviceLocator
-    ..registerFactory<UserProfileDataSource>(() => UserProfileDataSourceImpl())
+    ..registerFactory<UserProfileDataSource>(() => UserProfileDataSourceImpl(
+        firebaseFirestore: FirebaseFirestore.instance,
+        firebaseStorage: FirebaseStorage.instance))
     ..registerFactory<UserProfileRepository>(() =>
         UserProfileRepositoryImpl(userProfileDataSource: serviceLocator()))
     ..registerFactory(
       () => CreateUserProfileUseCase(profileRepository: serviceLocator()),
     )
+    ..registerFactory(
+        () => CheckUsernameExistUseCasse(profileRepository: serviceLocator()))
     ..registerLazySingleton(
-      () => ProfileBloc(serviceLocator(), serviceLocator()),
+      () => ProfileBloc(serviceLocator(), serviceLocator(), serviceLocator()),
     )
-    ..registerLazySingleton(() => SelectInterestCubit());
+    ..registerFactory(
+        () => AddInterestUseCase(profileRepository: serviceLocator()))
+    ..registerLazySingleton(() => SelectInterestCubit(serviceLocator()));
 }
 
 void _initLocation() {
@@ -170,8 +186,7 @@ void _initLocation() {
     ..registerFactory<LocationRepository>(
         () => LocationRepositoryImpl(locationLocalDataSource: serviceLocator()))
     ..registerFactory(
-        () => GetLocationUseCase(locationRepository: serviceLocator()))
-    ..registerFactory(() => LocationBloc(serviceLocator()));
+        () => GetLocationUseCase(locationRepository: serviceLocator()));
 }
 
 void _localAsset() {

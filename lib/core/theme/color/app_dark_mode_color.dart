@@ -9,7 +9,8 @@ class AppDarkColor extends AppColor {
   }
   AppDarkColor._()
       : super(
-          iconSoftColor:  Colors.grey,
+          buttonWhitishBackground: const Color(0xFFFFFFFF).withOpacity(0.9),
+          iconSoftColor: Colors.grey,
           iconPrimaryColor: const Color(0xFFFFFFFF),
           iconSecondarycolor: const Color(0xFFFF4D67),
           indicatorColor: const Color(0xFFFF4D67),

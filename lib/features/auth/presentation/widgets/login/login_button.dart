@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
+import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
-import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_button.dart';
-import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_button_text.dart';
-import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
-import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
+import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton(
@@ -19,31 +20,23 @@ class LoginButton extends StatelessWidget {
   final TextEditingController passwordController;
   @override
   Widget build(BuildContext context) {
-    return AuthButton(
+    return CustomButton(
       child: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
             Messenger.showSnackBar(
-                message: '${state.errorMsg}\n${state.details}',
-               );
+              message: '${state.errorMsg}\n${state.details}',
+            );
           }
           if (state is LoginSuccess) {
-            if (state.user.fullName!=null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const BottonNavWithAnimatedIcons(),
-                ),
-              );
+            if (state.user.fullName != null) {
+              context.pushReplacementNamed(MyAppRouteConst.bottomNavRoute);
             } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddProfilePage(
-                    appUser: state.user,
-                  ),
-                ),
-              );
+                 context
+                .read<InitialSetupCubit>()
+                .startInitialSetup(uId: state.user.id);
+              context.pushReplacementNamed(MyAppRouteConst.bottomNavRoute,
+                  extra: state.user);
             }
           }
         },
@@ -51,7 +44,10 @@ class LoginButton extends StatelessWidget {
           if (state is LoginLoading) {
             return const CircularLoading();
           }
-          return const AuthButtonText(title: 'Login');
+          return CustomText(
+            'Log In',
+            style: Theme.of(context).textTheme.labelSmall,
+          );
         },
       ),
       onClick: () {

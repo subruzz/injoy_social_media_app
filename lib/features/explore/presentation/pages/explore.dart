@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:social_media_app/core/const/app_sizedbox.dart';
-import 'package:social_media_app/core/widgets/textfields/details_add_text.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
 
 class ExplorePage extends StatelessWidget {
   final _searchController = TextEditingController();
