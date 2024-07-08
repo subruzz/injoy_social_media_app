@@ -1,9 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/const/app_info_dialog.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
+import 'package:social_media_app/core/widgets/button/custom_button_with_icon.dart';
+import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/post/presentation/bloc/delte_post/delete_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/pages/edit_post.dart';
 import 'package:social_media_app/core/widgets/post/each_post.dart';
@@ -21,7 +31,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<AppUserBloc>().appUser!;
+    final user = context.watch<AppUserBloc>().appUser;
 
     return DefaultTabController(
         length: 2,
@@ -38,8 +48,8 @@ class ProfilePage extends StatelessWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.more_vert),
-                onPressed: () async {
-                  FirebaseAuth.instance.signOut();
+                onPressed: () {
+                  CustomBottomSheet.showOptions(context);
                 },
               ),
             ],
@@ -63,37 +73,40 @@ class ProfilePage extends StatelessWidget {
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     AppSizedBox.sizedBox5H,
-                    ProfileUserDetailText(
-                      fullName: user.occupation ?? '',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    if (user.occupation != null)
+                      ProfileUserDetailText(
+                        fullName: user.occupation ?? '',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     AppSizedBox.sizedBox5H,
-                    ProfileUserDetailText(
-                      fullName: user.about ?? '',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(color: AppDarkColor().secondaryText),
-                    ),
-
+                    if (user.about != null)
+                      ProfileUserDetailText(
+                        fullName: user.about ?? '',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: AppDarkColor().secondaryText),
+                      ),
                     AppSizedBox.sizedBox15H,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        UserSocialAttribute(
-                            attribute: user.posts, attributeName: 'Posts'),
-                        const CustomVerticalDivider(),
-                        UserSocialAttribute(
-                            attribute: user.followers,
-                            attributeName: 'Followers'),
-                        const CustomVerticalDivider(),
-                        UserSocialAttribute(
-                            attribute: user.following,
-                            attributeName: 'Following'),
-                      ],
+                    CustomAppPadding(
+                      padding: AppPadding.horizontalExtraLarge,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          UserSocialAttribute(
+                              attribute: user.posts, attributeName: 'Posts'),
+                          const CustomVerticalDivider(),
+                          UserSocialAttribute(
+                              attribute: user.followers,
+                              attributeName: 'Followers'),
+                          const CustomVerticalDivider(),
+                          UserSocialAttribute(
+                              attribute: user.following,
+                              attributeName: 'Following'),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 16),
-                    // TabBar for switching between Photos and Posts
                     TabBar(
                       dividerColor: AppDarkColor().secondaryBackground,
                       indicatorColor: AppDarkColor().iconSecondarycolor,
@@ -137,12 +150,8 @@ class PostsTab extends StatelessWidget {
             final userPost = state.userPosts[index];
             return EachPost(
               currentPost: userPost,
-              onShare: () {
-                // Implement share functionality
-              },
-              onTurnOffCommenting: () {
-                // Implement turn off commenting functionality
-              },
+              onShare: () {},
+              onTurnOffCommenting: () {},
               onEdit: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => EditPostPage(
@@ -189,4 +198,131 @@ Widget _buildIconWithCount(IconData icon, int count, [Color? iconColor]) {
       ),
     ],
   );
+}
+
+class CustomBottomSheet {
+  static void showOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      backgroundColor: AppDarkColor().secondaryBackground,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildListTile(
+                icon: Icons.settings,
+                text: 'Settings',
+                onTap: () {
+                  Navigator.pop(context);
+                  // Add your onTap code here
+                },
+              ),
+              _buildListTile(
+                icon: Icons.edit,
+                text: 'Edit Interests',
+                onTap: () {
+                  context.pop(context);
+                  context.pushNamed(MyAppRouteConst.interestSelectRoute,
+                      extra: context.read<AppUserBloc>().appUser.interests);
+                },
+              ),
+              _buildListTile(
+                icon: Icons.star,
+                text: 'Get Premium',
+                onTap: () {
+                  Navigator.pop(context);
+                  // Add your onTap code here
+                },
+              ),
+              // _buildListTile(
+              //   icon: Icons.history,
+              //   text: 'Your Activity',
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     // Add your onTap code here
+              //   },
+              // ),
+              _buildListTile(
+                icon: Icons.qr_code,
+                text: 'QR Code',
+                onTap: () {
+                  Navigator.pop(context);
+                  // Add your onTap code here
+                },
+              ),
+              _buildListTile(
+                icon: Icons.bookmark,
+                text: 'Saved',
+                onTap: () {
+                  Navigator.pop(context);
+                  // Add your onTap code here
+                },
+              ),
+              // _buildListTile(
+              //   icon: Icons.people,
+              //   text: 'Close Friends',
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     // Add your onTap code here
+              //   },
+              // ),
+              _buildListTile(
+                icon: Icons.favorite,
+                text: 'Favorites',
+                onTap: () {
+                  Navigator.pop(context);
+                  // Add your onTap code here
+                },
+              ),
+              _buildListTile(
+                color: AppDarkColor().iconSecondarycolor,
+                icon: Icons.logout,
+                text: 'Log out',
+                onTap: () {
+                  AppInfoDialog.showInfoDialog(
+                      context: context,
+                      callBack: () {
+                        FirebaseAuth.instance.signOut().then((value) {
+                          context.pop(context);
+
+                          context.goNamed(MyAppRouteConst.loginRoute);
+                        }).catchError((error) {
+                          print('Sign out failed: $error');
+                        });
+                      },
+                      title: 'Are You Sure?',
+                      buttonText: 'Log Out');
+
+                  // Add your onTap code here
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  static ListTile _buildListTile(
+      {required IconData icon,
+      required String text,
+      required VoidCallback onTap,
+      Color? color}) {
+    return ListTile(
+      splashColor: Colors.transparent, // This removes the splash color
+
+      leading: Icon(icon, color: AppDarkColor().iconSoftColor),
+      title: Text(
+        text,
+        style: TextStyle(color: color ?? AppDarkColor().iconSoftColor),
+      ),
+      onTap: onTap,
+    );
+  }
 }

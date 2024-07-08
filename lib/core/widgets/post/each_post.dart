@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
@@ -13,6 +14,8 @@ import 'package:social_media_app/features/post_status_feed/presentation/widgets/
 import 'package:social_media_app/core/widgets/post/post_single_image.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_time.dart';
 import 'package:social_media_app/features/post/presentation/pages/view_post.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/other_profile/other_profile_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
 
 class EachPost extends StatelessWidget {
   const EachPost({
@@ -45,7 +48,7 @@ class EachPost extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ViewPost(post: currentPost,isEdit:isEdit),
+            builder: (context) => ViewPost(post: currentPost, isEdit: isEdit),
           ),
         );
       },
@@ -54,7 +57,18 @@ class EachPost extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PostOwnerImage(ownerImage: currentPost.userProfileUrl),
+            GestureDetector(
+                onTap: () {
+                  // context
+                  //     .read<OtherProfileCubit>()
+                  //     .getOtherProfile(currentPost.creatorUid);
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => OtherUserProfilePage(
+                        otherUserId: currentPost.creatorUid,
+                        userName: currentPost.userFullName),
+                  ));
+                },
+                child: PostOwnerImage(ownerImage: currentPost.userProfileUrl)),
             AppSizedBox.sizedBox5W,
             Expanded(
               child: Column(
@@ -105,7 +119,9 @@ class EachPost extends StatelessWidget {
                           borderRadius:
                               BorderRadius.circular(10), // Rounded corners
                         ),
-                        child:  PostActionBar(post: currentPost,)),
+                        child: PostActionBar(
+                          post: currentPost,
+                        )),
                   ),
                 ],
               ),

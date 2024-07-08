@@ -37,7 +37,7 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
     try {
       final userProfileModel = UserProfileModel.fromUserProfile(user);
 
-     final res= await _userProfileDataSource.createUserProfile(
+      final res = await _userProfileDataSource.createUserProfile(
           userProfile: userProfileModel, uid: uid, file: profilePic);
       return right(res);
     } on MainException catch (e) {
@@ -55,4 +55,6 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
       return left(Failure(e.errorMsg));
     }
   }
+
+
 }

@@ -11,19 +11,16 @@ import 'package:social_media_app/core/widgets/loading/loading_bar.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets_indicator.dart';
 import 'package:social_media_app/core/widgets/app_related/rotated_icon.dart';
-import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/create_post/create_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/select_tags_cubit/select_tags_cubit.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post/post_attributes_select.dart';
 import 'package:social_media_app/features/post/presentation/widgets/hashtags/select_hashtag.dart';
 import 'package:social_media_app/features/post/presentation/widgets/hashtags/selected_hashtags.dart';
 import 'package:social_media_app/features/post/presentation/widgets/post_feeds_options.dart';
-import 'package:social_media_app/features/post/presentation/widgets/post_location/post_location.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 
 class CreatePostScreen extends StatefulWidget {
-  const CreatePostScreen({super.key, required this.locationBloc});
-  final LocationBloc locationBloc;
+  const CreatePostScreen({super.key,});
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();
 }
@@ -53,7 +50,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              final locationState = widget.locationBloc.state;
               final selectedHashtags = _selectTagsCubit.state;
               final appUser = context.read<AppUserBloc>().appUser!;
               context.read<CreatePostBloc>().add(CreatePostClickEvent(
@@ -100,7 +96,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             }
             if (state is CreatePostSuccess) {
               context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
-                  uid: context.read<AppUserBloc>().appUser!.id));
+                  uid: context.read<AppUserBloc>().appUser.id));
               Navigator.pop(context);
               Messenger.showSnackBar(message: 'success');
             }
@@ -132,7 +128,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     debouncer: _debouncer,
                     hashtagcontroller: _hashtagcontroller),
                 AppSizedBox.sizedBox10H,
-                PostLocation(locationBloc: widget.locationBloc),
+                // PostLocation(locationBloc: widget.locationBloc),
                 AppSizedBox.sizedBox10H,
                 const PostFeedsOptions(
                     icon: Icons.person_add_alt_outlined, text: 'Tag People'),

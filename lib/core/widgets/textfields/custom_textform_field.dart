@@ -59,6 +59,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       decoration: InputDecoration(
           errorStyle: TextStyle(color: widget.errorColor),
           errorText: widget.errorMsg,
+
+          
           suffixIcon: widget.showSuffixIcon
               ? IconButton(
                   onPressed: widget.obsecureText

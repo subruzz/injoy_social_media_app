@@ -11,6 +11,7 @@ class DescriptionTextfield extends StatelessWidget {
         focusedBorder: InputBorder.none,
         hintText: 'Write a caption and add hashtags...',
         border: InputBorder.none,
+        filled: false,
       ),
       maxLines: null,
       style: Theme.of(context).textTheme.bodyMedium,

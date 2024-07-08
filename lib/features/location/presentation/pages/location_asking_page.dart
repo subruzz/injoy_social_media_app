@@ -128,9 +128,7 @@ class LocationAskingPage extends StatelessWidget {
                     ),
                     const Spacer(),
                     BlocBuilder<LocationBloc, LocationState>(
-                      buildWhen: (previous, current) =>
-                          current is LocationLoading ||
-                          current is LocationSuccess,
+                 
                       builder: (context, state) {
                         if (state is LocationLoading) {
                           return CustomAppPadding(

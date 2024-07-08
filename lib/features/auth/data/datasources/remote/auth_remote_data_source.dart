@@ -18,6 +18,7 @@ abstract interface class AuthRemoteDataSource {
   Future<AppUserModel?> getCurrentUser();
   Future<String?> getCurrentUserId();
   Future<void> deleteUser();
+  Future<void> signOut(String uid);
 }
 
 class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
@@ -220,6 +221,10 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       throw MainException(errorMsg: e.toString());
     }
   }
-
- 
+  
+  @override
+  Future<void> signOut(String uid) {
+    // TODO: implement signOut
+    throw UnimplementedError();
+  }
 }

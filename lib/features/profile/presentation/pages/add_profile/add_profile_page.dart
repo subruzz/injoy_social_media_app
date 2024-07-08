@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
+import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/add_profile_button.dart';
@@ -26,7 +28,9 @@ class _AddProfilePageState extends State<AddProfilePage> {
   final _selectImageCubit = GetIt.instance<PickSingleImageCubit>();
   final _dobController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  final Debouncer _debouncer =
+      Debouncer(delay: const Duration(milliseconds: 500));
+  final bool isValid = false;
   @override
   void dispose() {
     _nameController.dispose();
@@ -40,6 +44,14 @@ class _AddProfilePageState extends State<AddProfilePage> {
 
   void _profileCompleted() {
     if (_formKey.currentState!.validate()) {
+      if (_debouncer.isRunning()) {
+        Messenger.showSnackBar(message: 'Checking username availability');
+        return;
+      }
+      if (context.read<ProfileBloc>().state is! UserNameAvailabelState) {
+        Messenger.showSnackBar(message: 'Username already taken');
+        return;
+      }
       context.read<ProfileBloc>().add(ProfileSetUpUserDetailsEvent(
           fullName: _nameController.text.trim(),
           userName: _userNameController.text.trim(),
@@ -55,7 +67,8 @@ class _AddProfilePageState extends State<AddProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: AddProfileButton(onPressed: _profileCompleted),
+      floatingActionButton:
+          AddProfileButton(onPressed: _profileCompleted, isValid: isValid),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           const SliverAppBar(
@@ -68,6 +81,7 @@ class _AddProfilePageState extends State<AddProfilePage> {
         body: CustomAppPadding(
           child: SingleChildScrollView(
             child: ProfileForm(
+              debouncer: _debouncer,
               formKey: _formKey,
               nameController: _nameController,
               userNameController: _userNameController,

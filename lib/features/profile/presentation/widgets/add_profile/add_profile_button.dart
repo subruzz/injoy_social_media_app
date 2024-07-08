@@ -8,22 +8,35 @@ import 'package:social_media_app/features/profile/presentation/widgets/next_icon
 
 import '../../bloc/user_profile_bloc/profile_state.dart';
 
-class AddProfileButton extends StatelessWidget {
-  const AddProfileButton({super.key, required this.onPressed});
+class AddProfileButton extends StatefulWidget {
+  const AddProfileButton(
+      {super.key, required this.onPressed, required this.isValid});
   final void Function() onPressed;
+  final bool isValid;
+  @override
+  State<AddProfileButton> createState() => _AddProfileButtonState();
+}
+
+class _AddProfileButtonState extends State<AddProfileButton> {
+  late bool isValid;
+  @override
+  void initState() {
+    isValid = widget.isValid;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<ProfileBloc, ProfileState>(
       listenWhen: (previous, current) =>
-          current is ProfileSetUpLoading ||
-          current is ProfileSetupSuccess,
+          current is ProfileSetUpLoading || current is ProfileSetupSuccess,
       listener: (context, state) {
         if (state is ProfileSetupSuccess) {
           context.pushNamed(MyAppRouteConst.interestSelectRoute);
         }
       },
       child: NextButton(
-        onpressed: onPressed,
+        onpressed: widget.onPressed,
         child: const NextIcon(),
       ),
     );

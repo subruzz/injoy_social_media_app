@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
+import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/utils/functions/date_picker.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
@@ -21,10 +22,12 @@ class ProfileForm extends StatelessWidget {
   final TextEditingController aboutController;
   final TextEditingController dobController;
   final PickSingleImageCubit selectImageCubit;
+  final Debouncer debouncer;
   // final TextEditingController locationController;
   const ProfileForm({
     super.key,
     required this.formKey,
+    required this.debouncer,
     required this.nameController,
     required this.userNameController,
     required this.phoneNoController,
@@ -50,7 +53,7 @@ class ProfileForm extends StatelessWidget {
             validation: Validation.simpleValidation,
           ),
           AppSizedBox.sizedBox20H,
-          UserNameCheckField(userNameController: userNameController),
+          UserNameCheckField(userNameController: userNameController,debouncer: debouncer,),
           AppSizedBox.sizedBox15H,
           BlocListener<ProfileBloc, ProfileState>(
             listenWhen: (previous, current) => current is DateOfBirthSet,

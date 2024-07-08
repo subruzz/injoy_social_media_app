@@ -7,26 +7,32 @@ import 'package:social_media_app/core/const/app_info_dialog.dart';
 import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
 import 'package:social_media_app/core/const/interest_list.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/welcome_msg/welcome_msg.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/add_interests/select_interest_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/interest_selection/choice_chips.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/next_button.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/next_icon.dart';
 
 class InterestSelectionPage extends StatefulWidget {
-  const InterestSelectionPage({super.key});
-
+  const InterestSelectionPage({super.key, this.alreadySelectedInterests});
+  final List<String>? alreadySelectedInterests;
   @override
   State<InterestSelectionPage> createState() => _InterestSelectionPageState();
 }
 
 class _InterestSelectionPageState extends State<InterestSelectionPage> {
   final ValueNotifier<bool> _isSelected = ValueNotifier(false);
-  final List<String> _selectedInterests = [];
+  List<String> _selectedInterests = [];
+  @override
+  void initState() {
+    super.initState();
+    if (widget.alreadySelectedInterests != null) {
+      _selectedInterests = widget.alreadySelectedInterests!;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

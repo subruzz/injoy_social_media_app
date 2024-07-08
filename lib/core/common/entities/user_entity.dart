@@ -4,7 +4,6 @@ class AppUser extends Equatable {
   final String id;
   final String email;
   final bool hasPremium;
-
   final String? fullName;
   final String? userName;
   final String? dob;
@@ -23,7 +22,7 @@ class AppUser extends Equatable {
 
   const AppUser({
     required this.id,
-     this.viewedSetupIndex=0,
+    this.viewedSetupIndex = 0,
     required this.email,
     required this.hasPremium,
     required this.fullName,

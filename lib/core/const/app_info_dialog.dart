@@ -12,7 +12,7 @@ class AppInfoDialog {
       Color? backgroundColor,
       RoundedRectangleBorder? shape,
       String? title,
-      required String subtitle,
+      String? subtitle,
       String closeText = 'Back',
       required String buttonText}) {
     showDialog(
@@ -20,7 +20,8 @@ class AppInfoDialog {
       builder: (BuildContext context) {
         return AlertDialog(
           insetPadding: AppPadding.extraLarge,
-          backgroundColor: backgroundColor ?? AppDarkColor().secondaryBackground,
+          backgroundColor:
+              backgroundColor ?? AppDarkColor().secondaryBackground,
           content: SingleChildScrollView(
             child: ListBody(
               children: [
@@ -29,8 +30,9 @@ class AppInfoDialog {
                     title,
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
-                AppSizedBox.sizedBox10H,
-                Text(style: Theme.of(context).textTheme.bodyLarge, subtitle),
+                if (subtitle != null) AppSizedBox.sizedBox10H,
+                if (subtitle != null)
+                  Text(style: Theme.of(context).textTheme.bodyLarge, subtitle),
               ],
             ),
           ),

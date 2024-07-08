@@ -35,7 +35,7 @@ class CreatePostImage extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 8, 
+          top: 8,
           right: 8,
           child: InkWell(
             onTap: onTap,
@@ -80,18 +80,21 @@ class SearchHashTagSheet extends StatelessWidget {
             controller: hashtagController,
             onChanged: (query) {
               debouncer.run(() {
-                context.read<SearchHashtagBloc>().add(SeachHashTagGetEvent(query: query));
+                context
+                    .read<SearchHashtagBloc>()
+                    .add(SeachHashTagGetEvent(query: query));
               });
             },
             decoration: InputDecoration(
                 focusedBorder: const UnderlineInputBorder(),
                 hintText: 'Search Hashtags',
+                filled: false,
                 suffixIcon: IconButton(
                     onPressed: onpresses, icon: const Icon(Icons.add)),
                 border: const UnderlineInputBorder()),
           ),
           AppSizedBox.sizedBox10H,
-          BlocConsumer<SearchHashtagBloc,SearchHashtagState>(
+          BlocConsumer<SearchHashtagBloc, SearchHashtagState>(
             listener: (context, state) {
               if (state is SearchHashtagError) {
                 Messenger.showSnackBar(message: state.errorMsg);

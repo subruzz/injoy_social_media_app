@@ -22,10 +22,10 @@ class UserProfile extends StatelessWidget {
           bottom: 0,
           child: GestureDetector(
               onTap: () {
-                // Navigator.of(context).push(MaterialPageRoute(
-                //   builder: (context) => EditProfilePage(
-                //       appUser: context.read<AppUserBloc>().appUser!),
-                // ));
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => EditProfilePage(
+                      appUser: context.read<AppUserBloc>().appUser!),
+                ));
               },
               child: const EditProfileIcon()),
         ),

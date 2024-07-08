@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
@@ -5,12 +7,12 @@ import 'package:social_media_app/core/common/models/post_model.dart';
 abstract class PostFeedRemoteDatasource {
   Future<List<PostModel>> fetchFollowedPosts(String userId);
   Future<List<PostModel>> fetchSuggestedPosts(String userId);
- 
 }
 
 class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
   @override
   Future<List<PostModel>> fetchFollowedPosts(String userId) async {
+    log('getting posts');
     try {
       final posts = await FirebaseFirestore.instance
           .collection('posts')

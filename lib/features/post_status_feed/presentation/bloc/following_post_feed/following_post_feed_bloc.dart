@@ -23,6 +23,7 @@ class FollowingPostFeedBloc
       Emitter<FollowingPostFeedState> emit) async {
     final res = await _followingPostsUseCase(
         GetFollowingPostsUseCaseParams(uId: event.uId));
+
     res.fold(
         (failure) => emit(FollowingPostFeedError(errorMsg: failure.message)),
         (success) => emit(FollowingPostFeedSuccess(followingPosts: success)));

@@ -18,4 +18,8 @@ class Debouncer {
     _timer?.cancel();
     _timer = null;
   }
+
+  bool isRunning() {
+    return _timer != null && _timer!.isActive;
+  }
 }

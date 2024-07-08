@@ -43,8 +43,17 @@ import 'package:social_media_app/features/post/presentation/bloc/update_post/upd
 import 'package:social_media_app/features/post_status_feed/data/datasource/status_feed_remote_datasource.dart';
 import 'package:social_media_app/features/post_status_feed/data/repository/status_feed_repository_impl.dart';
 import 'package:social_media_app/features/post_status_feed/domain/repositories/status_feed_repository.dart';
+import 'package:social_media_app/features/profile/data/data_source/other_user_data_source.dart';
+import 'package:social_media_app/features/profile/data/repository/other_user_profile_impl.dart';
+import 'package:social_media_app/features/profile/domain/repository/other_user_repository.dart';
 import 'package:social_media_app/features/profile/domain/usecases/add_interest.dart';
 import 'package:social_media_app/features/profile/domain/usecases/check_username_exist.dart';
+import 'package:social_media_app/features/profile/domain/usecases/follow_user.dart';
+import 'package:social_media_app/features/profile/domain/usecases/get_other_user_details.dart';
+import 'package:social_media_app/features/profile/domain/usecases/unfollow_user.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/get_other_user_posts/get_other_user_posts_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/other_profile/other_profile_cubit.dart';
 import 'package:social_media_app/features/status/data/datasource/status_remote_datasource.dart';
 import 'package:social_media_app/features/status/data/repository/create_status_repository_impl.dart';
 import 'package:social_media_app/features/status/domain/repository/status_repository.dart';
@@ -176,7 +185,21 @@ void _initProfile() {
     )
     ..registerFactory(
         () => AddInterestUseCase(profileRepository: serviceLocator()))
-    ..registerLazySingleton(() => SelectInterestCubit(serviceLocator()));
+    ..registerLazySingleton(() => SelectInterestCubit(serviceLocator()))
+    ..registerFactory<OtherUserDataSource>(() =>
+        OtherUserDataSourceImpl(firebaseFirestore: FirebaseFirestore.instance))
+    ..registerFactory<OtherUserRepository>(() =>
+        OtherUserProfileRepositoryImpl(otherUserDataSource: serviceLocator()))
+    ..registerFactory(() =>
+        GetOtherUserDetailsUseCase(userProfileRepository: serviceLocator()))
+    ..registerFactory(() => OtherProfileCubit(serviceLocator()))
+    ..registerFactory(
+        () => FollowUserUseCase(userProfileRepository: serviceLocator()))
+    ..registerFactory(
+        () => UnfollowUserUseCase(userProfileRepository: serviceLocator()))
+    ..registerLazySingleton(
+        () => FollowunfollowCubit(serviceLocator(), serviceLocator()))
+    ..registerFactory(() => GetOtherUserPostsCubit(serviceLocator()));
 }
 
 void _initLocation() {

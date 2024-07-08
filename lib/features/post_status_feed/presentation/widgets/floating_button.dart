@@ -17,10 +17,8 @@ class FloatingButton extends StatelessWidget {
         SpeedDialChild(child: const Icon(Icons.circle), label: 'Status'),
         SpeedDialChild(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => CreatePostScreen(
-                    locationBloc: GetIt.instance<LocationBloc>()),
-              ));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CreatePostScreen()));
             },
             child: const Icon(Icons.add_to_photos_sharp),
             label: 'Post'),

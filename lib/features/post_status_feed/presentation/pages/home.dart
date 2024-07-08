@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
+import 'package:social_media_app/core/widgets/shimmer.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/core/widgets/post/each_post.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/floating_button.dart';
@@ -55,6 +57,9 @@ class HomePage extends StatelessWidget {
             ),
             BlocBuilder<FollowingPostFeedBloc, FollowingPostFeedState>(
               builder: (context, state) {
+                if (state is FollowingPostFeedError) {
+                  return CircularLoading();
+                }
                 if (state is FollowingPostFeedSuccess) {
                   return SliverList.builder(
                     itemCount: state.followingPosts.length,
@@ -65,8 +70,12 @@ class HomePage extends StatelessWidget {
                     },
                   );
                 }
-                return const SliverToBoxAdapter(
-                  child: SizedBox(),
+
+                return SliverList.builder(
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return ShimmerEachPost();
+                  },
                 );
               },
             ),

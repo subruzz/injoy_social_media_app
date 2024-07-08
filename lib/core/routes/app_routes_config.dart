@@ -66,7 +66,11 @@ class MyAppRouter {
         name: MyAppRouteConst.interestSelectRoute,
         path: '/interestSelect',
         pageBuilder: (context, state) {
-          return const MaterialPage(child: InterestSelectionPage());
+          final List<String>? interest = state.extra as List<String>?;
+          return MaterialPage(
+              child: InterestSelectionPage(
+            alreadySelectedInterests: interest,
+          ));
         },
       ),
       GoRoute(

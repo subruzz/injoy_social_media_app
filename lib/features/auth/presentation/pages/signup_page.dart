@@ -52,6 +52,7 @@ class _SignupPageState extends State<SignupPage> {
                   formKey: _formKey,
                   emailController: _emailController,
                   passwordController: _passwordController),
+              AppSizedBox.sizedBox10H,
               const SeparatingDivider(),
               AppSizedBox.sizedBox10H,
               const GoogleAuthButton(),

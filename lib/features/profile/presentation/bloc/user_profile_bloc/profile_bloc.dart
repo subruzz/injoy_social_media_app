@@ -11,13 +11,13 @@ import 'package:social_media_app/features/profile/domain/usecases/check_username
 import 'package:social_media_app/features/profile/domain/usecases/create_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
-import 'package:stream_transform/stream_transform.dart';
+// import 'package:stream_transform/stream_transform.dart';
 
-const _duration = Duration(milliseconds: 500);
+// const _duration = Duration(milliseconds: 500);
 
-EventTransformer<Event> debounce<Event>(Duration duration) {
-  return (events, mapper) => events.debounce(duration).switchMap(mapper);
-}
+// EventTransformer<Event> debounce<Event>(Duration duration) {
+//   return (events, mapper) => events.debounce(duration).switchMap(mapper);
+// }
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AppUserBloc _appUserBloc;
@@ -26,13 +26,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc(this._createUserProfileUseCase, this._appUserBloc,
       this._checkUsernameExistUseCasse)
       : super(ProfileInitial()) {
-    on<UserNameExistCheckEvent>(_checkUserNameAvailableOrNot,
-        transformer: debounce(_duration));
+    on<UserNameExistCheckEvent>(
+      _checkUserNameAvailableOrNot,
+      // transformer: debounce(_duration)
+    );
     on<ProfileSetUpUserDetailsEvent>(_onUserDetailsSet);
     on<ProfileInterestSelectedEvent>(_onInterestsSet);
     // on<ProfileSetUpLocationEvent>(_onLocationSet);
     on<DateOfBirthSelected>(_onDateOfBirthSelected);
     on<CompleteProfileSetup>(_completeProfileSetup);
+    on<UpdateProfilEvent>(_updateProfile);
   }
   String _fullName = '';
   String _userName = '';
@@ -134,5 +137,28 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   void _updateTheCurrentUser(AppUser user, Emitter<ProfileState> emit) {
     _appUserBloc.add(UpdateUserModelEvent(userModel: user));
     emit(CompleteProfileSetupSuceess(appUser: user));
+  }
+
+  FutureOr<void> _updateProfile(
+      UpdateProfilEvent event, Emitter<ProfileState> emit) async {
+    log(event.phoneNumber ?? '');
+    emit(CompleteProfileSetupLoading());
+    final UserProfile userProfile = UserProfile(
+        fullName: event.fullName,
+        userName: event.userName,
+        dob: event.dob,
+        phoneNumber:
+            event.phoneNumber?.isEmpty ?? true ? null : event.phoneNumber,
+        occupation: event.occupation?.isEmpty ?? true ? null : event.occupation,
+        about: event.about?.isEmpty ?? true ? null : event.about,
+        latitude: event.location?.latitude,
+        longitude: event.location?.longitude,
+        location: event.location?.currentLocation);
+    final res = await _createUserProfileUseCase(CreateUserProfileUseCaseParams(
+        appUser: userProfile, uid: event.uid, profilePic: event.profilePic));
+    res.fold((failure) {
+      log('error occured in bloc');
+      emit(CompleteProfileSetupFailure(errorMsg: failure.message));
+    }, (success) => _updateTheCurrentUser(success, emit));
   }
 }

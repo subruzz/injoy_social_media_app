@@ -30,12 +30,12 @@ class LoginButton extends StatelessWidget {
           }
           if (state is LoginSuccess) {
             if (state.user.fullName != null) {
+              context
+                  .read<InitialSetupCubit>()
+                  .startInitialSetup(uId: state.user.id);
               context.pushReplacementNamed(MyAppRouteConst.bottomNavRoute);
             } else {
-                 context
-                .read<InitialSetupCubit>()
-                .startInitialSetup(uId: state.user.id);
-              context.pushReplacementNamed(MyAppRouteConst.bottomNavRoute,
+              context.pushReplacementNamed(MyAppRouteConst.addProfilePage,
                   extra: state.user);
             }
           }

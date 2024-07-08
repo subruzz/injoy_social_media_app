@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
@@ -9,6 +10,8 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
+
+import '../../../../../core/const/assets/app_assets.dart';
 
 class GoogleAuthButton extends StatelessWidget {
   const GoogleAuthButton({super.key});
@@ -32,7 +35,10 @@ class GoogleAuthButton extends StatelessWidget {
           return const CircularLoading();
         }
         return CustomButton(
-          isShowIcon: true,
+          buttonIcon: Image.asset(
+            AppAssetsConst.googleLogo,
+            height: 25.h,
+          ),
           color: AppDarkColor().buttonWhitishBackground,
           child: CustomText(
             AppUiStringConst.googleLogin,

@@ -1,8 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:developer';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/profile/domain/usecases/get_user_posts.dart';
@@ -24,8 +25,10 @@ class GetUserPostsBloc extends Bloc<GetUserPostsEvent, GetUserPostsState> {
 
   FutureOr<void> _getUserPostsrequestedEvent(
       GetUserPostsrequestedEvent event, Emitter<GetUserPostsState> emit) async {
+    log('Requested for user posts');
     final result =
         await _getUserPostsUseCase(GetUserPostsUseCaseParams(uid: event.uid));
+    log('user pots are $result');
     result.fold(
         ((failure) => emit(GetUserPostsError(errorMsg: failure.message))),
         (success) => emit(GetUserPostsSuccess(

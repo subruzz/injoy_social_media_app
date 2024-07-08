@@ -53,7 +53,7 @@ final class CompleteProfileSetup extends ProfileEvent {
   final UserLocation? location;
   final String uid;
 
-  const CompleteProfileSetup({ this.location, required this.uid});
+  const CompleteProfileSetup({this.location, required this.uid});
 }
 
 class ProfileSetUpLocationEvent extends ProfileEvent {
@@ -80,4 +80,27 @@ class UserNameExistCheckEvent extends ProfileEvent {
   final String userName;
 
   const UserNameExistCheckEvent({required this.userName});
+}
+
+class UpdateProfilEvent extends ProfileEvent {
+  final String fullName;
+  final String userName;
+  final String dob;
+  final String? phoneNumber;
+  final String? occupation;
+  final String? about;
+  final File? profilePic;
+  final String uid;
+  final UserLocation? location;
+
+  const UpdateProfilEvent(
+      {required this.fullName,
+      required this.userName,
+      required this.dob,
+      required this.phoneNumber,
+      required this.occupation,
+      required this.about,
+      required this.profilePic,
+      required this.uid,
+      required this.location});
 }
