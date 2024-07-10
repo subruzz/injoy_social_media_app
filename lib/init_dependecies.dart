@@ -4,8 +4,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
+import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubits/Pick_multiple_image/pick_multiple_image_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
+import 'package:social_media_app/features/assets/data/repository/asset_repository_impl.dart';
+import 'package:social_media_app/features/assets/domain/repository/asset_repository.dart';
+import 'package:social_media_app/features/assets/data/datasource/asset_local_datasource.dart';
 import 'package:social_media_app/features/auth/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:social_media_app/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:social_media_app/features/auth/domain/repostiories/auth_repository.dart';
@@ -19,21 +23,19 @@ import 'package:social_media_app/features/auth/presentation/bloc/forgot_password
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
-import 'package:social_media_app/features/post/data/datasources/local/asset_local_source.dart';
 import 'package:social_media_app/features/post/data/datasources/remote/post_remote_datasource.dart';
-import 'package:social_media_app/features/post/data/repository/asset_repository_impl.dart';
 import 'package:social_media_app/features/post/data/repository/post_repostiory_impl.dart';
-import 'package:social_media_app/features/post/domain/repositories/asset_repository.dart';
 import 'package:social_media_app/features/post/domain/repositories/post_repository.dart';
 import 'package:social_media_app/features/post/domain/usecases/create_posts.dart';
 import 'package:social_media_app/features/post/domain/usecases/delete_post.dart';
-import 'package:social_media_app/features/post/domain/usecases/get_albums.dart';
-import 'package:social_media_app/features/post/domain/usecases/get_assets.dart';
+import 'package:social_media_app/features/assets/domain/usecae/get_albums.dart';
+import 'package:social_media_app/features/assets/domain/usecae/get_assets.dart';
 import 'package:social_media_app/features/post/domain/usecases/like_post.dart';
 import 'package:social_media_app/features/post/domain/usecases/searh_hashtag.dart';
+import 'package:social_media_app/features/post/domain/usecases/unlike_post.dart';
 import 'package:social_media_app/features/post/domain/usecases/update_post.dart';
-import 'package:social_media_app/features/post/presentation/bloc/album_bloc/album_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/assets_bloc/assets_bloc.dart';
+import 'package:social_media_app/features/assets/presenation/bloc/album_bloc/album_bloc.dart';
+import 'package:social_media_app/features/assets/presenation/bloc/assets_bloc/assets_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/create_post/create_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/delte_post/delete_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/like_post/like_post_bloc.dart';
@@ -104,9 +106,11 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(),
   );
+  serviceLocator.registerLazySingleton(() => FollowingCubit());
   serviceLocator.registerLazySingleton(() => InitialSetupCubit(
       getAllStatusBloc: serviceLocator(),
       getMyStatusBloc: serviceLocator(),
+      followingCubit: serviceLocator(),
       followingPostFeedBloc: serviceLocator(),
       getUserPostsBloc: serviceLocator()));
 }
@@ -243,7 +247,10 @@ void _post() {
         () => DeletePostsUseCase(postRepository: serviceLocator()))
     ..registerLazySingleton(() => DeletePostBloc(serviceLocator()))
     ..registerFactory(() => LikePostsUseCase(postRepository: serviceLocator()))
-    ..registerLazySingleton(() => LikePostBloc(serviceLocator()))
+    ..registerFactory(
+        () => UnlikePostsUseCase(postRepository: serviceLocator()))
+    ..registerLazySingleton(
+        () => LikePostBloc(serviceLocator(), serviceLocator()))
     ..registerFactory(() => SelectTagsCubit());
 }
 

@@ -14,13 +14,15 @@ class AppUser extends Equatable {
   final String? location;
   final double? latitude;
   final double? longitude;
-  final List<String> followers;
-  final List<String> following;
+  int followersCount;
+  int followingCount;
+  // final List<String> followers;
+  // final List<String> following;
   final List<String> interests;
   final List<String> posts;
   final int viewedSetupIndex;
 
-  const AppUser({
+   AppUser({
     required this.id,
     this.viewedSetupIndex = 0,
     required this.email,
@@ -28,6 +30,8 @@ class AppUser extends Equatable {
     required this.fullName,
     required this.userName,
     required this.dob,
+    required this.followersCount,
+    required this.followingCount,
     this.phoneNumber,
     this.occupation,
     this.about,
@@ -35,8 +39,9 @@ class AppUser extends Equatable {
     this.location,
     this.latitude,
     this.longitude,
-    this.followers = const [],
-    this.following = const [],
+
+    // this.followers = const [],
+    // this.following = const [],
     this.posts = const [],
     this.interests = const [],
   });
@@ -55,8 +60,8 @@ class AppUser extends Equatable {
         location,
         latitude,
         longitude,
-        ...followers,
-        ...following,
+        // ...followers,
+        // ...following,
         ...interests,
         ...posts,
       ];

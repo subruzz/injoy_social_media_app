@@ -26,6 +26,7 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
             ),
           )
           .toList();
+      print(result);
       return result;
     } catch (e) {
       print('error is this ${e.toString()}');

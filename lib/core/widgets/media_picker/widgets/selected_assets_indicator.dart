@@ -10,28 +10,23 @@ class SelectedAssetsIndicator extends StatelessWidget {
       required this.pageController,
       required this.selectedAssets});
   final PageController pageController;
-  final ValueNotifier<List<AssetEntity>> selectedAssets;
+  final List<AssetEntity> selectedAssets;
   final bool isPost;
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: selectedAssets,
-      builder: (context, value, child) {
-        return value.length > 1
-            ? isPost
-                ? PageViewIndicator(
-                    count: value.length,
-                    pageController: pageController,
-                  )
-                : Positioned(
-                    bottom: 100,
-                    child: PageViewIndicator(
-                      count: value.length,
-                      pageController: pageController,
-                    ),
-                  )
-            : const EmptyDisplay();
-      },
-    );
+    return selectedAssets.length > 1
+        ? isPost
+            ? PageViewIndicator(
+                count: selectedAssets.length,
+                pageController: pageController,
+              )
+            : Positioned(
+                bottom: 100,
+                child: PageViewIndicator(
+                  count: selectedAssets.length,
+                  pageController: pageController,
+                ),
+              )
+        : const EmptyDisplay();
   }
 }

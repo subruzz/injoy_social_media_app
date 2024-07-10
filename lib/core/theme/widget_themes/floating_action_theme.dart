@@ -8,8 +8,9 @@ final class AppFloationActionButtonTheme {
 
   static final floatingActionButtonTheme = FloatingActionButtonThemeData(
     
+    
     shape: RoundedRectangleBorder(
-      
+      side: BorderSide.none,
       borderRadius: AppBorderRadius.extraLarge
     ),
     backgroundColor: _color.buttonBackground,

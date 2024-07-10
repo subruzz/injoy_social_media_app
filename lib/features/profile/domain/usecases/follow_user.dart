@@ -12,7 +12,8 @@ class FollowUserUseCase implements UseCase<Unit, FollowUserUseCaseParms> {
       : _otherUserRepository = userProfileRepository;
   @override
   Future<Either<Failure, Unit>> call(FollowUserUseCaseParms params) async {
-    return await _otherUserRepository.followUser(params.myUid,params.otherUserUid);
+    return await _otherUserRepository.followUser(
+        params.myUid, params.otherUserUid);
   }
 }
 

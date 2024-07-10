@@ -11,11 +11,10 @@ final class LikePostInitial extends LikePostState {}
 
 final class LikePostLoading extends LikePostState {}
 
-final class LikePostFailure extends LikePostState {}
+final class LikePostFailure extends LikePostState {
+  final String error;
 
-final class LikePostSuccess extends LikePostState {
-  final int likeCount;
-
-  const LikePostSuccess({required this.likeCount});
-
+  const LikePostFailure({required this.error});
 }
+
+final class LikePostSuccess extends LikePostState {}

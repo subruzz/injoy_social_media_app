@@ -90,6 +90,8 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         id: userCredential.user!.uid,
         email: userCredential.user!.email ?? '',
         hasPremium: false,
+        followersCount: 0,
+        followingCount: 0,
       );
 
       await _firebaseStorage.runTransaction((transaction) async {
@@ -161,6 +163,8 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         id: user.uid,
         email: email,
         hasPremium: false,
+        followersCount: 0,
+        followingCount: 0,
       );
       await _firebaseStorage.runTransaction((transaction) async {
         transaction.set(userDocRef, userModel.toJson());

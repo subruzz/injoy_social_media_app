@@ -28,8 +28,7 @@ class AssetLocalSourceImpl implements AssetLocalSource {
       if (!isEnabled) {
         throw const MainException(errorMsg: 'Permission not enables');
       }
-      List<AssetPathEntity> albums = await PhotoManager.getAssetPathList();
-      print(albums);
+      List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(type: RequestType.image);
       return albums;
     } catch (e) {
       throw const MainException(

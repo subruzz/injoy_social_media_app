@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/theme/color/app_colors.dart';
 
 class UserTab extends StatelessWidget {
   const UserTab({super.key, required this.icon, required this.tabTitle});
-  final IconData icon;
+  final String icon;
   final String tabTitle;
   @override
   Widget build(BuildContext context) {
@@ -11,8 +13,16 @@ class UserTab extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon),
-          AppSizedBox.sizedBox5H,
+          SvgPicture.asset(
+            width: 20,
+            height: 20,
+            'assets/svgs/explore.svg',
+            colorFilter: ColorFilter.mode(
+              AppDarkColor().iconSecondarycolor,
+              BlendMode.srcIn,
+            ),
+          ),
+          AppSizedBox.sizedBox10W,
           Text(tabTitle),
         ],
       ),

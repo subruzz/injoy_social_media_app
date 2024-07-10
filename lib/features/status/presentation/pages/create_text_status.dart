@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_msg/app_success_msg.dart';
 import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_floating_button.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
-import 'package:social_media_app/core/widgets/media_picker/custom_media_picker_page.dart';
 import 'package:social_media_app/core/widgets/app_related/rotated_icon.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/widgets/create_text_status/create_text_status_background.dart';
+import 'package:social_media_app/features/status/presentation/widgets/status_app_bar.dart';
 
 class CreateTextStatusPage extends StatelessWidget {
   const CreateTextStatusPage(
@@ -35,13 +36,11 @@ class CreateTextStatusPage extends StatelessWidget {
               padding: AppPadding.floatingActionBottomPaddng,
               child: AppCustomFloatingButton(
                   onPressed: () async {
-                    final List<AssetEntity>? res = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CustomMediaPickerPage(
-                          alreadySelected: selectedAssets,
-                        ),
-                      ),
+                    final List<AssetEntity>? res = await context.pushNamed(
+                      MyAppRouteConst.mediaPickerRoute,
+                      extra: {
+                        'selectedAssets': selectedAssets,
+                      },
                     );
                     selectedAssets.clear();
 
@@ -54,13 +53,8 @@ class CreateTextStatusPage extends StatelessWidget {
                   },
                   child: const Icon(Icons.camera_sharp)),
             ),
-            appBar: AppCustomAppbar(
-              backGroundColor: colorCubit.color,
-              showLeading: true,
-              title: Text(
-                'Create Status',
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
+            appBar: StatusAppBar(
+              color: colorCubit.color,
               actions: [
                 BlocConsumer<StatusBloc, StatusState>(
                   listener: (context, state) {
@@ -81,20 +75,20 @@ class CreateTextStatusPage extends StatelessWidget {
                       );
                     }
                     return IconButton(
-                        onPressed: () {
-                          final currentUser =
-                              context.read<AppUserBloc>().appUser!;
-                          context.read<StatusBloc>().add(CreateStatusEvent(
-                              userId: currentUser.id,
-                              profilePic: currentUser.profilePic,
-                              userName: currentUser.userName ?? '',
-                              content: captonController.text.trim(),
-                              color: colorCubit.color.value,
-                              statusImage: null));
-                        },
-                        icon: const RotatedIcon(
-                          icon: Icons.send_outlined,
-                        ));
+                      onPressed: () {
+                        final currentUser = context.read<AppUserBloc>().appUser;
+                        context.read<StatusBloc>().add(CreateStatusEvent(
+                            userId: currentUser.id,
+                            profilePic: currentUser.profilePic,
+                            userName: currentUser.userName ?? '',
+                            content: captonController.text.trim(),
+                            color: colorCubit.color.value,
+                            statusImage: null));
+                      },
+                      icon: const RotatedIcon(
+                        icon: Icons.send_outlined,
+                      ),
+                    );
                   },
                 )
               ],

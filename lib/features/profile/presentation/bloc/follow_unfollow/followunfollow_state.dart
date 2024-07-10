@@ -9,13 +9,20 @@ sealed class FollowunfollowState extends Equatable {
 
 final class FollowunfollowInitial extends FollowunfollowState {}
 
-final class FollowUnfollowLoading extends FollowunfollowState {}
-
-final class FollowUnfollowFailure extends FollowunfollowState {
+final class FollowLoading extends FollowunfollowState {}
+final class UnfollowLoading extends FollowunfollowState{}
+final class FollowFailure extends FollowunfollowState {
   final String errorMsg;
 
-  const FollowUnfollowFailure({required this.errorMsg});
+  const FollowFailure({required this.errorMsg});
 }
 
-final class FollowSucess extends FollowunfollowState {}
-final class UnfollowSucess extends FollowunfollowState {}
+final class UnfollowFailure extends FollowunfollowState {
+  final String errorMsg;
+
+  const UnfollowFailure({required this.errorMsg});
+}
+
+final class FollowSuccess extends FollowunfollowState {}
+
+final class UnfollowSuccess extends FollowunfollowState {}

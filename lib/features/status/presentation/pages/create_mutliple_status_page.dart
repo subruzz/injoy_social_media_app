@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
-
-import 'package:social_media_app/core/widgets/media_picker/custom_media_picker_page.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/features/status/presentation/widgets/create_multiple_status/multiple_status_input_bar.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets_indicator.dart';
+import 'package:social_media_app/features/status/presentation/widgets/status_app_bar.dart';
 
-class MyPageViewScreen extends StatefulWidget {
-  const MyPageViewScreen(
+class CreateMutlipleStatusPage extends StatefulWidget {
+  const CreateMutlipleStatusPage(
       {super.key, required this.assets, required this.changeScreen});
   final List<AssetEntity> assets;
   final VoidCallback changeScreen;
 
   @override
-  State<MyPageViewScreen> createState() => _MyPageViewScreenState();
+  State<CreateMutlipleStatusPage> createState() =>
+      _CreateMutlipleStatusPageState();
 }
 
-class _MyPageViewScreenState extends State<MyPageViewScreen> {
+class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
   final PageController _pageController = PageController();
   final TextEditingController _captionController = TextEditingController();
   List<String> _captions = [];
@@ -24,8 +26,8 @@ class _MyPageViewScreenState extends State<MyPageViewScreen> {
   @override
   void initState() {
     super.initState();
-    // Initializing captions list with empty strings
     _selectedAssets.value = widget.assets;
+    // Initializing captions list with empty strings
     _captions = List.generate(widget.assets.length, (index) => '');
     _pageController.addListener(_onPageChanged);
   }
@@ -39,7 +41,7 @@ class _MyPageViewScreenState extends State<MyPageViewScreen> {
 
   void _onPageChanged() {
     //controller will listen to change and update here
-    //this for selecting different captions for differnt pics
+    //this for selecting different captions for differnt images
     final pageIndex = _pageController.page!.round();
     _captionController.text = _captions[pageIndex];
   }
@@ -53,32 +55,32 @@ class _MyPageViewScreenState extends State<MyPageViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Status'),
-        leading: IconButton(
-          onPressed: () {
-            widget.changeScreen();
-          },
-          icon: const Icon(Icons.close),
-        ),
-      ),
+      appBar: const StatusAppBar(actions: []),
       body: Stack(
         alignment: Alignment.center,
         children: [
-          SelectedAssetsPageView(
-              pageController: _pageController, selectedAssets: _selectedAssets),
+          //shows the selected assets
+          Hero(
+            tag: widget.assets[0],
+            child: SelectedAssetsSection(
+                pageController: _pageController,
+                selectedAssets: _selectedAssets.value),
+          ),
+          //shows the pageview indicator
           SelectedAssetsIndicator(
-              pageController: _pageController, selectedAssets: _selectedAssets),
+              pageController: _pageController,
+              selectedAssets: _selectedAssets.value),
+          //input bar for adding caption
           MultipleStatusInputBar(
               captionController: _captionController,
               alreadySelected: _selectedAssets.value,
               captions: _captions,
               onCaptionChanged: _onCaptionChanged,
               leadingIconPressed: () async {
-                final List<AssetEntity>? res = await Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => CustomMediaPickerPage(
-                            alreadySelected: _selectedAssets.value)));
+                final List<AssetEntity>? res = await context
+                    .pushNamed(MyAppRouteConst.mediaPickerRoute, extra: {
+                  'selectedAssets': widget.assets,
+                });
                 if (res != null) {
                   _selectedAssets.value = res;
                   _captions = List.generate(res.length, (index) => '');

@@ -13,7 +13,6 @@ class GetOtherUserPostsCubit extends Cubit<GetOtherUserPostsState> {
 
   void getOtherUserPosts(String uId) async {
     emit(GetOtherUserPostsLoading());
-    await Future.delayed(Duration(seconds: 3));
     final res = await _getUserPostsUseCase(GetUserPostsUseCaseParams(uid: uId));
     res.fold(
         (failure) => emit(GetOtherUserPostsError(errorMsg: failure.message)),

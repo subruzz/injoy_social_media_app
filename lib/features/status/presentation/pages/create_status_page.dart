@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/features/status/presentation/pages/create_mutliple_status.dart';
+import 'package:social_media_app/features/status/presentation/pages/create_mutliple_status_page.dart';
 import 'package:social_media_app/features/status/presentation/widgets/create_text_status/create_text_status_page_builder.dart';
+
 class StatusCreationPage extends StatefulWidget {
   const StatusCreationPage({super.key});
 
@@ -16,7 +17,8 @@ class _StatusCreationPageState extends State<StatusCreationPage> {
   @override
   Widget build(BuildContext context) {
     return _isMultipleStatusPage
-        ? MyPageViewScreen(
+        // create status with images and caption
+        ? CreateMutlipleStatusPage(
             changeScreen: () {
               setState(() {
                 _selectedAssets.clear();
@@ -25,6 +27,7 @@ class _StatusCreationPageState extends State<StatusCreationPage> {
             },
             assets: _selectedAssets,
           )
+        // create simple status using texts
         : CreateTextStatusPageBuilder(
             changeStatusScreen: () {
               setState(() {

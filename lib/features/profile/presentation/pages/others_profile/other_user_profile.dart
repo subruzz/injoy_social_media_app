@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
@@ -38,6 +38,7 @@ class OtherUserProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = context.read<AppUserBloc>().appUser;
+    final following = context.read<FollowingCubit>().followingList;
 
     return MultiBlocProvider(
       providers: [
@@ -50,221 +51,252 @@ class OtherUserProfilePage extends StatelessWidget {
             ..getOtherUserPosts(otherUserId),
         ),
       ],
-      child: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text(
-                userName,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.more_vert),
-                  onPressed: () async {
-                    FirebaseAuth.instance.signOut();
-                  },
+      child: PopScope(
+        onPopInvoked: (didPop) {},
+        child: DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                title: Text(
+                  userName,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
-              ],
-            ),
-            body: BlocConsumer<OtherProfileCubit, OtherProfileState>(
-              listener: (context, state) {},
-              builder: (context, state) {
-                if (state is OtherProfileError) {
-                  return Text('no user');
-                }
-                if (state is OtherProfileLoading) {
-                  return const CircularLoading();
-                }
-                if (state is OtherProfileSuccess) {
-                  final currentUser = state.userProfile;
-                  return Column(
-                    children: [
-                      // Profile info
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            UserProfile(
-                              profileImage: state.userProfile.profilePic,
-                            ),
-                            AppSizedBox.sizedBox10H,
-                            ProfileUserDetailText(
-                              fullName: state.userProfile.fullName ?? '',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            // AppSizedBox.sizedBox5H,
-                            // ProfileUserDetailText(
-                            //   fullName: user.occupation ?? '',
-                            //   style: Theme.of(context).textTheme.bodySmall,
-                            // ),
-                            // AppSizedBox.sizedBox5H,
-                            // ProfileUserDetailText(
-                            //   fullName: user.about ?? '',
-                            //   style: Theme.of(context)
-                            //       .textTheme
-                            //       .bodySmall
-                            //       ?.copyWith(color: AppDarkColor().secondaryText),
-                            // ),
-                            AppSizedBox.sizedBox15H,
-                            CustomAppPadding(
-                              padding: AppPadding.horizontalExtraLarge,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  UserSocialAttribute(
-                                      attribute: state.userProfile.posts,
-                                      attributeName: 'Posts'),
-                                  const CustomVerticalDivider(),
-                                  BlocBuilder<FollowunfollowCubit,
-                                      FollowunfollowState>(
-                                    builder: (context, state) {
-                                      int followers = currentUser.followers.length;
-                                      return UserSocialAttribute(
-                                          attribute: currentUser.followers,
-                                          attributeName: 'Followers');
-                                    },
-                                  ),
-                                  const CustomVerticalDivider(),
-                                  UserSocialAttribute(
-                                      attribute: state.userProfile.following,
-                                      attributeName: 'Following'),
-                                ],
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.more_vert),
+                    onPressed: () async {
+                      FirebaseAuth.instance.signOut();
+                    },
+                  ),
+                ],
+              ),
+              body: BlocConsumer<OtherProfileCubit, OtherProfileState>(
+                listener: (context, state) {},
+                builder: (context, state) {
+                  if (state is OtherProfileError) {
+                    return Text('no user');
+                  }
+                  if (state is OtherProfileLoading) {
+                    return const CircularLoading();
+                  }
+                  if (state is OtherProfileSuccess) {
+                    final currentUser = state.userProfile;
+                    return Column(
+                      children: [
+                        // Profile info
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              UserProfile(
+                                profileImage: state.userProfile.profilePic,
                               ),
-                            ),
-                            const SizedBox(height: 16),
-                            CustomAppPadding(
-                              padding: AppPadding.horizontalSmall,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      child: BlocConsumer<FollowunfollowCubit,
-                                          FollowunfollowState>(
-                                    builder: (context, state) {
-                                      return CustomButtonWithIcon(
-                                          iconSize: 20.w,
-                                          iconData: Icons.person_add_alt,
-                                          radius: AppBorderRadius
-                                              .horizontalExtraLarge,
-                                          title: user.following
-                                                  .contains(currentUser.id)
-                                              ? 'Following'
-                                              : 'Follow',
-                                          onClick: () {
-                                            final amIFollowing = user.following
-                                                .contains(currentUser.id);
-                                            if (amIFollowing) {
-                                              context
-                                                  .read<FollowunfollowCubit>()
-                                                  .unfollowUser(
-                                                      myId: user.id,
-                                                      otherId: currentUser.id);
-                                            } else {
-                                              context
-                                                  .read<FollowunfollowCubit>()
-                                                  .followUser(
-                                                      myId: user.id,
-                                                      otherId: currentUser.id);
-                                            }
-                                          });
-                                    },
-                                    listener: (context, state) {
-                                      if (state is FollowUnfollowFailure) {
-                                        Messenger.showSnackBar(
-                                            message: state.errorMsg);
-                                      }
-                                      if (state is FollowSucess) {
-                                        user.following.add(currentUser.id);
-                                      }
-                                      if (state is UnfollowSucess) {
-                                        user.following.remove(currentUser.id);
-                                      }
-                                    },
-                                  )),
-                                  AppSizedBox.sizedBox10W,
-                                  Expanded(
-                                      child: CustomButtonWithIcon(
-                                          iconColor:
-                                              AppDarkColor().buttonBackground,
-                                          iconSize: 20.w,
-                                          iconData:
-                                              CupertinoIcons.chat_bubble_text,
-                                          borderColor:
-                                              AppDarkColor().buttonBackground,
-                                          color: AppDarkColor().background,
-                                          radius: AppBorderRadius.extraLarge,
-                                          title: 'Message',
-                                          textColor: AppDarkColor()
-                                              .secondaryPrimaryText,
-                                          onClick: () {}))
-                                ],
+                              AppSizedBox.sizedBox10H,
+                              ProfileUserDetailText(
+                                fullName: state.userProfile.fullName ?? '',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            AppSizedBox.sizedBox10H,
+                              // AppSizedBox.sizedBox5H,
+                              // ProfileUserDetailText(
+                              //   fullName: user.occupation ?? '',
+                              //   style: Theme.of(context).textTheme.bodySmall,
+                              // ),
+                              // AppSizedBox.sizedBox5H,
+                              // ProfileUserDetailText(
+                              //   fullName: user.about ?? '',
+                              //   style: Theme.of(context)
+                              //       .textTheme
+                              //       .bodySmall
+                              //       ?.copyWith(color: AppDarkColor().secondaryText),
+                              // ),
+                              AppSizedBox.sizedBox15H,
+                              CustomAppPadding(
+                                padding: AppPadding.horizontalExtraLarge,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    UserSocialAttribute(
+                                        attribute: 0, attributeName: 'Posts'),
+                                    const CustomVerticalDivider(),
+                                    BlocBuilder<FollowunfollowCubit,
+                                        FollowunfollowState>(
+                                      builder: (context, state) {
+                                        return UserSocialAttribute(
+                                            attribute:
+                                                currentUser.followersCount,
+                                            attributeName: 'Followers');
+                                      },
+                                    ),
+                                    const CustomVerticalDivider(),
+                                    UserSocialAttribute(
+                                        attribute: currentUser.followingCount,
+                                        attributeName: 'Following'),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              CustomAppPadding(
+                                padding: AppPadding.horizontalSmall,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        child: BlocConsumer<FollowunfollowCubit,
+                                            FollowunfollowState>(
+                                      builder: (context, state) {
+                                        return CustomButtonWithIcon(
+                                            iconSize: 20.w,
+                                            iconData: Icons.person_add_alt,
+                                            radius: AppBorderRadius
+                                                .horizontalExtraLarge,
+                                            title: following
+                                                    .contains(currentUser.id)
+                                                ? 'Following'
+                                                : 'Follow',
+                                            onClick: () {
+                                              final amIFollowing = following
+                                                  .contains(currentUser.id);
+                                              if (amIFollowing) {
+                                                --currentUser.followersCount;
+                                                context
+                                                    .read<FollowunfollowCubit>()
+                                                    .unfollowUser(
+                                                        user.id,
+                                                        currentUser.id,
+                                                        following);
 
-                            TabBar(
-                              dividerColor: AppDarkColor().secondaryBackground,
-                              indicatorColor: AppDarkColor().iconSecondarycolor,
-                              tabs: const [
-                                UserTab(
-                                    icon: Icons.add_photo_alternate_rounded,
-                                    tabTitle: 'Media'),
-                                UserTab(
-                                    icon: Icons.add_to_photos_sharp,
-                                    tabTitle: 'Posts')
-                              ],
-                            ),
-                          ],
+                                                // following
+                                                //     .remove(currentUser.id);
+                                                // context
+                                                //     .read<FollowunfollowCubit>()
+                                                //     .unfollowUser(
+                                                //       myId: user.id,
+                                                //       following: following,
+                                                //       otherId: currentUser.id,
+                                                //     );
+                                              } else {
+                                                ++currentUser.followersCount;
+
+                                                context
+                                                    .read<FollowunfollowCubit>()
+                                                    .followUser(
+                                                        user.id,
+                                                        currentUser.id,
+                                                        following);
+                                                // following.add(currentUser.id);
+                                                // context
+                                                //     .read<FollowunfollowCubit>()
+                                                //     .followUser(
+                                                //       following: following,
+                                                //         myId: user.id,
+                                                //         otherId:
+                                                //             currentUser.id);
+                                              }
+                                            });
+                                      },
+                                      listener: (context, state) {
+                                        if (state is FollowFailure) {
+                                          Messenger.showSnackBar(
+                                              message:
+                                                  'An error occured while following this user,Please try again!');
+
+                                          // following.remove(currentUser.id);
+                                        }
+                                        if (state is UnfollowFailure) {
+                                          Messenger.showSnackBar(
+                                              message:
+                                                  'An error occured while Unfollowing this user,Please try again!');
+
+                                          // following.add(currentUser.id);
+                                        }
+                                      },
+                                    )),
+                                    AppSizedBox.sizedBox10W,
+                                    Expanded(
+                                        child: CustomButtonWithIcon(
+                                            iconColor:
+                                                AppDarkColor().buttonBackground,
+                                            iconSize: 20.w,
+                                            iconData:
+                                                CupertinoIcons.chat_bubble_text,
+                                            borderColor:
+                                                AppDarkColor().buttonBackground,
+                                            color: AppDarkColor().background,
+                                            radius: AppBorderRadius.extraLarge,
+                                            title: 'Message',
+                                            textColor: AppDarkColor()
+                                                .secondaryPrimaryText,
+                                            onClick: () {}))
+                                  ],
+                                ),
+                              ),
+                              AppSizedBox.sizedBox10H,
+
+                              TabBar(
+                                dividerColor:
+                                    AppDarkColor().secondaryBackground,
+                                indicatorColor:
+                                    AppDarkColor().iconSecondarycolor,
+                                tabs: const [
+                                  // UserTab(
+                                  //     icon: Icons.add_photo_alternate_rounded,
+                                  //     tabTitle: 'Media'),
+                                  // UserTab(
+                                  //     icon: Icons.add_to_photos_sharp,
+                                  //     tabTitle: 'Posts')
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      // TabBarView for displaying content of each tab
-                      Expanded(
-                        child: TabBarView(
-                          children: [
-                            BlocBuilder<GetOtherUserPostsCubit,
-                                GetOtherUserPostsState>(
-                              builder: (context, state) {
-                                if (state is GetOtherUserPostsSuccess) {
-                                  return MediaGrid(
-                                      medias: state.userAllPostImages);
-                                }
-                                return GridView.builder(
-                                    itemCount: 5,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2),
-                                    itemBuilder: (context, index) =>
-                                        Shimmer.fromColors(
-                                          baseColor: AppDarkColor()
-                                              .secondaryBackground,
-                                          highlightColor:
-                                              AppDarkColor().softBackground,
-                                          child: Container(
-                                            color: Colors.grey,
-                                            margin: const EdgeInsets.all(8.0),
-                                          ),
-                                        ));
-                              },
-                            ),
-                            PostsTab(),
-                          ],
+                        // TabBarView for displaying content of each tab
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              BlocBuilder<GetOtherUserPostsCubit,
+                                  GetOtherUserPostsState>(
+                                builder: (context, state) {
+                                  if (state is GetOtherUserPostsSuccess) {
+                                    return MediaGrid(
+                                        medias: state.userAllPostImages);
+                                  }
+                                  return GridView.builder(
+                                      itemCount: 5,
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2),
+                                      itemBuilder: (context, index) =>
+                                          Shimmer.fromColors(
+                                            baseColor: AppDarkColor()
+                                                .secondaryBackground,
+                                            highlightColor:
+                                                AppDarkColor().softBackground,
+                                            child: Container(
+                                              color: Colors.grey,
+                                              margin: const EdgeInsets.all(8.0),
+                                            ),
+                                          ));
+                                },
+                              ),
+                              PostsTab(),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }
-                return EmptyDisplay();
-              },
-            ),
-          )),
+                      ],
+                    );
+                  }
+                  return EmptyDisplay();
+                },
+              ),
+            )),
+      ),
     );
   }
 }

@@ -9,6 +9,7 @@ class CreateTextStatusBackground extends StatelessWidget {
   final SelectColorCubit colorCubit;
   final TextEditingController captionController;
   @override
+  //shows the background based on the color selected
   Widget build(BuildContext context) {
     return Container(
       color: colorCubit.color,

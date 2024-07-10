@@ -11,4 +11,6 @@ class MyAppRouteConst {
   static const String interestSelectRoute = 'InterestSelctingPage';
   static const String locationPageRoute = 'locationPage';
   static const String profileLoadingRouter = 'profileLoadingPage';
+  static const String mediaPickerRoute = 'mediaPickerPage';
+  
 }

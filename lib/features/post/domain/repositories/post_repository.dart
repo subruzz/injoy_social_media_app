@@ -1,4 +1,3 @@
-
 import 'package:fpdart/fpdart.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/errors/failure.dart';
@@ -11,8 +10,12 @@ abstract interface class PostRepository {
       PostEntity post, List<AssetEntity> postImage);
   Future<Either<Failure, List<PostEntity>>> getAllPosts(String uid);
   Future<Either<Failure, PostEntity>> updatePost(
-      UpdatePostEntity post,String postId,);
+    UpdatePostEntity post,
+    String postId,
+  );
   Future<Either<Failure, Unit>> deletePost(String postId);
-  Future<Either<Failure, Unit>> likePost(String postId);
+  Future<Either<Failure, Unit>> likePost(String postId, String currentUserUid);
+  Future<Either<Failure, Unit>> unLikePost(
+      String postId, String currentUserUid);
   Future<Either<Failure, List<HashTag>>> searchHashTags(String query);
 }

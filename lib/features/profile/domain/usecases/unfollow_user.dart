@@ -12,7 +12,8 @@ class UnfollowUserUseCase implements UseCase<Unit, UnfollowUserUseCaseParms> {
       : _otherUserRepository = userProfileRepository;
   @override
   Future<Either<Failure, Unit>> call(UnfollowUserUseCaseParms params) async {
-    return await _otherUserRepository.unfollowUser(params.myUid,params.otherUserUid);
+    return await _otherUserRepository.unfollowUser(
+        params.myUid, params.otherUserUid, );
   }
 }
 

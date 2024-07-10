@@ -22,7 +22,9 @@ abstract interface class PostRemoteDatasource {
     String pId,
   );
   Future<void> deletePost(String postId);
-  Future<void> likePost(String postId);
+  Future<void> likePost(String postId, String currentUserUid);
+  Future<void> unLikePost(String postId, String currentUserUid);
+
   Future<String?> getCurrentUserId();
   Future<List<HashTag>> searchHashTags(String query);
   Future<List<String>> uploadPostImages(
@@ -114,23 +116,21 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   }
 
   @override
-  Future<void> likePost(String postId) async {
+  Future<void> unLikePost(String postId, String currentUserUid) async {
+    final postCollection = FirebaseFirestore.instance.collection('posts');
+
+    await postCollection.doc(postId).update(({
+          'likes': FieldValue.arrayRemove([currentUserUid])
+        }));
+  }
+
+  @override
+  Future<void> likePost(String postId, String currentUserUid) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
     try {
-      final currentUserUid = await getCurrentUserId();
-      final postRef = await postCollection.doc(postId).get();
-      if (postRef.exists) {
-        List likes = postRef.get('likes');
-        if (likes.contains(currentUserUid)) {
-          postCollection.doc(postId).update({
-            'likes': FieldValue.arrayRemove([currentUserUid])
-          });
-        } else {
-          postCollection.doc(postId).update({
+      await postCollection.doc(postId).update(({
             'likes': FieldValue.arrayUnion([currentUserUid])
-          });
-        }
-      }
+          }));
     } catch (e) {
       throw MainException(errorMsg: e.toString());
     }

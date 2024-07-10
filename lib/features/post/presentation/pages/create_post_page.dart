@@ -20,7 +20,11 @@ import 'package:social_media_app/features/post/presentation/widgets/post_feeds_o
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 
 class CreatePostScreen extends StatefulWidget {
-  const CreatePostScreen({super.key,});
+  const CreatePostScreen({
+    super.key,
+    required this.selectedImages,
+  });
+  final List<AssetEntity> selectedImages;
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();
 }
@@ -31,7 +35,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final _selectTagsCubit = GetIt.instance<SelectTagsCubit>();
   final PageController _pageController = PageController();
   final _debouncer = Debouncer(delay: const Duration(milliseconds: 1000));
-  final ValueNotifier<List<AssetEntity>> _selectedAssets = ValueNotifier([]);
 
   @override
   void dispose() {
@@ -55,7 +58,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               context.read<CreatePostBloc>().add(CreatePostClickEvent(
                   isCommentOff: isCommentOff.value,
                   userFullName: appUser.fullName ?? '',
-                  postPics: _selectedAssets.value,
+                  postPics: widget.selectedImages,
                   creatorUid: appUser.id,
                   username: appUser.userName ?? '',
                   description: _descriptionController.text.trim().isEmpty
@@ -108,18 +111,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SelectedAssetsPageView(
+                SelectedAssetsSection(
                     isPost: true,
                     pageController: _pageController,
-                    selectedAssets: _selectedAssets),
+                    selectedAssets: widget.selectedImages),
                 Center(
                   child: SelectedAssetsIndicator(
                       isPost: true,
                       pageController: _pageController,
-                      selectedAssets: _selectedAssets),
+                      selectedAssets: widget.selectedImages),
                 ),
                 PostAttributesSelect(
-                    selectedAssets: _selectedAssets,
                     descriptionController: _descriptionController),
                 AppSizedBox.sizedBox20H,
                 SelectedHashtags(selectTagsCubit: _selectTagsCubit),

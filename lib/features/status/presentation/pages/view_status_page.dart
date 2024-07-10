@@ -4,7 +4,6 @@ import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/features/status/presentation/bloc/delete_status/delete_status_bloc.dart';
-import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/widgets/view_status/status_delete_popup.dart';
 import 'package:social_media_app/features/status/presentation/widgets/view_status/status_info.dart';
 import 'package:social_media_app/features/status/presentation/widgets/view_status/story_items.dart';
@@ -52,7 +51,7 @@ class _MoreStoriesState extends State<ViewStatusPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<AppUserBloc>().appUser!;
+    final user = context.read<AppUserBloc>().appUser;
     return GestureDetector(
         onVerticalDragEnd: (details) {
           if (details.primaryVelocity! > 0) {

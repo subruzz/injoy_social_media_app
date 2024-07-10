@@ -25,7 +25,7 @@ class OtherUserProfileRepositoryImpl implements OtherUserRepository {
 
   @override
   Future<Either<Failure, Unit>> followUser(
-      String currentUid, String otherUid) async {
+      String currentUid, String otherUid,) async {
     try {
       await _otherUserDataSource.followUser(currentUid, otherUid);
       return right(unit);
@@ -36,9 +36,9 @@ class OtherUserProfileRepositoryImpl implements OtherUserRepository {
 
   @override
   Future<Either<Failure, Unit>> unfollowUser(
-      String currentUid, String otherUid) async {
+      String currentUid, String otherUid, ) async {
     try {
-      await _otherUserDataSource.unfollowUser(currentUid, otherUid);
+      await _otherUserDataSource.unfollowUser(currentUid, otherUid, );
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

@@ -17,18 +17,18 @@ class UserProfile extends StatelessWidget {
             backgroundImage: profileImage != null
                 ? NetworkImage(profileImage!)
                 : const AssetImage('assets/images/profile_icon.png')),
-        Positioned(
-          right: 20,
-          bottom: 0,
-          child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => EditProfilePage(
-                      appUser: context.read<AppUserBloc>().appUser!),
-                ));
-              },
-              child: const EditProfileIcon()),
-        ),
+        // Positioned(
+        //   right: 10,
+        //   bottom: 0,
+        //   child: GestureDetector(
+        //       onTap: () {
+        //         Navigator.of(context).push(MaterialPageRoute(
+        //           builder: (context) => EditProfilePage(
+        //               appUser: context.read<AppUserBloc>().appUser!),
+        //         ));
+        //       },
+        //       child: const EditProfileIcon()),
+        // ),
       ],
     );
   }

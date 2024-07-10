@@ -2,8 +2,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/features/post/data/datasources/local/asset_local_source.dart';
-import 'package:social_media_app/features/post/domain/repositories/asset_repository.dart';
+import 'package:social_media_app/features/assets/domain/repository/asset_repository.dart';
+import 'package:social_media_app/features/assets/data/datasource/asset_local_datasource.dart';
 
 class AssetRepositoryImpl implements AssetRepository {
   final AssetLocalSource _assetLocalSource;

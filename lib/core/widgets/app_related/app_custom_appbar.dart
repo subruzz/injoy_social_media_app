@@ -1,8 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/widgets/app_bar_common_icon.dart';
 
 class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   AppCustomAppbar({
@@ -36,11 +35,7 @@ class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(
-                  leadingIcon ?? Icons.close,
-                  size: 30.w,
-                  color: AppDarkColor().iconPrimaryColor,
-                ))
+                icon: AppBarCommonIcon(icon: leadingIcon))
             : null);
   }
 

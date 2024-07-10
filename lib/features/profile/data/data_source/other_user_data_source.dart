@@ -22,7 +22,6 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
   @override
   Future<AppUser> getOtherUserProfile(String uid) async {
     try {
-      
       DocumentSnapshot docSnapshot = await _firebaseFirestore
           .collection(FirebaseCollectionConst.users)
           .doc(uid)
@@ -42,6 +41,8 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
   @override
   Future<void> followUser(String currentUid, String otherUid) async {
     try {
+      throw Exception();
+
       // await Future.delayed(Duration(seconds: 2));
       // throw Exception();
       await _firebaseFirestore
@@ -55,6 +56,27 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
           .doc(currentUid)
           .update({
         'following': FieldValue.arrayUnion([otherUid])
+      });
+    } catch (e) {
+      throw MainException(errorMsg: e.toString());
+    }
+  }
+
+  @override
+  Future<void> unfollowUser(String currentUid, String otherUid) async {
+    try {
+      throw Exception();
+      await _firebaseFirestore
+          .collection(FirebaseCollectionConst.users)
+          .doc(otherUid)
+          .update({
+        'followers': FieldValue.arrayRemove([currentUid])
+      });
+      await _firebaseFirestore
+          .collection(FirebaseCollectionConst.users)
+          .doc(currentUid)
+          .update({
+        'following': FieldValue.arrayRemove([otherUid])
       });
     } catch (e) {
       throw MainException(errorMsg: e.toString());
@@ -83,28 +105,6 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
       return (userPosts: userAllPosts, userPostImages: postImages);
     } catch (e) {
       throw const MainException(errorMsg: 'Error while loading the posts!');
-    }
-  }
-
-  @override
-  Future<void> unfollowUser(String currentUid, String otherUid) async {
-    try {
-      // await Future.delayed(Duration(seconds: 2));
-      // throw Exception();
-      await _firebaseFirestore
-          .collection(FirebaseCollectionConst.users)
-          .doc(otherUid)
-          .update({
-        'followers': FieldValue.arrayRemove([currentUid])
-      });
-      await _firebaseFirestore
-          .collection(FirebaseCollectionConst.users)
-          .doc(currentUid)
-          .update({
-        'following': FieldValue.arrayRemove([otherUid])
-      });
-    } catch (e) {
-      throw MainException(errorMsg: e.toString());
     }
   }
 }

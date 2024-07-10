@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,14 +36,14 @@ class HomePage extends StatelessWidget {
                     ?.copyWith(letterSpacing: 5),
               ),
               actions: [
-                if (context.read<AppUserBloc>().appUser!.profilePic != null)
+                if (context.read<AppUserBloc>().appUser.profilePic != null)
                   Padding(
                     padding: const EdgeInsets.only(right: 10.0),
                     child: CircleAvatar(
                         backgroundColor: AppDarkColor().background,
                         radius: 23,
                         backgroundImage: CachedNetworkImageProvider(
-                            context.read<AppUserBloc>().appUser!.profilePic!)),
+                            context.read<AppUserBloc>().appUser.profilePic!)),
                   )
               ],
             ),
@@ -61,11 +63,11 @@ class HomePage extends StatelessWidget {
                   return CircularLoading();
                 }
                 if (state is FollowingPostFeedSuccess) {
+                  log('success satetaefo posts ${state.followingPosts.length}');
                   return SliverList.builder(
                     itemCount: state.followingPosts.length,
                     itemBuilder: (context, index) {
                       final currentPost = state.followingPosts[index];
-                      print(currentPost.likes.length);
                       return EachPost(currentPost: currentPost);
                     },
                   );

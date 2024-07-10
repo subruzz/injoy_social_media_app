@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/features/post/domain/usecases/get_assets.dart';
+import 'package:social_media_app/features/assets/domain/usecae/get_assets.dart';
 
 part 'assets_event.dart';
 part 'assets_state.dart';

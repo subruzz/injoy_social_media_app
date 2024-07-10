@@ -41,7 +41,7 @@ class MultipleStatusInputBar extends StatelessWidget {
                   hintText: 'Add a caption...',
                   onChanged: onCaptionChanged,
                   prefixIcon: const Icon(Icons.photo_library),
-                  leadingPressed: () => leadingIconPressed),
+                  leadingPressed:  leadingIconPressed),
             ),
             const SizedBox(width: 10),
             BlocConsumer<StatusBloc, StatusState>(
@@ -61,9 +61,9 @@ class MultipleStatusInputBar extends StatelessWidget {
                   Navigator.pop(context);
                 }
               },
-              buildWhen: (previous, current) {
-               return  current is StatusCreateLoading;
-              },
+              // buildWhen: (previous, current) {
+              //  return  current is StatusCreateLoading;
+              // },
               builder: (context, state) {
                 if (state is StatusCreateLoading) {
                   return Padding(
@@ -74,7 +74,7 @@ class MultipleStatusInputBar extends StatelessWidget {
                 return CustomRoundButton(
                     icon: Icons.send,
                     onPressed: () {
-                      final user = context.read<AppUserBloc>().appUser!;
+                      final user = context.read<AppUserBloc>().appUser;
                       context.read<StatusBloc>().add(CreateMultipleStatusEvent(
                           userId: user.id,
                           userName: user.userName ?? '',

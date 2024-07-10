@@ -1,7 +1,7 @@
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 
 class AppUserModel extends AppUser {
-  const AppUserModel({
+   AppUserModel({
     required super.id,
     required super.email,
     required super.hasPremium,
@@ -15,11 +15,13 @@ class AppUserModel extends AppUser {
     super.location,
     super.latitude,
     super.longitude,
-    super.followers,
-    super.following,
+    required super.followersCount,
+    required super.followingCount,
+    // super.followers,
+    // super.following,
     super.posts,
     super.interests,
-   super.viewedSetupIndex,
+    super.viewedSetupIndex,
   });
 
   // AppUserModel copyWith({
@@ -66,6 +68,8 @@ class AppUserModel extends AppUser {
     return AppUserModel(
       viewedSetupIndex: json['viewedSetupIndex'],
       id: json['id'],
+      followersCount: json['followersCount'],
+      followingCount: json['followingCount'],
       email: json['email'],
       hasPremium: json['hasPremium'],
       fullName: json['fullName'],
@@ -78,8 +82,8 @@ class AppUserModel extends AppUser {
       location: json['location'],
       latitude: json['latitude'],
       longitude: json['longitude'],
-      followers: List<String>.from(json['followers'] ?? []),
-      following: List<String>.from(json['following'] ?? []),
+      // followers: List<String>.from(json['followers'] ?? []),
+      // following: List<String>.from(json['following'] ?? []),
       posts: List<String>.from(json['posts'] ?? []),
       interests: List<String>.from(json['interests'] ?? []),
     );
@@ -101,8 +105,10 @@ class AppUserModel extends AppUser {
       'location': location,
       'latitude': latitude,
       'longitude': longitude,
-      'followers': followers,
-      'following': following,
+      'followersCount': followersCount,
+      'followingCount': followingCount,
+      // 'followers': followers,
+      // 'following': following,
       'posts': posts,
       'interests': interests,
     };

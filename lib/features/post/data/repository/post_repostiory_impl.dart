@@ -45,16 +45,6 @@ class PostRepostioryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> likePost(String postId) async {
-    try {
-      await _postRemoteDatasource.likePost(postId);
-      return right(unit);
-    } on MainException catch (e) {
-      return left(Failure(e.errorMsg));
-    }
-  }
-
-  @override
   Future<Either<Failure, List<HashTag>>> searchHashTags(String query) async {
     try {
       final result = await _postRemoteDatasource.searchHashTags(query);
@@ -66,10 +56,34 @@ class PostRepostioryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, PostEntity>> updatePost(
-      UpdatePostEntity post, String postId, ) async {
+    UpdatePostEntity post,
+    String postId,
+  ) async {
     try {
-    final res=  await _postRemoteDatasource.updatePost(post, postId);
+      final res = await _postRemoteDatasource.updatePost(post, postId);
       return right(res);
+    } on MainException catch (e) {
+      return left(Failure(e.errorMsg));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> likePost(
+      String postId, String currentUserUid) async {
+    try {
+      await _postRemoteDatasource.likePost(postId, currentUserUid);
+      return right(unit);
+    } on MainException catch (e) {
+      return left(Failure(e.errorMsg));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> unLikePost(
+      String postId, String currentUserUid) async {
+    try {
+      await _postRemoteDatasource.unLikePost(postId, currentUserUid);
+      return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
     }

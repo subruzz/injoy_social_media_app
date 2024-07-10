@@ -13,11 +13,12 @@ class LikePostsUseCase implements UseCase<Unit, LikePostsUseCaseParams> {
       : _postRepository = postRepository;
   @override
   Future<Either<Failure, Unit>> call(params) async {
-    return await _postRepository.likePost(params.postId);
+    return await _postRepository.likePost(params.postId, params.currentUserId);
   }
 }
 
 class LikePostsUseCaseParams {
   final String postId;
-  LikePostsUseCaseParams({required this.postId});
+  final String currentUserId;
+  LikePostsUseCaseParams({required this.postId, required this.currentUserId});
 }

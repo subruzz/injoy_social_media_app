@@ -9,14 +9,14 @@ class UserSocialAttribute extends StatelessWidget {
     required this.attribute,
     required this.attributeName,
   });
-  final List<String> attribute;
+  final int attribute;
   final String attributeName;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ProfileUserDetailText(
-          fullName: attribute.length.toString(),
+          fullName: attribute.toString(),
           style: Theme.of(context).textTheme.titleSmall,
         ),
         ProfileUserDetailText(
