@@ -63,7 +63,7 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
                           }
                         },
                         icon: Icon(
-                          Icons.arrow_right_alt,
+                          Icons.arrow_circle_right_outlined,
                           size: 40.w,
                           color: AppDarkColor().iconSecondarycolor,
                         ))

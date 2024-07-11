@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/post/domain/enitities/update_post.dart';
-import 'package:social_media_app/features/post/domain/usecases/update_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/update_post.dart';
 
 part 'update_post_event.dart';
 part 'update_post_state.dart';

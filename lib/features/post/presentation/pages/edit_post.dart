@@ -10,12 +10,12 @@ import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
 import 'package:social_media_app/core/widgets/post/post_single_image.dart';
-import 'package:social_media_app/features/post/presentation/bloc/select_tags_cubit/select_tags_cubit.dart';
-import 'package:social_media_app/features/post/presentation/bloc/update_post/update_post_bloc.dart';
-import 'package:social_media_app/features/post/presentation/widgets/create_post/description_textfield.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/select_tags_cubit/select_tags_cubit.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/update_post/update_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/widgets/create_post_input_section/widget/description_textfield.dart';
 import 'package:social_media_app/features/post/presentation/widgets/edit_post/edit_screen_feed_option.dart';
-import 'package:social_media_app/features/post/presentation/widgets/hashtags/select_hashtag.dart';
-import 'package:social_media_app/features/post/presentation/widgets/hashtags/selected_hashtags.dart';
+import 'package:social_media_app/features/post/presentation/widgets/hashtag_section/widget/select_hashtag.dart';
+import 'package:social_media_app/features/post/presentation/widgets/hashtag_section/widget/selected_hashtags.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 
 class EditPostPage extends StatefulWidget {
@@ -150,6 +150,7 @@ class _EditPostPageState extends State<EditPostPage> {
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: DescriptionTextfield(
+                  onChanged: (value) {},
                   descriptionController: _descriptionController),
             ),
             Padding(
@@ -161,7 +162,6 @@ class _EditPostPageState extends State<EditPostPage> {
               children: [
                 SelectHashtag(
                     selectTagsCubit: _selectTagsCubit,
-                    debouncer: _debouncer,
                     hashtagcontroller: _hashtagcontroller),
               ],
             ),

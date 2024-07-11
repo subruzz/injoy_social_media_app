@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 class DescriptionTextfield extends StatelessWidget {
-  const DescriptionTextfield({super.key, required this.descriptionController});
+  const DescriptionTextfield(
+      {super.key,
+      required this.descriptionController,
+      required this.onChanged});
   final TextEditingController descriptionController;
+  final  Function(String value) onChanged;
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -14,6 +18,9 @@ class DescriptionTextfield extends StatelessWidget {
         filled: false,
       ),
       maxLines: null,
+      onChanged: (value) {
+        onChanged(value);
+      },
       style: Theme.of(context).textTheme.bodyMedium,
     );
   }

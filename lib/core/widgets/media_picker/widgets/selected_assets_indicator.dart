@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
-import 'package:social_media_app/features/post/presentation/widgets/select_post/page_view_indicator.dart';
+import 'package:social_media_app/core/widgets/page_view_indicator.dart';
 
 class SelectedAssetsIndicator extends StatelessWidget {
   const SelectedAssetsIndicator(

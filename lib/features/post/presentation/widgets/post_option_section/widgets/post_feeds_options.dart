@@ -17,7 +17,7 @@ class PostFeedsOptions extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        color: AppDarkColor().iconPrimaryColor,
+        color: AppDarkColor().iconSoftColor,
       ),
       title: Text(text),
       trailing: isComment

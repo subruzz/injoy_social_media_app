@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';
-import 'package:social_media_app/features/post/domain/usecases/searh_hashtag.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/searh_hashtag.dart';
 
 part 'search_hashtag_event.dart';
 part 'search_hashtag_state.dart';

@@ -13,16 +13,9 @@ class SelectedAssetsSection extends StatelessWidget {
   final bool isPost;
   @override
   Widget build(BuildContext context) {
-    return !isPost
-        ? CustomPageView(
-            pageController: pageController,
-            selectedStatusAssets: selectedAssets,
-          )
-        : Expanded(
-            child: CustomPageView(
-              pageController: pageController,
-              selectedStatusAssets: selectedAssets,
-            ),
-          );
+    return CustomPageView(
+      pageController: pageController,
+      selectedStatusAssets: selectedAssets,
+    );
   }
 }

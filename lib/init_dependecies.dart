@@ -23,25 +23,34 @@ import 'package:social_media_app/features/auth/presentation/bloc/forgot_password
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/post/data/datasources/remote/comment_remote_datasource.dart';
 import 'package:social_media_app/features/post/data/datasources/remote/post_remote_datasource.dart';
+import 'package:social_media_app/features/post/data/repository/comment_repository_impl.dart';
 import 'package:social_media_app/features/post/data/repository/post_repostiory_impl.dart';
+import 'package:social_media_app/features/post/domain/repositories/comment_repository.dart';
 import 'package:social_media_app/features/post/domain/repositories/post_repository.dart';
-import 'package:social_media_app/features/post/domain/usecases/create_posts.dart';
-import 'package:social_media_app/features/post/domain/usecases/delete_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/comment/create_comment_usecase.dart';
+import 'package:social_media_app/features/post/domain/usecases/comment/delete_comment.dart';
+import 'package:social_media_app/features/post/domain/usecases/comment/read_comment.dart';
+import 'package:social_media_app/features/post/domain/usecases/comment/update_comment.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/create_posts.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/delete_post.dart';
 import 'package:social_media_app/features/assets/domain/usecae/get_albums.dart';
 import 'package:social_media_app/features/assets/domain/usecae/get_assets.dart';
-import 'package:social_media_app/features/post/domain/usecases/like_post.dart';
-import 'package:social_media_app/features/post/domain/usecases/searh_hashtag.dart';
-import 'package:social_media_app/features/post/domain/usecases/unlike_post.dart';
-import 'package:social_media_app/features/post/domain/usecases/update_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/like_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/searh_hashtag.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/unlike_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/update_post.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/album_bloc/album_bloc.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/assets_bloc/assets_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/create_post/create_post_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/delte_post/delete_post_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/like_post/like_post_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/select_tags_cubit/select_tags_cubit.dart';
-import 'package:social_media_app/features/post/presentation/bloc/update_post/update_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
+import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/get_post_comment/get_post_comment_cubit.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/like_post/like_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/search_hashtag/search_hashtag_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/select_tags_cubit/select_tags_cubit.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/update_post/update_post_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/data/datasource/status_feed_remote_datasource.dart';
 import 'package:social_media_app/features/post_status_feed/data/repository/status_feed_repository_impl.dart';
 import 'package:social_media_app/features/post_status_feed/domain/repositories/status_feed_repository.dart';
@@ -103,6 +112,7 @@ Future<void> initDependencies() async {
   _getUserPosts();
   _postFeed();
   _statusCreation();
+  _comment();
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(),
   );
@@ -288,6 +298,28 @@ void _postFeed() {
     ..registerFactory(() => GetAllStatusesUseCase(repository: serviceLocator()))
     ..registerLazySingleton(
         () => GetAllStatusBloc(getAllStatusesUseCase: serviceLocator()));
+}
+
+void _comment() {
+  serviceLocator
+    ..registerFactory<CommentRemoteDatasource>(() =>
+        CommentRemoteDatasourceImpl(
+            firebaseFirestore: FirebaseFirestore.instance))
+    ..registerFactory<CommentRepository>(
+        () => CommentRepositoryImpl(commentRemoteDatasource: serviceLocator()))
+    ..registerFactory(
+        () => CreateCommentUsecase(commentRepository: serviceLocator()))
+    ..registerFactory(
+        () => UpdateCommentUseCase(commentRepository: serviceLocator()))
+    ..registerFactory(
+        () => DeleteCommentUseCase(commentRepository: serviceLocator()))
+    ..registerFactory(
+        () => ReadCommentUseCase(commentRepository: serviceLocator()))
+    ..registerLazySingleton(() => GetPostCommentCubit(serviceLocator()))
+    ..registerLazySingleton(() => CommentBasicCubit(
+        createCommentUsecase: serviceLocator(),
+        updateCommentUseCase: serviceLocator(),
+        deleteCommentUseCase: serviceLocator()));
 }
 
 void _statusCreation() {

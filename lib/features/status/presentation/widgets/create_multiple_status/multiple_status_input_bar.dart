@@ -9,7 +9,7 @@ import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_b
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/textfields/content_input_textfield.dart';
-import 'package:social_media_app/features/post/presentation/widgets/custom_round_button.dart';
+import 'package:social_media_app/core/widgets/custom_round_button.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 
 class MultipleStatusInputBar extends StatelessWidget {

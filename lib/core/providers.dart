@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
+import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/get_post_comment/get_post_comment_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_profile/other_profile_cubit.dart';
 import 'package:social_media_app/init_dependecies.dart';
@@ -15,11 +17,11 @@ import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/logi
 import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/album_bloc/album_bloc.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/assets_bloc/assets_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/create_post/create_post_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/delte_post/delete_post_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/like_post/like_post_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/update_post/update_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/like_post/like_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/search_hashtag/search_hashtag_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/update_post/update_post_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/add_interests/select_interest_cubit.dart';
 import 'package:social_media_app/features/status/presentation/bloc/delete_status/delete_status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
@@ -106,6 +108,12 @@ List<SingleChildWidget> myProviders = [
   ),
   BlocProvider(
     create: (context) => serviceLocator<GetAllStatusBloc>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<CommentBasicCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<GetPostCommentCubit>(),
   ),
   // BlocProvider(
   //   create: (context) => serviceLocator<OtherProfileCubit>(),

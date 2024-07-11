@@ -5,58 +5,57 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/const/messenger.dart';
-import 'package:social_media_app/features/post/presentation/bloc/search_hashtag/search_hashtag_bloc.dart';
-import 'package:social_media_app/features/post/presentation/pages/view_image.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/search_hashtag/search_hashtag_bloc.dart';
 
-class CreatePostImage extends StatelessWidget {
-  final File? selectedImage;
-  final String? alreadyImmage;
-  final void Function() onTap;
+// class CreatePostImage extends StatelessWidget {
+//   final File? selectedImage;
+//   final String? alreadyImmage;
+//   final void Function() onTap;
 
-  const CreatePostImage(
-      {super.key, this.selectedImage, required this.onTap, this.alreadyImmage});
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ViewImagePage(img: selectedImage!),
-            ));
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.file(
-              selectedImage!,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Positioned(
-          top: 8,
-          right: 8,
-          child: InkWell(
-            onTap: onTap,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.close,
-                size: 20,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
+//   const CreatePostImage(
+//       {super.key, this.selectedImage, required this.onTap, this.alreadyImmage});
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       fit: StackFit.expand,
+//       children: [
+//         GestureDetector(
+//           onTap: () {
+//             Navigator.of(context).push(MaterialPageRoute(
+//               builder: (context) => ViewImagePage(img: selectedImage!),
+//             ));
+//           },
+//           child: ClipRRect(
+//             borderRadius: BorderRadius.circular(8),
+//             child: Image.file(
+//               selectedImage!,
+//               fit: BoxFit.cover,
+//             ),
+//           ),
+//         ),
+//         Positioned(
+//           top: 8,
+//           right: 8,
+//           child: InkWell(
+//             onTap: onTap,
+//             child: Container(
+//               padding: const EdgeInsets.all(4),
+//               decoration: BoxDecoration(
+//                 color: Colors.black.withOpacity(0.5),
+//                 shape: BoxShape.circle,
+//               ),
+//               child: const Icon(
+//                 Icons.close,
+//                 size: 20,
+//                 color: Colors.white,
+//               ),
+//             ),
+//           ),
+//         )
+//       ],
+//     );
+//   }
+// }
 
 class SearchHashTagSheet extends StatelessWidget {
   const SearchHashTagSheet(

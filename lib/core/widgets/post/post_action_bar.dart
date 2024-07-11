@@ -1,74 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
-import 'package:social_media_app/core/widgets/post/post_attributes.dart';
-import 'package:social_media_app/features/post/presentation/bloc/like_post/like_post_bloc.dart';
-
-class PostActionBar extends StatelessWidget {
-  const PostActionBar({super.key, required this.post});
-  final PostEntity post;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        BlocBuilder<LikePostBloc, LikePostState>(
-          builder: (context, state) {
-            return PostAttributes(
-                onTap: () {
-                  // if (post.likes.contains(currentUserId)) {
-                  //   post.likes
-                  //       .removeWhere((element) => element == currentUserId);
-                  // } else {
-                  //   post.likes.add(currentUserId);
-                  // }
-                  // context
-                  //     .read<LikePostBloc>()
-                  //     .add(LikePostClickEvent(postId: post.postId));
-                },
-                icon: Icon(
-                  Icons.favorite,
-                  color: AppDarkColor().iconSecondarycolor,
-                ),
-                count: 0);
-          },
-        ),
-        AppSizedBox.sizedBox10W,
-        PostAttributes(
-          icon: Icon(
-            Icons.chat_bubble_outline,
-          ),
-          count: 2,
-          onTap: () {},
-        ),
-        Transform.rotate(
-          angle: 0,
-          child: IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.send_outlined,
-              size: 17,
-            ),
-            color: Colors.white,
-          ),
-        ),
-      ],
-    );
-  }
-}
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/like_post/like_post_bloc.dart';
 
 class SocialActions extends StatelessWidget {
-  const SocialActions({super.key, required this.post});
+  const SocialActions({super.key, required this.post, required this.likeAnim});
   final PostEntity post;
+  final VoidCallback likeAnim;
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +39,7 @@ class SocialActions extends StatelessWidget {
                                       postId: post.postId,
                                       currentUserId: appUser.id));
                             } else {
+                              likeAnim();
                               post.likes.add(appUser.id);
                               context.read<LikePostBloc>().add(
                                   LikePostClickEvent(

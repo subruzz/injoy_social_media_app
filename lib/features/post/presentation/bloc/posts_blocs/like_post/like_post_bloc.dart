@@ -3,8 +3,8 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/features/post/domain/usecases/like_post.dart';
-import 'package:social_media_app/features/post/domain/usecases/unlike_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/like_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/unlike_post.dart';
 
 part 'like_post_event.dart';
 part 'like_post_state.dart';

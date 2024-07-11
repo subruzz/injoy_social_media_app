@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/features/post/domain/usecases/delete_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/delete_post.dart';
 
 part 'delete_post_event.dart';
 part 'delete_post_state.dart';

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
-import 'package:social_media_app/features/post/domain/usecases/create_posts.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/create_posts.dart';
 import 'package:uuid/uuid.dart';
 
 part 'create_post_event.dart';

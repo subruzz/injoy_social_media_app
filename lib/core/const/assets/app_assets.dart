@@ -5,4 +5,7 @@ class AppAssetsConst {
   static const String googleLogo = 'assets/images/google.png';
   static const String location = 'assets/images/location_lottie.json';
   static const String buildProfile = 'assets/gifs/profile_building.gif';
+
+  //svgs
+  static const String closesqaure = 'assets/svgs/close_square.svg';
 }

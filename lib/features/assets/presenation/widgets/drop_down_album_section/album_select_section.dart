@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/album_bloc/album_bloc.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/assets_bloc/assets_bloc.dart';
@@ -32,24 +33,27 @@ class AlbumSelectSection extends StatelessWidget {
                         },
                         icon: const Icon(Icons.close)),
                   if (!isPost) AppSizedBox.sizedBox10W,
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton<AssetPathEntity>(
-                      isDense: true,
-                      value: value,
-                      style: Theme.of(context).textTheme.titleLarge,
-                      onChanged: (AssetPathEntity? value) {
-                        if (value != null) {
-                          context
-                              .read<AssetsBloc>()
-                              .add(GetAssetsEvent(selectedAlbum: value));
-                        }
-                        selectedAlbum.value = value;
-                      },
-                      items: state.allAlbums
-                          .map<DropdownMenuItem<AssetPathEntity>>((album) {
-                        return DropdownMenuItem(
-                            value: album, child: Text(album.name));
-                      }).toList(),
+                  Padding(
+                    padding: AppPadding.onlyLeftMedium,
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<AssetPathEntity>(
+                        isDense: true,
+                        value: value,
+                        style: Theme.of(context).textTheme.titleLarge,
+                        onChanged: (AssetPathEntity? value) {
+                          if (value != null) {
+                            context
+                                .read<AssetsBloc>()
+                                .add(GetAssetsEvent(selectedAlbum: value));
+                          }
+                          selectedAlbum.value = value;
+                        },
+                        items: state.allAlbums
+                            .map<DropdownMenuItem<AssetPathEntity>>((album) {
+                          return DropdownMenuItem(
+                              value: album, child: Text(album.name));
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ],

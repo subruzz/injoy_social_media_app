@@ -1,12 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/animation.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/messenger.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/post/post_action_bar.dart';
 import 'package:social_media_app/core/widgets/post/post_description.dart';
@@ -14,11 +12,9 @@ import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/core/widgets/post/post_hashtag.dart';
 import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
 import 'package:social_media_app/core/widgets/post/post_option_button.dart';
-import 'package:social_media_app/features/post/presentation/bloc/like_post/like_post_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_owner_username.dart';
 import 'package:social_media_app/core/widgets/post/post_single_image.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_time.dart';
-import 'package:social_media_app/features/post/presentation/pages/view_post.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
 
@@ -96,18 +92,18 @@ class _EachPostState extends State<EachPost> {
               AppSizedBox.sizedBox5W,
               GestureDetector(
                 // onDoubleTap: () {
-                  // final currentUserId = context.read<AppUserBloc>().appUser.id;
+                // final currentUserId = context.read<AppUserBloc>().appUser.id;
 
-                  // setState(() {
-                  //   _isAnimating = true;
-                  //   if (!widget.currentPost.likes.contains(currentUserId)) {
-                  //     widget.currentPost.likes.add(currentUserId);
-                  //     context.read<LikePostBloc>().add(LikePostClickEvent(
-                  //         postId: widget.currentPost.postId,
-                  //         currentUserId:
-                  //             context.read<AppUserBloc>().appUser.id));
-                  //   }
-                  // });
+                // setState(() {
+                //   _isAnimating = true;
+                //   if (!widget.currentPost.likes.contains(currentUserId)) {
+                //     widget.currentPost.likes.add(currentUserId);
+                //     context.read<LikePostBloc>().add(LikePostClickEvent(
+                //         postId: widget.currentPost.postId,
+                //         currentUserId:
+                //             context.read<AppUserBloc>().appUser.id));
+                //   }
+                // });
                 // },
                 onTap: () async {
                   // context
@@ -146,6 +142,11 @@ class _EachPostState extends State<EachPost> {
                     Align(
                         alignment: Alignment.centerRight,
                         child: SocialActions(
+                          likeAnim: () {
+                            setState(() {
+                              _isAnimating = true;
+                            });
+                          },
                           post: widget.currentPost,
                         )),
                   ],

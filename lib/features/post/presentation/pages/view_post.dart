@@ -84,7 +84,7 @@ class ViewPost extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(post.createAt.toDate().toCustomFormat()),
-                       PostActionBar(post: post,),
+                      //  PostActionBar(post: post,),
                     ],
                   ),
                   const Divider(),
