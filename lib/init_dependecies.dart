@@ -23,6 +23,17 @@ import 'package:social_media_app/features/auth/presentation/bloc/forgot_password
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/explore/data/datasource/explore_app_datasource.dart';
+import 'package:social_media_app/features/explore/data/repository/explore_app_repo_impl.dart';
+import 'package:social_media_app/features/explore/domain/repositories/explore_app_repository.dart';
+import 'package:social_media_app/features/explore/domain/usecases/get_recommended_post.dart';
+import 'package:social_media_app/features/explore/domain/usecases/search_hash_tags.dart';
+import 'package:social_media_app/features/explore/domain/usecases/search_locations_explore.dart';
+import 'package:social_media_app/features/explore/domain/usecases/search_user.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/get_recommended_post/get_recommended_post_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
 import 'package:social_media_app/features/post/data/datasources/remote/comment_remote_datasource.dart';
 import 'package:social_media_app/features/post/data/datasources/remote/post_remote_datasource.dart';
 import 'package:social_media_app/features/post/data/repository/comment_repository_impl.dart';
@@ -31,7 +42,9 @@ import 'package:social_media_app/features/post/domain/repositories/comment_repos
 import 'package:social_media_app/features/post/domain/repositories/post_repository.dart';
 import 'package:social_media_app/features/post/domain/usecases/comment/create_comment_usecase.dart';
 import 'package:social_media_app/features/post/domain/usecases/comment/delete_comment.dart';
+import 'package:social_media_app/features/post/domain/usecases/comment/like_comment.dart';
 import 'package:social_media_app/features/post/domain/usecases/comment/read_comment.dart';
+import 'package:social_media_app/features/post/domain/usecases/comment/remove_like_comment.dart';
 import 'package:social_media_app/features/post/domain/usecases/comment/update_comment.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/create_posts.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/delete_post.dart';
@@ -45,6 +58,7 @@ import 'package:social_media_app/features/assets/presenation/bloc/album_bloc/alb
 import 'package:social_media_app/features/assets/presenation/bloc/assets_bloc/assets_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/get_post_comment/get_post_comment_cubit.dart';
+import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/like_comment/like_comment_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/like_post/like_post_bloc.dart';
@@ -113,6 +127,7 @@ Future<void> initDependencies() async {
   _postFeed();
   _statusCreation();
   _comment();
+  _exploreApp();
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(),
   );
@@ -315,6 +330,12 @@ void _comment() {
         () => DeleteCommentUseCase(commentRepository: serviceLocator()))
     ..registerFactory(
         () => ReadCommentUseCase(commentRepository: serviceLocator()))
+    ..registerFactory(
+        () => LikeCommentUseCase(commentRepository: serviceLocator()))
+    ..registerFactory(
+        () => RemoveLikeCommentUseCase(commentRepository: serviceLocator()))
+    ..registerLazySingleton(
+        () => LikeCommentCubit(serviceLocator(), serviceLocator()))
     ..registerLazySingleton(() => GetPostCommentCubit(serviceLocator()))
     ..registerLazySingleton(() => CommentBasicCubit(
         createCommentUsecase: serviceLocator(),
@@ -345,4 +366,24 @@ void _statusCreation() {
         seeenStatusUpdateUseCase: serviceLocator(),
         createMultipleStatusUseCase: serviceLocator())))
     ..registerLazySingleton(() => SelectColorCubit());
+}
+
+void _exploreApp() {
+  serviceLocator
+    ..registerFactory<ExploreAppDatasource>(() =>
+        ExploreAppDatasourceImpl(firebaseFirestore: FirebaseFirestore.instance))
+    ..registerFactory<ExploreAppRepository>(
+        () => ExploreAppRepoImpl(exploreAppDatasource: serviceLocator()))
+    ..registerFactory(
+        () => SearchUserUseCase(exploreAppRepository: serviceLocator()))
+    ..registerLazySingleton(() => SearchUserCubit(serviceLocator()))
+    ..registerFactory(
+        () => SearchHashTagsUseCase(exploreAppRepository: serviceLocator()))
+    ..registerLazySingleton(() => SearchHashTagCubit(serviceLocator()))
+    ..registerFactory(
+        () => GetRecommendedPostUseCase(exploreAppRepository: serviceLocator()))
+    ..registerLazySingleton(() => GetRecommendedPostCubit(serviceLocator()))
+    ..registerFactory(() =>
+        SearchLocationsExploreUseCase(exploreAppRepository: serviceLocator()))
+    ..registerLazySingleton(() => SearchLocationExploreCubit(serviceLocator()));
 }

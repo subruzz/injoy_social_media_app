@@ -12,10 +12,12 @@ class CommentModel extends CommentEntity {
     required super.userProfile,
     required super.createdAt,
     required super.likes,
+    required super.isEdited,
   });
 
   factory CommentModel.fromJson(Map<String, dynamic> json) {
     return CommentModel(
+      isEdited: json['isEdited'] as bool,
       comment: json['comment'] as String,
       creatorId: json['creatorId'] as String,
       userName: json['userName'] as String,
@@ -30,6 +32,7 @@ class CommentModel extends CommentEntity {
 
   Map<String, dynamic> toJson() {
     return {
+      'isEdited': isEdited,
       'comment': comment,
       'creatorId': creatorId,
       'userName': userName,
@@ -44,6 +47,7 @@ class CommentModel extends CommentEntity {
 
   static CommentModel fromEntity(CommentEntity entity) {
     return CommentModel(
+      isEdited: entity.isEdited,
       comment: entity.comment,
       creatorId: entity.creatorId,
       userName: entity.userName,

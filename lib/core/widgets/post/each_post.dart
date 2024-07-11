@@ -12,6 +12,7 @@ import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/core/widgets/post/post_hashtag.dart';
 import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
 import 'package:social_media_app/core/widgets/post/post_option_button.dart';
+import 'package:social_media_app/features/post/presentation/pages/view_post.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_owner_username.dart';
 import 'package:social_media_app/core/widgets/post/post_single_image.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_time.dart';
@@ -63,9 +64,29 @@ class _EachPostState extends State<EachPost> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircularUserProfile(
-                    profile: widget.currentPost.userProfileUrl,
-                    size: 23,
+                  GestureDetector(
+                    onTap: () async {
+                      // context
+                      //     .read<OtherProfileCubit>()
+                      //     .getOtherProfile(currentPost.creatorUid);
+                      final FollowunfollowCubit? res =
+                          await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => OtherUserProfilePage(
+                            otherUserId: widget.currentPost.creatorUid,
+                            userName: widget.currentPost.userFullName),
+                      ));
+                      if (res != null) {
+                        log('follow checking');
+                        if (res.state is FollowFailure ||
+                            res.state is UnfollowFailure) {
+                          Messenger.showSnackBar();
+                        }
+                      }
+                    },
+                    child: CircularUserProfile(
+                      profile: widget.currentPost.userProfileUrl,
+                      size: 23,
+                    ),
                   ),
                   AppSizedBox.sizedBox10W,
                   Column(
@@ -91,7 +112,13 @@ class _EachPostState extends State<EachPost> {
               ),
               AppSizedBox.sizedBox5W,
               GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ViewPost(post: widget.currentPost),
+                  ));
+                },
                 // onDoubleTap: () {
+
                 // final currentUserId = context.read<AppUserBloc>().appUser.id;
 
                 // setState(() {
@@ -105,24 +132,7 @@ class _EachPostState extends State<EachPost> {
                 //   }
                 // });
                 // },
-                onTap: () async {
-                  // context
-                  //     .read<OtherProfileCubit>()
-                  //     .getOtherProfile(currentPost.creatorUid);
-                  final FollowunfollowCubit? res =
-                      await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => OtherUserProfilePage(
-                        otherUserId: widget.currentPost.creatorUid,
-                        userName: widget.currentPost.userFullName),
-                  ));
-                  if (res != null) {
-                    log('follow checking');
-                    if (res.state is FollowFailure ||
-                        res.state is UnfollowFailure) {
-                      Messenger.showSnackBar();
-                    }
-                  }
-                },
+
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -175,3 +185,4 @@ class _EachPostState extends State<EachPost> {
     );
   }
 }
+

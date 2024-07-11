@@ -14,6 +14,8 @@ final class GetPostCommentLoading extends GetPostCommentState {}
 final class GetPostCommentSuccess extends GetPostCommentState {
   final List<CommentEntity> postComments;
 
+  @override
+  List<Object> get props => [postComments];
   const GetPostCommentSuccess({required this.postComments});
 }
 

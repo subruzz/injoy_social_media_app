@@ -2,8 +2,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/get_recommended_post/get_recommended_post_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/get_post_comment/get_post_comment_cubit.dart';
+import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/like_comment/like_comment_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_profile/other_profile_cubit.dart';
 import 'package:social_media_app/init_dependecies.dart';
@@ -114,6 +119,21 @@ List<SingleChildWidget> myProviders = [
   ),
   BlocProvider(
     create: (context) => serviceLocator<GetPostCommentCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<LikeCommentCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<SearchUserCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<SearchHashTagCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<GetRecommendedPostCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<SearchLocationExploreCubit>(),
   ),
   // BlocProvider(
   //   create: (context) => serviceLocator<OtherProfileCubit>(),

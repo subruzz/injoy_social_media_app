@@ -6,4 +6,6 @@ final class FirebaseCollectionConst {
   static const String statuses = 'statuses';
   static const String posts = 'posts';
   static const String comments = 'comments';
+  static const String hashTags = 'hashgags';
+  static const String locations = 'locations';
 }

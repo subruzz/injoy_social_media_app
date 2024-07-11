@@ -11,9 +11,11 @@ class CommentEntity extends Equatable {
   final String commentId;
   final String postId;
   final String creatorId;
+  final bool isEdited;
 
   const CommentEntity(
       {required this.comment,
+      required this.isEdited,
       required this.creatorId,
       required this.userName,
       required this.postId,
@@ -33,5 +35,6 @@ class CommentEntity extends Equatable {
         commentId,
         postId,
         creatorId,
+        isEdited
       ];
 }

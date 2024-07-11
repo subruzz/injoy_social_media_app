@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
 
 class ExplorePage extends StatelessWidget {
   final _searchController = TextEditingController();
@@ -18,6 +20,9 @@ class ExplorePage extends StatelessWidget {
             child: Column(
               children: [
                 CustomTextField(
+                    onChanged: (value) {
+                      context.read<SearchUserCubit>().searchUser(value);
+                    },
                     prefixIcon: Icons.search,
                     controller: _searchController,
                     showPrefixIcon: true,
@@ -133,23 +138,23 @@ class PeopleSearch extends StatelessWidget {
             )
           ],
         ),
-        SizedBox(
-          height: 220,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: suggestions.length,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SuggestedCard(
-                  name: suggestions[index]['name']!,
-                  imageUrl: suggestions[index]['image']!,
-                ),
-              );
-            },
-          ),
-        ),
+        // SizedBox(
+        //   height: 220,
+        //   child: ListView.builder(
+        //     scrollDirection: Axis.horizontal,
+        //     itemCount: suggestions.length,
+        //     shrinkWrap: true,
+        //     itemBuilder: (context, index) {
+        //       return Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: SuggestedCard(
+        //           name: suggestions[index]['name']!,
+        //           imageUrl: suggestions[index]['image']!,
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ),
       ]),
     );
   }

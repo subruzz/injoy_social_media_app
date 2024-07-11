@@ -28,10 +28,12 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
       String? userProfile,
       required String postId,
       required String creatorId}) async {
+    emit(CommentLoading());
     final newComment = CommentEntity(
         comment: comment,
         creatorId: creatorId,
         userName: userName,
+        isEdited: false,
         postId: postId,
         commentId: IdGenerator.generateUniqueId(),
         totalReplies: 0,
@@ -46,6 +48,8 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
 
   void deleteComment(
       {required String postId, required String commentId}) async {
+    emit(CommentLoading());
+
     final res = await _deleteCommentUseCase(
         DeleteCommentUseCaseParams(postId: postId, commentId: commentId));
     res.fold((failure) => emit(CommentError(error: failure.message)),
@@ -55,8 +59,10 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
   void updateComment(
       {required String postId,
       required String commentId,
-      required String comment})async {
-    final res =  await _updateCommentUseCase(UpdateCommentUseCaseParams(
+      required String comment}) async {
+    emit(CommentLoading());
+
+    final res = await _updateCommentUseCase(UpdateCommentUseCaseParams(
         postId: postId, commentId: commentId, comment: comment));
     res.fold((failure) => emit(CommentError(error: failure.message)),
         (success) => emit(CommentSuccess()));

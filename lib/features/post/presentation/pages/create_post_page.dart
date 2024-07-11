@@ -65,9 +65,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   hashtags: selectedHashtags is SelectdTagsSuccess
                       ? selectedHashtags.tags
                       : [],
-                  latitude: null,
-                  location: null,
-                  longitude: null
+                  latitude: 34,
+                  location: 'kollam',
+                  longitude: 34
                   // latitude: locationState is LocationSuccess
                   //     ? locationState.latitue
                   //     : null,

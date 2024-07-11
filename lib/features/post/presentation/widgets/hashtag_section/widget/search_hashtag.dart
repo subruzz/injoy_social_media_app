@@ -117,9 +117,9 @@ class SearchHashTagSheet extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return ListTile(
                         onTap: () {
-                          addToUi(state.hashtags[index].hashTagName);
+                          // addToUi(state.hashtags[index].hashTagName);
                         },
-                        title: Text('#${state.hashtags[index].hashTagName}'),
+                        title: Text('#state.hashtags[index].hashTagName'),
                       );
                     },
                   ),

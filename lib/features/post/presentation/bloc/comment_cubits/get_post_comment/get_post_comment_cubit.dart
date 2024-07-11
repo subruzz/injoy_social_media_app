@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +16,8 @@ class GetPostCommentCubit extends Cubit<GetPostCommentState> {
   FutureOr<void> getPostComments({required String postId}) async {
     final streamRes = _readCommentUseCase.call(postId);
     await for (var value in streamRes) {
+      emit(GetPostCommentLoading());
+      log('lisetning for post change from cubit');
       value.fold(
           (failure) => emit(GetPostCommentFailure(erroMsg: failure.message)),
           (success) => emit(GetPostCommentSuccess(postComments: success)));

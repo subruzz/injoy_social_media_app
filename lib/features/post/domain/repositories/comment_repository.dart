@@ -11,5 +11,8 @@ abstract interface class CommentRepository {
 
   Future<Either<Failure, Unit>> deleteComment(String postId, String commentId);
 
-  Future<Either<Failure, Unit>> likeComment(CommentEntity comment);
+  Future<Either<Failure, Unit>> likeComment(
+      String postId, String commentId, String currentUserId);
+  Future<Either<Failure, Unit>> removeLikeComment(
+      String postId, String commentId, String currentUserId);
 }

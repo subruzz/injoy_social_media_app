@@ -10,6 +10,7 @@ import 'package:social_media_app/core/common/models/hashtag_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/utils/compress_image.dart';
 import 'package:social_media_app/core/utils/id_generator.dart';
+import 'package:social_media_app/features/explore/data/model/explore_seearch_location_model.dart';
 import 'package:social_media_app/features/post/data/models/update_user_model.dart';
 import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
@@ -46,6 +47,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   Future<void> createPost(PostEntity post, List<AssetEntity> postImage) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
     final hashtagCollection = FirebaseFirestore.instance.collection('hashtags');
+    final locationCollection =
+        FirebaseFirestore.instance.collection('locations');
 
     try {
       final postUrls = await uploadPostImages(postImage, post.postId);
@@ -67,12 +70,53 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
           postImageUrl: postUrls);
 
       final hashtags = post.hashtags;
-      for (var hashtag in hashtags) {
-        DocumentReference hashtagRef = hashtagCollection.doc(hashtag);
-        await hashtagRef.set({
-          'name': hashtag,
-          'posts': FieldValue.arrayUnion([post.postId])
-        }, SetOptions(merge: true));
+      // Update the hashtags collection
+      for (String hashtag in hashtags) {
+        final hashtagRef = hashtagCollection.doc(hashtag);
+        final postRef = hashtagRef.collection('postIds').doc(post.postId);
+
+        await FirebaseFirestore.instance.runTransaction((transaction) async {
+          DocumentSnapshot snapshot = await transaction.get(hashtagRef);
+          if (!snapshot.exists) {
+            transaction.set(hashtagRef,
+                {'count': FieldValue.increment(1), 'hashtagName': hashtag});
+          } else {
+            transaction.update(hashtagRef, {
+              'count': FieldValue.increment(1),
+            });
+          }
+
+          transaction.set(postRef, {
+            'postId': post.postId,
+          });
+        });
+      }
+      final locationName = post.location;
+
+      if (post.location != null && post.location != '') {
+        final locationRef = locationCollection.doc(locationName);
+        final postRef = locationRef.collection('postIds').doc(post.postId);
+
+        await FirebaseFirestore.instance.runTransaction((transaction) async {
+          DocumentSnapshot snapshot = await transaction.get(locationRef);
+          final location = SearchLocationModel(
+            latitude: post.latitude,
+            longitude: post.longitude,
+            locationName: locationName!,
+            count: 1,
+          );
+          if (!snapshot.exists) {
+            transaction.set(locationRef, location.toJson());
+          } else {
+            transaction.update(locationRef, {
+              'count': FieldValue.increment(1),
+            });
+          }
+
+          transaction.set(postRef, {
+            'postId': post.postId,
+          });
+        });
       }
       await postCollection.doc(post.postId).set(newPost.toJson());
     } catch (e) {
@@ -137,16 +181,16 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   }
 
   @override
-  Future<List<HashTagModel>> searchHashTags(String query) async {
+  Future<List<HashtagModel>> searchHashTags(String query) async {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('hashtags')
-          .where('name', isGreaterThanOrEqualTo: query)
-          .where('name', isLessThan: '${query}z')
+          .where('hashtagName', isGreaterThanOrEqualTo: query)
+          .where('hashtagName', isLessThan: '${query}z')
           .get();
 
       return snapshot.docs
-          .map((doc) => HashTagModel.fromJson(doc.data()))
+          .map((doc) => HashtagModel.fromJson(doc.data()))
           .toList();
     } catch (e) {
       throw MainException(details: e.toString());

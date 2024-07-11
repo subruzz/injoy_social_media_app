@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/time_stamp_to_string.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/post/post_action_bar.dart';
 import 'package:social_media_app/core/widgets/post/post_owner_image.dart';
@@ -12,11 +17,28 @@ import 'package:social_media_app/core/widgets/post/post_description.dart';
 import 'package:social_media_app/core/widgets/post/post_hashtag.dart';
 import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
 import 'package:social_media_app/core/widgets/post/post_single_image.dart';
+import 'package:social_media_app/core/widgets/user_profile.dart';
+import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
+import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/get_post_comment/get_post_comment_cubit.dart';
 
-class ViewPost extends StatelessWidget {
+class ViewPost extends StatefulWidget {
   final PostEntity post;
   const ViewPost({super.key, required this.post, this.isEdit = false});
   final bool isEdit;
+
+  @override
+  State<ViewPost> createState() => _ViewPostState();
+}
+
+class _ViewPostState extends State<ViewPost> {
+  @override
+  void initState() {
+    context
+        .read<GetPostCommentCubit>()
+        .getPostComments(postId: widget.post.postId);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,17 +55,17 @@ class ViewPost extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      PostOwnerImage(ownerImage: post.userProfileUrl),
+                      PostOwnerImage(ownerImage: widget.post.userProfileUrl),
                       AppSizedBox.sizedBox5W,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            post.userFullName,
+                            widget.post.userFullName,
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                           Text(
-                            '@${post.username}',
+                            '@${widget.post.username}',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
@@ -52,74 +74,99 @@ class ViewPost extends StatelessWidget {
                           )
                         ],
                       ),
-                      const Spacer(),
                       PostOptionButton(
-                        isEdit: isEdit,
+                        isEdit: widget.isEdit,
                       ),
                     ],
                   ),
                   AppSizedBox.sizedBox10H,
-                  if (post.description != null)
+                  if (widget.post.description != null)
                     PostDescription(
-                      description: post.description ?? '',
+                      description: widget.post.description ?? '',
                       seeFull: true,
                     ),
-                  if (post.hashtags.isNotEmpty) Text(post.hashtags.join('#')),
+                  if (widget.post.hashtags.isNotEmpty)
+                    Text(widget.post.hashtags.join('#')),
                   AppSizedBox.sizedBox10H,
-                  if (post.hashtags.isNotEmpty)
-                    PostHashtag(hashtags: post.hashtags),
-                  if (post.postImageUrl.isNotEmpty)
-                    if (post.postImageUrl.isNotEmpty)
-                      post.postImageUrl.length == 1
+                  if (widget.post.hashtags.isNotEmpty)
+                    PostHashtag(hashtags: widget.post.hashtags),
+                  if (widget.post.postImageUrl.isNotEmpty)
+                    if (widget.post.postImageUrl.isNotEmpty)
+                      widget.post.postImageUrl.length == 1
                           ? PostSingleImage(
-                              imgUrl: post.postImageUrl[0],
+                              imgUrl: widget.post.postImageUrl[0],
                               size: .5,
                             )
                           : PostMultipleImages(
-                              postImageUrls: post.postImageUrl,
+                              postImageUrls: widget.post.postImageUrl,
                               size: .5,
                             ),
                   AppSizedBox.sizedBox10H,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(post.createAt.toDate().toCustomFormat()),
+                      Text(widget.post.createAt.toDate().toCustomFormat()),
                       //  PostActionBar(post: post,),
                     ],
                   ),
                   const Divider(),
                   AppSizedBox.sizedBox20H,
-                  if (!post.isCommentOff)
-                    Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 25,
-                        ),
-                        AppSizedBox.sizedBox5W,
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'sarah_virsson',
-                              style: Theme.of(context).textTheme.titleSmall,
+                  if (!widget.post.isCommentOff)
+                    BlocBuilder<GetPostCommentCubit, GetPostCommentState>(
+                      builder: (context, state) {
+                        if (state is GetPostCommentSuccess) {
+                          log('we have this much comments ${state.postComments.length}');
+                          return SizedBox(
+                            height:
+                                300, // Constrain the height of ListView.builder
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: state.postComments.length,
+                              itemBuilder: (context, index) => Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const CircleAvatar(
+                                        radius: 25,
+                                      ),
+                                      AppSizedBox.sizedBox5W,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'sarah_virsson',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleSmall,
+                                          ),
+                                          Text(
+                                            '@sarah',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.copyWith(
+                                                    color: AppDarkColor()
+                                                        .primaryTextBlur),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  AppSizedBox.sizedBox5H,
+                                  if (!widget.post.isCommentOff)
+                                    const Text(
+                                        'how many paragraphs are enough, and how many are too many? For historical writing, there should be between four and six paragraphs in a two-page paper, or ..'),
+                                ],
+                              ),
                             ),
-                            Text(
-                              '@sarah',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                      color: AppDarkColor().primaryTextBlur),
-                            )
-                          ],
-                        )
-                      ],
+                          );
+                        }
+                        return Container();
+                      },
                     ),
-                  AppSizedBox.sizedBox5H,
-                  if (!post.isCommentOff)
-                    const Text(
-                        'how many paragraphs are enough, and how many are too many? For historical writing, there should be between four and six paragraphs in a two-page paper, or ..'),
-                  if (!post.isCommentOff)
+                  if (!widget.post.isCommentOff)
                     Row(
                       children: [
                         _buildIconWithCount(Icons.favorite, 435, Colors.red),
@@ -134,45 +181,64 @@ class ViewPost extends StatelessWidget {
               ),
             ),
           ),
-          if (!post.isCommentOff)
+          if (!widget.post.isCommentOff)
             Positioned(
               left: 0,
               right: 0,
               bottom: 0,
               child: Container(
-                height: 60,
+                height: 80,
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 color:
                     Colors.black, // Set the background color of the container
-                child: Row(
+                child: Column(
                   children: [
-                    Expanded(
-                      child: TextField(
-                        style: TextStyle(color: Colors.white), // Text color
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Write a comment...',
-                            enabledBorder: InputBorder.none,
-                            filled: true,
-                            focusedBorder:
-                                InputBorder.none, // No border when focused
-
-                            fillColor:
-                                AppDarkColor().background // Background color
-                            ),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                    
+                      ],
                     ),
-                    SizedBox(width: 10),
-                    TextButton(
-                      onPressed: () {
-                        // Handle posting comment logic here
-                      },
-                      child: Text(
-                        'Post',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge, // Button text color
-                      ),
+                    Row(
+                      children: [
+                        CircularUserProfile(
+                          size: 12,
+                        ),
+                        Expanded(
+                          child: TextField(
+                            style: TextStyle(color: Colors.white), // Text color
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Write a comment...',
+                                enabledBorder: InputBorder.none,
+                                filled: true,
+                                focusedBorder:
+                                    InputBorder.none, // No border when focused
+
+                                fillColor: AppDarkColor()
+                                    .background // Background color
+                                ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        TextButton(
+                          onPressed: () {
+                            final user = context.read<AppUserBloc>().appUser;
+                            context.read<CommentBasicCubit>().addComment(
+                                comment: 'comment',
+                                userName: user.userName ?? '',
+                                postId: widget.post.postId,
+                                creatorId: user.id);
+                                
+                          },
+                          child: Text(
+                            'Post',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge, // Button text color
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

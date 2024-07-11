@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
@@ -46,14 +49,42 @@ class CommentRepositoryImpl implements CommentRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> likeComment(CommentEntity comment) {
-    // TODO: implement likeComment
-    throw UnimplementedError();
+  Stream<Either<Failure, List<CommentEntity>>> readComments(
+      String postId) async* {
+    try {
+      await for (final comments
+          in _commentRemoteDatasource.readComments(postId)) {
+        log('we have ${comments.length}from repo impl');
+        yield Right(comments);
+      }
+    } on SocketException catch (e) {
+      yield Left(Failure(e.toString()));
+    } catch (e) {
+      yield Left(Failure());
+    }
   }
 
   @override
-  Stream<Either<Failure, List<CommentEntity>>> readComments(String postId) {
-    // TODO: implement readComments
-    throw UnimplementedError();
+  Future<Either<Failure, Unit>> likeComment(
+      String postId, String commentId, String currentUserId) async {
+    try {
+      await _commentRemoteDatasource.likeComment(
+          postId, commentId, currentUserId);
+      return right(unit);
+    } on MainException catch (e) {
+      return left(Failure(e.errorMsg));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> removeLikeComment(
+      String postId, String commentId, String currentUserId) async {
+    try {
+      await _commentRemoteDatasource.removeLikeComment(
+          postId, commentId, currentUserId);
+      return right(unit);
+    } on MainException catch (e) {
+      return left(Failure(e.errorMsg));
+    }
   }
 }
