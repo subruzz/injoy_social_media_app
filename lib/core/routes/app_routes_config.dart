@@ -14,6 +14,7 @@ import 'package:social_media_app/features/post/presentation/pages/create_post_pa
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile/add_profile_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/interest_page/interest_selection_page.dart';
+import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
 import 'package:social_media_app/splash_screen.dart';
 
@@ -80,14 +81,16 @@ class MyAppRouter {
         name: MyAppRouteConst.locationPageRoute,
         path: '/locationPage',
         pageBuilder: (context, state) {
-          return const MaterialPage(child: LocationAskingPageBuilder());
+          final bool isFirstTime = state.extra as bool? ?? false;
+          return MaterialPage(
+              child: LocationAskingPageBuilder(isFirstTime: isFirstTime));
         },
       ),
       GoRoute(
         name: MyAppRouteConst.profileLoadingRouter,
         path: '/profileLoading',
         pageBuilder: (context, state) {
-          return const MaterialPage(child: ProfileLoading());
+          return const MaterialPage(child: AppLoadingGif());
         },
       ),
       GoRoute(
@@ -117,39 +120,23 @@ class MyAppRouter {
               child: CreatePostScreen(selectedImages: selectedAssets));
         },
       ),
+      GoRoute(
+        name: MyAppRouteConst.otherUserProfile,
+        path: '/otherUserProfile',
+        pageBuilder: (context, state) {
+          final Map<String, dynamic> params =
+              state.extra as Map<String, dynamic>;
+          final String userName = params['userName'];
+          final String otherUserId = params['otherUserId'];
+          return MaterialPage(
+            child: OtherUserProfilePage(
+              userName: userName,
+              otherUserId: otherUserId,
+            ),
+          );
+        },
+      ),
     ],
-    redirect: (BuildContext context, GoRouterState state) {
-      // final authState = context.read<AuthBloc>().state;
-      // print('camer here');
-      // if (authState is AuthNotLoggedIn) {
-      //   print('logged');
-
-      //   return context.namedLocation(MyAppRouteConst.loginRoute);
-      // } else if (authState is AuthLoggedInOrUpdate) {
-      //   print('logged');
-
-      //   // Trigger your bloc events here
-      //   context
-      //       .read<GetAllStatusBloc>()     //       .add(GetAllstatusesEvent(uId: authState.user.id));
-      //   context
-      //       .read<GetMyStatusBloc>()
-      //       .add(GetAllMystatusesEvent(uId: authState.user.id));
-      //   context
-      //       .read<FollowingPostFeedBloc>()
-      //       .add(FollowingPostFeedGetEvent(uId: authState.user.id));
-      //   context
-      //       .read<GetUserPostsBloc>()
-      //       .add(GetUserPostsrequestedEvent(uid: authState.user.id));
-
-      //   return context.namedLocation(MyAppRouteConst.bottomNavRoute);
-      // } else if (authState is AuthLoggedInButProfileNotSet) {
-      //   print('logged');
-
-      //   return context.namedLocation(MyAppRouteConst.addProfilePage);
-      // }
-
-      // return null; // No redirect if no conditions are met
-    },
     errorPageBuilder: (context, state) => MaterialPage(
       child: Scaffold(
         appBar: AppBar(

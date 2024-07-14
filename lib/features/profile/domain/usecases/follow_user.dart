@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:fpdart/fpdart.dart';
-import 'package:fpdart/src/either.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/profile/domain/repository/other_user_repository.dart';

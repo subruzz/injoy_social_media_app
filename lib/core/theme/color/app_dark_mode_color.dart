@@ -11,7 +11,7 @@ class AppDarkColor extends AppColor {
       : super(
           buttonWhitishBackground: const Color(0xFFFFFFFF).withOpacity(0.9),
           iconSoftColor: const Color.fromARGB(255, 151, 152, 155),
-          iconPrimaryColor: const Color(0xFFFFFFFF),
+          iconPrimaryColor: const Color.fromARGB(255, 164, 164, 164),
           iconSecondarycolor: const Color(0xFFFF4D67),
           indicatorColor: const Color(0xFFFF4D67),
           loadingColor: const Color(0xFFFF4D67),
@@ -21,7 +21,7 @@ class AppDarkColor extends AppColor {
           secondaryBackground: const Color(0xFF1a1a22),
           lightBackground: const Color(0xFF2C2C2C),
           pure: const Color(0xFF000000),
-          primaryText: const Color(0xFFCCCCCC),
+          primaryText: const Color(0xFFEAEAEA),
           primaryTextSoft: const Color(0xFFf48A9A).withOpacity(0.9),
           primaryTextBlur: const Color(0xFFFFFFFF).withOpacity(0.7),
           secondaryText: const Color(0xFFA0A0A0),

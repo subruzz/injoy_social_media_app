@@ -7,10 +7,16 @@ import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
 class CircularUserProfile extends StatelessWidget {
-  const CircularUserProfile({super.key, this.profile, this.size = 35,this.fileImg});
+  const CircularUserProfile(
+      {super.key,
+      this.profile,
+      this.size = 35,
+      this.fileImg,
+      this.wantSecProfile = false});
   final String? profile;
   final double size;
   final File? fileImg;
+  final bool wantSecProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +25,16 @@ class CircularUserProfile extends StatelessWidget {
         backgroundImage: profile != null
             ? CachedNetworkImageProvider(
                 profile!,
-              ):fileImg!=null?FileImage(fileImg!)
-            : const AssetImage(
-                AppAssetsConst.profileIcon,
-              ) as ImageProvider,
-        backgroundColor: AppDarkColor().iconPrimaryColor);
+              )
+            : fileImg != null
+                ? FileImage(fileImg!)
+                : AssetImage(
+                    wantSecProfile
+                        ? AppAssetsConst.userSecondaryProfile
+                        : AppAssetsConst.profileIcon,
+                  ) as ImageProvider,
+        backgroundColor: wantSecProfile
+            ? AppDarkColor().background
+            : AppDarkColor().iconPrimaryColor);
   }
 }

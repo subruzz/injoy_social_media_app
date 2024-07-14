@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/errors/exception.dart';
@@ -11,6 +14,8 @@ abstract interface class OtherUserDataSource {
   Future<void> unfollowUser(String currentUid, String otherUid);
   Future<({List<PostModel> userPosts, List<String> userPostImages})>
       getAllPostsByOtherUser(String userId);
+  Future<List<PartialUser>> getMyFollowing(List<String> following, String myId);
+  Future<List<PartialUser>> getMyFollowers(String myId);
 }
 
 class OtherUserDataSourceImpl implements OtherUserDataSource {
@@ -21,7 +26,7 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
 
   @override
   Future<AppUser> getOtherUserProfile(String uid) async {
-    try {
+    try {  
       DocumentSnapshot docSnapshot = await _firebaseFirestore
           .collection(FirebaseCollectionConst.users)
           .doc(uid)
@@ -41,10 +46,6 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
   @override
   Future<void> followUser(String currentUid, String otherUid) async {
     try {
-      throw Exception();
-
-      // await Future.delayed(Duration(seconds: 2));
-      // throw Exception();
       await _firebaseFirestore
           .collection(FirebaseCollectionConst.users)
           .doc(otherUid)
@@ -65,7 +66,6 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
   @override
   Future<void> unfollowUser(String currentUid, String otherUid) async {
     try {
-      throw Exception();
       await _firebaseFirestore
           .collection(FirebaseCollectionConst.users)
           .doc(otherUid)
@@ -103,6 +103,68 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
         );
       }).toList();
       return (userPosts: userAllPosts, userPostImages: postImages);
+    } catch (e) {
+      throw const MainException(errorMsg: 'Error while loading the posts!');
+    }
+  }
+
+  @override
+  Future<List<PartialUser>> getMyFollowers(String myId) async {
+    try {
+      // Fetch the follower IDs from the subcollection
+      var followersSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(myId)
+          .collection('followers')
+          .get();
+      log('followers list are $followersSnapshot');
+      // Extract the follower IDs
+      List<String> followerIds =
+          followersSnapshot.docs.map((doc) => doc.id).toList();
+
+      if (followerIds.isNotEmpty) {
+        // Fetch the user details for the follower IDs
+        var userDetailsSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .where(FieldPath.documentId, whereIn: followerIds)
+            .get();
+
+        // Map the query results to a list of PartialUser objects
+        List<PartialUser> followers = userDetailsSnapshot.docs.map((doc) {
+          var data = doc.data();
+          return PartialUser.fromJson(data);
+        }).toList();
+
+        return followers;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      throw const MainException(errorMsg: 'Error while loading the posts!');
+    }
+  }
+
+  @override
+  Future<List<PartialUser>> getMyFollowing(
+      List<String> following, String myId) async {
+    try {
+      if (following.isNotEmpty) {
+        // Query the users collection for the user IDs in the following list
+        var userDetailsSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .where(FieldPath.documentId, whereIn: following)
+            .get();
+
+        // Map the query results to a list of PartialUser objects
+        List<PartialUser> followingUsers = userDetailsSnapshot.docs.map((doc) {
+          var data = doc.data();
+          return PartialUser.fromJson(data);
+        }).toList();
+
+        return followingUsers;
+      } else {
+        return [];
+      }
     } catch (e) {
       throw const MainException(errorMsg: 'Error while loading the posts!');
     }

@@ -18,7 +18,8 @@ final class SearchUserFailure extends SearchUserState {
 }
 
 final class SearchUserSuccess extends SearchUserState {
-  final List<AppUser> searchedUsers;
+  final List<PartialUser> searchedUsers;
+  final String query;
 
-  const SearchUserSuccess({required this.searchedUsers});
+  const SearchUserSuccess({required this.searchedUsers, required this.query});
 }

@@ -26,10 +26,16 @@ import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/sig
 import 'package:social_media_app/features/explore/data/datasource/explore_app_datasource.dart';
 import 'package:social_media_app/features/explore/data/repository/explore_app_repo_impl.dart';
 import 'package:social_media_app/features/explore/domain/repositories/explore_app_repository.dart';
+import 'package:social_media_app/features/explore/domain/usecases/get_hashtag_top_posts.dart';
+import 'package:social_media_app/features/explore/domain/usecases/get_recent_posts_hashtag.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_recommended_post.dart';
+import 'package:social_media_app/features/explore/domain/usecases/get_suggested_users.dart';
 import 'package:social_media_app/features/explore/domain/usecases/search_hash_tags.dart';
 import 'package:social_media_app/features/explore/domain/usecases/search_locations_explore.dart';
 import 'package:social_media_app/features/explore/domain/usecases/search_user.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/explore_user/explore_user_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_hash_tag_posts_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/get_recent_hashtag_posts/get_recent_hashtag_posts_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_recommended_post/get_recommended_post_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
@@ -74,9 +80,13 @@ import 'package:social_media_app/features/profile/domain/repository/other_user_r
 import 'package:social_media_app/features/profile/domain/usecases/add_interest.dart';
 import 'package:social_media_app/features/profile/domain/usecases/check_username_exist.dart';
 import 'package:social_media_app/features/profile/domain/usecases/follow_user.dart';
+import 'package:social_media_app/features/profile/domain/usecases/get_followers_list.dart';
+import 'package:social_media_app/features/profile/domain/usecases/get_following_list.dart';
 import 'package:social_media_app/features/profile/domain/usecases/get_other_user_details.dart';
 import 'package:social_media_app/features/profile/domain/usecases/unfollow_user.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/get_followers_list/get_followers_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/get_following_list/get_following_list_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_other_user_posts/get_other_user_posts_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_profile/other_profile_cubit.dart';
 import 'package:social_media_app/features/status/data/datasource/status_remote_datasource.dart';
@@ -228,7 +238,13 @@ void _initProfile() {
         () => UnfollowUserUseCase(userProfileRepository: serviceLocator()))
     ..registerLazySingleton(
         () => FollowunfollowCubit(serviceLocator(), serviceLocator()))
-    ..registerFactory(() => GetOtherUserPostsCubit(serviceLocator()));
+    ..registerFactory(() => GetOtherUserPostsCubit(serviceLocator()))
+    ..registerFactory(
+        () => GetFollowingListUseCase(userProfileRepository: serviceLocator()))
+    ..registerFactory(
+        () => GetFollowersListUseCase(userProfileRepository: serviceLocator()))
+    ..registerFactory(() => GetFollowersCubit(serviceLocator()))
+    ..registerFactory(() => GetFollowingListCubit(serviceLocator()));
 }
 
 void _initLocation() {
@@ -385,5 +401,16 @@ void _exploreApp() {
     ..registerLazySingleton(() => GetRecommendedPostCubit(serviceLocator()))
     ..registerFactory(() =>
         SearchLocationsExploreUseCase(exploreAppRepository: serviceLocator()))
-    ..registerLazySingleton(() => SearchLocationExploreCubit(serviceLocator()));
+    ..registerLazySingleton(() => SearchLocationExploreCubit(serviceLocator()))
+    ..registerFactory(() =>
+        GetRecentPostsHashtagUseCase(exploreAppRepository: serviceLocator()))
+    ..registerLazySingleton(
+        () => GetHashtagTopPostsUseCase(exploreAppRepository: serviceLocator()))
+    ..registerFactory(() => GetHashTagPostsCubit(
+          serviceLocator(),
+        ))
+    ..registerFactory(() => GetRecentHashtagPostsCubit(serviceLocator()))
+    ..registerFactory(
+        () => GetSuggestedUsersUseCase(exploreAppRepository: serviceLocator()))
+    ..registerFactory(() => ExploreUserCubit(serviceLocator()));
 }

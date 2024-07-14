@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
+import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/const/messenger.dart';
@@ -21,10 +23,15 @@ class GoogleAuthButton extends StatelessWidget {
     return BlocConsumer<GoogleAuthBloc, GoogleAuthState>(
       listener: (context, state) {
         if (state is GoogleAuthSuccess) {
-          state.user.fullName == null
-              ? context.pushReplacementNamed(MyAppRouteConst.addProfilePage,
-                  extra: state.user)
-              : context.pushReplacementNamed(MyAppRouteConst.bottomNavRoute);
+          if (state.user.fullName == null) {
+            context.pushReplacementNamed(MyAppRouteConst.addProfilePage,
+                extra: state.user);
+          } else {
+            context
+                .read<InitialSetupCubit>()
+                .startInitialSetup(uId: state.user.id);
+            context.pushReplacementNamed(MyAppRouteConst.bottomNavRoute);
+          }
         }
         if (state is GoogleAuthFailure) {
           Messenger.showSnackBar(message: state.errorMsg);
@@ -40,11 +47,8 @@ class GoogleAuthButton extends StatelessWidget {
             height: 25.h,
           ),
           color: AppDarkColor().buttonWhitishBackground,
-          child: CustomText(
-            AppUiStringConst.googleLogin,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.bold, color: AppDarkColor().background),
-          ),
+          child: CustomText(AppUiStringConst.googleLogin,
+              style: AppTextTheme.titleMediumBlackVariation.titleMedium),
           onClick: () {
             context.read<GoogleAuthBloc>().add(GoogleAuthStartEvent());
           },

@@ -21,11 +21,7 @@ class CustomText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: style ??
-          Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: color, letterSpacing: letterSpacing),
+      style: style ?? Theme.of(context).textTheme.labelMedium,
       overflow: overflow,
       maxLines: maxLines,
       textAlign: textAlign,

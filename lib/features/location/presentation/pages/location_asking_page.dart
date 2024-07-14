@@ -16,6 +16,7 @@ import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
+import 'package:social_media_app/core/widgets/custom_divider.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';
@@ -27,8 +28,8 @@ import 'package:social_media_app/features/profile/presentation/bloc/user_profile
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
 
 class LocationAskingPage extends StatelessWidget {
-  const LocationAskingPage({super.key});
-
+  const LocationAskingPage({super.key,required this.isFirstTime});
+  final bool isFirstTime;
   void submitProfile(BuildContext context, UserLocation? location) {
     context.read<ProfileBloc>().add(CompleteProfileSetup(
         location: location, uid: context.read<AppUserBloc>().appUser.id));
@@ -58,14 +59,16 @@ class LocationAskingPage extends StatelessWidget {
         BlocListener<LocationBloc, LocationState>(
           listener: (context, state) {
             if (state is LocationSuccess) {
-              AppInfoDialog.showInfoDialog(
-                  context: context,
-                  callBack: () {
-                    submitProfile(context, state.location);
-                  },
-                  title: 'Selected Location',
-                  subtitle: state.location.currentLocation ?? '',
-                  buttonText: 'Continue');
+              isFirstTime
+                  ? AppInfoDialog.showInfoDialog(
+                      context: context,
+                      callBack: () {
+                        submitProfile(context, state.location);
+                      },
+                      title: 'Selected Location',
+                      subtitle: state.location.currentLocation ?? '',
+                      buttonText: 'Continue')
+                  : Navigator.pop(context, state.location);
             }
             if (state is LocationNotOnState) {
               showLocationDialog(
@@ -84,29 +87,30 @@ class LocationAskingPage extends StatelessWidget {
       child: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, state) {
           if (state is CompleteProfileSetupLoading) {
-            return const ProfileLoading();
+            return const AppLoadingGif();
           }
           return Scaffold(
             appBar: AppCustomAppbar(
               showLeading: true,
               actions: [
-                TextButton(
-                  onPressed: () {
-                    AppInfoDialog.showInfoDialog(
-                        context: context,
-                        callBack: () {
-                          submitProfile(context, null);
-                        },
-                        title: 'Are You Sure?',
-                        subtitle: AppIngoMsg.locationSkip,
-                        buttonText: 'Skip');
-                  },
-                  child: CustomText(
-                    'Skip',
-                    style:
-                        TextStyle(color: AppDarkColor().secondaryPrimaryText),
-                  ),
-                )
+                if (isFirstTime)
+                  TextButton(
+                    onPressed: () {
+                      AppInfoDialog.showInfoDialog(
+                          context: context,
+                          callBack: () {
+                            submitProfile(context, null);
+                          },
+                          title: 'Are You Sure?',
+                          subtitle: AppIngoMsg.locationSkip,
+                          buttonText: 'Skip');
+                    },
+                    child: CustomText(
+                      'Skip',
+                      style:
+                          TextStyle(color: AppDarkColor().secondaryPrimaryText),
+                    ),
+                  )
               ],
             ),
             resizeToAvoidBottomInset: false,
@@ -119,16 +123,25 @@ class LocationAskingPage extends StatelessWidget {
                       hintText: 'Search manually..',
                       prefixIcon: Icons.search,
                     ),
-                    const AppLottieAnimation(
-                      lottie: AppAssetsConst.location,
-                    ),
-                    const CustomText(
-                      textAlign: TextAlign.center,
-                      AppIngoMsg.locationinfo,
-                    ),
-                    const Spacer(),
+                    if (isFirstTime)
+                      const AppLottieAnimation(
+                        lottie: AppAssetsConst.location,
+                      ),
+                    if (isFirstTime)
+                      const CustomText(
+                        textAlign: TextAlign.center,
+                        AppIngoMsg.locationinfo,
+                      ),
+                    isFirstTime
+                        ? const Spacer()
+                        : Column(
+                            children: [
+                              AppSizedBox.sizedBox5H,
+                              const CustomDivider(),
+                              AppSizedBox.sizedBox5H,
+                            ],
+                          ),
                     BlocBuilder<LocationBloc, LocationState>(
-                 
                       builder: (context, state) {
                         if (state is LocationLoading) {
                           return CustomAppPadding(

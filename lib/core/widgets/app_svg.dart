@@ -25,6 +25,7 @@ class CustomSvgIcon extends StatelessWidget {
         width: width.w,
         height: height.h,
         colorFilter: ColorFilter.mode(
-            color != null ? color! : AppDarkColor().iconSoftColor, blendMode));
+            color != null ? color! : AppDarkColor().iconPrimaryColor,
+            blendMode));
   }
 }

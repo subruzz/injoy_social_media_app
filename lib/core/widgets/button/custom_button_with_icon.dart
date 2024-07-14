@@ -60,10 +60,9 @@ class CustomButtonWithIcon extends StatelessWidget {
             onClick();
           },
           icon: Icon(iconData, color: iconColor, size: iconSize),
-          label: Text(
-            title,
-            style: TextStyle(color: textColor),
-          ), // Display child widget as label
+          label: Text(title,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: textColor)), // Display child widget as label
         ),
       ),
     );

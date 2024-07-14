@@ -53,6 +53,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
     try {
       final postUrls = await uploadPostImages(postImage, post.postId);
       final newPost = PostModel(
+          likesCount: 0,
           isCommentOff: post.isCommentOff,
           userFullName: post.userFullName,
           postId: post.postId,
@@ -162,21 +163,30 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   @override
   Future<void> unLikePost(String postId, String currentUserUid) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
+    try {
+      final postRef = postCollection.doc(postId);
 
-    await postCollection.doc(postId).update(({
-          'likes': FieldValue.arrayRemove([currentUserUid])
-        }));
+      await postRef.update({
+        'likes': FieldValue.arrayRemove([currentUserUid]),
+        'likesCount': FieldValue.increment(-1),
+      });
+    } catch (e) {
+      throw const MainException();
+    }
   }
 
   @override
   Future<void> likePost(String postId, String currentUserUid) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
     try {
-      await postCollection.doc(postId).update(({
-            'likes': FieldValue.arrayUnion([currentUserUid])
-          }));
+      final postRef = postCollection.doc(postId);
+
+      await postRef.update({
+        'likes': FieldValue.arrayUnion([currentUserUid]),
+        'likesCount': FieldValue.increment(1),
+      });
     } catch (e) {
-      throw MainException(errorMsg: e.toString());
+      throw const MainException();
     }
   }
 

@@ -42,16 +42,14 @@ class _InterestSelectionPageState extends State<InterestSelectionPage> {
       floatingActionButton: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfileInterestsSet) {
-            context.pushNamed(MyAppRouteConst.locationPageRoute,
-                extra: _selectedInterests);
+            context.pushNamed(MyAppRouteConst.locationPageRoute, extra: true);
           }
           if (state is ProfileInterestEmptyState) {
             return AppInfoDialog.showInfoDialog(
               context: context,
               buttonText: 'Skip',
-              callBack: () => context.pushNamed(
-                  MyAppRouteConst.locationPageRoute,
-                  extra: _selectedInterests),
+              callBack: () => context
+                  .pushNamed(MyAppRouteConst.locationPageRoute, extra: true),
               title: AppIngoMsg.interestEmptyTitle,
               subtitle: AppIngoMsg.interestEmptyinfo,
             );

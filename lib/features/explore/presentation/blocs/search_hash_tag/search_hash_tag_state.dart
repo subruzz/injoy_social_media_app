@@ -19,6 +19,8 @@ final class SearchHashTagFailure extends SearchHashTagState {
 
 final class SearchHashTagSuccess extends SearchHashTagState {
   final List<HashTag> searchedHashtags;
+  final String query;
 
-  const SearchHashTagSuccess({required this.searchedHashtags});
+  const SearchHashTagSuccess(
+      {required this.searchedHashtags, required this.query});
 }

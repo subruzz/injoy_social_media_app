@@ -10,7 +10,7 @@ class PostEntity extends Equatable {
   final List<String> likes;
   final bool isCommentOff;
   final String? description;
-
+  final int likesCount;
   final num? totalComments;
   final Timestamp createAt;
   final String? userProfileUrl;
@@ -21,6 +21,7 @@ class PostEntity extends Equatable {
 
   const PostEntity(
       {required this.postId,
+      required this.likesCount,
       required this.isCommentOff,
       required this.creatorUid,
       required this.userFullName,

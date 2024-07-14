@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 
-class ProfileLoading extends StatelessWidget {
-  const ProfileLoading({super.key});
+class AppLoadingGif extends StatelessWidget {
+  const AppLoadingGif({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class ProfileLoading extends StatelessWidget {
             height: 125,
             width: 125,
           ),
-      const   CustomText('Building Your Profile..')
+          const CustomText('Building Your Profile..')
         ],
       )),
     );

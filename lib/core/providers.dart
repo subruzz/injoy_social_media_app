@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/explore_user/explore_user_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/follow_hashtag/follow_hashtag_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_hash_tag_posts_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_recommended_post/get_recommended_post_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
@@ -134,6 +138,14 @@ List<SingleChildWidget> myProviders = [
   ),
   BlocProvider(
     create: (context) => serviceLocator<SearchLocationExploreCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<GetHashTagPostsCubit>(),
+  ),
+ 
+  BlocProvider(
+    create: (context) => FollowHashtagCubit(
+        FirebaseFirestore.instance, context.read<AppUserBloc>().appUser.id),
   ),
   // BlocProvider(
   //   create: (context) => serviceLocator<OtherProfileCubit>(),

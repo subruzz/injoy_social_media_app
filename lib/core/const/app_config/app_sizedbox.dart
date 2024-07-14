@@ -5,6 +5,8 @@ class AppSizedBox {
   // Private constructor to prevent direct instantiation
   AppSizedBox._();
   // Height SizedBoxes
+  static SizedBox get sizedBox3H => SizedBox(height: 3.h);
+
   static SizedBox get sizedBox5H => SizedBox(height: 5.h);
   static SizedBox get sizedBox10H => SizedBox(height: 10.h);
   static SizedBox get sizedBox15H => SizedBox(height: 15.h);

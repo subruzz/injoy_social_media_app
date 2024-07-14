@@ -11,12 +11,15 @@ class SearchLocationExploreCubit extends Cubit<SearchLocationExploreState> {
       : super(SearchLocationExploreInitial());
 
   Future<void> searchLocations(String query) async {
+    if (query.isEmpty) {
+      return emit(SearchLocationExploreInitial());
+    }
     emit(SearchLocationLoading());
     final res = await _searchLocationsExploreUseCase(
         SearchLocationsExploreUseCaseParams(query: query));
     res.fold((failure) => emit(SearchLocationFailure(erroMsg: failure.message)),
         (success) {
-      emit(SearchLocationSuccess(searchedLocations: success));
+      emit(SearchLocationSuccess(searchedLocations: success, query: query));
     });
   }
 }

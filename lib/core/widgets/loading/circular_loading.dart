@@ -12,3 +12,20 @@ class CircularLoading extends StatelessWidget {
     );
   }
 }
+
+class CircularLoadingGrey extends StatelessWidget {
+  const CircularLoadingGrey({super.key, this.size = 35});
+  final double size;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: size,
+      width: size,
+      child: const CircularProgressIndicator(
+        valueColor:
+            AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 134, 132, 132)),
+        strokeWidth: 2,
+      ),
+    );
+  }
+}

@@ -19,6 +19,8 @@ final class GetRecommendedPostFailure extends GetRecommendedPostState {
 
 final class GetRecommendedPostSuccess extends GetRecommendedPostState {
   final List<PostEntity> recommendedPosts;
+  final String query;
 
-  const GetRecommendedPostSuccess({required this.recommendedPosts});
+  const GetRecommendedPostSuccess(
+      {required this.recommendedPosts, required this.query});
 }

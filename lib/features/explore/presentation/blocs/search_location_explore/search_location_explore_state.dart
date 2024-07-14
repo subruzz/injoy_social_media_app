@@ -19,6 +19,7 @@ final class SearchLocationFailure extends SearchLocationExploreState {
 
 final class SearchLocationSuccess extends SearchLocationExploreState {
   final List<ExploreLocationSearchEntity> searchedLocations;
-
-  const SearchLocationSuccess({required this.searchedLocations});
+  final String query;
+  const SearchLocationSuccess(
+      {required this.searchedLocations, required this.query});
 }

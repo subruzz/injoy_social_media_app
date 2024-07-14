@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/features/post/presentation/pages/tag_people.dart';
 
 final ValueNotifier<bool> isCommentOff = ValueNotifier(false);
 
-class PostFeedsOptions extends StatelessWidget {
+class PostFeedsOptions extends StatefulWidget {
   const PostFeedsOptions(
       {super.key,
       required this.icon,
@@ -12,15 +13,21 @@ class PostFeedsOptions extends StatelessWidget {
   final IconData icon;
   final String text;
   final bool isComment;
+
+  @override
+  State<PostFeedsOptions> createState() => _PostFeedsOptionsState();
+}
+
+class _PostFeedsOptionsState extends State<PostFeedsOptions> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(
-        icon,
+        widget.icon,
         color: AppDarkColor().iconSoftColor,
       ),
-      title: Text(text),
-      trailing: isComment
+      title: Text(widget.text),
+      trailing: widget.isComment
           ? Transform.scale(
               scale: .7,
               child: ValueListenableBuilder(
@@ -36,7 +43,7 @@ class PostFeedsOptions extends StatelessWidget {
             )
           : const Icon(Icons.arrow_forward, color: Colors.grey),
       onTap: () {
-        // Handle tag people
+      
       },
     );
   }

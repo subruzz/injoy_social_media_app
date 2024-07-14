@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
+import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
@@ -44,10 +45,8 @@ class LoginButton extends StatelessWidget {
           if (state is LoginLoading) {
             return const CircularLoading();
           }
-          return CustomText(
-            'Log In',
-            style: Theme.of(context).textTheme.labelSmall,
-          );
+          return CustomText('Log In',
+              style: AppTextTheme.labelMediumPureWhiteVariations.labelMedium);
         },
       ),
       onClick: () {

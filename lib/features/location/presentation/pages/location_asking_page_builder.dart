@@ -6,13 +6,14 @@ import 'package:social_media_app/features/location/presentation/blocs/location_b
 import 'package:social_media_app/features/location/presentation/pages/location_asking_page.dart';
 
 class LocationAskingPageBuilder extends StatelessWidget {
-  const LocationAskingPageBuilder({
-    super.key,
-  });
+  const LocationAskingPageBuilder({super.key, this.isFirstTime = false});
+  final bool isFirstTime;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => LocationBloc(GetIt.instance<GetLocationUseCase>()),
-        child: const LocationAskingPage());
+        child: LocationAskingPage(
+          isFirstTime: isFirstTime,
+        ));
   }
 }

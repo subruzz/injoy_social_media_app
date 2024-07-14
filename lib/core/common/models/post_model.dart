@@ -7,6 +7,7 @@ class PostModel extends PostEntity {
     required super.creatorUid,
     required super.username,
     super.description,
+    required super.likesCount,
     required super.postImageUrl,
     required super.userFullName,
     required super.likes,
@@ -23,6 +24,7 @@ class PostModel extends PostEntity {
   // 1. From JSON (Firestore)
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
+      likesCount: json['likesCount'],
       isCommentOff: json['isCommentOff'],
       userFullName: json['userFullName'],
       latitude: json['latitude'],
@@ -44,6 +46,7 @@ class PostModel extends PostEntity {
   // 2. To JSON (Firestore)
   Map<String, dynamic> toJson() {
     return {
+      'likesCount': likesCount,
       'isCommentOff': isCommentOff,
       'userFullName': userFullName,
       'location': location,

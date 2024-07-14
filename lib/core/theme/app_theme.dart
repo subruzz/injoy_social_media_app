@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/elevated_button_theme.dart';
@@ -15,7 +14,7 @@ final class AppDarkTheme {
   /// Dark theme configuration.
   static final ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: AppDarkColor().background,
-    fontFamily: GoogleFonts.poppins().fontFamily,
+    fontFamily: 'Poppins',
     colorScheme: ColorScheme.dark(
       surface: _color.background,
     ),

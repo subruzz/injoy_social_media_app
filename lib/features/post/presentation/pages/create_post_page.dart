@@ -9,12 +9,14 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/loading/loading_bar.dart';
 import 'package:social_media_app/core/widgets/app_related/rotated_icon.dart';
+import 'package:social_media_app/features/location/domain/entities/location.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/select_tags_cubit/select_tags_cubit.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post_input_section/post_input_section.dart';
 import 'package:social_media_app/features/post/presentation/widgets/hashtag_section/hash_tag_section.dart';
 import 'package:social_media_app/features/post/presentation/widgets/post_option_section/widgets/post_feeds_options.dart';
 import 'package:social_media_app/features/post/presentation/widgets/post_option_section/post_option_section.dart';
+import 'package:social_media_app/features/post/presentation/widgets/post_option_section/widgets/post_location.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -32,7 +34,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final _hashtagcontroller = TextEditingController();
   final _selectTagsCubit = GetIt.instance<SelectTagsCubit>();
   final PageController _pageController = PageController();
-
+  UserLocation? _location;
+  bool _isCommentOff = false;
   @override
   void dispose() {
     _descriptionController.dispose();
@@ -53,31 +56,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               final selectedHashtags = _selectTagsCubit.state;
               final appUser = context.read<AppUserBloc>().appUser;
               context.read<CreatePostBloc>().add(CreatePostClickEvent(
-                  isCommentOff: isCommentOff.value,
-                  userFullName: appUser.fullName ?? '',
-                  postPics: widget.selectedImages,
-                  creatorUid: appUser.id,
-                  username: appUser.userName ?? '',
-                  description: _descriptionController.text.trim().isEmpty
-                      ? null
-                      : _descriptionController.text.trim(),
-                  userProfileUrl: appUser.profilePic,
-                  hashtags: selectedHashtags is SelectdTagsSuccess
-                      ? selectedHashtags.tags
-                      : [],
-                  latitude: 34,
-                  location: 'kollam',
-                  longitude: 34
-                  // latitude: locationState is LocationSuccess
-                  //     ? locationState.latitue
-                  //     : null,
-                  // longitude: locationState is LocationSuccess
-                  //     ? locationState.longitude
-                  //     : null,
-                  // location: locationState is LocationSuccess
-                  //     ? locationState.locationName
-                  //     : null
-
+                    isCommentOff: _isCommentOff,
+                    userFullName: appUser.fullName ?? '',
+                    postPics: widget.selectedImages,
+                    creatorUid: appUser.id,
+                    username: appUser.userName ?? '',
+                    description: _descriptionController.text.trim().isEmpty
+                        ? null
+                        : _descriptionController.text.trim(),
+                    userProfileUrl: appUser.profilePic,
+                    hashtags: selectedHashtags is SelectdTagsSuccess
+                        ? selectedHashtags.tags
+                        : [],
+                    latitude: _location?.latitude,
+                    location: _location?.currentLocation,
+                    longitude: _location?.longitude,
                   ));
             },
             icon: RotatedIcon(
@@ -129,9 +122,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     hashTagController: _hashtagcontroller,
                     selectTagsCubit: _selectTagsCubit),
                 AppSizedBox.sizedBox10H,
-                // PostLocation(locationBloc: widget.locationBloc),
+                PostLocation(
+                  setLocation: (location) {
+                    _location = location;
+                  },
+                ),
                 AppSizedBox.sizedBox10H,
                 // for selecting post options
+                // ListTile(
+                //     title: Text('Tag people'),
+                //     onTap: () {
+                //       Navigator.of(context).push(MaterialPageRoute(
+                //         builder: (context) => TagPeoplePage(
+                //           selectedAssets: widget.selectedImages,
+                //         ),
+                //       ));
+                //     }),
                 const PostOptionSection()
               ],
             );

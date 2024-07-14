@@ -22,6 +22,7 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
         return;
       }
       final newPost = PostEntity(
+        likesCount: 0,
           isCommentOff: event.isCommentOff,
           userFullName: event.userFullName,
           postId: const Uuid().v4(),
