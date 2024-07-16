@@ -1,25 +1,15 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/extensions/time_stamp_to_string.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/post/post_action_bar.dart';
-import 'package:social_media_app/core/widgets/post/post_owner_image.dart';
-import 'package:social_media_app/core/widgets/post/post_option_button.dart';
-import 'package:social_media_app/core/widgets/post/post_description.dart';
-import 'package:social_media_app/core/widgets/post/post_hashtag.dart';
-import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
-import 'package:social_media_app/core/widgets/post/post_single_image.dart';
-import 'package:social_media_app/core/widgets/user_profile.dart';
-import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
+import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/get_post_comment/get_post_comment_cubit.dart';
+import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/comment_bottom_input_section.dart';
+import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/widgets/each_comment.dart';
+import 'package:social_media_app/features/post/presentation/widgets/comment_screen/widgets/no_comment_display.dart';
+import 'package:social_media_app/features/post/presentation/widgets/view_posts/sections/post_details_section.dart';
+import 'package:social_media_app/features/post/presentation/widgets/view_posts/sections/post_user_details_section.dart';
 
 class ViewPost extends StatefulWidget {
   final PostEntity post;
@@ -39,11 +29,28 @@ class _ViewPostState extends State<ViewPost> {
     super.initState();
   }
 
+  final FocusNode? inputNode = FocusNode();
+
+  final TextEditingController _commentController = TextEditingController();
+  final ValueNotifier<
+          ({
+            bool isComment,
+            bool isEdit,
+            bool isTextEmpty,
+          })> _commentSubmitSelection =
+      ValueNotifier((isComment: false, isEdit: false, isTextEmpty: true));
+  String commentId = '';
+
   @override
   Widget build(BuildContext context) {
+    final appUser = context.read<AppUserBloc>().appUser;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Post'),
+        title: Text(
+          'Post',
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
       ),
       body: Stack(
         children: [
@@ -53,117 +60,44 @@ class _ViewPostState extends State<ViewPost> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      PostOwnerImage(ownerImage: widget.post.userProfileUrl),
-                      AppSizedBox.sizedBox5W,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.post.userFullName,
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          Text(
-                            '@${widget.post.username}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(
-                                    color: AppDarkColor().primaryTextBlur),
-                          )
-                        ],
-                      ),
-                      PostOptionButton(
-                        isEdit: widget.isEdit,
-                      ),
-                    ],
+                  PostUserDetailsSection(
+                    post: widget.post,
+                    isEdit: widget.isEdit,
                   ),
                   AppSizedBox.sizedBox10H,
-                  if (widget.post.description != null)
-                    PostDescription(
-                      description: widget.post.description ?? '',
-                      seeFull: true,
-                    ),
-                  if (widget.post.hashtags.isNotEmpty)
-                    Text(widget.post.hashtags.join('#')),
-                  AppSizedBox.sizedBox10H,
-                  if (widget.post.hashtags.isNotEmpty)
-                    PostHashtag(hashtags: widget.post.hashtags),
-                  if (widget.post.postImageUrl.isNotEmpty)
-                    if (widget.post.postImageUrl.isNotEmpty)
-                      widget.post.postImageUrl.length == 1
-                          ? PostSingleImage(
-                              imgUrl: widget.post.postImageUrl[0],
-                              size: .5,
-                            )
-                          : PostMultipleImages(
-                              postImageUrls: widget.post.postImageUrl,
-                              size: .5,
-                            ),
-                  AppSizedBox.sizedBox10H,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(widget.post.createAt.toDate().toCustomFormat()),
-                      //  PostActionBar(post: post,),
-                    ],
-                  ),
-                  const Divider(),
-                  AppSizedBox.sizedBox20H,
+                  PostDetailsSection(post: widget.post),
                   if (!widget.post.isCommentOff)
                     BlocBuilder<GetPostCommentCubit, GetPostCommentState>(
                       builder: (context, state) {
                         if (state is GetPostCommentSuccess) {
-                          log('we have this much comments ${state.postComments.length}');
-                          return SizedBox(
-                            height:
-                                300, // Constrain the height of ListView.builder
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: state.postComments.length,
-                              itemBuilder: (context, index) => Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      const CircleAvatar(
-                                        radius: 25,
-                                      ),
-                                      AppSizedBox.sizedBox5W,
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'sarah_virsson',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall,
-                                          ),
-                                          Text(
-                                            '@sarah',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge
-                                                ?.copyWith(
-                                                    color: AppDarkColor()
-                                                        .primaryTextBlur),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  AppSizedBox.sizedBox5H,
-                                  if (!widget.post.isCommentOff)
-                                    const Text(
-                                        'how many paragraphs are enough, and how many are too many? For historical writing, there should be between four and six paragraphs in a two-page paper, or ..'),
-                                ],
-                              ),
-                            ),
-                          );
+                          return state.postComments.isEmpty
+                              ? const NoCommentDisplay()
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: state.postComments.length,
+                                  itemBuilder: (context, index) {
+                                    final comment = state.postComments[index];
+
+                                    return EachComment(
+                                        postId: widget.post.postId,
+                                        commentId: comment.commentId,
+                                        editCall: () {
+                                          inputNode?.requestFocus();
+                                          _commentController.text =
+                                              comment.comment;
+                                          commentId = comment.commentId;
+                                          _commentSubmitSelection.value = (
+                                            isComment: false,
+                                            isEdit: true,
+                                            isTextEmpty: false
+                                          );
+                                        },
+                                        comment: comment,
+                                        myId: appUser.id);
+                                  });
                         }
-                        return Container();
+                        return const EmptyDisplay();
                       },
                     ),
                   if (!widget.post.isCommentOff)
@@ -174,7 +108,6 @@ class _ViewPostState extends State<ViewPost> {
                         TextButton(
                             onPressed: () {}, child: const Text('Reply')),
                         AppSizedBox.sizedBox10W,
-                        const Text('5 hours ago')
                       ],
                     ),
                 ],
@@ -182,68 +115,12 @@ class _ViewPostState extends State<ViewPost> {
             ),
           ),
           if (!widget.post.isCommentOff)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                height: 80,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                color:
-                    Colors.black, // Set the background color of the container
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                    
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        CircularUserProfile(
-                          size: 12,
-                        ),
-                        Expanded(
-                          child: TextField(
-                            style: TextStyle(color: Colors.white), // Text color
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Write a comment...',
-                                enabledBorder: InputBorder.none,
-                                filled: true,
-                                focusedBorder:
-                                    InputBorder.none, // No border when focused
-
-                                fillColor: AppDarkColor()
-                                    .background // Background color
-                                ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        TextButton(
-                          onPressed: () {
-                            final user = context.read<AppUserBloc>().appUser;
-                            context.read<CommentBasicCubit>().addComment(
-                                comment: 'comment',
-                                userName: user.userName ?? '',
-                                postId: widget.post.postId,
-                                creatorId: user.id);
-                                
-                          },
-                          child: Text(
-                            'Post',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge, // Button text color
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            CommentBottomInputSection(
+                commentController: _commentController,
+                commentSubmitSelection: _commentSubmitSelection,
+                myId: appUser.id,
+                postId: widget.post.postId,
+                commentId: commentId)
         ],
       ),
     );

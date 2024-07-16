@@ -33,12 +33,17 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
   Future<Either<Failure, AppUser>> createUserProfile(
       {required UserProfile user,
       File? profilePic,
-      required String uid}) async {
+      required String uid,
+      required bool isEdit}) async {
     try {
       final userProfileModel = UserProfileModel.fromUserProfile(user);
 
       final res = await _userProfileDataSource.createUserProfile(
-          userProfile: userProfileModel, uid: uid, file: profilePic);
+        userProfile: userProfileModel,
+        uid: uid,
+        file: profilePic,
+        isEdit: isEdit
+      );
       return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg, e.details));
@@ -49,12 +54,10 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
   Future<Either<Failure, Unit>> addInterest(
       List<String> interests, String uid) async {
     try {
-      await _userProfileDataSource.addInterest(interests, uid);
+      await _userProfileDataSource.editInterest(interests, uid);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
     }
   }
-
-
 }

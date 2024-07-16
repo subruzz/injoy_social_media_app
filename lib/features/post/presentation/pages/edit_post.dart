@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
@@ -69,11 +70,16 @@ class _EditPostPageState extends State<EditPostPage> {
                 Messenger.showSnackBar(message: state.errorMsg);
               }
               if (state is UpdatePostSuccess) {
-                context.read<GetUserPostsBloc>().add(GetUserPostsAterPostUpdate(
-                    userAllPostImages: widget.userAllPostImages,
-                    updatedPost: state.updatePost,
-                    index: widget.index,
-                    allUsePosts: widget.allUserStatuses));
+                context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
+                    uid: context
+                        .read<AppUserBloc>()
+                        .appUser
+                        .id)); // context.read<GetUserPostsBloc>().add(GetUserPostsAterPostUpdate(
+                //     userAllPostImages: widget.userAllPostImages,
+                //     updatedPost: state.updatePost,
+                //     index: widget.index,
+                //     allUsePosts: widget.allUserStatuses));
+                Navigator.pop(context);
                 Navigator.pop(context);
               }
             },

@@ -24,6 +24,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     res.fold((failure) {
       emit(LocationFailure());
     }, (success) {
+    
       switch (success.locationStatus) {
         case LocationStatus.locationNotEnabled:
           emit(LocationNotOnState());
@@ -37,6 +38,8 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
         case LocationStatus.locationPermissionAllowed:
           emit(LocationSuccess(location: success));
           break;
+        case null:
+          emit(LocationFailure());
       }
     });
   }

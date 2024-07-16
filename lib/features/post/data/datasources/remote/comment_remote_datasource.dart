@@ -89,7 +89,6 @@ class CommentRemoteDatasourceImpl implements CommentRemoteDatasource {
         .collection(FirebaseCollectionConst.comments)
         .orderBy('createdAt', descending: true);
     return commentCollection.snapshots().map((snap) {
-      log('listening for comment change');
       return snap.docs.map((e) => CommentModel.fromJson(e.data())).toList();
     });
   }

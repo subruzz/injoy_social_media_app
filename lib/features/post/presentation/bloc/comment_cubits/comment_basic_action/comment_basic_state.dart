@@ -18,3 +18,7 @@ class CommentError extends CommentBasicState {
 }
 
 class CommentSuccess extends CommentBasicState {}
+
+class CommentAddedSuccess extends CommentBasicState {}
+
+class CommentDeletedSuccess extends CommentBasicState {}

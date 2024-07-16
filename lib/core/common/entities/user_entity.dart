@@ -17,12 +17,12 @@ class AppUser extends Equatable {
   int followersCount;
   int followingCount;
   // final List<String> followers;
-  // final List<String> following;
+  final List<String> following;
   final List<String> interests;
   final List<String> posts;
   final int viewedSetupIndex;
 
-   AppUser({
+  AppUser({
     required this.id,
     this.viewedSetupIndex = 0,
     required this.email,
@@ -41,7 +41,7 @@ class AppUser extends Equatable {
     this.longitude,
 
     // this.followers = const [],
-    // this.following = const [],
+    this.following = const [],
     this.posts = const [],
     this.interests = const [],
   });

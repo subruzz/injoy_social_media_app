@@ -91,6 +91,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
                   uid: context.read<AppUserBloc>().appUser.id));
               Navigator.pop(context);
+              Navigator.pop(context);
+
               Messenger.showSnackBar(message: 'success');
             }
           },

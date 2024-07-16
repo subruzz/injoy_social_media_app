@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
-import 'package:social_media_app/core/const/interest_list.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/features/assets/presenation/pages/custom_media_picker_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
-import 'package:social_media_app/features/location/presentation/pages/location_asking_page.dart';
+import 'package:social_media_app/features/explore/presentation/pages/view_hash_tag_posts.dart';
 import 'package:social_media_app/features/location/presentation/pages/location_asking_page_builder.dart';
 import 'package:social_media_app/features/post/presentation/pages/create_post_page.dart';
+import 'package:social_media_app/features/post/presentation/pages/view_post.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile/add_profile_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/interest_page/interest_selection_page.dart';
@@ -121,6 +122,14 @@ class MyAppRouter {
         },
       ),
       GoRoute(
+        name: MyAppRouteConst.viewPostsDetailedRoute,
+        path: '/viewPostDetailsPage',
+        pageBuilder: (context, state) {
+          final PostEntity post = state.extra as PostEntity;
+          return MaterialPage(child: ViewPost(post: post));
+        },
+      ),
+      GoRoute(
         name: MyAppRouteConst.otherUserProfile,
         path: '/otherUserProfile',
         pageBuilder: (context, state) {
@@ -132,6 +141,22 @@ class MyAppRouter {
             child: OtherUserProfilePage(
               userName: userName,
               otherUserId: otherUserId,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        name: MyAppRouteConst.hashtagPostsRoute,
+        path: '/viewHashTagPosts',
+        pageBuilder: (context, state) {
+          final Map<String, dynamic> params =
+              state.extra as Map<String, dynamic>;
+          final String hashTagName = params['hashTagName'];
+          final int? hashTagPostCount = params['hashTagPostCount'];
+          return MaterialPage(
+            child: ViewHashTagPostsScreen(
+              hashTagName: hashTagName,
+              hashTagPostCount: hashTagPostCount,
             ),
           );
         },

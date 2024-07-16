@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 
 class PostModel extends PostEntity {
-  const PostModel({
+   PostModel({
     required super.postId,
     required super.creatorUid,
     required super.username,
@@ -11,7 +10,7 @@ class PostModel extends PostEntity {
     required super.postImageUrl,
     required super.userFullName,
     required super.likes,
-    super.totalComments,
+    required super.totalComments,
     required super.createAt,
     super.userProfileUrl,
     required super.hashtags,

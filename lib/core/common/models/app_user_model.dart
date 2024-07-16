@@ -18,7 +18,7 @@ class AppUserModel extends AppUser {
     required super.followersCount,
     required super.followingCount,
     // super.followers,
-    // super.following,
+    super.following,
     super.posts,
     super.interests,
     super.viewedSetupIndex,
@@ -83,7 +83,7 @@ class AppUserModel extends AppUser {
       latitude: json['latitude'],
       longitude: json['longitude'],
       // followers: List<String>.from(json['followers'] ?? []),
-      // following: List<String>.from(json['following'] ?? []),
+      following: List<String>.from(json['following'] ?? []),
       posts: List<String>.from(json['posts'] ?? []),
       interests: List<String>.from(json['interests'] ?? []),
     );
@@ -108,7 +108,7 @@ class AppUserModel extends AppUser {
       'followersCount': followersCount,
       'followingCount': followingCount,
       // 'followers': followers,
-      // 'following': following,
+      'following': following,
       'posts': posts,
       'interests': interests,
     };

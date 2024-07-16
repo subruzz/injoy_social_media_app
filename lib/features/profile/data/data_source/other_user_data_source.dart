@@ -26,7 +26,7 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
 
   @override
   Future<AppUser> getOtherUserProfile(String uid) async {
-    try {  
+    try {
       DocumentSnapshot docSnapshot = await _firebaseFirestore
           .collection(FirebaseCollectionConst.users)
           .doc(uid)
@@ -109,7 +109,9 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
   }
 
   @override
-  Future<List<PartialUser>> getMyFollowers(String myId) async {
+  Future<List<PartialUser>> getMyFollowers(
+    String myId,
+  ) async {
     try {
       // Fetch the follower IDs from the subcollection
       var followersSnapshot = await FirebaseFirestore.instance

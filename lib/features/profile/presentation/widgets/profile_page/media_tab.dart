@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
@@ -24,11 +25,13 @@ class UsersPostsTab extends StatelessWidget {
           if (state.userAllPostImages.isEmpty) {
             return const NoPostsPlaceholder();
           }
-          return MediaGrid(medias: state.userPosts);
+          return MediaGrid(
+            medias: state.userPosts,
+            isEdit: true,
+          );
         }
-        return const SizedBox.shrink();
+        return const EmptyDisplay();
       },
     );
   }
 }
-

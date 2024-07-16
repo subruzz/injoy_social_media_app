@@ -2,14 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
-import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
-import 'package:social_media_app/core/widgets/user_profile.dart';
+
+import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/partial_user_widget.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_followers_list/get_followers_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_following_list/get_following_list_cubit.dart';
 import 'package:social_media_app/init_dependecies.dart';
@@ -25,7 +22,7 @@ class SeeFollowersFollowingPage extends StatelessWidget {
             create: (context) => serviceLocator<GetFollowingListCubit>()
               ..getMyFollowingList(
                   myId: '',
-                  following: context.read<FollowingCubit>().followingList),
+                  following: context.read<AppUserBloc>().appUser.following),
           ),
           BlocProvider(
             create: (context) => serviceLocator<GetFollowersCubit>()
@@ -61,36 +58,11 @@ class SeeFollowersFollowingPage extends StatelessWidget {
                                     padding: AppPadding.small,
                                     itemCount: state.following.length,
                                     itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: AppPadding.onlyBottomSmall,
-                                        child: Row(
-                                          children: [
-                                            CircularUserProfile(
-                                              size: 30,
-                                            ),
-                                            AppSizedBox.sizedBox15W,
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text('@Angelina'),
-                                                Text('saholina')
-                                              ],
-                                            ),
-                                            const Spacer(),
-                                            CustomButton(
-                                                height: 40,
-                                                width: 100,
-                                                radius: AppBorderRadius
-                                                    .horizontalExtraLarge,
-                                                child: Text('Follow'),
-                                                onClick: () {})
-                                          ],
-                                        ),
-                                      );
+                                      return PartialUserWidget(
+                                          user: state.following[index]);
                                     });
                               }
-                              return EmptyDisplay();
+                              return const EmptyDisplay();
                             },
                           ),
                           BlocBuilder<GetFollowersCubit, GetFollowersState>(
@@ -101,36 +73,11 @@ class SeeFollowersFollowingPage extends StatelessWidget {
                                     padding: AppPadding.small,
                                     itemCount: state.followers.length,
                                     itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: AppPadding.onlyBottomSmall,
-                                        child: Row(
-                                          children: [
-                                            CircularUserProfile(
-                                              size: 30,
-                                            ),
-                                            AppSizedBox.sizedBox15W,
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text('@Angelina'),
-                                                Text('saholina')
-                                              ],
-                                            ),
-                                            const Spacer(),
-                                            CustomButton(
-                                                height: 40,
-                                                width: 100,
-                                                radius: AppBorderRadius
-                                                    .horizontalExtraLarge,
-                                                child: Text('Follow'),
-                                                onClick: () {})
-                                          ],
-                                        ),
-                                      );
+                                      return PartialUserWidget(
+                                          user: state.followers[index]);
                                     });
                               }
-                              return EmptyDisplay();
+                              return const  EmptyDisplay();
                             },
                           ),
                         ],

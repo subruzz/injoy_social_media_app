@@ -53,6 +53,7 @@ class OtherUserProfilePage extends StatelessWidget {
                     child: Column(
                       children: [
                         UserBasicDetailSection(user: currentUser),
+                        AppSizedBox.sizedBox10H,
                         UserSocialActionDetailsSection(
                           user: currentUser,
                           isMe: false,
@@ -66,7 +67,9 @@ class OtherUserProfilePage extends StatelessWidget {
                     ),
                   ),
                   // TabBarView for displaying content of each tab
-                  const OtherUserPosts()
+                  OtherUserPosts(
+                    userName: userName,
+                  )
                 ],
               );
             }

@@ -34,7 +34,6 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
       body: Center(
         child: SizedBox(
           child: DefaultTabController(
-            
             length: 2,
             child: NestedScrollView(
               headerSliverBuilder: (_, __) {
@@ -61,8 +60,6 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
     );
   }
 }
-
-
 
 class CustomBottomSheet {
   static void showOptions(BuildContext context) {
@@ -91,6 +88,8 @@ class CustomBottomSheet {
                 icon: Icons.person,
                 text: 'Edit Profile',
                 onTap: () {
+                  Navigator.pop(context);
+
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => EditProfilePage(
                         appUser: context.read<AppUserBloc>().appUser),
@@ -101,7 +100,7 @@ class CustomBottomSheet {
                 icon: Icons.interests,
                 text: 'Edit Interests',
                 onTap: () {
-                  context.pop(context);
+                  Navigator.pop(context);
                   context.pushNamed(MyAppRouteConst.interestSelectRoute,
                       extra: context.read<AppUserBloc>().appUser.interests);
                 },
@@ -114,23 +113,16 @@ class CustomBottomSheet {
                   // Add your onTap code here
                 },
               ),
-              
-              _buildListTile(
-                icon: Icons.qr_code,
-                text: 'QR Code',
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
-              _buildListTile(
-                icon: Icons.bookmark,
-                text: 'Saved',
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
+
+              // _buildListTile(
+              //   icon: Icons.qr_code,
+              //   text: 'QR Code',
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     // Add your onTap code here
+              //   },
+              // ),
+            
               // _buildListTile(
               //   icon: Icons.people,
               //   text: 'Close Friends',
@@ -139,14 +131,7 @@ class CustomBottomSheet {
               //     // Add your onTap code here
               //   },
               // ),
-              _buildListTile(
-                icon: Icons.favorite,
-                text: 'Favorites',
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
+             
               _buildListTile(
                 color: AppDarkColor().iconSecondarycolor,
                 icon: Icons.logout,
@@ -182,7 +167,7 @@ class CustomBottomSheet {
       required VoidCallback onTap,
       Color? color}) {
     return ListTile(
-      splashColor: Colors.transparent, // This removes the splash color
+      splashColor: Colors.transparent, 
 
       leading: Icon(icon, color: AppDarkColor().iconSoftColor),
       title: Text(

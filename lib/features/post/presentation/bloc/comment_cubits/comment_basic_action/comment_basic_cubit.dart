@@ -43,7 +43,7 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
     final res = await _createCommentUsecase(
         CreateCommentUsecaseParams(comment: newComment));
     res.fold((failure) => emit(CommentError(error: failure.message)),
-        (success) => emit(CommentSuccess()));
+        (success) => emit(CommentAddedSuccess()));
   }
 
   void deleteComment(
@@ -53,7 +53,7 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
     final res = await _deleteCommentUseCase(
         DeleteCommentUseCaseParams(postId: postId, commentId: commentId));
     res.fold((failure) => emit(CommentError(error: failure.message)),
-        (success) => emit(CommentSuccess()));
+        (success) => emit(CommentDeletedSuccess()));
   }
 
   void updateComment(

@@ -14,10 +14,13 @@ class UserBasicDetailSection extends StatelessWidget {
     return CustomAppPadding(
       child: Column(
         children: [
-          CircularUserProfile(
-            wantSecProfile: true,
-            size: 55,
-            profile: user.profilePic,
+          Hero(
+            tag: user.id,
+            child: CircularUserProfile(
+              wantSecProfile: true,
+              size: 55,
+              profile: user.profilePic,
+            ),
           ),
           AppSizedBox.sizedBox3H,
           CustomText(

@@ -7,8 +7,10 @@ import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_event.dart';
 import 'package:social_media_app/features/profile/domain/entities/user_profile.dart';
+import 'package:social_media_app/features/profile/domain/usecases/add_interest.dart';
 import 'package:social_media_app/features/profile/domain/usecases/check_username_exist.dart';
 import 'package:social_media_app/features/profile/domain/usecases/create_user_profile.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
 // import 'package:stream_transform/stream_transform.dart';
@@ -23,8 +25,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AppUserBloc _appUserBloc;
   final CheckUsernameExistUseCasse _checkUsernameExistUseCasse;
   final CreateUserProfileUseCase _createUserProfileUseCase;
+  final AddInterestUseCase _addInterestUseCase;
   ProfileBloc(this._createUserProfileUseCase, this._appUserBloc,
-      this._checkUsernameExistUseCasse)
+      this._checkUsernameExistUseCasse, this._addInterestUseCase)
       : super(ProfileInitial()) {
     on<UserNameExistCheckEvent>(
       _checkUserNameAvailableOrNot,
@@ -71,14 +74,22 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> _onInterestsSet(
       ProfileInterestSelectedEvent event, Emitter<ProfileState> emit) async {
-    _interest = event.interests;
+    if (!event.isEdit) _interest = event.interests;
     emit(ProfileInterestLoading());
     if (event.interests.isEmpty) {
       emit(ProfileInterestEmptyState());
       return;
     }
+    if (event.isEdit) {
+      final res = await _addInterestUseCase(AddInterestUseCaseParams(
+          interests: event.interests, uid: event.myId));
+      res.fold(
+          (failure) => emit(ProfileInterestsFailure(error: failure.message)),
+          (success) => emit(const ProfileInterestsSet(isEdit: true)));
+      return;
+    }
 
-    emit(ProfileInterestsSet());
+    emit(const ProfileInterestsSet());
   }
 
   // FutureOr<void> _onLocationSet(
@@ -127,7 +138,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         location: event.location?.currentLocation);
     log(userProfile.toString());
     final res = await _createUserProfileUseCase(CreateUserProfileUseCaseParams(
-        appUser: userProfile, uid: event.uid, profilePic: _fileImg));
+        isEdit: false,
+        appUser: userProfile,
+        uid: event.uid,
+        profilePic: _fileImg));
     res.fold((failure) {
       log('error occured in bloc');
       emit(CompleteProfileSetupFailure(errorMsg: failure.message));
@@ -155,7 +169,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         longitude: event.location?.longitude,
         location: event.location?.currentLocation);
     final res = await _createUserProfileUseCase(CreateUserProfileUseCaseParams(
-        appUser: userProfile, uid: event.uid, profilePic: event.profilePic));
+        isEdit: true,
+        appUser: userProfile,
+        uid: event.uid,
+        profilePic: event.profilePic));
     res.fold((failure) {
       log('error occured in bloc');
       emit(CompleteProfileSetupFailure(errorMsg: failure.message));

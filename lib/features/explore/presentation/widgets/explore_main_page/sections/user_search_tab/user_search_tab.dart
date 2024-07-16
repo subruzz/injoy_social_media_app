@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/common_widgets/explore_search_loading.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/common_widgets/partial_user_widget.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/common_widgets/search_empty_error_text.dart';
+import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/explore_search_loading.dart';
+import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/partial_user_widget.dart';
+import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/search_empty_error_text.dart';
 
 class UserSearchTab extends StatelessWidget {
   const UserSearchTab({super.key});
@@ -17,7 +17,7 @@ class UserSearchTab extends StatelessWidget {
       builder: (context, state) {
         if (state is SearchUserSuccess) {
           if (state.searchedUsers.isEmpty) {
-            return SearchEmptyErrorText(query: state.query);
+            return ExploreFieldMessages(query: state.query);
           }
           return ListView.builder(
             padding: AppPadding.small,
@@ -28,7 +28,7 @@ class UserSearchTab extends StatelessWidget {
           );
         }
         if (state is SearchUserFailure) {
-          return const SearchEmptyErrorText(
+          return const ExploreFieldMessages(
             isError: true,
           );
         }

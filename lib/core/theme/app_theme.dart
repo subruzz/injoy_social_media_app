@@ -111,6 +111,8 @@ final class AppDarkTheme {
       surfaceTintColor: Colors.transparent,
     ),
     tabBarTheme: TabBarTheme(
+      labelPadding: const EdgeInsets.only(bottom: 6),
+      labelColor: _color.secondaryPrimaryText,
       labelStyle: TextStyle(
         color: _color.primaryText,
         fontWeight: FontWeight.w600,
@@ -119,9 +121,11 @@ final class AppDarkTheme {
       unselectedLabelStyle: TextStyle(
         color: _color.secondaryText,
         fontSize: 16.sp,
+        fontWeight: FontWeight.w600,
       ),
-      dividerColor: _color.secondaryBorder,
-      indicatorColor: _color.primaryBorder,
+      indicatorSize: TabBarIndicatorSize.tab,
+      dividerColor: _color.secondaryBackground,
+      indicatorColor: _color.buttonBackground,
       overlayColor: const WidgetStatePropertyAll(Colors.transparent),
       splashFactory: NoSplash.splashFactory,
     ),

@@ -2,28 +2,18 @@ import 'package:social_media_app/features/profile/domain/entities/user_profile.d
 
 class UserProfileModel extends UserProfile {
   UserProfileModel({
-    required String fullName,
-    required String userName,
-    required String dob,
-    String? phoneNumber,
-    String? occupation,
-    String? about,
-    String? profilePic,
-    String? location,
-    double? latitude,
-    double? longitude,
+    required super.fullName,
+    required super.userName,
+    required super.dob,
+    super.phoneNumber,
+    super.occupation,
+    super.about,
+    super.profilePic,
+    super.location,
+    super.latitude,
+    super.longitude,
     List<String>? interests,
   }) : super(
-          fullName: fullName,
-          userName: userName,
-          dob: dob,
-          phoneNumber: phoneNumber,
-          occupation: occupation,
-          about: about,
-          profilePic: profilePic,
-          location: location,
-          latitude: latitude,
-          longitude: longitude,
           interests: interests ?? [],
         );
 
@@ -83,13 +73,12 @@ class UserProfileModel extends UserProfile {
       location: json['location'],
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
-      interests: json['interests'] != null
-          ? List<String>.from(json['interests'])
-          : [],
+      interests:
+          json['interests'] != null ? List<String>.from(json['interests']) : [],
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({bool edit = false}) {
     return {
       'fullName': fullName,
       'userName': userName,
@@ -101,7 +90,7 @@ class UserProfileModel extends UserProfile {
       'location': location,
       'latitude': latitude,
       'longitude': longitude,
-      'interests': interests,
+      if (!edit) 'interests': interests,
     };
   }
 }

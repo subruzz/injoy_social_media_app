@@ -19,7 +19,10 @@ class CreateUserProfileUseCase
   Future<Either<Failure, AppUser>> call(
       CreateUserProfileUseCaseParams params) async {
     return await _profileRepository.createUserProfile(
-        user: params.appUser, profilePic: params.profilePic, uid: params.uid);
+        user: params.appUser,
+        profilePic: params.profilePic,
+        uid: params.uid,
+        isEdit: params.isEdit);
   }
 }
 
@@ -27,10 +30,11 @@ class CreateUserProfileUseCaseParams {
   final UserProfile appUser;
   File? profilePic;
   final String uid;
-
+  final bool isEdit;
   CreateUserProfileUseCaseParams({
     required this.appUser,
     required this.uid,
+    required this.isEdit,
     required this.profilePic,
   });
 }

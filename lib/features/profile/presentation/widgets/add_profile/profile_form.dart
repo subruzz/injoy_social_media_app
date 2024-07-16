@@ -79,25 +79,7 @@ class ProfileForm extends StatelessWidget {
               validation: Validation.simpleValidation,
             ),
           ),
-          // AppSizedBox.sizedBox15H,
-          // InkWell(
-          //   onTap: () async {
-          //     final UserLocation? res =
-          //         await context.pushNamed(MyAppRouteConst.locationPageRoute);
-          //     // if (res != null) {
-          //     //   _userLocation = res;
-          //     //   _locationController.text = res.currentLocation ?? '';
-          //     // }
-          //   },
-          //   child: IgnorePointer(
-          //     child: CustomTextField(
-          //       autoValidate: false,
-          //       readOnly: true,
-          //       prefixIcon: Icons.location_on,
-          //       hintText: 'Location',
-          //     ),
-          //   ),
-          // ),
+       
           AppSizedBox.sizedBox15H,
           CustomTextField(
             controller: phoneNoController,

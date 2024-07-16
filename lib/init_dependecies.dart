@@ -74,6 +74,8 @@ import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/upd
 import 'package:social_media_app/features/post_status_feed/data/datasource/status_feed_remote_datasource.dart';
 import 'package:social_media_app/features/post_status_feed/data/repository/status_feed_repository_impl.dart';
 import 'package:social_media_app/features/post_status_feed/domain/repositories/status_feed_repository.dart';
+import 'package:social_media_app/features/post_status_feed/domain/usecases/get_for_you_posts.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/bloc/for_you_posts/for_you_post_bloc.dart';
 import 'package:social_media_app/features/profile/data/data_source/other_user_data_source.dart';
 import 'package:social_media_app/features/profile/data/repository/other_user_profile_impl.dart';
 import 'package:social_media_app/features/profile/domain/repository/other_user_repository.dart';
@@ -88,6 +90,7 @@ import 'package:social_media_app/features/profile/presentation/bloc/follow_unfol
 import 'package:social_media_app/features/profile/presentation/bloc/get_followers_list/get_followers_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_following_list/get_following_list_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_other_user_posts/get_other_user_posts_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/get_user_liked_posts/get_user_liked_posts_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_profile/other_profile_cubit.dart';
 import 'package:social_media_app/features/status/data/datasource/status_remote_datasource.dart';
 import 'package:social_media_app/features/status/data/repository/create_status_repository_impl.dart';
@@ -123,6 +126,8 @@ import 'package:social_media_app/features/profile/domain/usecases/get_user_posts
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/add_interests/select_interest_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
+
+import 'features/profile/domain/usecases/get_my_liked_posts.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -220,7 +225,8 @@ void _initProfile() {
     ..registerFactory(
         () => CheckUsernameExistUseCasse(profileRepository: serviceLocator()))
     ..registerLazySingleton(
-      () => ProfileBloc(serviceLocator(), serviceLocator(), serviceLocator()),
+      () => ProfileBloc(serviceLocator(), serviceLocator(), serviceLocator(),
+          serviceLocator()),
     )
     ..registerFactory(
         () => AddInterestUseCase(profileRepository: serviceLocator()))
@@ -236,8 +242,8 @@ void _initProfile() {
         () => FollowUserUseCase(userProfileRepository: serviceLocator()))
     ..registerFactory(
         () => UnfollowUserUseCase(userProfileRepository: serviceLocator()))
-    ..registerLazySingleton(
-        () => FollowunfollowCubit(serviceLocator(), serviceLocator()))
+    ..registerLazySingleton(() => FollowunfollowCubit(
+        serviceLocator(), serviceLocator(), serviceLocator()))
     ..registerFactory(() => GetOtherUserPostsCubit(serviceLocator()))
     ..registerFactory(
         () => GetFollowingListUseCase(userProfileRepository: serviceLocator()))
@@ -305,7 +311,10 @@ void _getUserPosts() {
         () => GetUserPostsUseCase(userPostRepository: serviceLocator()))
     ..registerFactory(
         () => UpdatePostsUseCase(postRepository: serviceLocator()))
-    ..registerLazySingleton(() => GetUserPostsBloc(serviceLocator()));
+    ..registerLazySingleton(() => GetUserPostsBloc(serviceLocator()))
+    ..registerFactory(
+        () => GetMyLikedPostsUseCase(userPostRepository: serviceLocator()))
+    ..registerFactory(() => GetUserLikedPostsCubit(serviceLocator()));
 }
 
 void _postFeed() {
@@ -328,7 +337,10 @@ void _postFeed() {
         ))
     ..registerFactory(() => GetAllStatusesUseCase(repository: serviceLocator()))
     ..registerLazySingleton(
-        () => GetAllStatusBloc(getAllStatusesUseCase: serviceLocator()));
+        () => GetAllStatusBloc(getAllStatusesUseCase: serviceLocator()))
+    ..registerFactory(
+        () => GetForYouPostsUseCase(postFeedRepository: serviceLocator()))
+    ..registerLazySingleton(() => ForYouPostBloc(serviceLocator()));
 }
 
 void _comment() {
@@ -352,7 +364,7 @@ void _comment() {
         () => RemoveLikeCommentUseCase(commentRepository: serviceLocator()))
     ..registerLazySingleton(
         () => LikeCommentCubit(serviceLocator(), serviceLocator()))
-    ..registerLazySingleton(() => GetPostCommentCubit(serviceLocator()))
+    ..registerFactory(() => GetPostCommentCubit(serviceLocator()))
     ..registerLazySingleton(() => CommentBasicCubit(
         createCommentUsecase: serviceLocator(),
         updateCommentUseCase: serviceLocator(),

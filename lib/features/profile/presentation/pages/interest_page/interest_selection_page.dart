@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +9,7 @@ import 'package:social_media_app/core/const/app_info_dialog.dart';
 import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
 import 'package:social_media_app/core/const/interest_list.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/welcome_msg/welcome_msg.dart';
@@ -42,6 +45,10 @@ class _InterestSelectionPageState extends State<InterestSelectionPage> {
       floatingActionButton: BlocListener<ProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state is ProfileInterestsSet) {
+            if (state.isEdit) {
+              Navigator.pop(context);
+              return;
+            }
             context.pushNamed(MyAppRouteConst.locationPageRoute, extra: true);
           }
           if (state is ProfileInterestEmptyState) {
@@ -57,8 +64,10 @@ class _InterestSelectionPageState extends State<InterestSelectionPage> {
         },
         child: NextButton(
             onpressed: () {
-              context.read<ProfileBloc>().add(
-                  ProfileInterestSelectedEvent(interests: _selectedInterests));
+              context.read<ProfileBloc>().add(ProfileInterestSelectedEvent(
+                  isEdit: widget.alreadySelectedInterests != null,
+                  interests: _selectedInterests,
+                  myId: context.read<AppUserBloc>().appUser.id));
             },
             child: const NextIcon()),
       ),

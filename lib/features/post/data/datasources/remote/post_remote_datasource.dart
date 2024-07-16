@@ -163,12 +163,30 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   @override
   Future<void> unLikePost(String postId, String currentUserUid) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
+    final userCollection = FirebaseFirestore.instance.collection('users');
+
     try {
       final postRef = postCollection.doc(postId);
+      final userRef = userCollection.doc(currentUserUid);
 
-      await postRef.update({
-        'likes': FieldValue.arrayRemove([currentUserUid]),
-        'likesCount': FieldValue.increment(-1),
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final postSnapshot = await transaction.get(postRef);
+        final userSnapshot = await transaction.get(userRef);
+
+        if (!postSnapshot.exists || !userSnapshot.exists) {
+          throw Exception("Post or user does not exist!");
+        }
+
+        // Update post's likes array and decrement likes count
+        transaction.update(postRef, {
+          'likes': FieldValue.arrayRemove([currentUserUid]),
+          'likesCount': FieldValue.increment(-1),
+        });
+
+        // Remove post from user's likedPosts subcollection
+        final userLikesSubCollectionRef =
+            userRef.collection('likedPosts').doc(postId);
+        transaction.delete(userLikesSubCollectionRef);
       });
     } catch (e) {
       throw const MainException();
@@ -178,12 +196,33 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   @override
   Future<void> likePost(String postId, String currentUserUid) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
+    final userCollection = FirebaseFirestore.instance.collection('users');
+
     try {
       final postRef = postCollection.doc(postId);
+      final userRef = userCollection.doc(currentUserUid);
 
-      await postRef.update({
-        'likes': FieldValue.arrayUnion([currentUserUid]),
-        'likesCount': FieldValue.increment(1),
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        final postSnapshot = await transaction.get(postRef);
+        final userSnapshot = await transaction.get(userRef);
+
+        if (!postSnapshot.exists || !userSnapshot.exists) {
+          throw Exception("Post or user does not exist!");
+        }
+
+        // Update post's likes array and increment likes count
+        transaction.update(postRef, {
+          'likes': FieldValue.arrayUnion([currentUserUid]),
+          'likesCount': FieldValue.increment(1),
+        });
+
+        // Add post to user's likedPosts subcollection
+        final userLikesSubCollectionRef =
+            userRef.collection('likedPosts').doc(postId);
+        transaction.set(userLikesSubCollectionRef, {
+          'postId': postId,
+          'likedAt': FieldValue.serverTimestamp(),
+        });
       });
     } catch (e) {
       throw const MainException();

@@ -13,4 +13,6 @@ class MyAppRouteConst {
   static const String profileLoadingRouter = 'profileLoadingPage';
   static const String mediaPickerRoute = 'mediaPickerPage';
   static const String otherUserProfile = 'otherUserprofile';
+  static const String hashtagPostsRoute = 'hashtagPostsPage';
+  static const String viewPostsDetailedRoute = 'viewPostDetailsPage';
 }

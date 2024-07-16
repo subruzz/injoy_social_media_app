@@ -54,7 +54,6 @@ class CommentRepositoryImpl implements CommentRepository {
     try {
       await for (final comments
           in _commentRemoteDatasource.readComments(postId)) {
-        log('we have ${comments.length}from repo impl');
         yield Right(comments);
       }
     } on SocketException catch (e) {

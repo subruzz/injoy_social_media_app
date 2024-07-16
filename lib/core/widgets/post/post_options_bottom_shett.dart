@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 
 class PostOptionsBottomShett {
   static showPostOptionBottomSheet(
@@ -77,15 +81,25 @@ class PostOptionsBottomShett {
                   onEdit?.call();
                 },
               ),
-              ListTile(
-                leading: Icon(Icons.delete_outlined,
-                    color: AppDarkColor().iconSecondarycolor),
-                title: Text('Delete',
-                    style: Theme.of(context).textTheme.labelLarge),
-                onTap: () {
-                  Navigator.pop(context);
-                  onDelete?.call();
+              BlocListener<DeletePostBloc, DeletePostState>(
+                listener: (context, state) {
+                  if (state is DeletePostSuccess) {
+                    context.read<GetUserPostsBloc>().add(
+                        GetUserPostsrequestedEvent(
+                            uid: context.read<AppUserBloc>().appUser.id));
+                    Navigator.pop(context);
+                  }
                 },
+                child: ListTile(
+                  leading: Icon(Icons.delete_outlined,
+                      color: AppDarkColor().iconSecondarycolor),
+                  title: Text('Delete',
+                      style: Theme.of(context).textTheme.labelLarge),
+                  onTap: () {
+                    Navigator.pop(context);
+                    onDelete?.call();
+                  },
+                ),
               ),
             ],
             if (!isEdit)

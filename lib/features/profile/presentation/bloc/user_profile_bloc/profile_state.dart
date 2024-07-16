@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:equatable/equatable.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/features/profile/domain/entities/user_profile.dart';
@@ -42,7 +40,17 @@ final class CompleteProfileSetupSuceess extends ProfileState {
 }
 
 //user interest selecing
-class ProfileInterestsSet extends ProfileState {}
+class ProfileInterestsSet extends ProfileState {
+  final bool isEdit;
+
+  const ProfileInterestsSet({this.isEdit = false});
+}
+
+class ProfileInterestsFailure extends ProfileState {
+  final String error;
+
+  const ProfileInterestsFailure({required this.error});
+}
 
 class ProfileInterestLoading extends ProfileState {}
 

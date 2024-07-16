@@ -21,8 +21,7 @@ class OtherUserFollowMessageSection extends StatelessWidget {
   final AppUser currentVisitedUser;
   @override
   Widget build(BuildContext context) {
-    final user = context.read<AppUserBloc>().appUser;
-    final following = context.read<FollowingCubit>().followingList;
+    final me = context.read<AppUserBloc>().appUser;
 
     return CustomAppPadding(
       padding: AppPadding.horizontalSmall,
@@ -35,21 +34,25 @@ class OtherUserFollowMessageSection extends StatelessWidget {
                     iconSize: 20.w,
                     iconData: Icons.person_add_alt,
                     radius: AppBorderRadius.horizontalExtraLarge,
-                    title: following.contains(currentVisitedUser.id)
+                    title: me.following.contains(currentVisitedUser.id)
                         ? 'Following'
                         : 'Follow',
                     onClick: () {
                       final amIFollowing =
-                          following.contains(currentVisitedUser.id);
+                          me.following.contains(currentVisitedUser.id);
                       if (amIFollowing) {
                         --currentVisitedUser.followersCount;
                         context.read<FollowunfollowCubit>().unfollowUser(
-                            user.id, currentVisitedUser.id, following);
+                              myId: me.id,
+                              otherId: currentVisitedUser.id,
+                            );
                       } else {
                         ++currentVisitedUser.followersCount;
 
                         context.read<FollowunfollowCubit>().followUser(
-                            user.id, currentVisitedUser.id, following);
+                              me.id,
+                              currentVisitedUser.id,
+                            );
                       }
                     }),
               );
@@ -59,7 +62,6 @@ class OtherUserFollowMessageSection extends StatelessWidget {
                 Messenger.showSnackBar(
                     message:
                         'An error occured while following this user,Please try again!');
-
               }
               if (state is UnfollowFailure) {
                 Messenger.showSnackBar(

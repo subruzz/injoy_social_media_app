@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
 import 'package:social_media_app/core/utils/functions/date_picker.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 import 'package:social_media_app/core/widgets/loading/loading_bar.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
+import 'package:social_media_app/features/location/domain/entities/location.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
@@ -29,6 +32,8 @@ class _AddProfilePageState extends State<EditProfilePage> {
   final _phoneNoController = TextEditingController();
   final _occupationController = TextEditingController();
   final _aboutController = TextEditingController();
+  final _locationController = TextEditingController();
+  UserLocation? _userLocation;
   String? _profileImage;
   final _selectImageCuit = GetIt.instance<PickSingleImageCubit>();
   List<String> _selectedInterest = [];
@@ -45,6 +50,11 @@ class _AddProfilePageState extends State<EditProfilePage> {
     _occupationController.text = widget.appUser.occupation ?? '';
     _selectedDate.value.text = widget.appUser.dob ?? '';
     _aboutController.text = widget.appUser.about ?? '';
+    _locationController.text = widget.appUser.location ?? '';
+    _userLocation = UserLocation(
+        latitude: widget.appUser.latitude,
+        longitude: widget.appUser.longitude,
+        currentLocation: widget.appUser.location);
   }
 
   Future<void> _pickDate() async {
@@ -123,35 +133,52 @@ class _AddProfilePageState extends State<EditProfilePage> {
                         },
                       ),
                       AppSizedBox.sizedBox15H,
-                      CustomTextField(
-                          showPrefixIcon: false,
-                          controller: _phoneNoController,
-                          showSuffixIcon: false,
-                          hintText: 'Phone Number',
-                          validation: Validation.phoneNoValidation,
-                          obsecureText: false),
+                      InkWell(
+                        onTap: () async {
+                          final UserLocation? res = await context
+                              .pushNamed(MyAppRouteConst.locationPageRoute);
+                          if (res != null) {
+                            _userLocation = res;
+                            _locationController.text =
+                                res.currentLocation ?? '';
+                          }
+                        },
+                        child: IgnorePointer(
+                          child: CustomTextField(
+                            controller: _locationController,
+                            autoValidate: false,
+                            readOnly: true,
+                            prefixIcon: Icons.location_on,
+                            hintText: 'Location',
+                          ),
+                        ),
+                      ),
                       AppSizedBox.sizedBox15H,
                       CustomTextField(
-                          showPrefixIcon: false,
-                          controller: _occupationController,
-                          showSuffixIcon: false,
-                          hintText: 'Occupation',
-                          obsecureText: false),
+                        showPrefixIcon: false,
+                        controller: _phoneNoController,
+                        hintText: 'Phone Number',
+                        validation: Validation.phoneNoValidation,
+                      ),
                       AppSizedBox.sizedBox15H,
                       CustomTextField(
-                          showPrefixIcon: false,
-                          controller: _aboutController,
-                          showSuffixIcon: false,
-                          hintText: 'About',
-                          maxLine: 3,
-                          obsecureText: false),
+                        showPrefixIcon: false,
+                        controller: _occupationController,
+                        hintText: 'Occupation',
+                      ),
+                      AppSizedBox.sizedBox15H,
+                      CustomTextField(
+                        showPrefixIcon: false,
+                        controller: _aboutController,
+                        hintText: 'About',
+                        maxLine: 3,
+                      ),
                       AppSizedBox.sizedBox15H,
                       CustomButton(
                           child: const Text('Update'),
                           onClick: () {
                             if (_formKey.currentState!.validate()) {
                               context.read<ProfileBloc>().add(UpdateProfilEvent(
-                                
                                   fullName: _nameController.text.trim(),
                                   userName: _userNameController.text.trim(),
                                   dob: _selectedDate.value.text.trim(),
@@ -160,10 +187,9 @@ class _AddProfilePageState extends State<EditProfilePage> {
                                   about: _aboutController.text.trim(),
                                   profilePic: _selectImageCuit.img,
                                   uid: widget.appUser.id,
-                                  location: null));
+                                  location: _userLocation));
                             }
                           })
-                   
                     ],
                   ),
                 ),

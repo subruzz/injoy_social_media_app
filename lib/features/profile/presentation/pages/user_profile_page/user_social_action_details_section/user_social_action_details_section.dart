@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
-import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
@@ -59,13 +59,18 @@ class UserSocialActionDetailsSection extends StatelessWidget {
             },
             child: UserSocialAttribute(
               name: 'Following',
-              attribute: CustomText(isMe
-                  ? context
-                      .read<FollowingCubit>()
-                      .followingList
-                      .length
-                      .toString()
-                  : user.followingCount.toString()),
+              attribute: BlocBuilder<FollowunfollowCubit, FollowunfollowState>(
+                builder: (context, state) {
+                  return isMe
+                      ? CustomText(context
+                          .read<AppUserBloc>()
+                          .appUser
+                          .following
+                          .length
+                          .toString())
+                      : CustomText(user.followingCount.toString());
+                },
+              ),
             ),
           ),
           const CustomVerticalDivider(),

@@ -44,9 +44,12 @@ class ProfileSetUpUserDetailsEvent extends ProfileEvent {
 
 class ProfileInterestSelectedEvent extends ProfileEvent {
   final List<String> interests;
+  final bool isEdit;
+  final String myId;
   @override
   List<Object> get props => [interests];
-  const ProfileInterestSelectedEvent({required this.interests});
+  const ProfileInterestSelectedEvent(
+      {required this.interests, this.isEdit = false, required this.myId});
 }
 
 final class CompleteProfileSetup extends ProfileEvent {

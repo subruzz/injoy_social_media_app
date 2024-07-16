@@ -15,6 +15,7 @@ class AppUserBloc extends Bloc<AppUserEvent, AppUserState> {
       (event, emit) {
         log('app user initilized');
         _appUser = event.userModel;
+        log(_appUser.following.toString());
         emit(AppUserLoggedIn(user: appUser));
       },
     );

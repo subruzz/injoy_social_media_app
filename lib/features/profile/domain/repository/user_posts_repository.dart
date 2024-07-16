@@ -7,4 +7,5 @@ abstract class UserPostsRepository {
           Either<Failure,
               ({List<PostEntity> userPosts, List<String> userPostImages})>>
       getAllPostsByUser(String userId);
+  Future<Either<Failure, List<PostEntity>>> getMyLikedPosts(String userId);
 }

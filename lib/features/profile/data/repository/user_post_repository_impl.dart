@@ -1,4 +1,4 @@
-import 'package:fpdart/src/either.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
@@ -24,6 +24,19 @@ class UserPostRepositoryImpl implements UserPostsRepository {
         Failure(
           e.errorMsg,
         ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<PostEntity>>> getMyLikedPosts(
+      String userId) async {
+    try {
+      final res = await _userPostsRemoteDataSource.getMyLikedPosts(userId);
+      return right(res);
+    } on MainException catch (e) {
+      return left(
+        Failure(e.errorMsg),
       );
     }
   }

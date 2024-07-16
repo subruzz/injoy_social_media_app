@@ -14,10 +14,13 @@ import 'package:social_media_app/features/profile/data/model/user_profile_model.
 
 abstract interface class UserProfileDataSource {
   Future<AppUser> createUserProfile(
-      {required UserProfileModel userProfile, required String uid, File? file});
+      {required UserProfileModel userProfile,
+      required String uid,
+      File? file,
+      required bool isEdit});
   Future<String> uploadUserImage(File profileImage, String uid);
   Future<bool> checkUserNameExist(String userName);
-  Future<void> addInterest(List<String> interests, String uid);
+  Future<void> editInterest(List<String> interests, String uid);
 }
 
 class UserProfileDataSourceImpl implements UserProfileDataSource {
@@ -33,7 +36,8 @@ class UserProfileDataSourceImpl implements UserProfileDataSource {
   Future<AppUser> createUserProfile(
       {required UserProfileModel userProfile,
       required String uid,
-      File? file}) async {
+      File? file,
+      required bool isEdit}) async {
     try {
       String? userImage;
       //if user profile is selected uploading to firebase storage
@@ -48,14 +52,16 @@ class UserProfileDataSourceImpl implements UserProfileDataSource {
           .collection(FirebaseCollectionConst.users)
           .doc(uid)
           .update(
-            userProfile.toJson(),
+            userProfile.toJson(edit: isEdit),
           );
       DocumentSnapshot docSnapshot = await _firebaseFirestore
           .collection(FirebaseCollectionConst.users)
           .doc(uid)
           .get();
       //return the latest user details
-      return AppUserModel.fromJson(docSnapshot.data() as Map<String, dynamic>);
+      return AppUserModel.fromJson(
+        docSnapshot.data() as Map<String, dynamic>,
+      );
     } catch (e) {
       log('exception while creating the user');
       throw const MainException(
@@ -64,13 +70,16 @@ class UserProfileDataSourceImpl implements UserProfileDataSource {
   }
 
   @override
-  Future<void> addInterest(List<String> interests, String uid) async {
+  Future<void> editInterest(List<String> interests, String uid) async {
     try {
       await _firebaseFirestore
           .collection(FirebaseCollectionConst.users)
           .doc(uid)
-          .update({'interests': interests, 'viewedSetupIndex': 1});
+          .update({
+        'interests': interests,
+      });
     } catch (e) {
+      log(e.toString());
       throw const MainException();
     }
   }
@@ -109,6 +118,4 @@ class UserProfileDataSourceImpl implements UserProfileDataSource {
           errorMsg: 'Error while setting profile Picture ');
     }
   }
-
-  
 }
