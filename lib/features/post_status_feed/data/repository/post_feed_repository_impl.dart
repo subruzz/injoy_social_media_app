@@ -1,10 +1,12 @@
-import 'package:fpdart/src/either.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/post_status_feed/data/datasource/post_feed_remote_datasource.dart';
 import 'package:social_media_app/features/post_status_feed/domain/repositories/post_feed_repository.dart';
+import 'package:social_media_app/features/post_status_feed/domain/usecases/get_following_posts.dart';
 
 class PostFeedRepositoryImpl implements PostFeedRepository {
   final PostFeedRemoteDatasource _feedRemoteDatasource;
@@ -12,11 +14,12 @@ class PostFeedRepositoryImpl implements PostFeedRepository {
   PostFeedRepositoryImpl(
       {required PostFeedRemoteDatasource feedRemoteDatasource})
       : _feedRemoteDatasource = feedRemoteDatasource;
+
   @override
-  Future<Either<Failure, List<PostEntity>>> fetchFollowedPosts(
-      String userId) async {
+  Future<Either<Failure, List<PostEntity>>> fetchSuggestedPosts(
+      AppUser user) async {
     try {
-      final result = await _feedRemoteDatasource.fetchFollowedPosts(userId);
+      final result = await _feedRemoteDatasource.fetchSuggestedPosts(user);
       return right(result);
     } on MainException catch (e) {
       return left(
@@ -28,10 +31,13 @@ class PostFeedRepositoryImpl implements PostFeedRepository {
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> fetchSuggestedPosts(
-      AppUser user) async {
+  Future<Either<Failure, PostsResult>> fetchFollowedPosts(
+      String userId, List<String> following,
+      {DocumentSnapshot<Object?>? lastDoc, int limit = 4}) async {
     try {
-      final result = await _feedRemoteDatasource.fetchSuggestedPosts (user);
+      final result = await _feedRemoteDatasource.fetchFollowedPosts(
+          userId, following,
+          lastDoc: lastDoc, limit: limit);
       return right(result);
     } on MainException catch (e) {
       return left(

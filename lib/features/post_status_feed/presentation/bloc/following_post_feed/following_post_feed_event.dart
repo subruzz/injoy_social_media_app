@@ -9,6 +9,13 @@ sealed class FollowingPostFeedEvent extends Equatable {
 
 class FollowingPostFeedGetEvent extends FollowingPostFeedEvent {
   final String uId;
+  final bool isLoadMore;
+  final DocumentSnapshot? lastDoc;
+  final List<String> following;
 
-  const FollowingPostFeedGetEvent({required this.uId});
+  const FollowingPostFeedGetEvent(
+      {required this.uId,
+      required this.isLoadMore,
+      required this.lastDoc,
+      required this.following});
 }

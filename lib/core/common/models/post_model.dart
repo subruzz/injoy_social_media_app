@@ -18,11 +18,13 @@ class PostModel extends PostEntity {
     super.location,
     super.longitude,
     required super.isCommentOff,
+    required super.isEdited,
   });
 
   // 1. From JSON (Firestore)
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
+      isEdited: json['isEdited'],
       likesCount: json['likesCount'],
       isCommentOff: json['isCommentOff'],
       userFullName: json['userFullName'],
@@ -45,6 +47,7 @@ class PostModel extends PostEntity {
   // 2. To JSON (Firestore)
   Map<String, dynamic> toJson() {
     return {
+      'isEdited':isEdited,
       'likesCount': likesCount,
       'isCommentOff': isCommentOff,
       'userFullName': userFullName,

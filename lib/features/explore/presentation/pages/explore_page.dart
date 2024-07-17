@@ -15,15 +15,20 @@ class ExploreStartingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => serviceLocator<ExploreUserCubit>()
-        ..getSuggestedUsers(
-            myId: context.read<AppUserBloc>().appUser.id,
-            interests: context.read<AppUserBloc>().appUser.interests),
+      create: (context) {
+        final user = context.read<AppUserBloc>().appUser;
+
+        return serviceLocator<ExploreUserCubit>()
+          ..getNearByUses(
+              myId: user.id,
+              latitude: user.latitude,
+              longitude: user.longitude);
+      },
       child: Padding(
         padding: const EdgeInsets.only(top: 20.0),
         child: SingleChildScrollView(
           child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
@@ -50,7 +55,6 @@ class ExploreStartingPage extends StatelessWidget {
               child: BlocBuilder<ExploreUserCubit, ExploreUserState>(
                 builder: (context, state) {
                   if (state is ExploreUsersLoaded) {
-                    log('user loaded ${state.suggestedUsers}');
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: state.suggestedUsers.length,
@@ -92,7 +96,7 @@ class ExploreStartingPage extends StatelessWidget {
             //   child: ListView.builder(
             //     scrollDirection: Axis.horizontal,
             //     itemCount: suggestions.length,
-            //     shrinkWrap: true, 
+            //     shrinkWrap: true,
             //     itemBuilder: (context, index) {
             //       return Padding(
             //         padding: const EdgeInsets.all(8.0),

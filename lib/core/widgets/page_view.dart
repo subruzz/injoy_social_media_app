@@ -10,26 +10,31 @@ class CustomPageView extends StatelessWidget {
     required this.pageController,
     this.images,
     this.selectedStatusAssets,
+    this.onPagechanged,
   });
   final PageController pageController;
-  final List<File?>? images;
+  final List<File>? images;
   final List<AssetEntity>? selectedStatusAssets;
+  final Function(int)? onPagechanged;
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
+      onPageChanged: onPagechanged,
       controller: pageController,
       itemCount: selectedStatusAssets != null
           ? selectedStatusAssets!.length
           : images!.length,
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
-        return AssetEntityImage(
-          height: 600,
-          width: double.infinity,
-          selectedStatusAssets![index],
-          isOriginal: false,
-          thumbnailSize: const ThumbnailSize.square(500),
-        );
+        return images != null
+            ? Image.file(images![index])
+            : AssetEntityImage(
+                height: 600,
+                width: double.infinity,
+                selectedStatusAssets![index],
+                isOriginal: false,
+                thumbnailSize: const ThumbnailSize.square(500),
+              );
         // : CreatePostImage(
         //     onTap: () {
         //       //  context.read<PickMultipleImageCubit>().removeImage(images[index]);

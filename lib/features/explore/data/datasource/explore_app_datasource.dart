@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/models/hashtag_model.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
@@ -17,7 +19,8 @@ abstract interface class ExploreAppDatasource {
   Future<List<PostModel>> searchRecentPostsOfHashTags(String tag);
   Future<List<PartialUser>> getSuggestedUsers(
       List<String> interests, String myId);
-  Future<List<PartialUser>> getNearByUsers(double latitude, double longitude);
+  Future<List<PartialUser>> getNearByUsers(
+      double latitude, double longitude, String myId);
 }
 
 class ExploreAppDatasourceImpl implements ExploreAppDatasource {
@@ -245,8 +248,8 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
     try {
       final querySnapshot = await _firebaseFirestore
           .collection('users')
-          .where('id', isNotEqualTo: myId) 
-          .where('interests', arrayContainsAny: interests) 
+          .where('id', isNotEqualTo: myId)
+          .where('interests', arrayContainsAny: interests)
           .limit(2)
           .get();
       final List<PartialUser> suggestedUsers = querySnapshot.docs.map((doc) {
@@ -261,15 +264,18 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
 
   @override
   Future<List<PartialUser>> getNearByUsers(
-      double latitude, double longitude) async {
+      double latitude, double longitude, String myId) async {
     try {
-      const double radius = 50.0;
-
-      double latRange = radius / 111.0;
+      double latRange = 50 / 111; // Roughly 50km in latitude degrees
+      double lonRange =
+          50 / (111 * cos(latitude * (pi / 180))); // Adjusted for longitude
       final querySnapshot = await _firebaseFirestore
-          .collection('users')
-          .where('latitude', isGreaterThan: latitude - latRange)
-          .where('latitude', isLessThan: latitude + latRange)
+          .collection(FirebaseCollectionConst.users)
+          .where('id', isNotEqualTo: myId)
+          .where('latitude', isGreaterThanOrEqualTo: latitude - latRange)
+          .where('latitude', isLessThanOrEqualTo: latitude + latRange)
+          .where('longitude', isGreaterThanOrEqualTo: longitude - lonRange)
+          .where('longitude', isLessThanOrEqualTo: longitude + lonRange)
           .get();
       final List<PartialUser> nearByPeople = querySnapshot.docs.map((doc) {
         final data = doc.data();

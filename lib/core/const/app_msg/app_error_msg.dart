@@ -66,6 +66,10 @@ class AppErrorMessages {
   static const String myStatusFetchFailed =
       'We couldn\'t load your statuses. Please try again later.';
   // Post-Specific Errors
+  static const String postFetchError =
+      'Failed to load posts. Please try again.';
+  static const String forYouPostFetchError =
+      'Failed to load suggested posts. Please try again.';
   static const String postCreationFailed =
       'Failed to create post. Please try again.';
   static const String postUpdateFailed =
@@ -76,7 +80,8 @@ class AppErrorMessages {
   static const String postNoContent =
       'Your post is feeling a little lonely. Add a caption or a photos to keep it company!';
 //profile errors
-  static const String profileCreateFailure = 'Error while creating profile please try again!';
+  static const String profileCreateFailure =
+      'Error while creating profile please try again!';
 
   // Other Common Errors
   static const String invalidInput = 'Invalid input. Please check your data.';

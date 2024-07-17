@@ -156,8 +156,6 @@ List<SingleChildWidget> myProviders = [
   // BlocProvider(
   //   create: (context) => serviceLocator<OtherProfileCubit>(),
   // ),
-  BlocProvider(
-      create: (context) => serviceLocator<AlbumBloc>()..add(GetAlbumsEvent())),
-  BlocProvider(create: (context) => serviceLocator<AssetsBloc>()),
+
   BlocProvider(create: (context) => serviceLocator<InitialSetupCubit>()),
 ];

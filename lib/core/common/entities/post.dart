@@ -11,16 +11,18 @@ class PostEntity extends Equatable {
   final bool isCommentOff;
   final String? description;
   final int likesCount;
-   num totalComments;
+  num totalComments;
   final Timestamp createAt;
+  final bool isEdited;
   final String? userProfileUrl;
   final List<String> hashtags;
   final double? latitude;
   final double? longitude;
   final String? location;
 
-   PostEntity(
+  PostEntity(
       {required this.postId,
+      required this.isEdited,
       required this.likesCount,
       required this.isCommentOff,
       required this.creatorUid,
@@ -52,6 +54,6 @@ class PostEntity extends Equatable {
         latitude,
         location,
         longitude,
-        isCommentOff
+        isCommentOff,isEdited
       ];
 }

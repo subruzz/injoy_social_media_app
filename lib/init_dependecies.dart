@@ -27,6 +27,7 @@ import 'package:social_media_app/features/explore/data/datasource/explore_app_da
 import 'package:social_media_app/features/explore/data/repository/explore_app_repo_impl.dart';
 import 'package:social_media_app/features/explore/domain/repositories/explore_app_repository.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_hashtag_top_posts.dart';
+import 'package:social_media_app/features/explore/domain/usecases/get_nearyby_users.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_recent_posts_hashtag.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_recommended_post.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_suggested_users.dart';
@@ -148,6 +149,7 @@ Future<void> initDependencies() async {
   );
   serviceLocator.registerLazySingleton(() => FollowingCubit());
   serviceLocator.registerLazySingleton(() => InitialSetupCubit(
+   
       getAllStatusBloc: serviceLocator(),
       getMyStatusBloc: serviceLocator(),
       followingCubit: serviceLocator(),
@@ -269,9 +271,9 @@ void _localAsset() {
     ..registerFactory<AssetRepository>(
         () => AssetRepositoryImpl(assetLocalSource: serviceLocator()))
     ..registerFactory(() => LoadAssetsUseCase(serviceLocator()))
-    ..registerLazySingleton(() => AssetsBloc(serviceLocator()))
+    ..registerFactory(() => AssetsBloc(serviceLocator()))
     ..registerFactory(() => LoadAlbumsUseCase(serviceLocator()))
-    ..registerLazySingleton(() => AlbumBloc(
+    ..registerFactory(() => AlbumBloc(
           serviceLocator(),
         ));
 }
@@ -319,8 +321,8 @@ void _getUserPosts() {
 
 void _postFeed() {
   serviceLocator
-    ..registerFactory<PostFeedRemoteDatasource>(
-        () => PostFeedRemoteDatasourceImpl())
+    ..registerFactory<PostFeedRemoteDatasource>(() =>
+        PostFeedRemoteDatasourceImpl(firestore: FirebaseFirestore.instance))
     ..registerFactory<PostFeedRepository>(
         () => PostFeedRepositoryImpl(feedRemoteDatasource: serviceLocator()))
     ..registerFactory(
@@ -424,5 +426,8 @@ void _exploreApp() {
     ..registerFactory(() => GetRecentHashtagPostsCubit(serviceLocator()))
     ..registerFactory(
         () => GetSuggestedUsersUseCase(exploreAppRepository: serviceLocator()))
-    ..registerFactory(() => ExploreUserCubit(serviceLocator()));
+    ..registerFactory(
+        () => ExploreUserCubit(serviceLocator(), serviceLocator()))
+    ..registerFactory(
+        () => GetNearybyUsersUseCase(exploreAppRepository: serviceLocator()));
 }

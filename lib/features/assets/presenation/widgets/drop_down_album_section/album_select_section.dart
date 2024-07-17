@@ -14,6 +14,13 @@ class AlbumSelectSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AlbumBloc, AlbumBlocState>(
+      listenWhen: (previous, current) =>
+          current is! AssetToFileLoading || current is! AssetToFileSuccess,
+      buildWhen: (previous, current) =>
+          current is! AssetToFileLoading ||
+          current is! AssetToFileSuccess ||
+          previous is! AssetToFileLoading ||
+          previous is! AssetToFileSuccess,
       builder: (context, state) {
         if (state is AlbumSuccess) {
           context

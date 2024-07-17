@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -21,6 +23,8 @@ class GridAssetSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AssetsBloc, AssetsState>(
+      buildWhen: (previous, current) =>
+          previous is! AssetSuccess && current is AssetSuccess,
       builder: (context, state) {
         if (state is AssetLoading) {
           return const Expanded(
@@ -33,6 +37,7 @@ class GridAssetSection extends StatelessWidget {
           return Text(state.error);
         }
         if (state is AssetSuccess) {
+          log('success');
           return Expanded(
             child: GridView.builder(
               padding: AppPadding.horizontalSmall,

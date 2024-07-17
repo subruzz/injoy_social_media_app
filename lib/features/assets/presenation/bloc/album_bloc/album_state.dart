@@ -9,7 +9,6 @@ sealed class AlbumBlocState extends Equatable {
 
 final class AlbumBlocInitial extends AlbumBlocState {}
 
-
 final class AlbumNoPermission extends AlbumBlocState {}
 
 final class AlbumLoading extends AlbumBlocState {}
@@ -25,4 +24,12 @@ final class AlbumFailure extends AlbumBlocState {
   final String errorDetails;
 
   const AlbumFailure({required this.error, required this.errorDetails});
+}
+
+final class AssetToFileLoading extends AlbumBlocState {}
+
+final class AssetToFileSuccess extends AlbumBlocState {
+  final List<File> selectedFileImages;
+
+  const AssetToFileSuccess({required this.selectedFileImages});
 }

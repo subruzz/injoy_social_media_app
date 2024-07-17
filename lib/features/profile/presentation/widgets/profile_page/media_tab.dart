@@ -15,10 +15,9 @@ class UsersPostsTab extends StatelessWidget {
     return BlocBuilder<GetUserPostsBloc, GetUserPostsState>(
       builder: (context, state) {
         if (state is GetUserPostsLoading) {
-          return const Expanded(
-              child: Center(
+          return const Center(
             child: CircularLoadingGrey(),
-          ));
+          );
         } else if (state is GetUserPostsError) {
           return Text(state.errorMsg);
         } else if (state is GetUserPostsSuccess) {

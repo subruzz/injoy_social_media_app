@@ -13,7 +13,7 @@ class ExploreUsersLoading extends ExploreUserState {}
 
 class ExploreUsersLoaded extends ExploreUserState {
   final List<PartialUser> suggestedUsers;
-
+  
   const ExploreUsersLoaded({
     required this.suggestedUsers,
   });

@@ -13,8 +13,9 @@ import 'package:social_media_app/core/widgets/post/post_hashtag.dart';
 import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
 import 'package:social_media_app/core/widgets/post/post_option_button.dart';
 import 'package:social_media_app/features/post/presentation/pages/view_post.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_owner_username.dart';
 import 'package:social_media_app/core/widgets/post/post_single_image.dart';
+
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_owner_username.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/post/post_time.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
@@ -185,4 +186,3 @@ class _EachPostState extends State<EachPost> {
     );
   }
 }
-

@@ -8,4 +8,5 @@ final class FirebaseCollectionConst {
   static const String comments = 'comments';
   static const String hashTags = 'hashtags';
   static const String locations = 'locations';
+ 
 }

@@ -50,9 +50,8 @@ class _SplashScreenState extends State<SplashScreen>
             context.goNamed(MyAppRouteConst.loginRoute);
           }
           if (state is AuthLoggedInOrUpdate) {
-            context
-                .read<InitialSetupCubit>()
-                .startInitialSetup(uId: state.user.id);
+            context.read<InitialSetupCubit>().startInitialSetup(
+                uId: state.user.id, following: state.user.following);
             context.goNamed(MyAppRouteConst.bottomNavRoute, extra: state.user);
           }
           if (state is AuthLoggedInButProfileNotSet) {

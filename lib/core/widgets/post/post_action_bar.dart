@@ -108,9 +108,7 @@ class SocialActions extends StatelessWidget {
                               current is CommentDeletedSuccess ||
                               current is CommentAddedSuccess,
                           builder: (context, state) {
-                            log('builded');
                             return Builder(builder: (context) {
-                              log('builder called ${post.username}');
                               return Text(
                                 post.totalComments.toString(),
                                 style: TextStyle(color: Colors.white),

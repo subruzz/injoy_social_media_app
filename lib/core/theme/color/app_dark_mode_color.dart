@@ -9,6 +9,7 @@ class AppDarkColor extends AppColor {
   }
   AppDarkColor._()
       : super(
+        statusborder: const Color.fromARGB(255, 255, 0, 85),
           buttonWhitishBackground: const Color(0xFFFFFFFF).withOpacity(0.9),
           iconSoftColor: const Color.fromARGB(255, 151, 152, 155),
           iconPrimaryColor: const Color.fromARGB(255, 164, 164, 164),

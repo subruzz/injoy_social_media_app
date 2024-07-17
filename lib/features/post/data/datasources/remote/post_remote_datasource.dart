@@ -11,7 +11,7 @@ import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/utils/compress_image.dart';
 import 'package:social_media_app/core/utils/id_generator.dart';
 import 'package:social_media_app/features/explore/data/model/explore_seearch_location_model.dart';
-import 'package:social_media_app/features/post/data/models/update_user_model.dart';
+import 'package:social_media_app/features/post/data/models/update_post_model.dart';
 import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/post/domain/enitities/update_post.dart';
@@ -53,6 +53,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
     try {
       final postUrls = await uploadPostImages(postImage, post.postId);
       final newPost = PostModel(
+          isEdited: false,
           likesCount: 0,
           isCommentOff: post.isCommentOff,
           userFullName: post.userFullName,
@@ -134,7 +135,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
     final postCollection = FirebaseFirestore.instance.collection('posts');
 
     try {
-      final newPost = UpdateUserModel(
+      final newPost = UpdatePostModel(
         description: post.description,
         hashtags: post.hashtags,
       );

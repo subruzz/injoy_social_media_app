@@ -1,35 +1,69 @@
 import 'dart:developer';
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
+import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
+import 'package:social_media_app/features/post_status_feed/domain/usecases/get_following_posts.dart';
 
 abstract class PostFeedRemoteDatasource {
-  Future<List<PostModel>> fetchFollowedPosts(String userId);
+  Future<PostsResult> fetchFollowedPosts(String userId, List<String> following,
+      {int limit = 4, DocumentSnapshot? lastDoc});
   Future<List<PostModel>> fetchSuggestedPosts(AppUser user);
 }
 
 class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
+  final FirebaseFirestore _firestore;
+  PostFeedRemoteDatasourceImpl({required FirebaseFirestore firestore})
+      : _firestore = firestore;
   @override
-  Future<List<PostModel>> fetchFollowedPosts(String userId) async {
+  Future<PostsResult> fetchFollowedPosts(String userId, List<String> following,
+      {int limit = 4, DocumentSnapshot? lastDoc}) async {
+    if (following.isEmpty) {
+      return PostsResult(posts: [], hasMore: false, lastDoc: null);
+    }
+    final postcollection = _firestore.collection(FirebaseCollectionConst.posts);
     try {
-      final posts = await FirebaseFirestore.instance
-          .collection('posts')
-          .where("creatorUid", isNotEqualTo: userId)
+      Query<Map<String, dynamic>> postsQuery = postcollection
+          .where('creatorUid',
+              isNotEqualTo: userId) // Example .where clause causing issues
           .orderBy('createAt', descending: true)
-          .get();
-      final List<PostModel> result = posts.docs
-          .map(
-            (doc) => PostModel.fromJson(
-              doc.data(),
-            ),
-          )
-          .toList();
-      return result;
+          .limit(limit);
+
+      if (lastDoc != null) {
+        postsQuery = postsQuery.startAfterDocument(lastDoc);
+      }
+      // if (lastDoc != null) {
+      //   // log('Document ID: ${lastDoc.id}');
+      //   // log('Document data: ${lastDoc.data()}');
+      //   // log('Document runtimeType: ${lastDoc.runtimeType}');
+      //   // log('Document metadata: ${lastDoc.metadata}');
+      //   // log('Document data: ${lastDoc.runtimeType}');
+
+      //   postsQuery = postsQuery.startAfterDocument(lastDoc);
+      // }
+      final QuerySnapshot<Map<String, dynamic>> allPosts =
+          await postsQuery.get();
+
+      final List<PostModel> result = allPosts.docs.map((doc) {
+        return PostModel.fromJson(doc.data());
+      }).toList();
+      log('res is ${result.length}');
+      final hasMore = result.length == limit;
+
+      return PostsResult(
+        posts: result,
+        hasMore: hasMore,
+        lastDoc: allPosts.docs.isNotEmpty ? allPosts.docs.last : null,
+      );
     } catch (e) {
-      throw const MainException(errorMsg: 'Error while loading the posts!');
+      log("Invalid argument error: ${e.toString()}"); // Log the specific error message
+      // Optionally: You could refetch the last document or handle the error differently
+
+      throw const MainException(errorMsg: AppErrorMessages.postFetchError);
     }
   }
 
@@ -42,14 +76,17 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
 
     const p = 0.017453292519943295;
     final a = 0.5 -
-        cos((lat2 - lat1) * p) / 2 +
-        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a));
+        math.cos((lat2 - lat1) * p) / 2 +
+        math.cos(lat1 * p) *
+            math.cos(lat2 * p) *
+            (1 - math.cos((lon2 - lon1) * p)) /
+            2;
+    return 12742 * math.asin(math.sqrt(a));
   }
 
   @override
   Future<List<PostModel>> fetchSuggestedPosts(AppUser user) async {
-    final postCollection = FirebaseFirestore.instance.collection('posts');
+    final postCollection = _firestore.collection('posts');
 
     try {
       List<dynamic> interests = user.interests;
@@ -62,8 +99,9 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
       // Query for posts by latitude and longitude if user location is provided
       if (userLat != null && userLon != null) {
         double latRange = 50 / 111; // Roughly 50km in latitude degrees
-        double lonRange =
-            50 / (111 * cos(userLat * (pi / 180))); // Adjusted for longitude
+        double lonRange = 50 /
+            (111 *
+                math.cos(userLat * (math.pi / 180))); // Adjusted for longitude
 
         Query latitudeQuery = postCollection
             .where('latitude', isGreaterThanOrEqualTo: userLat - latRange)
@@ -99,7 +137,8 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
 
       return suggestedPosts;
     } catch (e) {
-      throw const MainException();
+      throw const MainException(
+          errorMsg: AppErrorMessages.forYouPostFetchError);
     }
   }
 

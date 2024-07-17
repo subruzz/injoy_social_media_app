@@ -35,7 +35,7 @@ class FollowingUserStatus extends StatelessWidget {
                       ));
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
+                      padding: AppPadding.onlyRightMedium,
                       child: Column(
                         children: [
                           Padding(
@@ -47,7 +47,7 @@ class FollowingUserStatus extends StatelessWidget {
                                   isMe: false,
                                   spaceLength: 6,
                                   images: userAttribute.statuses,
-                                  uid: context.read<AppUserBloc>().appUser!.id),
+                                  uid: context.read<AppUserBloc>().appUser.id),
                               child: Hero(
                                 tag: userAttribute.uId,
                                 child: CircularUserProfile(

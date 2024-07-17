@@ -28,7 +28,7 @@ import 'package:social_media_app/features/profile/presentation/bloc/user_profile
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
 
 class LocationAskingPage extends StatelessWidget {
-  const LocationAskingPage({super.key,required this.isFirstTime});
+  const LocationAskingPage({super.key, required this.isFirstTime});
   final bool isFirstTime;
   void submitProfile(BuildContext context, UserLocation? location) {
     context.read<ProfileBloc>().add(CompleteProfileSetup(
@@ -43,9 +43,9 @@ class LocationAskingPage extends StatelessWidget {
           listener: (context, state) {
             if (state is CompleteProfileSetupSuceess) {
               final user = context.read<AppUserBloc>().appUser;
-              context
-                  .read<FollowingPostFeedBloc>()
-                  .add(FollowingPostFeedGetEvent(uId: user.id));
+              // context.read<FollowingPostFeedBloc>().add(
+              //     FollowingPostFeedGetEvent(
+              //         uId: user.id, following: user.following));
               context
                   .read<GetUserPostsBloc>()
                   .add(GetUserPostsrequestedEvent(uid: user.id));

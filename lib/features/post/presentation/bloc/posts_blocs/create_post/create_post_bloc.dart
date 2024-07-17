@@ -17,12 +17,13 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
       emit(CreatePostLoading());
     });
     on<CreatePostClickEvent>((event, emit) async {
-      if (event.description == null&& event.postPics.isEmpty) {
+      if (event.description == null && event.postPics.isEmpty) {
         emit(const CreatePostFailure(errorMsg: AppErrorMessages.postNoContent));
         return;
       }
       final newPost = PostEntity(
-        likesCount: 0,
+          isEdited: false,
+          likesCount: 0,
           isCommentOff: event.isCommentOff,
           userFullName: event.userFullName,
           postId: const Uuid().v4(),

@@ -19,7 +19,6 @@ class AssetsBloc extends Bloc<AssetsEvent, AssetsState> {
 
   FutureOr<void> _getAssets(
       GetAssetsEvent event, Emitter<AssetsState> emit) async {
-    print('dfd');
     final res = await _loadAssetsUseCase(
         LoadAssetsUseCaseParams(selectedAlbum: event.selectedAlbum));
     res.fold(

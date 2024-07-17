@@ -1,6 +1,5 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/explore/domain/entities/explore_search_location.dart';
@@ -15,6 +14,8 @@ abstract interface class ExploreAppRepository {
       searchLocationInExplore(String query);
   Future<Either<Failure, List<PartialUser>>> getSuggestedUsers(
       List<String> interests, String myId);
+  Future<Either<Failure, List<PartialUser>>> getNearyByUsers(
+      double latitude, double longitude, String myId);
   //posts based on location
   Future<Either<Failure, List<PostEntity>>> getTopPostsOfLocation(
       String location);
