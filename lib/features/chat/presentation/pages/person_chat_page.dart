@@ -1,15 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/theme/app_theme.dart';
+import 'package:social_media_app/core/const/message_type.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
+import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
+import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
+import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/personal_chat_top_bar/personal_page_top_bar.dart';
 
 class PersonChatPage extends StatefulWidget {
-  const PersonChatPage({super.key});
-
+  const PersonChatPage({super.key, required this.otherUser});
+  final AppUser otherUser;
   @override
   State<PersonChatPage> createState() => _PersonChatPageState();
 }
@@ -18,6 +25,12 @@ class _PersonChatPageState extends State<PersonChatPage> {
   final TextEditingController _textMsgController = TextEditingController();
   final ValueNotifier<bool> _isTextMsgEmpty = ValueNotifier(false);
   final ValueNotifier<bool> _showAttachWindow = ValueNotifier(false);
+  final ScrollController _scrollController = ScrollController();
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,46 +54,76 @@ class _PersonChatPageState extends State<PersonChatPage> {
             ),
             Column(
               children: [
-                Expanded(
-                    child: ListView(
-                  children: [
-                    _messageLayout(
-                        message: 'Helo',
-                        alignment: Alignment.centerRight,
-                        createAt: Timestamp.now(),
-                        isSeen: false,
-                        isShowTick: true,
-                        messageBgColor: AppDarkColor().buttonBackground,
-                        onLongPress: () {},
-                        onSwipe: () {}),
-                    _messageLayout(
-                        message: 'helo myra sugano',
-                        alignment: Alignment.centerRight,
-                        createAt: Timestamp.now(),
-                        isSeen: false,
-                        isShowTick: true,
-                        messageBgColor: AppDarkColor().buttonBackground,
-                        onLongPress: () {},
-                        onSwipe: () {}),
-                    _messageLayout(
-                        message: 'Helo',
-                        alignment: Alignment.centerLeft,
-                        createAt: Timestamp.now(),
-                        isSeen: false,
-                        isShowTick: false,
-                        messageBgColor: AppDarkColor().secondaryBackground,
-                        onLongPress: () {},
-                        onSwipe: () {}),
-                    _messageLayout(
-                        message: 'helo myra sugano',
-                        alignment: Alignment.centerLeft,
-                        createAt: Timestamp.now(),
-                        isSeen: false,
-                        isShowTick: false,
-                        messageBgColor: AppDarkColor().secondaryBackground,
-                        onLongPress: () {},
-                        onSwipe: () {}),
-                  ],
+                Expanded(child: BlocBuilder<MessageCubit, MessageState>(
+                  builder: (context, state) {
+                    if (state is MessageFailure) {
+                      return Center(
+                        child: Text(state.errorMsg),
+                      );
+                    }
+                    if (state is MessageLoaded) {
+                      if (state.messages.isEmpty) {
+                        return Center(
+                          child: Text('No histror'),
+                        );
+                      }
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _scrollToBottom();
+                      });
+                      return ListView.builder(
+                          controller: _scrollController,
+                          itemCount: state.messages.length,
+                          itemBuilder: (context, index) {
+                            final message = state.messages[index];
+
+                            return _messageLayout(
+                                message: message.message,
+                                alignment: message.senderUid ==
+                                        context.read<AppUserBloc>().appUser.id
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                isSeen: false,
+                                isShowTick: message.senderUid ==
+                                        context.read<AppUserBloc>().appUser.id
+                                    ? true
+                                    : false,
+                                messageBgColor: message.senderUid ==
+                                        context.read<AppUserBloc>().appUser.id
+                                    ? AppDarkColor().buttonBackground
+                                    : AppDarkColor().secondaryBackground,
+                                onLongPress: () {},
+                                onSwipe: () {});
+                          });
+                    }
+                    return CircularLoadingGrey();
+                    // _messageLayout(
+                    //     message: 'helo myra sugano',
+                    //     alignment: Alignment.centerRight,
+                    //     createAt: Timestamp.now(),
+                    //     isSeen: false,
+                    //     isShowTick: true,
+                    //     messageBgColor: AppDarkColor().buttonBackground,
+                    //     onLongPress: () {},
+                    //     onSwipe: () {}),
+                    // _messageLayout(
+                    //     message: 'Helo',
+                    //     alignment: Alignment.centerLeft,
+                    //     createAt: Timestamp.now(),
+                    //     isSeen: false,
+                    //     isShowTick: false,
+                    //     messageBgColor: AppDarkColor().secondaryBackground,
+                    //     onLongPress: () {},
+                    //     onSwipe: () {}),
+                    // _messageLayout(
+                    //     message: 'helo myra sugano',
+                    //     alignment: Alignment.centerLeft,
+                    //     createAt: Timestamp.now(),
+                    //     isSeen: false,
+                    //     isShowTick: false,
+                    //     messageBgColor: AppDarkColor().secondaryBackground,
+                    //     onLongPress: () {},
+                    //     onSwipe: () {}),
+                  },
                 )),
                 Container(
                   margin: const EdgeInsets.only(
@@ -133,20 +176,26 @@ class _PersonChatPageState extends State<PersonChatPage> {
                         ),
                       )),
                       AppSizedBox.sizedBox5W,
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: AppDarkColor().buttonBackground,
-                        ),
-                        child: Center(
-                          child: ValueListenableBuilder(
-                            valueListenable: _isTextMsgEmpty,
-                            builder: (context, value, child) {
-                              return Icon(
-                                  value ? Icons.send_outlined : Icons.mic);
-                            },
+                      GestureDetector(
+                        onTap: () {
+                          // _sendMessage();
+                          _textMsgController.clear();
+                        },
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            color: AppDarkColor().buttonBackground,
+                          ),
+                          child: Center(
+                            child: ValueListenableBuilder(
+                              valueListenable: _isTextMsgEmpty,
+                              builder: (context, value, child) {
+                                return Icon(
+                                    value ? Icons.send_outlined : Icons.mic);
+                              },
+                            ),
                           ),
                         ),
                       )
@@ -406,7 +455,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
                 right: 10,
                 child: Row(
                   children: [
-                    Text('9/3/4',
+                    Text('16:20',
                         style: AppTextTheme
                             .bodysmallPureWhiteVariations.bodySmall),
                     const SizedBox(
@@ -428,4 +477,29 @@ class _PersonChatPageState extends State<PersonChatPage> {
       ),
     );
   }
+
+  // void _sendMessage() {
+  //   final me = context.read<AppUserBloc>().appUser;
+  //   context.read<MessageCubit>().sendMessage(
+  //       msg: MessageEntity(
+  //           senderUid: me.id,
+  //           recipientUid: widget.otherUser.id,
+  //           senderName: me.userName??'',
+  //           recipientName: widget.otherUser.userName??'',
+  //           messageType: MessageTypeConst.textMessage,
+  //           repliedTo: '',
+  //           repliedMessage: '',
+  //           repliedMessageType: '',
+  //           isSeen: false,
+  //           message: _textMsgController.text.trim()),
+  //       chat: ChatEntity(
+  //           senderUid: me.id,
+  //           recipientUid: widget.otherUser.id,
+  //           senderName: me.userName??'',
+  //           recipientName: widget.otherUser.userName??'',
+  //           senderProfile: me.profilePic,
+  //           recipientProfile: widget.otherUser.profilePic,
+  //           createdAt: Timestamp.now(),
+  //           totalUnReadMessages: 0));
+  // }
 }

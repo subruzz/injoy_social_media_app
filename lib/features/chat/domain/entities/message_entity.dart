@@ -2,45 +2,43 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class MessageEntity extends Equatable {
-  final String? senderUid;
-  final String? recipientUid;
-  final String? senderName;
-  final String? recipientName;
-  final String? messageType;
+  final String senderUid;
+  final String recipientUid;
+  final String messageType;
   final String? message;
   final Timestamp? createdAt;
-  final bool? isSeen;
+  final bool isSeen;
   final String? repliedTo;
   final String? repliedMessage;
   final String? repliedMessageType;
-  final String? senderProfile;
-  final String? recipientProfile;
-  final String? messageId;
-  final String? uid;
+  final String messageId;
+  final bool isDeleted;
+  final bool isEdited;
+  final DateTime? deletedAt;
 
-  const MessageEntity(
-      {this.senderUid,
-      this.recipientUid,
-      this.senderName,
-      this.recipientName,
-      this.messageType,
-      this.message,
-      this.createdAt,
-      this.isSeen,
-      this.repliedTo,
-      this.repliedMessage,
-      this.repliedMessageType,
-      this.messageId,
-      this.senderProfile,
-      this.recipientProfile,
-      this.uid});
+  const MessageEntity({
+    required this.isDeleted,
+    required this.isEdited,
+    required this.deletedAt,
+    required this.senderUid,
+    required this.recipientUid,
+    required this.messageType,
+    this.message,
+    this.createdAt,
+    required this.isSeen,
+    this.repliedTo,
+    this.repliedMessage,
+    this.repliedMessageType,
+    required this.messageId,
+  });
 
   @override
   List<Object?> get props => [
+        deletedAt,
+        isEdited,
+        isDeleted,
         senderUid,
         recipientUid,
-        senderName,
-        recipientName,
         messageType,
         message,
         createdAt,
@@ -49,8 +47,5 @@ class MessageEntity extends Equatable {
         repliedMessage,
         repliedMessageType,
         messageId,
-        senderProfile,
-        recipientProfile,
-        uid,
       ];
 }

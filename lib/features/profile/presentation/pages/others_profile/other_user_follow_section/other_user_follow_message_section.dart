@@ -6,9 +6,10 @@ import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/button/custom_button_with_icon.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 
 import '../../../../../../core/const/app_config/app_border_radius.dart';
@@ -83,7 +84,14 @@ class OtherUserFollowMessageSection extends StatelessWidget {
                 radius: AppBorderRadius.extraLarge,
                 title: 'Message',
                 textColor: AppDarkColor().secondaryPrimaryText,
-                onClick: () {}),
+                onClick: () {
+                  context.read<MessageCubit>().getPersonalChats(
+                      recipientId: currentVisitedUser.id, sendorId: me.id);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PersonChatPage(
+                            otherUser: currentVisitedUser,
+                          )));
+                }),
           )
         ],
       ),

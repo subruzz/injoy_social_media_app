@@ -21,9 +21,9 @@ class ChatCallItem extends StatelessWidget {
     return ListTile(
       onTap: () {
         log('taped');
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => PersonChatPage(),
-        ));
+        // Navigator.of(context).push(MaterialPageRoute(
+        //   builder: (context) => PersonChatPage(otherUser: ,),
+        // ));
       },
       leading: CircleAvatar(
         radius: 30,

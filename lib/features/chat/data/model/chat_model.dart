@@ -3,12 +3,12 @@ import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart'
 
 class ChatModel extends ChatEntity {
   const ChatModel(
-      {super.senderUid,
-      super.recipientUid,
-      super.senderName,
-      super.recipientName,
-      super.recentTextMessage,
-      super.createdAt,
+      {required super.senderUid,
+      required super.recipientUid,
+      required super.senderName,
+      required super.recipientName,
+      required super.recentTextMessage,
+      required super.createdAt,
       super.senderProfile,
       super.recipientProfile,
       super.totalUnReadMessages});
@@ -40,4 +40,40 @@ class ChatModel extends ChatEntity {
         "recipientProfile": recipientProfile,
         "createdAt": createdAt,
       };
+  factory ChatModel.fromChatEntity(ChatEntity entity) {
+    return ChatModel(
+      senderUid: entity.senderUid,
+      senderName: entity.senderName,
+      recipientUid: entity.recipientUid,
+      recipientName: entity.recipientName,
+      recentTextMessage: entity.recentTextMessage,
+      createdAt: entity.createdAt,
+      senderProfile: entity.senderProfile,
+      recipientProfile: entity.recipientProfile,
+      totalUnReadMessages: entity.totalUnReadMessages,
+    );
+  }
+  ChatModel copyWith({
+    String? senderUid,
+    String? recipientUid,
+    String? senderName,
+    String? recipientName,
+    String? recentTextMessage,
+    Timestamp? createdAt,
+    String? senderProfile,
+    String? recipientProfile,
+    int? totalUnReadMessages,
+  }) {
+    return ChatModel(
+      senderUid: senderUid ?? this.senderUid,
+      recipientUid: recipientUid ?? this.recipientUid,
+      senderName: senderName ?? this.senderName,
+      recipientName: recipientName ?? this.recipientName,
+      recentTextMessage: recentTextMessage ?? this.recentTextMessage,
+      createdAt: createdAt ?? this.createdAt,
+      senderProfile: senderProfile ?? this.senderProfile,
+      recipientProfile: recipientProfile ?? this.recipientProfile,
+      totalUnReadMessages: totalUnReadMessages ?? this.totalUnReadMessages,
+    );
+  }
 }

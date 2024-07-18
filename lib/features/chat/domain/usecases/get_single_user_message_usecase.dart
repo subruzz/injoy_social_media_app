@@ -9,7 +9,8 @@ class GetSingleUserMessageUsecase {
   GetSingleUserMessageUsecase({required ChatRepository chatRepository})
       : _chatRepository = chatRepository;
 
-  Stream<Either<Failure, List<MessageEntity>>> call(MessageEntity message) {
-    return _chatRepository.getSingleUserMessages(message);
+  Stream<Either<Failure, List<MessageEntity>>> call(
+      String sendorId, String recipientId) {
+    return _chatRepository.getSingleUserMessages(sendorId, recipientId);
   }
 }

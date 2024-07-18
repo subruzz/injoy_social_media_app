@@ -1,9 +1,12 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/chat/data/datasource/chat_remote_datasource.dart';
+import 'package:social_media_app/features/chat/data/model/chat_model.dart';
+import 'package:social_media_app/features/chat/data/model/message_model.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/domain/repositories/chat_repository.dart';
@@ -35,23 +38,24 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Stream<Either<Failure, List<MessageEntity>>> getSingleUserMessages(
-      MessageEntity message) async* {
+      String sendorId, String recipientId) async* {
     try {
-      await for (final messages
-          in _chatRemoteDatasource.getSingleUserMessages(message)) {
+      await for (final messages in _chatRemoteDatasource.getSingleUserMessages(
+          sendorId, recipientId)) {
         yield Right(messages);
       }
     } on SocketException catch (e) {
       yield Left(Failure(e.toString()));
     } catch (e) {
+      log(e.toString());
       yield Left(Failure());
     }
   }
 
   @override
-  Stream<Either<Failure, List<ChatEntity>>> getMyChat(ChatEntity chat) async* {
+  Stream<Either<Failure, List<ChatEntity>>> getMyChat(String myId) async* {
     try {
-      await for (final chats in _chatRemoteDatasource.getMyChat(chat)) {
+      await for (final chats in _chatRemoteDatasource.getMyChat(myId)) {
         yield Right(chats);
       }
     } on SocketException catch (e) {
@@ -75,7 +79,9 @@ class ChatRepositoryImpl implements ChatRepository {
   Future<Either<Failure, Unit>> sendMessage(
       ChatEntity chat, MessageEntity message) async {
     try {
-      await _chatRemoteDatasource.sendMessage(chat, message);
+      final ChatModel chatModel = ChatModel.fromChatEntity(chat);
+      final MessageModel messageModel = MessageModel.fromMessageEntity(message);
+      await _chatRemoteDatasource.sendMessage(chatModel, messageModel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

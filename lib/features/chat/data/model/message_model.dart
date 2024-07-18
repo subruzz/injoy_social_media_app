@@ -1,29 +1,48 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 
 class MessageModel extends MessageEntity {
   const MessageModel(
-      {super.senderUid,
-      super.recipientUid,
-      super.senderName,
-      super.recipientName,
-      super.messageType,
+      {required super.senderUid,
+      required super.recipientUid,
+      required super.messageType,
       super.message,
       super.createdAt,
-      super.isSeen,
+      required super.isSeen,
       super.repliedTo,
       super.repliedMessage,
       super.repliedMessageType,
-      super.messageId});
-
+      required super.messageId,
+      required super.isDeleted,
+      required super.isEdited,
+      required super.deletedAt});
+  factory MessageModel.fromMessageEntity(MessageEntity entity) {
+    return MessageModel(
+      isDeleted: entity.isDeleted,
+      isEdited: entity.isEdited,
+      deletedAt: entity.deletedAt,
+      senderUid: entity.senderUid,
+      recipientUid: entity.recipientUid,
+      createdAt: entity.createdAt,
+      isSeen: entity.isSeen,
+      message: entity.message,
+      messageType: entity.messageType,
+      repliedMessage: entity.repliedMessage,
+      repliedTo: entity.repliedTo,
+      messageId: entity.messageId,
+      repliedMessageType: entity.repliedMessageType,
+    );
+  }
   factory MessageModel.fromJson(DocumentSnapshot snapshot) {
     final snap = snapshot.data() as Map<String, dynamic>;
 
     return MessageModel(
+      isDeleted: snap['isDeleted'],
+      isEdited: snap['isEdited'],
+      deletedAt: snap['deleteAt'],
       senderUid: snap['senderUid'],
-      senderName: snap['senderName'],
       recipientUid: snap['recipientUid'],
-      recipientName: snap['recipientName'],
       createdAt: snap['createdAt'],
       isSeen: snap['isSeen'],
       message: snap['message'],
@@ -36,11 +55,12 @@ class MessageModel extends MessageEntity {
   }
 
   Map<String, dynamic> toDocument() => {
+        'isDeleted': isDeleted,
+        'isEdited': isEdited,
+        'deleteAt': deletedAt,
         "senderUid": senderUid,
-        "senderName": senderName,
         "recipientUid": recipientUid,
-        "recipientName": recipientName,
-        "createdAt": createdAt,
+        "createdAt": createdAt ?? FieldValue.serverTimestamp(),
         "isSeen": isSeen,
         "message": message,
         "messageType": messageType,

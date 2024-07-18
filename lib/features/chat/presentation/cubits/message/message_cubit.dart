@@ -12,8 +12,9 @@ class MessageCubit extends Cubit<MessageState> {
   final GetSingleUserMessageUsecase _getSingleUserMessageUsecase;
   MessageCubit(this._sendMessageUseCase, this._getSingleUserMessageUsecase)
       : super(MessageInitial());
-  Future<void> getMyChats({required MessageEntity msg}) async {
-    final streamRes = _getSingleUserMessageUsecase.call(msg);
+  Future<void> get(
+      {required String sendorId, required String recipientId}) async {
+    final streamRes = _getSingleUserMessageUsecase.call(sendorId, recipientId);
     await for (var value in streamRes) {
       emit(MessageLoading());
       value.fold((failure) => emit(MessageFailure(errorMsg: failure.message)),

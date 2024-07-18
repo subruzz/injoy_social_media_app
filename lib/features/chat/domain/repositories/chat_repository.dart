@@ -7,9 +7,9 @@ import '../entities/chat_entity.dart';
 abstract class ChatRepository {
   Future<Either<Failure, Unit>> sendMessage(
       ChatEntity chat, MessageEntity message);
-  Stream<Either<Failure, List<ChatEntity>>> getMyChat(ChatEntity chat);
+  Stream<Either<Failure, List<ChatEntity>>> getMyChat(String myId);
   Stream<Either<Failure, List<MessageEntity>>> getSingleUserMessages(
-      MessageEntity message);
+      String sendorId, String recipientId);
   Future<Either<Failure, Unit>> deleteMessage(MessageEntity message);
   Future<Either<Failure, Unit>> seenMessageUpdate(MessageEntity message);
 

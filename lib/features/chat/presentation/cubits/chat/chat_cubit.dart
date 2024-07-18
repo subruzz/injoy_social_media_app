@@ -9,8 +9,8 @@ class ChatCubit extends Cubit<ChatState> {
   final GetMyChatsUsecase _getMyChatsUsecase;
   ChatCubit(this._getMyChatsUsecase) : super(ChatInitial());
 
-  Future<void> getMyChats({required ChatEntity chat}) async {
-    final streamRes = _getMyChatsUsecase.call(chat);
+  Future<void> getMyChats({required String myId}) async {
+    final streamRes = _getMyChatsUsecase.call(myId);
     await for (var value in streamRes) {
       emit(ChatLoading());
       value.fold((failure) => emit(ChatFailure(errorMsg: failure.message)),

@@ -4,6 +4,8 @@ import 'package:provider/single_child_widget.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/chat/chat_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/explore_user/explore_user_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/follow_hashtag/follow_hashtag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_hash_tag_posts_cubit.dart';
@@ -143,6 +145,12 @@ List<SingleChildWidget> myProviders = [
   ),
   BlocProvider(
     create: (context) => serviceLocator<GetHashTagPostsCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<ChatCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<MessageCubit>(),
   ),
   BlocProvider(
     create: (context) => serviceLocator<ForYouPostBloc>()

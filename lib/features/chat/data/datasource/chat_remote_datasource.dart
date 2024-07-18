@@ -10,9 +10,10 @@ import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart'
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 
 abstract interface class ChatRemoteDatasource {
-  Future<void> sendMessage(ChatEntity chat, MessageEntity message);
-  Stream<List<ChatModel>> getMyChat(ChatEntity chat);
-  Stream<List<MessageModel>> getSingleUserMessages(MessageEntity message);
+  Future<void> sendMessage(ChatModel chat, MessageModel message);
+  Stream<List<ChatModel>> getMyChat(String myId);
+  Stream<List<MessageModel>> getSingleUserMessages(
+      String sendorId, String recipientId);
   Future<void> deleteMessage(MessageEntity message);
   Future<void> seenMessageUpdate(MessageEntity message);
 
@@ -28,8 +29,16 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
       required FirebaseStorage firebaseStorage})
       : _firestore = firestore,
         _firebaseStorage = firebaseStorage;
+
+  String combineIds(String id1, String id2) {
+    List<String> ids = [id1, id2];
+    ids.sort(); // Sort IDs alphabetically or numerically
+
+    return ids.join('_'); // Combine IDs with an underscore separator
+  }
+
   @override
-  Future<void> sendMessage(ChatEntity chat, MessageEntity message) async {
+  Future<void> sendMessage(ChatModel chat, MessageModel message) async {
     await sendMessagesByType(message);
 
     String recentTextMessage = "";
@@ -51,20 +60,10 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
         recentTextMessage = message.message!;
     }
 
-    await addToChat(ChatEntity(
-      createdAt: chat.createdAt,
-      senderProfile: chat.senderProfile,
-      recipientProfile: chat.recipientProfile,
-      recentTextMessage: recentTextMessage,
-      recipientName: chat.recipientName,
-      senderName: chat.senderName,
-      recipientUid: chat.recipientUid,
-      senderUid: chat.senderUid,
-      totalUnReadMessages: chat.totalUnReadMessages,
-    ));
+    await addToChat(chat);
   }
 
-  Future<void> addToChat(ChatEntity chat) async {
+  Future<void> addToChat(ChatModel chat) async {
     final myChatRef = _firestore
         .collection(FirebaseCollectionConst.users)
         .doc(chat.senderUid)
@@ -74,17 +73,7 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
         .collection(FirebaseCollectionConst.users)
         .doc(chat.recipientUid)
         .collection(FirebaseCollectionConst.myChat);
-    final myNewChat = ChatModel(
-      createdAt: chat.createdAt,
-      senderProfile: chat.senderProfile,
-      recipientProfile: chat.recipientProfile,
-      recentTextMessage: chat.recentTextMessage,
-      recipientName: chat.recipientName,
-      senderName: chat.senderName,
-      recipientUid: chat.recipientUid,
-      senderUid: chat.senderUid,
-      totalUnReadMessages: chat.totalUnReadMessages,
-    ).toJson();
+    final myNewChat = chat.toJson();
 
     final otherNewChat = ChatModel(
             createdAt: chat.createdAt,
@@ -116,42 +105,27 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
     }
   }
 
-  Future<void> sendMessagesByType(MessageEntity message) async {
+  Future<void> sendMessagesByType(MessageModel message) async {
     // users -> uid -> myChat -> uid -> messages -> messageIds
-
+    final combinedId = combineIds(message.senderUid!, message.recipientUid!);
     final myMessageRef = _firestore
-        .collection(FirebaseCollectionConst.users)
-        .doc(message.senderUid)
-        .collection(FirebaseCollectionConst.myChat)
-        .doc(message.recipientUid)
-        .collection(FirebaseCollectionConst.messages);
+        .collection(FirebaseCollectionConst.messages)
+        .doc(combinedId)
+        .collection('oneToOneMessages');
 
-    final otherMessageRef = _firestore
-        .collection(FirebaseCollectionConst.users)
-        .doc(message.recipientUid)
-        .collection(FirebaseCollectionConst.myChat)
-        .doc(message.senderUid)
-        .collection(FirebaseCollectionConst.messages);
+    // final otherMessageRef = _firestore
+    //     .collection(FirebaseCollectionConst.users)
+    //     .doc(message.recipientUid)
+    //     .collection(FirebaseCollectionConst.myChat)
+    //     .doc(message.senderUid)
+    //     .collection(FirebaseCollectionConst.messages);
     String messageId = IdGenerator.generateUniqueId();
 
-    final newMessage = MessageModel(
-            senderUid: message.senderUid,
-            recipientUid: message.recipientUid,
-            senderName: message.senderName,
-            recipientName: message.recipientName,
-            createdAt: message.createdAt,
-            repliedTo: message.repliedTo,
-            repliedMessage: message.repliedMessage,
-            isSeen: message.isSeen,
-            messageType: message.messageType,
-            message: message.message,
-            messageId: messageId,
-            repliedMessageType: message.repliedMessageType)
-        .toDocument();
+    final newMessage = message.toDocument();
 
     try {
       await myMessageRef.doc(messageId).set(newMessage);
-      await otherMessageRef.doc(messageId).set(newMessage);
+      // await otherMessageRef.doc(messageId).set(newMessage);
     } catch (e) {
       throw const MainException();
     }
@@ -170,10 +144,10 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   }
 
   @override
-  Stream<List<ChatModel>> getMyChat(ChatEntity chat) {
+  Stream<List<ChatModel>> getMyChat(String myId) {
     final myChatRef = _firestore
         .collection(FirebaseCollectionConst.users)
-        .doc(chat.senderUid)
+        .doc(myId)
         .collection(FirebaseCollectionConst.myChat)
         .orderBy("createdAt", descending: true);
 
@@ -182,14 +156,21 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   }
 
   @override
-  Stream<List<MessageModel>> getSingleUserMessages(MessageEntity message) {
+  Stream<List<MessageModel>> getSingleUserMessages(
+      String sendorId, String recipientId) {
+    final combinedId = combineIds(sendorId, recipientId);
     final messagesRef = _firestore
-        .collection(FirebaseCollectionConst.users)
-        .doc(message.senderUid)
-        .collection(FirebaseCollectionConst.myChat)
-        .doc(message.recipientUid)
         .collection(FirebaseCollectionConst.messages)
+        .doc(combinedId)
+        .collection('oneToOneMessages')
         .orderBy("createdAt", descending: false);
+    // final messagesRef = _firestore
+    //     .collection(FirebaseCollectionConst.users)
+    //     .doc(sendorId)
+    //     .collection(FirebaseCollectionConst.myChat)
+    //     .doc(recipientId)
+    //     .collection(FirebaseCollectionConst.messages)
+    //     .orderBy("createdAt", descending: false);
 
     return messagesRef.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((e) => MessageModel.fromJson(e)).toList());

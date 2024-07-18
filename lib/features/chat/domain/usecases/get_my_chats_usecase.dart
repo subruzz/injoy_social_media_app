@@ -9,7 +9,7 @@ class GetMyChatsUsecase {
   GetMyChatsUsecase({required ChatRepository chatRepository})
       : _chatRepository = chatRepository;
 
-  Stream<Either<Failure, List<ChatEntity>>> call(ChatEntity chat) {
-    return _chatRepository.getMyChat(chat);
+  Stream<Either<Failure, List<ChatEntity>>> call(String myId) {
+    return _chatRepository.getMyChat(myId);
   }
 }
