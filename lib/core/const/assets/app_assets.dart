@@ -17,5 +17,8 @@ class AppAssetsConst {
       'assets/images/profile_icon.png'; //svgs
   static const String closesqaure = 'assets/svgs/close_square.svg';
   static const String moreIcon = 'assets/svgs/more.svg';
+  static const String call = 'assets/svgs/call.svg';
+  static const String video = 'assets/svgs/video.svg';
+
   static const String explore = 'assets/svgs/explore.svg';
 }

@@ -23,6 +23,17 @@ import 'package:social_media_app/features/auth/presentation/bloc/forgot_password
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/chat/data/datasource/chat_remote_datasource.dart';
+import 'package:social_media_app/features/chat/data/repositories/chat_repository_impl.dart';
+import 'package:social_media_app/features/chat/domain/repositories/chat_repository.dart';
+import 'package:social_media_app/features/chat/domain/usecases/delete_chat_usecase.dart';
+import 'package:social_media_app/features/chat/domain/usecases/delete_message_usecase.dart';
+import 'package:social_media_app/features/chat/domain/usecases/get_my_chats_usecase.dart';
+import 'package:social_media_app/features/chat/domain/usecases/get_single_user_message_usecase.dart';
+import 'package:social_media_app/features/chat/domain/usecases/seen_message_update_usecase.dart';
+import 'package:social_media_app/features/chat/domain/usecases/send_message_use_case.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/chat/chat_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/explore/data/datasource/explore_app_datasource.dart';
 import 'package:social_media_app/features/explore/data/repository/explore_app_repo_impl.dart';
 import 'package:social_media_app/features/explore/domain/repositories/explore_app_repository.dart';
@@ -144,12 +155,12 @@ Future<void> initDependencies() async {
   _statusCreation();
   _comment();
   _exploreApp();
+  _chat();
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(),
   );
   serviceLocator.registerLazySingleton(() => FollowingCubit());
   serviceLocator.registerLazySingleton(() => InitialSetupCubit(
-   
       getAllStatusBloc: serviceLocator(),
       getMyStatusBloc: serviceLocator(),
       followingCubit: serviceLocator(),
@@ -430,4 +441,25 @@ void _exploreApp() {
         () => ExploreUserCubit(serviceLocator(), serviceLocator()))
     ..registerFactory(
         () => GetNearybyUsersUseCase(exploreAppRepository: serviceLocator()));
+}
+
+void _chat() {
+  serviceLocator
+    ..registerFactory<ChatRemoteDatasource>(() => ChatRemoteDatasourceImpl(
+        firestore: FirebaseFirestore.instance,
+        firebaseStorage: FirebaseStorage.instance))
+    ..registerFactory<ChatRepository>(
+        () => ChatRepositoryImpl(chatRemoteDatasource: serviceLocator()))
+    ..registerFactory(() => DeleteChatUsecase(chatRepository: serviceLocator()))
+    ..registerFactory(
+        () => DeleteMessageUsecase(chatRepository: serviceLocator()))
+    ..registerFactory(() => GetMyChatsUsecase(chatRepository: serviceLocator()))
+    ..registerFactory(
+        () => GetSingleUserMessageUsecase(chatRepository: serviceLocator()))
+    ..registerFactory(
+        () => SeenMessageUpdateUsecase(chatRepository: serviceLocator()))
+    ..registerFactory(
+        () => SendMessageUseCase(chatRepository: serviceLocator()))
+    ..registerFactory(() => MessageCubit(serviceLocator(), serviceLocator()))
+    ..registerFactory(() => ChatCubit(serviceLocator()));
 }

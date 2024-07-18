@@ -120,6 +120,12 @@ final class AppTextTheme {
       fontSize: 15.sp,
     ),
   );
+  static TextTheme bodysmallPureWhiteVariations = TextTheme(
+    bodySmall: TextStyle(
+      color: Colors.white,
+      fontSize: 11.sp,
+    ),
+  );
 
   static TextTheme labelSmallVariations = TextTheme(
     labelSmall: TextStyle(

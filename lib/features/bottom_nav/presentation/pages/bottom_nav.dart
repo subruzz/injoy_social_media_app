@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
-import 'package:social_media_app/features/chat/presentation/pages/chat_page.dart';
+import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/personal_profile_page.dart';
@@ -27,7 +27,7 @@ class _BottonNavWithAnimatedIconsState
   List<Widget> pages = [
     const HomePage(),
     ExplorePage(),
-    ChatPage(),
+    ChatMainTabPage(),
     const NotificationPage(),
     const PersonalProfilePage()
   ];

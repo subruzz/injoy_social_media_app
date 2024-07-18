@@ -34,7 +34,7 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
           .limit(limit);
 
       if (lastDoc != null) {
-        postsQuery = postsQuery.startAfterDocument(lastDoc);
+        // postsQuery = postsQuery.startAfterDocument(lastDoc);
       }
       // if (lastDoc != null) {
       //   // log('Document ID: ${lastDoc.id}');
