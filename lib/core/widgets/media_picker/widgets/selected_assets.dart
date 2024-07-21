@@ -1,6 +1,7 @@
+
 import 'package:flutter/cupertino.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/widgets/page_view.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 
 class SelectedAssetsSection extends StatelessWidget {
   const SelectedAssetsSection(
@@ -9,13 +10,13 @@ class SelectedAssetsSection extends StatelessWidget {
       this.isPost = false,
       required this.selectedAssets});
   final PageController pageController;
-  final List<AssetEntity> selectedAssets;
+  final List<SelectedByte> selectedAssets;
   final bool isPost;
   @override
   Widget build(BuildContext context) {
     return CustomPageView(
       pageController: pageController,
-      selectedStatusAssets: selectedAssets,
+      images: selectedAssets,
     );
   }
 }

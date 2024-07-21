@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/status/data/datasource/status_remote_datasource.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/features/status/domain/repository/status_repository.dart';
@@ -53,7 +56,7 @@ class CreateStatusRepositoryImpl implements StatusRepository {
 
   @override
   Future<Either<Failure, Unit>> createMultipleStatus(StatusEntity status,
-      List<String> caption, List<AssetEntity> assets) async {
+      List<String> caption, List<SelectedByte> assets) async {
     try {
       await _statusRemoteDatasource.createMultipleStatus(
           status, caption, assets);

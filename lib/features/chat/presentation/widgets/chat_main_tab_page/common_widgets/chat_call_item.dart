@@ -1,7 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:social_media_app/core/extensions/time_ago.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/widgets/user_profile.dart';
+import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 
 import '../../../../../../core/theme/color/app_colors.dart';
 
@@ -9,40 +13,36 @@ class ChatCallItem extends StatelessWidget {
   final String name;
   final String time;
   final bool isCall;
-
+  final ChatEntity? chat;
   const ChatCallItem(
       {super.key,
       required this.name,
       required this.time,
-      required this.isCall});
+      this.isCall = false,
+      required this.chat});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        log('taped');
-        // Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context) => PersonChatPage(otherUser: ,),
-        // ));
+        if (chat != null) {
+          context.read<MessageInfoStoreCubit>().setDataForChat(
+              receiverProfile: chat!.recipientProfile,
+              receiverName: chat!.recipientName,
+              recipientId: chat!.recipientUid);
+          context.pushNamed(MyAppRouteConst.personaChatRoute);
+        }
       },
-      leading: CircleAvatar(
-        radius: 30,
-        backgroundImage: NetworkImage(
-            'https://images.panda.org/assets/images/pages/welcome/orangutan_1600x1000_279157.jpg'), // Replace with your image
+      leading: CircularUserProfile(
+        profile: chat?.recipientProfile,
       ),
       title: Text(
         name,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.labelSmall,
       ),
-      subtitle: Text(
-        time,
-        style: TextStyle(color: Colors.grey),
-      ),
+      subtitle: Text(time, style: Theme.of(context).textTheme.bodyMedium),
       trailing: isCall
-          ? Icon(Icons.call, color: Colors.white)
+          ? const Icon(Icons.call, color: Colors.white)
           : Column(
               children: [
                 DecoratedBox(
@@ -50,16 +50,13 @@ class ChatCallItem extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: AppDarkColor().secondaryPrimaryText),
                   child: const Padding(
-                    padding: const EdgeInsets.all(6.0),
+                    padding: EdgeInsets.all(6.0),
                     child: Text('2'),
                   ),
                 ),
                 Text(
-                  '16:47',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(fontSize: 11),
+                  style: Theme.of(context).textTheme.bodySmall,
+                  chat!.createdAt.toDate().timeAgoChatExtension(),
                 )
               ],
             ),

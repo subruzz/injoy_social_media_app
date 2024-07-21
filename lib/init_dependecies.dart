@@ -34,6 +34,8 @@ import 'package:social_media_app/features/chat/domain/usecases/seen_message_upda
 import 'package:social_media_app/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat/chat_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/message_attribute/message_attribute_bloc.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/explore/data/datasource/explore_app_datasource.dart';
 import 'package:social_media_app/features/explore/data/repository/explore_app_repo_impl.dart';
 import 'package:social_media_app/features/explore/domain/repositories/explore_app_repository.dart';
@@ -460,6 +462,11 @@ void _chat() {
         () => SeenMessageUpdateUsecase(chatRepository: serviceLocator()))
     ..registerFactory(
         () => SendMessageUseCase(chatRepository: serviceLocator()))
-    ..registerFactory(() => MessageCubit(serviceLocator(), serviceLocator()))
+    ..registerLazySingleton(() =>
+        MessageInfoStoreCubit(id: serviceLocator<AppUserBloc>().appUser.id))
+    ..registerFactory(() =>
+        MessageCubit(serviceLocator(), serviceLocator(), serviceLocator(),serviceLocator()))
+    ..registerFactory(
+        () => MessageAttributeBloc(serviceLocator(), serviceLocator()))
     ..registerFactory(() => ChatCubit(serviceLocator()));
 }

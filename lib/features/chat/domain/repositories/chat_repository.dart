@@ -6,11 +6,12 @@ import '../entities/chat_entity.dart';
 
 abstract class ChatRepository {
   Future<Either<Failure, Unit>> sendMessage(
-      ChatEntity chat, MessageEntity message);
+      ChatEntity chat, List<MessageEntity> message);
   Stream<Either<Failure, List<ChatEntity>>> getMyChat(String myId);
   Stream<Either<Failure, List<MessageEntity>>> getSingleUserMessages(
       String sendorId, String recipientId);
-  Future<Either<Failure, Unit>> deleteMessage(MessageEntity message);
+  Future<Either<Failure, Unit>> deleteMessage(
+      String sendorId, String recieverId, String messageId);
   Future<Either<Failure, Unit>> seenMessageUpdate(MessageEntity message);
 
   Future<Either<Failure, Unit>> deleteChat(ChatEntity chat);

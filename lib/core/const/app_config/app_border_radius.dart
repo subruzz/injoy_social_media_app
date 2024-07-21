@@ -55,11 +55,24 @@ final class AppBorderRadius {
   static BorderRadius dialogRadius = all(16.0);
   static BorderRadius chipRadius = all(20.0);
 
-  // Page-Specific BorderRadius (Todo)
+  // Page-Specific BorderRadius
   static BorderRadius bottomSheetRadius = only(topLeft: 16.0, topRight: 16.0);
   static BorderRadius dialogTopRadius = only(topLeft: 12.0, topRight: 12.0);
 
-  // Custom values for specific cases (Todo)
+  // Custom values for specific cases
   static const double floatingActionRadiusValue = 28.0;
   static const double homeCardRadiusValue = 10.0;
+
+  // Additional Specific Radius Values
+  static double topLeftRadius(double value) => value.w;
+  static double topRightRadius(double value) => value.w;
+  static double bottomLeftRadius(double value) => value.w;
+  static double bottomRightRadius(double value) => value.w;
+
+  // Complex Radius Cases (with two corners)
+  static double topLeftBottomRight(double topLeft, double bottomRight) =>
+      topLeft.w;
+
+  static double topRightBottomLeft(double topRight, double bottomLeft) =>
+      topRight.w;
 }

@@ -18,7 +18,7 @@ final class CreatePostClickEvent extends CreatePostEvent {
   final double? latitude;
   final double? longitude;
   final String? location;
-  final List<AssetEntity> postPics;
+  final List<SelectedByte> postPics;
   final bool isCommentOff;
 
   const CreatePostClickEvent(

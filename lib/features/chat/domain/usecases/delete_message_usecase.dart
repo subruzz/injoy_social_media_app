@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
-import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/domain/repositories/chat_repository.dart';
 
 class DeleteMessageUsecase
@@ -14,15 +13,17 @@ class DeleteMessageUsecase
   @override
   Future<Either<Failure, Unit>> call(DeleteMessageUsecaseParams params) async {
     return await _chatRepository.deleteMessage(
-      params.message,
-    );
+        params.sendorId, params.recieverId, params.messageId);
   }
 }
 
 class DeleteMessageUsecaseParams {
-  final MessageEntity message;
+  final String sendorId;
+  final String recieverId;
+  final String messageId;
 
-  DeleteMessageUsecaseParams({
-    required this.message,
-  });
+  DeleteMessageUsecaseParams(
+      {required this.sendorId,
+      required this.recieverId,
+      required this.messageId});
 }

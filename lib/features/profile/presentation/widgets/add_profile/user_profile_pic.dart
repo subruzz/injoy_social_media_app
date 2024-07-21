@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,9 +25,13 @@ class UserProfilePicSelect extends StatelessWidget {
           BlocBuilder<PickSingleImageCubit, PickSingleImageState>(
             bloc: selectImageCuit,
             builder: (context, state) {
-              return CircularUserProfile(
-                fileImg: selectImageCuit.img,
-                size: 70,
+              return Builder(
+                builder: (context) {
+                  return CircularUserProfile(
+                    fileImg: selectImageCuit.img,
+                    size: 70,
+                  );
+                }
               );
             },
           ),

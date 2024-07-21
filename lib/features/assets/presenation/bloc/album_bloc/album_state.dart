@@ -29,7 +29,13 @@ final class AlbumFailure extends AlbumBlocState {
 final class AssetToFileLoading extends AlbumBlocState {}
 
 final class AssetToFileSuccess extends AlbumBlocState {
-  final List<File> selectedFileImages;
+  final SelectedImagesDetails selectedImages;
 
-  const AssetToFileSuccess({required this.selectedFileImages});
+  const AssetToFileSuccess({required this.selectedImages});
+}
+
+final class AssetToFileError extends AlbumBlocState {
+  final String errorMessage;
+
+  const AssetToFileError({required this.errorMessage});
 }

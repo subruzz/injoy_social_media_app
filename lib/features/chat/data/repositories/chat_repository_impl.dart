@@ -27,9 +27,11 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> deleteMessage(MessageEntity message) async {
+  Future<Either<Failure, Unit>> deleteMessage(
+      String sendorId, String recieverId, String messageId) async {
     try {
-      await _chatRemoteDatasource.deleteMessage(message);
+      await _chatRemoteDatasource.deleteMessage(
+          sendorId, recieverId, messageId);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -61,6 +63,7 @@ class ChatRepositoryImpl implements ChatRepository {
     } on SocketException catch (e) {
       yield Left(Failure(e.toString()));
     } catch (e) {
+      log(e.toString());
       yield Left(Failure());
     }
   }
@@ -77,11 +80,11 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<Either<Failure, Unit>> sendMessage(
-      ChatEntity chat, MessageEntity message) async {
+      ChatEntity chat, List<MessageEntity> message) async {
     try {
       final ChatModel chatModel = ChatModel.fromChatEntity(chat);
-      final MessageModel messageModel = MessageModel.fromMessageEntity(message);
-      await _chatRemoteDatasource.sendMessage(chatModel, messageModel);
+      // final MessageModel messageModel = MessageModel.fromMessageEntity(message);
+      await _chatRemoteDatasource.sendMessage(chatModel, message);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

@@ -1,15 +1,20 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:photo_manager/photo_manager.dart';
+import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_msg/app_success_msg.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
+import 'package:social_media_app/core/const/message_type.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/textfields/content_input_textfield.dart';
 import 'package:social_media_app/core/widgets/custom_round_button.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 
 class MultipleStatusInputBar extends StatelessWidget {
@@ -19,12 +24,14 @@ class MultipleStatusInputBar extends StatelessWidget {
       required this.alreadySelected,
       required this.captions,
       this.onCaptionChanged,
-      required this.leadingIconPressed});
+      required this.leadingIconPressed,
+      required this.isChat});
   final TextEditingController captionController;
-  final List<AssetEntity> alreadySelected;
+  final List<SelectedByte> alreadySelected;
   final List<String> captions;
   final void Function(String)? onCaptionChanged;
   final VoidCallback leadingIconPressed;
+  final bool isChat;
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -41,7 +48,7 @@ class MultipleStatusInputBar extends StatelessWidget {
                   hintText: 'Add a caption...',
                   onChanged: onCaptionChanged,
                   prefixIcon: const Icon(Icons.photo_library),
-                  leadingPressed:  leadingIconPressed),
+                  leadingPressed: leadingIconPressed),
             ),
             const SizedBox(width: 10),
             BlocConsumer<StatusBloc, StatusState>(
@@ -75,11 +82,21 @@ class MultipleStatusInputBar extends StatelessWidget {
                     icon: Icons.send,
                     onPressed: () {
                       final user = context.read<AppUserBloc>().appUser;
-                      context.read<StatusBloc>().add(CreateMultipleStatusEvent(
-                          userId: user.id,
-                          userName: user.userName ?? '',
-                          captions: captions,
-                          statusImages: alreadySelected));
+                      if (isChat) {
+                        context.read<MessageCubit>().sendMessage(
+                            recentTextMessage: '',
+                            selectedAssets: alreadySelected,
+                            messageType: MessageTypeConst.photoMessage,
+                            captions: captions);
+                      } else {
+                        context.read<StatusBloc>().add(
+                            CreateMultipleStatusEvent(
+                                userId: user.id,
+                                userName: user.userName ?? '',
+                                captions: captions,
+                                statusImages: alreadySelected));
+                      }
+                     
                     });
               },
             )

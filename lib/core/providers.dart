@@ -6,6 +6,7 @@ import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dar
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat/chat_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/explore_user/explore_user_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/follow_hashtag/follow_hashtag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_hash_tag_posts_cubit.dart';
@@ -147,10 +148,13 @@ List<SingleChildWidget> myProviders = [
     create: (context) => serviceLocator<GetHashTagPostsCubit>(),
   ),
   BlocProvider(
-    create: (context) => serviceLocator<ChatCubit>(),
-  ),
+      create: (context) => serviceLocator<ChatCubit>()
+        ..getMyChats(myId: context.read<AppUserBloc>().appUser.id)),
   BlocProvider(
     create: (context) => serviceLocator<MessageCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<MessageInfoStoreCubit>(),
   ),
   BlocProvider(
     create: (context) => serviceLocator<ForYouPostBloc>()

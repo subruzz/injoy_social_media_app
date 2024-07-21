@@ -23,3 +23,26 @@ extension TimeAgo on DateTime {
     }
   }
 }
+
+extension TimeAgoChatExtension on DateTime {
+  String timeAgoChatExtension() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+
+    if (isAfter(today)) {
+      // Today's message: show time without AM/PM
+      final hourStr = hour < 10 ? '0$hour' : hour.toString();
+      final minuteStr = minute < 10 ? '0$minute' : minute.toString();
+      return '$hourStr:$minuteStr';
+    } else if (isAfter(yesterday)) {
+      // Yesterday's message: show "Yesterday"
+      return 'Yesterday';
+    } else {
+      // Older than yesterday: show date
+      final monthStr = month < 10 ? '0$month' : month.toString();
+      final dayStr = day < 10 ? '0$day' : day.toString();
+      return '$monthStr/$dayStr/$year';
+    }
+  }
+}

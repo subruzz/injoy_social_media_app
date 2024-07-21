@@ -114,6 +114,7 @@ class UserProfileDataSourceImpl implements UserProfileDataSource {
       //return the download url
       return downloadUrl;
     } catch (e) {
+      log(e.toString());
       throw const MainException(
           errorMsg: 'Error while setting profile Picture ');
     }

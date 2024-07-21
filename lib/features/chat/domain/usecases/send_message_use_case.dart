@@ -19,7 +19,7 @@ class SendMessageUseCase implements UseCase<Unit, SendMessageUseCaseParams> {
 
 class SendMessageUseCaseParams {
   final ChatEntity chat;
-  final MessageEntity message;
+  final List<MessageEntity> message;
 
   SendMessageUseCaseParams({required this.chat, required this.message});
 }

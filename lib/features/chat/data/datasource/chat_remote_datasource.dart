@@ -1,3 +1,7 @@
+import 'dart:developer';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
@@ -8,13 +12,15 @@ import 'package:social_media_app/features/chat/data/model/chat_model.dart';
 import 'package:social_media_app/features/chat/data/model/message_model.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 
 abstract interface class ChatRemoteDatasource {
-  Future<void> sendMessage(ChatModel chat, MessageModel message);
+  Future<void> sendMessage(ChatModel chat, List<MessageEntity> message);
   Stream<List<ChatModel>> getMyChat(String myId);
   Stream<List<MessageModel>> getSingleUserMessages(
       String sendorId, String recipientId);
-  Future<void> deleteMessage(MessageEntity message);
+  Future<void> deleteMessage(
+      String sendorId, String recieverId, String messageId);
   Future<void> seenMessageUpdate(MessageEntity message);
 
   Future<void> deleteChat(ChatEntity chat);
@@ -38,32 +44,43 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   }
 
   @override
-  Future<void> sendMessage(ChatModel chat, MessageModel message) async {
-    await sendMessagesByType(message);
+  Future<void> sendMessage(ChatModel chat, List<MessageEntity> messages) async {
+    final time = FieldValue.serverTimestamp();
+    // *firebase transaction will cause an error if we we perfom any
+    //* kind of write operation before read opeation
+    try {
+      await _firestore.runTransaction((transaction) async {
+        // Performing read operations
+        final myChatRef = _firestore
+            .collection(FirebaseCollectionConst.users)
+            .doc(chat.senderUid)
+            .collection(FirebaseCollectionConst.myChat)
+            .doc(chat.recipientUid);
 
-    String recentTextMessage = "";
+        final myChatDoc = await transaction.get(myChatRef);
 
-    switch (message.messageType) {
-      case MessageTypeConst.photoMessage:
-        recentTextMessage = '📷 Photo';
-        break;
-      case MessageTypeConst.videoMessage:
-        recentTextMessage = '📸 Video';
-        break;
-      case MessageTypeConst.audioMessage:
-        recentTextMessage = '🎵 Audio';
-        break;
-      case MessageTypeConst.gifMessage:
-        recentTextMessage = 'GIF';
-        break;
-      default:
-        recentTextMessage = message.message!;
+        // Then only perform write operations
+        await sendMessagesByType(transaction, messages, time, chat);
+
+        await addToChat(
+            transaction,
+            chat.copyWith(
+              recentTextMessage: _getRecentTextMessage(
+                  MessageModel.fromMessageEntity(messages.last)),
+            ),
+            time,
+            myChatDoc.exists);
+      });
+    } catch (e) {
+      log(e.toString());
+      throw const MainException();
     }
-
-    await addToChat(chat);
   }
 
-  Future<void> addToChat(ChatModel chat) async {
+  Future<void> addToChat(Transaction transaction, ChatModel chat,
+      FieldValue time, bool isChatDocExists) async {
+    final senderId = chat.senderUid;
+    final receiverId = chat.recipientUid;
     final myChatRef = _firestore
         .collection(FirebaseCollectionConst.users)
         .doc(chat.senderUid)
@@ -73,61 +90,63 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
         .collection(FirebaseCollectionConst.users)
         .doc(chat.recipientUid)
         .collection(FirebaseCollectionConst.myChat);
-    final myNewChat = chat.toJson();
 
-    final otherNewChat = ChatModel(
-            createdAt: chat.createdAt,
-            senderProfile: chat.recipientProfile,
-            recipientProfile: chat.senderProfile,
-            recentTextMessage: chat.recentTextMessage,
-            recipientName: chat.senderName,
-            senderName: chat.recipientName,
-            recipientUid: chat.senderUid,
-            senderUid: chat.recipientUid,
-            totalUnReadMessages: chat.totalUnReadMessages)
-        .toJson();
-    try {
-      myChatRef.doc(chat.recipientUid).get().then((myChatDoc) async {
-        // Create
-        if (!myChatDoc.exists) {
-          await myChatRef.doc(chat.recipientUid).set(myNewChat);
-          await otherChatRef.doc(chat.senderUid).set(otherNewChat);
-          return;
-        } else {
-          // Update
-          await myChatRef.doc(chat.recipientUid).update(myNewChat);
-          await otherChatRef.doc(chat.senderUid).update(otherNewChat);
-          return;
-        }
-      });
-    } catch (e) {
-      throw const MainException();
+    final myNewChat = chat
+        .copyWith(senderUid: senderId, recipientUid: receiverId)
+        .toJson(time: time);
+    final otherNewChat = chat
+        .copyWith(senderUid: receiverId, recipientUid: senderId)
+        .toJson(time: time);
+
+    // Use the provided transaction for Firestore operations
+    if (!isChatDocExists) {
+      transaction.set(myChatRef.doc(chat.recipientUid), myNewChat);
+      transaction.set(otherChatRef.doc(chat.senderUid), otherNewChat);
+    } else {
+      transaction.update(myChatRef.doc(chat.recipientUid), myNewChat);
+      transaction.update(otherChatRef.doc(chat.senderUid), otherNewChat);
     }
   }
 
-  Future<void> sendMessagesByType(MessageModel message) async {
-    // users -> uid -> myChat -> uid -> messages -> messageIds
-    final combinedId = combineIds(message.senderUid!, message.recipientUid!);
+  Future<void> sendMessagesByType(Transaction transaction,
+      List<MessageEntity> messages, FieldValue time, ChatModel chat) async {
+    final combinedId = combineIds(chat.senderUid, chat.recipientUid);
+
     final myMessageRef = _firestore
         .collection(FirebaseCollectionConst.messages)
         .doc(combinedId)
         .collection('oneToOneMessages');
 
-    // final otherMessageRef = _firestore
-    //     .collection(FirebaseCollectionConst.users)
-    //     .doc(message.recipientUid)
-    //     .collection(FirebaseCollectionConst.myChat)
-    //     .doc(message.senderUid)
-    //     .collection(FirebaseCollectionConst.messages);
-    String messageId = IdGenerator.generateUniqueId();
+    for (var messageEntity in messages) {
+      var message = MessageModel.fromMessageEntity(messageEntity);
 
-    final newMessage = message.toDocument();
+      if (message.messageType != MessageTypeConst.textMessage) {
+        log(message.assetPath?.toString() ?? 'null');
+        if (message.assetPath == null) throw const MainException();
+        final fileUrl = await uploadMessageAssets(
+            message.assetPath!, combinedId, message.messageId);
+        message = message.copyWith(assetLink: fileUrl);
+        log(fileUrl);
+      }
 
-    try {
-      await myMessageRef.doc(messageId).set(newMessage);
-      // await otherMessageRef.doc(messageId).set(newMessage);
-    } catch (e) {
-      throw const MainException();
+      final newMessage = message.toDocument(time: time);
+
+      transaction.set(myMessageRef.doc(message.messageId), newMessage);
+    }
+  }
+
+  String _getRecentTextMessage(MessageModel message) {
+    switch (message.messageType) {
+      case MessageTypeConst.photoMessage:
+        return '📷 Photo';
+      case MessageTypeConst.videoMessage:
+        return '📸 Video';
+      case MessageTypeConst.audioMessage:
+        return '🎵 Audio';
+      case MessageTypeConst.gifMessage:
+        return 'GIF';
+      default:
+        return message.message ?? '';
     }
   }
 
@@ -139,8 +158,25 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   }
 
   @override
-  Future<void> deleteMessage(MessageEntity message) async {
-    throw UnimplementedError();
+  Future<void> deleteMessage(
+      String sendorId, String recieverId, String messageId) async {
+    log('chat called');
+    try {
+      final combinedId = combineIds(sendorId, recieverId);
+      log(combinedId);
+      log(messageId);
+      final myMessageRef = _firestore
+          .collection(FirebaseCollectionConst.messages)
+          .doc(combinedId)
+          .collection('oneToOneMessages')
+          .doc(messageId);
+      final m = await myMessageRef.get();
+      log(m.exists.toString());
+      await myMessageRef.delete();
+    } catch (e) {
+      log(e.toString());
+      throw const MainException();
+    }
   }
 
   @override
@@ -151,8 +187,10 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
         .collection(FirebaseCollectionConst.myChat)
         .orderBy("createdAt", descending: true);
 
-    return myChatRef.snapshots().map((querySnapshot) =>
-        querySnapshot.docs.map((e) => ChatModel.fromJson(e)).toList());
+    return myChatRef.snapshots().map((querySnapshot) {
+      log('stream called');
+      return querySnapshot.docs.map((e) => ChatModel.fromJson(e)).toList();
+    });
   }
 
   @override
@@ -174,6 +212,23 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
 
     return messagesRef.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((e) => MessageModel.fromJson(e)).toList());
+  }
+
+  Future<String> uploadMessageAssets(
+      SelectedByte assetPath, String path, String id) async {
+    try {
+      //if not status images is picked return empty list
+
+      Reference ref = _firebaseStorage.ref().child('chatImages').child(path);
+
+      UploadTask task = ref.child(id).putData(assetPath.selectedByte);
+      TaskSnapshot snapshot = await task;
+
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      throw Exception();
+    }
   }
 
   @override

@@ -36,7 +36,7 @@ final class CreateMultipleStatusEvent extends StatusEvent {
   final String userName;
   final String? profilePic;
   final List<String> captions;
-  final List<AssetEntity> statusImages;
+  final List<SelectedByte> statusImages;
   const CreateMultipleStatusEvent(
       {required this.userId,
       this.profilePic,

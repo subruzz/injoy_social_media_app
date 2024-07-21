@@ -19,7 +19,7 @@ class FloatingButton extends StatelessWidget {
               context.pushNamed(
                 MyAppRouteConst.mediaPickerRoute,
                 extra: {
-                  'isPost': true,
+                  'pickerType': MediaPickerType.post
                 },
               );
             },

@@ -52,6 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '803278246806',
     projectId: 'socialmediaapp-58c5c',
     authDomain: 'socialmediaapp-58c5c.firebaseapp.com',
+    databaseURL: 'https://socialmediaapp-58c5c-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'socialmediaapp-58c5c.appspot.com',
   );
 
@@ -60,6 +61,7 @@ class DefaultFirebaseOptions {
     appId: '1:803278246806:android:08bd4c18ab84f1992a03b7',
     messagingSenderId: '803278246806',
     projectId: 'socialmediaapp-58c5c',
+    databaseURL: 'https://socialmediaapp-58c5c-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'socialmediaapp-58c5c.appspot.com',
   );
 
@@ -68,7 +70,11 @@ class DefaultFirebaseOptions {
     appId: '1:803278246806:ios:5b7d2dc6ff1e55c42a03b7',
     messagingSenderId: '803278246806',
     projectId: 'socialmediaapp-58c5c',
+    databaseURL: 'https://socialmediaapp-58c5c-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'socialmediaapp-58c5c.appspot.com',
+    androidClientId: '803278246806-795bj6ocatq8g6ve245bq6btkvnqbnnq.apps.googleusercontent.com',
+    iosClientId: '803278246806-l3kjc8dtp0j3ksdo6smi57no3jk41dqk.apps.googleusercontent.com',
     iosBundleId: 'com.example.socialMediaApp',
   );
+
 }

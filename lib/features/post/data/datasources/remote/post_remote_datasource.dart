@@ -1,15 +1,15 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/hashtag_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/utils/compress_image.dart';
 import 'package:social_media_app/core/utils/id_generator.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/explore/data/model/explore_seearch_location_model.dart';
 import 'package:social_media_app/features/post/data/models/update_post_model.dart';
 import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';
@@ -17,7 +17,7 @@ import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/post/domain/enitities/update_post.dart';
 
 abstract interface class PostRemoteDatasource {
-  Future<void> createPost(PostEntity post, List<AssetEntity> postImage);
+  Future<void> createPost(PostEntity post, List<SelectedByte> postImage);
   Future<PostModel> updatePost(
     UpdatePostEntity post,
     String pId,
@@ -28,8 +28,7 @@ abstract interface class PostRemoteDatasource {
 
   Future<String?> getCurrentUserId();
   Future<List<HashTag>> searchHashTags(String query);
-  Future<List<String>> uploadPostImages(
-      List<AssetEntity> postImages, String pId);
+  Future<List<String>> uploadPostImages(List<SelectedByte> postImages, String pId);
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDatasource {
@@ -44,7 +43,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   }
 
   @override
-  Future<void> createPost(PostEntity post, List<AssetEntity> postImage) async {
+  Future<void> createPost(PostEntity post, List<SelectedByte> postImage) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
     final hashtagCollection = FirebaseFirestore.instance.collection('hashtags');
     final locationCollection =
@@ -249,7 +248,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
 
   @override
   Future<List<String>> uploadPostImages(
-      List<AssetEntity> postImages, String uId) async {
+      List<SelectedByte> postImages, String uId) async {
     try {
       //if not status images is picked return empty list
       if (postImages.isEmpty) {
@@ -263,11 +262,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
 
       for (var image in postImages) {
         //get the  file from the AssetEntity
-        File? file = await image.file;
-        if (file == null) continue;
         // Compress the image; resulting type will be Uint8List
-        final data = await compressFile(file);
-        if (data == null) continue;
+        final data = await testComporessList(image.selectedByte);
         //generating unique id
         String imageId = IdGenerator.generateUniqueId();
         // Upload the compressed image data to Firebase Storage

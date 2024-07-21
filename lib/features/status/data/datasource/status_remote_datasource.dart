@@ -1,7 +1,6 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
@@ -11,15 +10,16 @@ import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/utils/compress_image.dart';
 import 'package:social_media_app/core/utils/id_generator.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 
 abstract interface class StatusRemoteDatasource {
   Future<void> createStatus(SingleStatusEntity singleStatus);
   Future<void> seenStatusUpdate(String statusId, String viewedUserId);
   Future<void> deleteStatus(String statusId, String? imgUrl);
   Future<void> createMultipleStatus(
-      StatusEntity status, List<String> caption, List<AssetEntity> assets);
+      StatusEntity status, List<String> caption, List<SelectedByte> assets);
   Future<List<Map<String, String>>> uploadStatusImages(
-      List<AssetEntity> postImages, String pId);
+      List<SelectedByte> postImages, String pId);
 }
 
 class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
@@ -69,7 +69,7 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
 
   @override
   Future<void> createMultipleStatus(StatusEntity status, List<String> captions,
-      List<AssetEntity> assets) async {
+      List<SelectedByte> assets) async {
     try {
       final statusCollection =
           firestore.collection(FirebaseCollectionConst.statuses);
@@ -114,7 +114,6 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
   @override
   Future<void> deleteStatus(String statusId, String? imgUrl) async {
     try {
-
       //deleting the status using the status id
       final statusRef =
           firestore.collection(FirebaseCollectionConst.statuses).doc(statusId);
@@ -147,7 +146,7 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
 
   @override
   Future<List<Map<String, String>>> uploadStatusImages(
-      List<AssetEntity> postImages, String uId) async {
+      List<SelectedByte> postImages, String uId) async {
     try {
       //if not status images is picked return empty list
       if (postImages.isEmpty) {
@@ -163,11 +162,9 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
 
       for (var image in postImages) {
         //get the  file from the AssetEntity
-        File? file = await image.file;
-        if (file == null) continue;
+
         // Compress the image; resulting type will be Uint8List
-        final data = await compressFile(file);
-        if (data == null) continue;
+        final data = await testComporessList(image.selectedByte);
         //generating unique id
         String imageId = IdGenerator.generateUniqueId();
         // Upload the compressed image data to Firebase Storage

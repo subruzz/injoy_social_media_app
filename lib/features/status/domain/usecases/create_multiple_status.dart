@@ -1,9 +1,10 @@
+import 'dart:typed_data';
 
 import 'package:fpdart/fpdart.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/status/domain/repository/status_repository.dart';
 
 class CreateMultipleStatusUseCase
@@ -23,7 +24,7 @@ class CreateMultipleStatusUseCase
 
 class CreateMutlipleStatusUseCaseParams {
   final StatusEntity status;
-  final List<AssetEntity> assets;
+  final List<SelectedByte> assets;
   final List<String> captions;
   CreateMutlipleStatusUseCaseParams({
     required this.captions,

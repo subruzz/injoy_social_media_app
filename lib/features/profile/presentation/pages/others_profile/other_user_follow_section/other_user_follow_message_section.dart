@@ -9,6 +9,7 @@ import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_b
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/button/custom_button_with_icon.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 
@@ -75,24 +76,26 @@ class OtherUserFollowMessageSection extends StatelessWidget {
           ),
           AppSizedBox.sizedBox10W,
           Expanded(
-            child: CustomButtonWithIcon(
-                iconColor: AppDarkColor().buttonBackground,
-                iconSize: 20.w,
-                iconData: CupertinoIcons.chat_bubble_text,
-                borderColor: AppDarkColor().buttonBackground,
-                color: AppDarkColor().background,
-                radius: AppBorderRadius.extraLarge,
-                title: 'Message',
-                textColor: AppDarkColor().secondaryPrimaryText,
-                onClick: () {
-                  context.read<MessageCubit>().getPersonalChats(
-                      recipientId: currentVisitedUser.id, sendorId: me.id);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PersonChatPage(
-                            otherUser: currentVisitedUser,
-                          )));
-                }),
-          )
+              child: CustomButtonWithIcon(
+                  iconColor: AppDarkColor().buttonBackground,
+                  iconSize: 20.w,
+                  iconData: CupertinoIcons.chat_bubble_text,
+                  borderColor: AppDarkColor().buttonBackground,
+                  color: AppDarkColor().background,
+                  radius: AppBorderRadius.extraLarge,
+                  title: 'Message',
+                  textColor: AppDarkColor().secondaryPrimaryText,
+                  onClick: () {
+                    context.read<MessageInfoStoreCubit>().setDataForChat(
+                        receiverProfile: currentVisitedUser.profilePic,
+                        receiverName: currentVisitedUser.userName ?? '',
+                        recipientId: currentVisitedUser.id);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const PersonChatPage(),
+                      ),
+                    );
+                  })),
         ],
       ),
     );

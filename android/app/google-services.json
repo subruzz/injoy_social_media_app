@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "803278246806",
+    "firebase_url": "https://socialmediaapp-58c5c-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "socialmediaapp-58c5c",
     "storage_bucket": "socialmediaapp-58c5c.appspot.com"
   },
@@ -12,7 +13,12 @@
           "package_name": "com.example.socia"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "803278246806-eup8h5b4ie58ipmvgscte0dsk0hvrpua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAoMU_lqqWSVq-vdxAg3PXOi8F3BcpCm6g"
@@ -20,7 +26,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803278246806-eup8h5b4ie58ipmvgscte0dsk0hvrpua.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "803278246806-l3kjc8dtp0j3ksdo6smi57no3jk41dqk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.socialMediaApp"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +49,20 @@
           "package_name": "com.example.social_media_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "803278246806-795bj6ocatq8g6ve245bq6btkvnqbnnq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.social_media_app",
+            "certificate_hash": "c422afe236e4520ef0a3c9c5e3bfef85854867ce"
+          }
+        },
+        {
+          "client_id": "803278246806-eup8h5b4ie58ipmvgscte0dsk0hvrpua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAoMU_lqqWSVq-vdxAg3PXOi8F3BcpCm6g"
@@ -39,7 +70,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803278246806-eup8h5b4ie58ipmvgscte0dsk0hvrpua.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "803278246806-l3kjc8dtp0j3ksdo6smi57no3jk41dqk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.socialMediaApp"
+              }
+            }
+          ]
         }
       }
     },
@@ -50,7 +93,12 @@
           "package_name": "com.example.social_meida_app.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "803278246806-eup8h5b4ie58ipmvgscte0dsk0hvrpua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAoMU_lqqWSVq-vdxAg3PXOi8F3BcpCm6g"
@@ -58,7 +106,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803278246806-eup8h5b4ie58ipmvgscte0dsk0hvrpua.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "803278246806-l3kjc8dtp0j3ksdo6smi57no3jk41dqk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.socialMediaApp"
+              }
+            }
+          ]
         }
       }
     },
@@ -69,7 +129,12 @@
           "package_name": "com.injoy.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "803278246806-eup8h5b4ie58ipmvgscte0dsk0hvrpua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAoMU_lqqWSVq-vdxAg3PXOi8F3BcpCm6g"
@@ -77,7 +142,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "803278246806-eup8h5b4ie58ipmvgscte0dsk0hvrpua.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "803278246806-l3kjc8dtp0j3ksdo6smi57no3jk41dqk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.socialMediaApp"
+              }
+            }
+          ]
         }
       }
     }

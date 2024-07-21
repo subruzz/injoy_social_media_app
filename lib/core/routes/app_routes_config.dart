@@ -1,6 +1,6 @@
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
@@ -8,6 +8,8 @@ import 'package:social_media_app/features/assets/presenation/pages/custom_media_
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/peronal_chat_builder.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/explore/presentation/pages/view_hash_tag_posts.dart';
 import 'package:social_media_app/features/location/presentation/pages/location_asking_page_builder.dart';
 import 'package:social_media_app/features/post/presentation/pages/create_post_page.dart';
@@ -17,6 +19,7 @@ import 'package:social_media_app/features/profile/presentation/pages/add_profile
 import 'package:social_media_app/features/profile/presentation/pages/interest_page/interest_selection_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
+import 'package:social_media_app/features/status/presentation/pages/create_mutliple_status_page.dart';
 import 'package:social_media_app/splash_screen.dart';
 
 class MyAppRouter {
@@ -100,23 +103,35 @@ class MyAppRouter {
         pageBuilder: (context, state) {
           final Map<String, dynamic>? extras =
               state.extra as Map<String, dynamic>?;
-          final List<AssetEntity>? selectedAssets =
-              extras?['selectedAssets'] as List<AssetEntity>?;
-          final bool isPost = extras?['isPost'] as bool? ?? false;
+          final MediaPickerType pickerType =
+              extras?['pickerType'] as MediaPickerType? ?? MediaPickerType.post;
+
           return MaterialPage(
             child: CustomMediaPickerPage(
-              alreadySelected: selectedAssets,
-              isPost: isPost,
+              pickerType: pickerType,
             ),
           );
+        },
+      ),
+      GoRoute(
+        name: MyAppRouteConst.createMultipleStatusRoute,
+        path: '/create_multiple_status_page',
+        pageBuilder: (context, state) {
+          final Map<String, dynamic> params =
+              state.extra as Map<String, dynamic>;
+          final List<SelectedByte> selectedAssets = params['selectedAssets'];
+          final bool isChat = params['isChat'];
+          return MaterialPage(
+              child: CreateMutlipleStatusPage(
+                  assets: selectedAssets, isChat: isChat));
         },
       ),
       GoRoute(
         name: MyAppRouteConst.createPostRoute,
         path: '/create_post_page',
         pageBuilder: (context, state) {
-          final List<AssetEntity> selectedAssets =
-              state.extra as List<AssetEntity>;
+          final List<SelectedByte> selectedAssets =
+              state.extra as List<SelectedByte>;
           return MaterialPage(
               child: CreatePostScreen(selectedImages: selectedAssets));
         },
@@ -159,6 +174,13 @@ class MyAppRouter {
               hashTagPostCount: hashTagPostCount,
             ),
           );
+        },
+      ),
+      GoRoute(
+        name: MyAppRouteConst.personaChatRoute,
+        path: '/personChatPage',
+        pageBuilder: (context, state) {
+          return const MaterialPage(child: PeronalChatBuilder());
         },
       ),
     ],

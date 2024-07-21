@@ -1,7 +1,7 @@
+
 import 'package:flutter/widgets.dart';
-import 'package:photo_manager/photo_manager.dart';
-import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post_input_section/widget/description_textfield.dart';
 
 class PostInputSection extends StatelessWidget {
@@ -10,7 +10,7 @@ class PostInputSection extends StatelessWidget {
       required this.descriptionController,
       required this.assetEntity});
   final TextEditingController descriptionController;
-  final AssetEntity assetEntity;
+  final SelectedByte assetEntity;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -23,11 +23,9 @@ class PostInputSection extends StatelessWidget {
         )),
         ClipRRect(
           borderRadius: AppBorderRadius.small,
-          child: AssetEntityImage(
+          child: Image.file(
             height: 50,
-            assetEntity,
-            isOriginal: false,
-            thumbnailSize: const ThumbnailSize.square(500),
+            assetEntity.selectedFile!,
           ),
         )
       ],

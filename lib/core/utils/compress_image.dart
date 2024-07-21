@@ -1,14 +1,14 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
-Future<Uint8List?> compressFile(File file) async {
-    var result = await FlutterImageCompress.compressWithFile(
-      file.absolute.path,
-      minWidth: 2300,
-      minHeight: 1500,
-      quality: 50,
-    );
-    return result;
-  }
+Future<Uint8List> testComporessList(Uint8List list) async {
+  var result = await FlutterImageCompress.compressWithList(
+    list,
+    minHeight: 1920,
+    minWidth: 1080,
+    quality: 96,
+    rotate: 0,
+  );
+  return result;
+}

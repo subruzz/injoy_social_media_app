@@ -1,7 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_msg/app_success_msg.dart';
 import 'package:social_media_app/core/const/messenger.dart';
@@ -11,6 +12,7 @@ import 'package:social_media_app/core/widgets/app_related/app_custom_floating_bu
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/app_related/rotated_icon.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/widgets/create_text_status/create_text_status_background.dart';
@@ -23,7 +25,7 @@ class CreateTextStatusPage extends StatelessWidget {
       required this.selectedAssets,
       required this.captonController});
   final VoidCallback changeStatusScreen;
-  final List<AssetEntity> selectedAssets;
+  final List<SelectedByte> selectedAssets;
   final TextEditingController captonController;
   @override
   Widget build(BuildContext context) {
@@ -36,11 +38,9 @@ class CreateTextStatusPage extends StatelessWidget {
               padding: AppPadding.floatingActionBottomPaddng,
               child: AppCustomFloatingButton(
                   onPressed: () async {
-                    final List<AssetEntity>? res = await context.pushNamed(
+                    final List<SelectedByte>? res = await context.pushNamed(
                       MyAppRouteConst.mediaPickerRoute,
-                      extra: {
-                        'selectedAssets': selectedAssets,
-                      },
+                      extra: {'pickerType': MediaPickerType.status},
                     );
                     selectedAssets.clear();
 

@@ -6,7 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 abstract class AssetLocalSource {
   Future<List<AssetEntity>> loadAssets(AssetPathEntity selectedAlbum);
   Future<void> grantPermissions();
-  Future<List<AssetPathEntity>> fetchAlbums();
+  Future<List<AssetPathEntity>> fetchAlbums(RequestType type);
 }
 
 class AssetLocalSourceImpl implements AssetLocalSource {
@@ -22,13 +22,14 @@ class AssetLocalSourceImpl implements AssetLocalSource {
   }
 
   @override
-  Future<List<AssetPathEntity>> fetchAlbums() async {
+  Future<List<AssetPathEntity>> fetchAlbums(RequestType type) async {
     try {
       final isEnabled = await grantPermissions();
       if (!isEnabled) {
         throw const MainException(errorMsg: 'Permission not enabled');
       }
-      List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(type: RequestType.image);
+      List<AssetPathEntity> albums =
+          await PhotoManager.getAssetPathList(type: type);
       return albums;
     } catch (e) {
       throw const MainException(

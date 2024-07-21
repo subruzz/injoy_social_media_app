@@ -1,22 +1,29 @@
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 
 class MessageModel extends MessageEntity {
-  const MessageModel(
-      {required super.senderUid,
-      required super.recipientUid,
-      required super.messageType,
-      super.message,
-      super.createdAt,
-      required super.isSeen,
-      super.repliedTo,
-      super.repliedMessage,
-      super.repliedMessageType,
-      required super.messageId,
-      required super.isDeleted,
-      required super.isEdited,
-      required super.deletedAt});
+  const MessageModel({
+    required super.senderUid,
+    required super.recipientUid,
+    required super.messageType,
+    super.message,
+    super.createdAt,
+    super.assetPath,
+    required super.isSeen,
+    super.repliedTo,
+    super.assetLink,
+    super.repliedMessage,
+    super.repliedMessageType,
+    required super.messageId,
+    required super.isDeleted,
+    required super.isEdited,
+    required super.deletedAt,
+  });
+
   factory MessageModel.fromMessageEntity(MessageEntity entity) {
     return MessageModel(
       isDeleted: entity.isDeleted,
@@ -30,14 +37,17 @@ class MessageModel extends MessageEntity {
       messageType: entity.messageType,
       repliedMessage: entity.repliedMessage,
       repliedTo: entity.repliedTo,
+      assetPath: entity.assetPath,
       messageId: entity.messageId,
       repliedMessageType: entity.repliedMessageType,
     );
   }
+
   factory MessageModel.fromJson(DocumentSnapshot snapshot) {
     final snap = snapshot.data() as Map<String, dynamic>;
 
     return MessageModel(
+      assetLink: snap['assetLink'],
       isDeleted: snap['isDeleted'],
       isEdited: snap['isEdited'],
       deletedAt: snap['deleteAt'],
@@ -54,19 +64,56 @@ class MessageModel extends MessageEntity {
     );
   }
 
-  Map<String, dynamic> toDocument() => {
+  Map<String, dynamic> toDocument({required FieldValue time}) => {
         'isDeleted': isDeleted,
         'isEdited': isEdited,
+        'assetLink': assetLink,
         'deleteAt': deletedAt,
-        "senderUid": senderUid,
-        "recipientUid": recipientUid,
-        "createdAt": createdAt ?? FieldValue.serverTimestamp(),
-        "isSeen": isSeen,
-        "message": message,
-        "messageType": messageType,
-        "repliedMessage": repliedMessage,
-        "repliedTo": repliedTo,
-        "messageId": messageId,
-        "repliedMessageType": repliedMessageType,
+        'senderUid': senderUid,
+        'recipientUid': recipientUid,
+        'createdAt': time,
+        'isSeen': isSeen,
+        'message': message,
+        'messageType': messageType,
+        'repliedMessage': repliedMessage,
+        'repliedTo': repliedTo,
+        'messageId': messageId,
+        'repliedMessageType': repliedMessageType,
       };
+
+  // Add the copyWith method
+  MessageModel copyWith({
+    String? senderUid,
+    String? recipientUid,
+    String? messageType,
+    String? assetLink,
+    String? message,
+    Timestamp? createdAt,
+    SelectedByte? assetPath,
+    bool? isSeen,
+    String? repliedTo,
+    String? repliedMessage,
+    String? repliedMessageType,
+    String? messageId,
+    bool? isDeleted,
+    bool? isEdited,
+    DateTime? deletedAt,
+  }) {
+    return MessageModel(
+        senderUid: senderUid ?? this.senderUid,
+        recipientUid: recipientUid ?? this.recipientUid,
+        messageType: messageType ?? this.messageType,
+        message: message ?? this.message,
+        createdAt: createdAt ?? this.createdAt,
+        assetPath: assetPath ?? this.assetPath,
+        isSeen: isSeen ?? this.isSeen,
+        repliedTo: repliedTo ?? this.repliedTo,
+        repliedMessage: repliedMessage ?? this.repliedMessage,
+        repliedMessageType: repliedMessageType ?? this.repliedMessageType,
+        messageId: messageId ?? this.messageId,
+        isDeleted: isDeleted ?? this.isDeleted,
+        isEdited: isEdited ?? this.isEdited,
+        deletedAt: deletedAt ?? this.deletedAt,
+        assetLink: assetLink ?? this.assetLink);
+  }
 }
