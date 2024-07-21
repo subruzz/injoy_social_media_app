@@ -15,15 +15,17 @@ class SeenMessageUpdateUsecase
   Future<Either<Failure, Unit>> call(
       SeenMessageUpdateUsecaseParams params) async {
     return await _chatRepository.seenMessageUpdate(
-      params.message,
-    );
+        params.sendorId, params.recieverId, params.messageId);
   }
 }
 
 class SeenMessageUpdateUsecaseParams {
-  final MessageEntity message;
+  final String sendorId;
+  final String recieverId;
+  final String messageId;
 
-  SeenMessageUpdateUsecaseParams({
-    required this.message,
-  });
+  SeenMessageUpdateUsecaseParams(
+      {required this.sendorId,
+      required this.recieverId,
+      required this.messageId});
 }

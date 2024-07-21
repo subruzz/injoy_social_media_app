@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/extensions/video_duration.dart';
@@ -80,7 +81,9 @@ class _CachedVideoMessageWidgetState extends State<CachedVideoMessageWidget> {
             child: Stack(
               children: [
                 (videoPlayerController!.value.isInitialized)
-                    ? VideoPlayer(videoPlayerController!)
+                    ? ClipRRect(
+                        borderRadius: AppBorderRadius.small,
+                        child: VideoPlayer(videoPlayerController!))
                     : const Text('loading'),
                 Align(
                   alignment: Alignment.center,

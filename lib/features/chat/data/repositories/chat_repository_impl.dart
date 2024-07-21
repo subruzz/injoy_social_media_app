@@ -69,9 +69,11 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> seenMessageUpdate(MessageEntity message) async {
+  Future<Either<Failure, Unit>> seenMessageUpdate(
+      String sendorId, String recieverId, String messageId) async {
     try {
-      await _chatRemoteDatasource.seenMessageUpdate(message);
+      await _chatRemoteDatasource.seenMessageUpdate(
+          sendorId, recieverId, messageId);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

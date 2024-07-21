@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class AppUser extends Equatable {
@@ -12,6 +13,7 @@ class AppUser extends Equatable {
   final String? about;
   final String? profilePic;
   final String? location;
+  final Timestamp? lastSeen;
   final double? latitude;
   final double? longitude;
   int followersCount;
@@ -19,6 +21,7 @@ class AppUser extends Equatable {
   // final List<String> followers;
   final List<String> following;
   final List<String> interests;
+  final bool onlineStatus;
   final List<String> posts;
   final int viewedSetupIndex;
 
@@ -26,9 +29,11 @@ class AppUser extends Equatable {
     required this.id,
     this.viewedSetupIndex = 0,
     required this.email,
+    this.lastSeen,
     required this.hasPremium,
     required this.fullName,
     required this.userName,
+    required this.onlineStatus,
     required this.dob,
     required this.followersCount,
     required this.followingCount,
@@ -52,14 +57,14 @@ class AppUser extends Equatable {
         hasPremium,
         fullName,
         userName,
-        dob,
+        dob, lastSeen,
         phoneNumber,
         occupation,
         about,
         profilePic,
         location,
         latitude,
-        longitude,
+        longitude, onlineStatus,
         // ...followers,
         // ...following,
         ...interests,

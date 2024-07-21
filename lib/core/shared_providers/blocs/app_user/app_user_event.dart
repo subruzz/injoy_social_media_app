@@ -20,3 +20,9 @@ final class UpdateUserModelEvent extends AppUserEvent {
 final class UpdateUserSignOutEvent extends AppUserEvent {}
 
 final class EnsureUserModelExistsEvent extends AppUserEvent {}
+
+final class UserOnlineStatusUpdate extends AppUserEvent {
+  final bool status;
+
+  const UserOnlineStatusUpdate({required this.status});
+}

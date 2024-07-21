@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_event.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
@@ -20,8 +22,45 @@ class BottonNavWithAnimatedIcons extends StatefulWidget {
       _BottonNavWithAnimatedIconsState();
 }
 
-class _BottonNavWithAnimatedIconsState
-    extends State<BottonNavWithAnimatedIcons> {
+class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
+    with WidgetsBindingObserver {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        context
+            .read<AppUserBloc>()
+            .add(const UserOnlineStatusUpdate(status: true));
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.paused:
+        context
+            .read<AppUserBloc>()
+            .add(const UserOnlineStatusUpdate(status: false));
+        break;
+      case AppLifecycleState.hidden:
+        break;
+    }
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    for (var controller in controllers) {
+      controller?.dispose();
+    }
+
+    super.dispose();
+  }
+
   List<SMIBool> riveIconInputs = [];
   List<StateMachineController?> controllers = [];
   List<Widget> pages = [
@@ -50,14 +89,6 @@ class _BottonNavWithAnimatedIconsState
     controllers.add(controller);
 
     riveIconInputs.add(controller.findInput<bool>('active') as SMIBool);
-  }
-
-  @override
-  void dispose() {
-    for (var controller in controllers) {
-      controller?.dispose();
-    }
-    super.dispose();
   }
 
   int _currentPage = 0;

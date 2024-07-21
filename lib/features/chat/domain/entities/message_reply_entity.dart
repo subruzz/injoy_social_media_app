@@ -1,10 +1,10 @@
-class MessageReplayEntity {
+class MessageReplyEntity {
   final String? message;
   final String? username;
   final String? messageType;
   final bool? isMe;
 
-  MessageReplayEntity({
+  MessageReplyEntity({
     this.message,
     this.username,
     this.messageType,

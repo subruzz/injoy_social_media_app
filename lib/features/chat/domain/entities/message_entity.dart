@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
@@ -14,6 +13,7 @@ class MessageEntity extends Equatable {
   final bool isSeen;
   final String? repliedTo;
   final String? repliedMessage;
+  final String? repliedMessageAssetLink;
   final String? repliedMessageType;
   final String messageId;
   final bool isDeleted;
@@ -23,6 +23,7 @@ class MessageEntity extends Equatable {
   const MessageEntity({
     required this.isDeleted,
     required this.isEdited,
+     this.repliedMessageAssetLink,
     required this.deletedAt,
     required this.senderUid,
     this.assetLink,
@@ -49,7 +50,7 @@ class MessageEntity extends Equatable {
         assetLink,
         messageType,
         message,
-        createdAt,
+        createdAt,repliedMessageAssetLink,
         isSeen,
         repliedTo,
         repliedMessage,

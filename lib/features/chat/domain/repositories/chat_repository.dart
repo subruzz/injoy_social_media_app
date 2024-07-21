@@ -12,7 +12,8 @@ abstract class ChatRepository {
       String sendorId, String recipientId);
   Future<Either<Failure, Unit>> deleteMessage(
       String sendorId, String recieverId, String messageId);
-  Future<Either<Failure, Unit>> seenMessageUpdate(MessageEntity message);
+  Future<Either<Failure, Unit>> seenMessageUpdate(
+      String sendorId, String recieverId, String messageId);
 
   Future<Either<Failure, Unit>> deleteChat(ChatEntity chat);
 }

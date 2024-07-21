@@ -37,7 +37,10 @@ enum MediaType {
 Future<GiphyGif?> pickGif(BuildContext context) async {
   GiphyGif? gif;
   try {
-    gif = await GiphyPicker.pickGif(context: context, apiKey: '');
+    gif = await GiphyPicker.pickGif(
+        showPreviewPage: false,
+        context: context,
+        apiKey: 'HN4nOunS6Eg8OHF5LLDRibdbHGrpm6l8');
   } catch (e) {
     log('errror');
   }

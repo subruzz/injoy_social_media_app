@@ -464,8 +464,8 @@ void _chat() {
         () => SendMessageUseCase(chatRepository: serviceLocator()))
     ..registerLazySingleton(() =>
         MessageInfoStoreCubit(id: serviceLocator<AppUserBloc>().appUser.id))
-    ..registerFactory(() =>
-        MessageCubit(serviceLocator(), serviceLocator(), serviceLocator(),serviceLocator()))
+    ..registerFactory(() => MessageCubit(serviceLocator(), serviceLocator(),
+        serviceLocator(), serviceLocator(), serviceLocator()))
     ..registerFactory(
         () => MessageAttributeBloc(serviceLocator(), serviceLocator()))
     ..registerFactory(() => ChatCubit(serviceLocator()));

@@ -88,6 +88,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       }
       AppUserModel userModel = AppUserModel(
         id: userCredential.user!.uid,
+        onlineStatus: false,
         email: userCredential.user!.email ?? '',
         hasPremium: false,
         followersCount: 0,
@@ -161,6 +162,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           .doc(user.uid);
       AppUserModel userModel = AppUserModel(
         id: user.uid,
+        onlineStatus: false,
         email: email,
         hasPremium: false,
         followersCount: 0,
@@ -225,7 +227,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       throw MainException(errorMsg: e.toString());
     }
   }
-  
+
   @override
   Future<void> signOut(String uid) {
     // TODO: implement signOut

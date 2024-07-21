@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_event.dart';
@@ -19,5 +21,14 @@ class AppUserBloc extends Bloc<AppUserEvent, AppUserState> {
         emit(AppUserLoggedIn(user: appUser));
       },
     );
+    on<UserOnlineStatusUpdate>(_updateUserStatus);
+  }
+
+  FutureOr<void> _updateUserStatus(
+      UserOnlineStatusUpdate event, Emitter<AppUserState> emit) async {
+    FirebaseFirestore.instance.collection('users').doc(_appUser.id).update({
+      'onlineStatus': event.status,
+      if (!event.status) 'lastSeen': FieldValue.serverTimestamp()
+    });
   }
 }

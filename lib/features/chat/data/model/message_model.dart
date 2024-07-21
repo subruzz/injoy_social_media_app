@@ -18,6 +18,7 @@ class MessageModel extends MessageEntity {
     super.assetLink,
     super.repliedMessage,
     super.repliedMessageType,
+    super.repliedMessageAssetLink,
     required super.messageId,
     required super.isDeleted,
     required super.isEdited,
@@ -26,6 +27,7 @@ class MessageModel extends MessageEntity {
 
   factory MessageModel.fromMessageEntity(MessageEntity entity) {
     return MessageModel(
+      repliedMessageAssetLink: entity.repliedMessageAssetLink,
       isDeleted: entity.isDeleted,
       isEdited: entity.isEdited,
       deletedAt: entity.deletedAt,
@@ -47,6 +49,7 @@ class MessageModel extends MessageEntity {
     final snap = snapshot.data() as Map<String, dynamic>;
 
     return MessageModel(
+      repliedMessageAssetLink: snap['repliedMessageAssetLink'],
       assetLink: snap['assetLink'],
       isDeleted: snap['isDeleted'],
       isEdited: snap['isEdited'],
@@ -65,6 +68,7 @@ class MessageModel extends MessageEntity {
   }
 
   Map<String, dynamic> toDocument({required FieldValue time}) => {
+        'repliedMessageAssetLink': repliedMessageAssetLink,
         'isDeleted': isDeleted,
         'isEdited': isEdited,
         'assetLink': assetLink,
@@ -85,6 +89,7 @@ class MessageModel extends MessageEntity {
   MessageModel copyWith({
     String? senderUid,
     String? recipientUid,
+    String? repliedMessageAssetLink,
     String? messageType,
     String? assetLink,
     String? message,
@@ -100,6 +105,8 @@ class MessageModel extends MessageEntity {
     DateTime? deletedAt,
   }) {
     return MessageModel(
+        repliedMessageAssetLink:
+            repliedMessageAssetLink ?? this.repliedMessageAssetLink,
         senderUid: senderUid ?? this.senderUid,
         recipientUid: recipientUid ?? this.recipientUid,
         messageType: messageType ?? this.messageType,

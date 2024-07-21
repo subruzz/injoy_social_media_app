@@ -6,6 +6,7 @@ import 'package:social_media_app/core/const/message_type.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
+import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_attribute/message_attribute_bloc.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
@@ -51,6 +52,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       appBar: PersonalPageTopBar(
+        id: _msgInfo.receiverId,
         userName: _msgInfo.receiverName,
       ),
       body: GestureDetector(
@@ -71,6 +73,9 @@ class _PersonChatPageState extends State<PersonChatPage> {
               children: [
                 //messages listing
                 ChatListingSectionSection(
+                    onSwipe: (message) {
+                      onMessageSwipe(message: message);
+                    },
                     goToBottom: _scrollToBottom,
                     scrollController: _scrollController),
 //input field for creating chat
@@ -207,6 +212,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
     );
   }
 
+  void onMessageSwipe({required MessageEntity message}) {}
   _attachWindowItem(
       {IconData? icon, Color? color, String? title, VoidCallback? onTap}) {
     return GestureDetector(

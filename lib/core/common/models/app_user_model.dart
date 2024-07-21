@@ -8,6 +8,7 @@ class AppUserModel extends AppUser {
     super.fullName,
     super.userName,
     super.dob,
+    required super.onlineStatus,
     super.phoneNumber,
     super.occupation,
     super.about,
@@ -66,6 +67,7 @@ class AppUserModel extends AppUser {
 
   factory AppUserModel.fromJson(Map<String, dynamic> json) {
     return AppUserModel(
+      onlineStatus:json['onlineStatus'],
       viewedSetupIndex: json['viewedSetupIndex'],
       id: json['id'],
       followersCount: json['followersCount'],
@@ -93,6 +95,7 @@ class AppUserModel extends AppUser {
     return {
       'viewedSetupIndex': viewedSetupIndex,
       'id': id,
+      'onlineStatus':onlineStatus,
       'email': email,
       'hasPremium': hasPremium,
       'fullName': fullName,

@@ -21,7 +21,8 @@ abstract interface class ChatRemoteDatasource {
       String sendorId, String recipientId);
   Future<void> deleteMessage(
       String sendorId, String recieverId, String messageId);
-  Future<void> seenMessageUpdate(MessageEntity message);
+  Future<void> seenMessageUpdate(
+      String sendorId, String recieverId, String messageId);
 
   Future<void> deleteChat(ChatEntity chat);
 }
@@ -120,7 +121,8 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
     for (var messageEntity in messages) {
       var message = MessageModel.fromMessageEntity(messageEntity);
 
-      if (message.messageType != MessageTypeConst.textMessage) {
+      if (message.messageType != MessageTypeConst.textMessage &&
+          message.messageType != MessageTypeConst.gifMessage) {
         log(message.assetPath?.toString() ?? 'null');
         if (message.assetPath == null) throw const MainException();
         final fileUrl = await uploadMessageAssets(
@@ -232,7 +234,17 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   }
 
   @override
-  Future<void> seenMessageUpdate(MessageEntity message) async {
-    throw UnimplementedError();
+  Future<void> seenMessageUpdate(
+      String sendorId, String recieverId, String messageId) async {
+    try {
+      final combinedId = combineIds(sendorId, recieverId);
+      final messagesRef = _firestore
+          .collection(FirebaseCollectionConst.messages)
+          .doc(combinedId)
+          .collection('oneToOneMessages');
+      await messagesRef.doc(messageId).update({'isSeen': true});
+    } catch (e) {
+      throw const MainException();
+    }
   }
 }

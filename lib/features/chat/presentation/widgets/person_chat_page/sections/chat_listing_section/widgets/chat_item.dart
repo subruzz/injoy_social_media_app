@@ -1,12 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/message_type.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
+import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
-import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_audio_widget.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_photo_widget.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_video_widget.dart';
@@ -16,6 +19,7 @@ class ChatItem extends StatelessWidget {
       {super.key,
       required this.createAt,
       this.onSwipe,
+      this.onTap,
       this.message,
       required this.messageType,
       required this.isShowTick,
@@ -34,379 +38,291 @@ class ChatItem extends StatelessWidget {
   final MessageEntity messageItem;
   final VoidCallback? onLongPress;
   final bool isMe;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: !isMe ? AppPadding.onlyLeftMedium : AppPadding.onlyRightMedium,
-      child: Align(
-        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: .8.sw),
-          child: Container(
-            margin: const EdgeInsets.only(top: 10),
-            decoration: BoxDecoration(
-              gradient: isMe &&
-                      messageType != MessageTypeConst.photoMessage &&
-                      messageType != MessageTypeConst.videoMessage
-                  ? const LinearGradient(
-                      colors: [
-                        Color.fromARGB(255, 240, 93, 130),
-                        Color(0xFFfe526a),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )
-                  : null,
-              color: !isMe
-                  ? AppDarkColor().secondaryBackground
-                  : AppDarkColor().softBackground,
-              borderRadius: BorderRadius.only(
-                topLeft: !isMe
-                    ? const Radius.circular(0)
-                    : Radius.circular(
-                        AppBorderRadius.topLeftRadius(12),
-                      ),
-                topRight: isMe
-                    ? const Radius.circular(0)
-                    : Radius.circular(
-                        AppBorderRadius.topLeftRadius(12),
-                      ),
-                bottomLeft: Radius.circular(AppBorderRadius.topLeftRadius(12)),
-                bottomRight: const Radius.circular(12),
-              ),
-            ),
-            child: Stack(
+    return GestureDetector(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      child: Padding(
+        padding: !isMe ? AppPadding.onlyLeftMedium : AppPadding.onlyRightMedium,
+        child: Align(
+          alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: .75.sw),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: 10,
-                      right: messageType == MessageTypeConst.textMessage
-                          ? 70
-                          : isMe
-                              ? 5
-                              : 0,
-                      top: 10,
-                      bottom: 20),
-                  child: messageType == MessageTypeConst.textMessage
-                      ? Text(
-                          message ?? '',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        )
-                      : messageType == MessageTypeConst.photoMessage &&
-                              messageItem.assetLink != null
-                          ? ChatPhotoWidget(url: messageItem.assetLink!)
-                          : messageType == MessageTypeConst.videoMessage
-                              ? Column(
+                if (messageItem.repliedTo != null)
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(
+                        left: 5, right: isMe ? 5 : 0, top: 5, bottom: 5),
+                    decoration: BoxDecoration(
+                      color: !isMe
+                          ? AppDarkColor().secondaryBackground
+                          : AppDarkColor().buttonBackground,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12)),
+                    ),
+                    child: IntrinsicHeight(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                  color: isMe
+                                      ? AppDarkColor().buttonBackground
+                                      : AppDarkColor().softBackground,
+                                  width: 2)),
+                          color: isMe
+                              ? Color.fromARGB(255, 193, 86, 102)
+                              : AppDarkColor()
+                                  .secondaryBackground
+                                  .withOpacity(.3),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: isMe
+                                      ? Color(0xFFFF9AA2)
+                                      : AppDarkColor()
+                                          .buttonBackground // Light Coral
+                                  ,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10))),
+                              width: 5,
+                            ),
+                            // VerticalDivider(
+                            //   thickness: 4,
+                            //   width: 4,
+                            // ),
+                            AppSizedBox.sizedBox5W,
+                            // if (messageItem.repliedMessageType ==
+                            //         MessageTypeConst.textMessage &&
+                            //     messageItem.messageType ==
+                            //         MessageTypeConst.textMessage)
+                            //   Column(
+                            //     children: [
+                            //       if (messageItem.repliedTo != null)
+                            //         Text(messageItem.repliedTo!),
+                            //       Text(
+                            //         messageItem.message ?? '',
+                            //         maxLines: 2,
+                            //       ),
+                            //     ],
+                            //   )
+                            // else
+                            Builder(builder: (context) {
+                              log('df');
+                              return Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CachedVideoMessageWidget(
-                                        url: messageItem.assetLink!)
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        if (messageItem.repliedTo != null)
+                                          Text(
+                                            messageItem.repliedTo!,
+                                            style: AppTextTheme
+                                                .bodyMeidumwhiteVariant
+                                                .bodyMedium,
+                                          ),
+                                      ],
+                                    ),
+                                    AppSizedBox.sizedBox5H,
+
+                                    Builder(builder: (context) {
+                                      return Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          messageItem.messageType ==
+                                                  MessageTypeConst.gifMessage
+                                              ? const Icon(Icons.gif)
+                                              : messageItem.messageType ==
+                                                      MessageTypeConst
+                                                          .audioMessage
+                                                  ? const Icon(
+                                                      Icons.audiotrack_outlined)
+                                                  : (messageItem.messageType ==
+                                                                  MessageTypeConst
+                                                                      .textMessage ||
+                                                              messageItem
+                                                                      .messageType ==
+                                                                  MessageTypeConst
+                                                                      .videoMessage ||
+                                                              messageItem
+                                                                      .messageType ==
+                                                                  MessageTypeConst
+                                                                      .photoMessage) &&
+                                                          messageItem.message !=
+                                                              null
+                                                      ? Expanded(
+                                                          child: Text(
+                                                            messageItem
+                                                                    .repliedMessage ??
+                                                                '',
+                                                            maxLines: 2,
+                                                            style: AppTextTheme
+                                                                .bodyMeidumwhiteVariant
+                                                                .bodyMedium,
+                                                          ),
+                                                        )
+                                                      : EmptyDisplay(),
+                                          (messageItem.messageType ==
+                                                          MessageTypeConst
+                                                              .photoMessage &&
+                                                      messageItem.assetPath !=
+                                                          null) ||
+                                                  (messageItem.messageType ==
+                                                          MessageTypeConst
+                                                              .gifMessage &&
+                                                      messageItem.message !=
+                                                          null)
+                                              ? Image.network(
+                                                  messageItem.messageType ==
+                                                          MessageTypeConst
+                                                              .gifMessage
+                                                      ? messageItem.message!
+                                                      : messageItem.assetLink!,
+                                                  width: 30.w,
+                                                )
+                                              : EmptyDisplay()
+                                        ],
+                                      );
+                                    })
+                                    // : messageInfoStoreState.messageType ==
+                                    //         MessageTypeConst.audioMessage
+                                    //     ? Icon(Icons.audio_file)
+                                    //     : EmptyDisplay()
                                   ],
-                                )
-                              : ChatAudioWidget(
-                                  audioUrl: messageItem.assetLink!,
                                 ),
-                ),
-                Positioned(
-                  bottom: 4,
-                  right: 5,
-                  child: Row(
+                              );
+                            })
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                Container(
+                  width: messageItem.repliedTo != null ? double.infinity : null,
+                  margin: messageItem.repliedTo == null
+                      ? const EdgeInsets.only(top: 10)
+                      : null,
+                  decoration: BoxDecoration(
+                    gradient: isMe
+                        // &&
+                        //         messageType != MessageTypeConst.photoMessage &&
+                        //         messageType != MessageTypeConst.videoMessage &&
+                        //         messageType != MessageTypeConst.gifMessage
+                        ? const LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 240, 93, 130),
+                              Color(0xFFfe526a),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )
+                        : null,
+                    color: !isMe
+                        ? AppDarkColor().secondaryBackground
+                        : AppDarkColor().softBackground,
+                    borderRadius: BorderRadius.only(
+                      topLeft: !isMe || messageItem.repliedTo != null
+                          ? const Radius.circular(0)
+                          : Radius.circular(
+                              AppBorderRadius.topLeftRadius(12),
+                            ),
+                      topRight: isMe || messageItem.repliedTo != null
+                          ? const Radius.circular(0)
+                          : Radius.circular(
+                              AppBorderRadius.topLeftRadius(12),
+                            ),
+                      bottomLeft:
+                          Radius.circular(AppBorderRadius.topLeftRadius(12)),
+                      bottomRight: const Radius.circular(12),
+                    ),
+                  ),
+                  child: Stack(
                     children: [
-                      Text(
-                        createAt,
-                        style:
-                            AppTextTheme.bodysmallPureWhiteVariations.bodySmall,
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 5,
+                            right: messageType == MessageTypeConst.textMessage
+                                ? 70
+                                : isMe
+                                    ? 5
+                                    : 0,
+                            top: 5,
+                            bottom: 20),
+                        child: messageType == MessageTypeConst.textMessage
+                            ? Text(
+                                message ?? '',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              )
+                            : (messageType == MessageTypeConst.photoMessage &&
+                                        messageItem.assetLink != null) ||
+                                    (messageType ==
+                                            MessageTypeConst.gifMessage &&
+                                        messageItem.message != null)
+                                ? ChatPhotoWidget(
+                                    url: messageType ==
+                                            MessageTypeConst.photoMessage
+                                        ? messageItem.assetLink!
+                                        : messageItem.message!)
+                                : messageType == MessageTypeConst.videoMessage
+                                    ? Column(
+                                        children: [
+                                          CachedVideoMessageWidget(
+                                              url: messageItem.assetLink!)
+                                        ],
+                                      )
+                                    : ChatAudioWidget(
+                                        audioUrl: messageItem.assetLink!,
+                                      ),
                       ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      isShowTick == true
-                          ? Icon(
-                              isSeen == true ? Icons.done_all : Icons.done,
-                              size: 16,
-                              color: isSeen == true ? Colors.blue : Colors.grey,
-                            )
-                          : Container()
+                      Positioned(
+                        bottom: 4,
+                        right: 5,
+                        child: Row(
+                          children: [
+                            Text(
+                              createAt,
+                              style: AppTextTheme
+                                  .bodysmallPureWhiteVariations.bodySmall,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            isShowTick == true
+                                ? Icon(
+                                    messageItem.isSeen == true
+                                        ? Icons.done_all
+                                        : Icons.done,
+                                    size: 16,
+                                    color: Colors.white,
+                                  )
+                                : Container()
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
         ),
       ),
     );
-
-    // Padding(
-    //   padding: AppPadding.small,
-    //   child: GestureDetector(
-    //     onLongPress: onLongPress,
-    //     child: Align(
-    //       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-    //       child: Column(
-    //         // crossAxisAlignment: alignment == Alignment.centerRight
-    //         //     ? CrossAxisAlignment.end
-    //         //     : CrossAxisAlignment.start,
-    //         children: [
-    //           Column(
-    //             // crossAxisAlignment: alignment == Alignment.centerRight
-    //             //     ? CrossAxisAlignment.end
-    //             //     : CrossAxisAlignment.start,
-    //             children: [
-    //               Builder(
-    //                 builder: (context) {
-    //                   return Container(
-    //                     margin: AppPadding.onlyTopSmall,
-    //                     constraints: BoxConstraints(
-    //                       maxWidth: MediaQuery.of(context).size.width * 0.80,
-    //                     ),
-    //                     decoration: BoxDecoration(
-    //                       gradient: isMe
-    //                           ? const LinearGradient(
-    //                               colors: [
-    //                                 Color(0xFFFf6b81),
-
-    //                                 Color(0xFFFf5b73),
-    //                               ],
-    //                               begin: Alignment
-    //                                   .topLeft,
-    //                               end: Alignment
-    //                                   .bottomRight,
-    //                             )
-    //                           : null,
-    //                       color:
-    //                           !isMe ? AppDarkColor().secondaryBackground : null,
-    //                       borderRadius: BorderRadius.only(
-    //                         topLeft: Radius.circular(
-    //                             AppBorderRadius.topLeftRadius(12)),
-    //                         topRight: Radius.circular(
-    //                             AppBorderRadius.topLeftRadius(12)),
-    //                         bottomLeft: isMe
-    //                             ? Radius.circular(
-    //                                 AppBorderRadius.topLeftRadius(12))
-    //                             : const Radius.circular(0),
-    //                         bottomRight: isMe
-    //                             ? const Radius.circular(0)
-    //                             : Radius.circular(
-    //                                 AppBorderRadius.topLeftRadius(12)),
-    //                       ),
-    //                     ),
-    //                     child: Column(
-    //                       crossAxisAlignment:
-    //                           messageType == MessageTypeConst.textMessage
-    //                               ? CrossAxisAlignment.start
-    //                               : CrossAxisAlignment.end,
-    //                       children: [
-    //                         messageType == MessageTypeConst.textMessage
-    //                             ? Padding(
-    //                                 padding: EdgeInsets.only(
-    //                                   left: 5,
-    //                                   right: messageType ==
-    //                                           MessageTypeConst.textMessage
-    //                                       ? 50
-    //                                       : 5,
-    //                                   top: 5,
-    //                                   bottom: 5,
-    //                                 ),
-    //                                 child: Text(
-    //                                   message ?? '',
-    //                                   style:
-    //                                       Theme.of(context).textTheme.bodyLarge,
-    //                                 ),
-    //                               )
-    //                             : messageType == MessageTypeConst.photoMessage
-    //                                 ? Column(
-    //                                     crossAxisAlignment:
-    //                                         CrossAxisAlignment.start,
-    //                                     children: [
-    //                                       CachedNetworkImage(
-    //                                           imageUrl: messageItem.assetLink!),
-    //                                       if (messageItem.message != null &&
-    //                                           messageItem.message!.isNotEmpty)
-    //                                         Text(
-    //                                           messageItem.message!,
-    //                                           style: AppTextTheme
-    //                                               .bodysmallPureWhiteVariations
-    //                                               .bodySmall,
-    //                                         )
-    //                                     ],
-    //                                   )
-    //                                 : messageType ==
-    //                                         MessageTypeConst.videoMessage
-    //                                     ? Column(
-    //                                         children: [
-    //                                           CachedVideoMessageWidget(
-    //                                               url: messageItem.assetLink!),
-    //                                           Text(messageItem.message ?? '')
-    //                                         ],
-    //                                       )
-    //                                     : MessageAudioWidget(
-    //                                         audioUrl: messageItem.assetLink!,
-    //                                       ),
-    //                         Row(
-    //                           mainAxisSize: MainAxisSize.min,
-    //                           children: [
-    //                             AppSizedBox.sizedBox20W,
-    //                             Text(
-    //                               createAt,
-    //                               style: AppTextTheme
-    //                                   .bodysmallPureWhiteVariations.bodySmall,
-    //                             ),
-    //                             const SizedBox(width: 5),
-    //                             if (isShowTick == true)
-    //                               Icon(
-    //                                 isSeen == true
-    //                                     ? Icons.done_all
-    //                                     : Icons.done,
-    //                                 size: 16,
-    //                                 color: AppDarkColor().primaryText,
-    //                               ),
-    //                           ],
-    //                         ),
-    //                       ],
-    //                     ),
-    //                   );
-    //                 },
-    //               ),
-    //               const SizedBox(height: 3),
-    //             ],
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
-    //  Padding(
-    //   padding: AppPadding.small,
-    //   child: GestureDetector(
-    //     onLongPress: onLongPress,
-    //     child: Align(
-    //       alignment: alignment ?? Alignment.centerRight,
-    //       child: Container(
-    //         constraints: BoxConstraints(
-    //           maxWidth: MediaQuery.of(context).size.width * 0.8,
-    //         ),
-    //         margin: AppPadding.onlyTopSmall,
-    //         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-    //         decoration: BoxDecoration(
-    //           color: alignment == Alignment.centerRight
-    //               ? Colors.pinkAccent.shade100
-    //               : Colors.grey.shade800,
-    //           borderRadius: BorderRadius.only(
-    //             topLeft: Radius.circular(16),
-    //             topRight: Radius.circular(16),
-    //             bottomLeft: alignment == Alignment.centerRight
-    //                 ? Radius.circular(16)
-    //                 : Radius.circular(0),
-    //             bottomRight: alignment == Alignment.centerRight
-    //                 ? Radius.circular(0)
-    //                 : Radius.circular(16),
-    //           ),
-    //         ),
-    //         child: Row(
-    //           crossAxisAlignment: CrossAxisAlignment.start,
-    //           children: [
-    //             if (messageType == MessageTypeConst.textMessage)
-    //               Text(
-    //                 message ?? '',
-    //                 style: TextStyle(
-    //                   color: Colors.white,
-    //                   fontSize: 16,
-    //                 ),
-    //               )
-    //             else
-    //               MessageAudioWidget(
-    //                 audioUrl: message,
-    //               ),
-    //             const SizedBox(height: 3),
-    //             Row(
-    //               mainAxisAlignment: MainAxisAlignment.end,
-    //               children: [
-    //                 Text(
-    //                   createAt,
-    //                   style: TextStyle(
-    //                     color: Colors.white70,
-    //                     fontSize: 12,
-    //                   ),
-    //                 ),
-    //                 const SizedBox(width: 5),
-    //                 if (isShowTick)
-    //                   Icon(
-    //                     Icons.done,
-    //                     size: 16,
-    //                     color: Colors.white70,
-    //                   ),
-    //               ],
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }
-// child: Column(
-//   crossAxisAlignment: CrossAxisAlignment.start,
-//   children: [
-//     Container(
-
-//             decoration: BoxDecoration(
-//               color: Colors.black.withOpacity(.2),
-//               borderRadius: BorderRadius.circular(8),
-//             ),
-//             child: Row(
-//               children: [
-//                 Container(
-//                   height: double.infinity,
-//                   width: 4.5,
-//                   decoration: BoxDecoration(
-//                       color: reply.username ==
-//                               widget.message.recipientName
-//                           ? Colors.deepPurpleAccent
-//                           : tabColor,
-//                       borderRadius:
-//                           const BorderRadius.only(
-//                               topLeft:
-//                                   Radius.circular(15),
-//                               bottomLeft:
-//                                   Radius.circular(15))),
-//                 ),
-//                 Expanded(
-//                   child: Padding(
-//                     padding: const EdgeInsets.symmetric(
-//                         horizontal: 5.0, vertical: 5),
-//                     child: Column(
-//                       crossAxisAlignment:
-//                           CrossAxisAlignment.start,
-//                       children: [
-//                         Text(
-//                           "${reply.username == widget.message.recipientName ? reply.username : "You"}",
-//                           style: TextStyle(
-//                               fontWeight: FontWeight.bold,
-//                               color: reply.username ==
-//                                       widget.message
-//                                           .recipientName
-//                                   ? Colors
-//                                       .deepPurpleAccent
-//                                   : tabColor),
-//                         ),
-//                         MessageReplayTypeWidget(
-//                           message: reply.message,
-//                           type: reply.messageType,
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//     const SizedBox(
-//       height: 3,
-//     ),
-//     MessageTypeWidget(
-//       message: message,
-//       type: messageType,
-//     ),
-//   ],
-// ),
