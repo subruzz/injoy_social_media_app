@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 
@@ -19,11 +18,10 @@ class NoPostsPlaceholder extends StatelessWidget {
         ),
         TextButton(
             onPressed: () {
-              context.pushNamed(
+              Navigator.pushNamed(
+                context,
                 MyAppRouteConst.mediaPickerRoute,
-                extra: {
-                  'isPost': true,
-                },
+                arguments: {'isPost': true},
               );
             },
             child: Text('Start Creating',

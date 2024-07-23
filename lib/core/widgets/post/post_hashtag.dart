@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 
 class PostHashtag extends StatelessWidget {
@@ -16,9 +16,10 @@ class PostHashtag extends StatelessWidget {
       children: hashtags
           .map((tag) => GestureDetector(
                 onTap: () {
-                  context.pushNamed(
+                  Navigator.pushNamed(
+                    context,
                     MyAppRouteConst.hashtagPostsRoute,
-                    extra: {'hashTagName': tag},
+                    arguments: {'hashTagName': tag},
                   );
                 },
                 child: Text(

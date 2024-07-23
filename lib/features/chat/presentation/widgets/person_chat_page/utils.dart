@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:giphy_picker/giphy_picker.dart';
+import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 
 class SelectedImagesDetails {
   List<SelectedByte> selectedFiles;
@@ -45,4 +46,21 @@ Future<GiphyGif?> pickGif(BuildContext context) async {
     log('errror');
   }
   return gif;
+}
+
+final class ChatConstants {
+  static Radius commonborderRadius12 = Radius.circular(
+    AppBorderRadius.getRadius(12),
+  );
+  static Radius commonborderRadius24 = Radius.circular(
+    AppBorderRadius.getRadius(24),
+  );
+  static Gradient chatGradient = const LinearGradient(
+    colors: [
+      Color.fromARGB(255, 240, 93, 130),
+      Color(0xFFfe526a),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 }

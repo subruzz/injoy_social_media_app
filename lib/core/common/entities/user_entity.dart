@@ -14,6 +14,7 @@ class AppUser extends Equatable {
   final String? profilePic;
   final String? location;
   final Timestamp? lastSeen;
+  final List<String> token;
   final double? latitude;
   final double? longitude;
   int followersCount;
@@ -44,6 +45,7 @@ class AppUser extends Equatable {
     this.location,
     this.latitude,
     this.longitude,
+   required  this.token,
 
     // this.followers = const [],
     this.following = const [],
@@ -60,7 +62,7 @@ class AppUser extends Equatable {
         dob, lastSeen,
         phoneNumber,
         occupation,
-        about,
+        about,token,
         profilePic,
         location,
         latitude,

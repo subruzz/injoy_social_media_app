@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
@@ -24,174 +22,97 @@ import 'package:social_media_app/splash_screen.dart';
 
 class MyAppRouter {
   final bool isAuth;
-  static GoRouter router = GoRouter(
-    initialLocation: '/',
-    routes: [
-      GoRoute(
-        name: MyAppRouteConst.splashRote,
-        path: '/',
-        pageBuilder: (context, state) {
-          return const MaterialPage(child: SplashScreen());
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.homeRoute,
-        path: '/home',
-        pageBuilder: (context, state) {
-          return const MaterialPage(child: HomePage());
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.loginRoute,
-        path: '/login',
-        pageBuilder: (context, state) {
-          return const MaterialPage(child: LoginPage());
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.signUpRoute,
-        path: '/signup',
-        pageBuilder: (context, state) {
-          return const MaterialPage(child: SignupPage());
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.bottomNavRoute,
-        path: '/bottom_nav',
-        pageBuilder: (context, state) {
-          return const MaterialPage(child: BottonNavWithAnimatedIcons());
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.addProfilePage,
-        path: '/add_profile',
-        pageBuilder: (context, state) {
-          final AppUser appUser = state.extra as AppUser;
-          return MaterialPage(child: AddProfilePage(appUser: appUser));
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.interestSelectRoute,
-        path: '/interestSelect',
-        pageBuilder: (context, state) {
-          final List<String>? interest = state.extra as List<String>?;
-          return MaterialPage(
-              child: InterestSelectionPage(
-            alreadySelectedInterests: interest,
-          ));
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.locationPageRoute,
-        path: '/locationPage',
-        pageBuilder: (context, state) {
-          final bool isFirstTime = state.extra as bool? ?? false;
-          return MaterialPage(
-              child: LocationAskingPageBuilder(isFirstTime: isFirstTime));
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.profileLoadingRouter,
-        path: '/profileLoading',
-        pageBuilder: (context, state) {
-          return const MaterialPage(child: AppLoadingGif());
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.mediaPickerRoute,
-        path: '/media_picker_page',
-        pageBuilder: (context, state) {
-          final Map<String, dynamic>? extras =
-              state.extra as Map<String, dynamic>?;
-          final MediaPickerType pickerType =
-              extras?['pickerType'] as MediaPickerType? ?? MediaPickerType.post;
-
-          return MaterialPage(
-            child: CustomMediaPickerPage(
-              pickerType: pickerType,
-            ),
-          );
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.createMultipleStatusRoute,
-        path: '/create_multiple_status_page',
-        pageBuilder: (context, state) {
-          final Map<String, dynamic> params =
-              state.extra as Map<String, dynamic>;
-          final List<SelectedByte> selectedAssets = params['selectedAssets'];
-          final bool isChat = params['isChat'];
-          return MaterialPage(
-              child: CreateMutlipleStatusPage(
-                  assets: selectedAssets, isChat: isChat));
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.createPostRoute,
-        path: '/create_post_page',
-        pageBuilder: (context, state) {
-          final List<SelectedByte> selectedAssets =
-              state.extra as List<SelectedByte>;
-          return MaterialPage(
-              child: CreatePostScreen(selectedImages: selectedAssets));
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.viewPostsDetailedRoute,
-        path: '/viewPostDetailsPage',
-        pageBuilder: (context, state) {
-          final PostEntity post = state.extra as PostEntity;
-          return MaterialPage(child: ViewPost(post: post));
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.otherUserProfile,
-        path: '/otherUserProfile',
-        pageBuilder: (context, state) {
-          final Map<String, dynamic> params =
-              state.extra as Map<String, dynamic>;
-          final String userName = params['userName'];
-          final String otherUserId = params['otherUserId'];
-          return MaterialPage(
-            child: OtherUserProfilePage(
-              userName: userName,
-              otherUserId: otherUserId,
-            ),
-          );
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.hashtagPostsRoute,
-        path: '/viewHashTagPosts',
-        pageBuilder: (context, state) {
-          final Map<String, dynamic> params =
-              state.extra as Map<String, dynamic>;
-          final String hashTagName = params['hashTagName'];
-          final int? hashTagPostCount = params['hashTagPostCount'];
-          return MaterialPage(
-            child: ViewHashTagPostsScreen(
-              hashTagName: hashTagName,
-              hashTagPostCount: hashTagPostCount,
-            ),
-          );
-        },
-      ),
-      GoRoute(
-        name: MyAppRouteConst.personaChatRoute,
-        path: '/personChatPage',
-        pageBuilder: (context, state) {
-          return const MaterialPage(child: PeronalChatBuilder());
-        },
-      ),
-    ],
-    errorPageBuilder: (context, state) => MaterialPage(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Page Not Found'),
-        ),
-      ),
-    ),
-  );
 
   MyAppRouter({required this.isAuth});
+
+  Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
+
+      case MyAppRouteConst.homeRoute:
+        return MaterialPageRoute(builder: (_) => const HomePage());
+
+      case MyAppRouteConst.loginRoute:
+        return MaterialPageRoute(builder: (_) => const LoginPage());
+
+      case MyAppRouteConst.signUpRoute:
+        return MaterialPageRoute(builder: (_) => const SignupPage());
+
+      case MyAppRouteConst.bottomNavRoute:
+        return MaterialPageRoute(builder: (_) => const BottonNavWithAnimatedIcons());
+
+      case MyAppRouteConst.addProfilePage:
+        final AppUser appUser = settings.arguments as AppUser;
+        return MaterialPageRoute(builder: (_) => AddProfilePage(appUser: appUser));
+
+      case MyAppRouteConst.interestSelectRoute:
+        final List<String>? interest = settings.arguments as List<String>?;
+        return MaterialPageRoute(
+          builder: (_) => InterestSelectionPage(alreadySelectedInterests: interest),
+        );
+
+      case MyAppRouteConst.locationPageRoute:
+        final bool isFirstTime = settings.arguments as bool? ?? false;
+        return MaterialPageRoute(
+          builder: (_) => LocationAskingPageBuilder(isFirstTime: isFirstTime),
+        );
+
+      case MyAppRouteConst.profileLoadingRouter:
+        return MaterialPageRoute(builder: (_) => const AppLoadingGif());
+
+      case MyAppRouteConst.mediaPickerRoute:
+        final Map<String, dynamic>? extras = settings.arguments as Map<String, dynamic>?;
+        final MediaPickerType pickerType = extras?['pickerType'] as MediaPickerType? ?? MediaPickerType.post;
+        return MaterialPageRoute(
+          builder: (_) => CustomMediaPickerPage(pickerType: pickerType),
+        );
+
+      case MyAppRouteConst.createMultipleStatusRoute:
+        final Map<String, dynamic> params = settings.arguments as Map<String, dynamic>;
+        final List<SelectedByte> selectedAssets = params['selectedAssets'];
+        final bool isChat = params['isChat'];
+        return MaterialPageRoute(
+          builder: (_) => CreateMutlipleStatusPage(assets: selectedAssets, isChat: isChat),
+        );
+
+      case MyAppRouteConst.createPostRoute:
+        final List<SelectedByte> selectedAssets = settings.arguments as List<SelectedByte>;
+        return MaterialPageRoute(
+          builder: (_) => CreatePostScreen(selectedImages: selectedAssets),
+        );
+
+      case MyAppRouteConst.viewPostsDetailedRoute:
+        final PostEntity post = settings.arguments as PostEntity;
+        return MaterialPageRoute(builder: (_) => ViewPost(post: post));
+
+      case MyAppRouteConst.otherUserProfile:
+        final Map<String, dynamic> params = settings.arguments as Map<String, dynamic>;
+        final String userName = params['userName'];
+        final String otherUserId = params['otherUserId'];
+        return MaterialPageRoute(
+          builder: (_) => OtherUserProfilePage(userName: userName, otherUserId: otherUserId),
+        );
+
+      case MyAppRouteConst.hashtagPostsRoute:
+        final Map<String, dynamic> params = settings.arguments as Map<String, dynamic>;
+        final String hashTagName = params['hashTagName'];
+        final int? hashTagPostCount = params['hashTagPostCount'];
+        return MaterialPageRoute(
+          builder: (_) => ViewHashTagPostsScreen(hashTagName: hashTagName, hashTagPostCount: hashTagPostCount),
+        );
+
+      case MyAppRouteConst.personaChatRoute:
+        return MaterialPageRoute(builder: (_) => const PeronalChatBuilder());
+
+      default:
+        return MaterialPageRoute(
+          builder: (_) => Scaffold(
+            appBar: AppBar(
+              title: const Text('Page Not Found'),
+            ),
+          ),
+        );
+    }
+  }
 }

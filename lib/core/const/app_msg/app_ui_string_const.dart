@@ -7,4 +7,10 @@ class AppUiStringConst {
   static const String signUp = 'Sign Up';
   static const String login = 'Log In';
   static const String haveAccount = 'Already have an account?';
+  static const String online = 'online';
+  static const String noPersonalChatFound =
+      'No Chat history found,\nStart messaging!';
+  static const String delete = 'Delete';
+  static const String you = 'You';
+  static const String message = 'message';
 }

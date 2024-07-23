@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/const/messenger.dart';
@@ -31,8 +30,11 @@ class SignupButton extends StatelessWidget {
                 color: AppDarkColor().buttonBackground);
           }
           if (state is SignupSuccess) {
-            context.pushReplacementNamed(MyAppRouteConst.addProfilePage,
-                extra: state.user);
+            Navigator.pushReplacementNamed(
+              context,
+              MyAppRouteConst.addProfilePage,
+              arguments: state.user,
+            );
           }
         },
         builder: (context, state) {

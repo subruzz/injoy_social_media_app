@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 
 class FloatingButton extends StatelessWidget {
@@ -16,10 +15,11 @@ class FloatingButton extends StatelessWidget {
         SpeedDialChild(child: const Icon(Icons.circle), label: 'Status'),
         SpeedDialChild(
             onTap: () {
-              context.pushNamed(
+              Navigator.pushNamed(
+                context,
                 MyAppRouteConst.mediaPickerRoute,
-                extra: {
-                  'pickerType': MediaPickerType.post
+                arguments: {
+                  'pickerType': MediaPickerType.post,
                 },
               );
             },

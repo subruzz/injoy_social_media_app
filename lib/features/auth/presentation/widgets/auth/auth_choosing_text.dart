@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
@@ -20,9 +19,12 @@ class AuthChoosingText extends StatelessWidget {
                 : AppUiStringConst.haveAccount),
             TextButton(
               onPressed: () {
-                islogin
-                    ? context.pushNamed(MyAppRouteConst.signUpRoute)
-                    : context.goNamed(MyAppRouteConst.loginRoute);
+                if (islogin) {
+                  Navigator.pushNamed(context, MyAppRouteConst.signUpRoute);
+                } else {
+                  Navigator.pushReplacementNamed(
+                      context, MyAppRouteConst.loginRoute);
+                }
               },
               child: Text(
                 islogin ? AppUiStringConst.signUp : AppUiStringConst.login,

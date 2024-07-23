@@ -3,6 +3,8 @@ part 'app_dark_mode_color.dart';
 
 /// Interface for defining colors used in the application's UI.
 abstract interface class AppColor {
+  final Color chatTileGradientOne;
+  final Color chatTileGradientTwo;
   final Color statusborder;
   final Color indicatorColor;
   final Color iconSoftColor;
@@ -40,12 +42,20 @@ abstract interface class AppColor {
   final Color recipientChatColor; // Recipient chat color.
   final Color bottomSheet; // Bottom sheet background color.
   final Color buttonWhitishBackground;
+  final Color chatSideBar;
+  final Color chatCommon;
+  final Color replyMessageContainerColor;
 
   /// Constructs an [AppColor] instance with specified colors.
-  AppColor({
+  const AppColor({
+    required this.chatCommon,
+    required this.replyMessageContainerColor,
+    required this.chatSideBar,
     required this.iconSoftColor,
     required this.statusborder,
     required this.buttonWhitishBackground,
+    required this.chatTileGradientOne,
+    required this.chatTileGradientTwo,
     required this.iconPrimaryColor,
     required this.iconSecondarycolor,
     required this.indicatorColor,

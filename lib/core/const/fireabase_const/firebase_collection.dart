@@ -10,4 +10,6 @@ final class FirebaseCollectionConst {
   static const String locations = 'locations';
   static const String myChat = 'myChat';
   static const String messages = 'messages';
+  static const String calls = 'calls';
+  static const String callHistory = 'callHistory';
 }

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/mulitple_post_indicator.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
@@ -19,8 +18,11 @@ class PostStaggeredView extends StatelessWidget {
         padding: const EdgeInsets.all(3.0),
         child: GestureDetector(
           onTap: () {
-            context.pushNamed(MyAppRouteConst.viewPostsDetailedRoute,
-                extra: allPosts[index]);
+            Navigator.pushNamed(
+              context,
+              MyAppRouteConst.viewPostsDetailedRoute,
+              arguments: allPosts[index],
+            );
           },
           child: MulitplePostIndicator(
             showIndicator: allPosts[index].postImageUrl.length > 1,

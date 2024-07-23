@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/app_info_dialog.dart';
 import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
@@ -49,14 +47,21 @@ class _InterestSelectionPageState extends State<InterestSelectionPage> {
               Navigator.pop(context);
               return;
             }
-            context.pushNamed(MyAppRouteConst.locationPageRoute, extra: true);
+            Navigator.pushNamed(
+              context,
+              MyAppRouteConst.locationPageRoute,
+              arguments: true,
+            );
           }
           if (state is ProfileInterestEmptyState) {
             return AppInfoDialog.showInfoDialog(
               context: context,
               buttonText: 'Skip',
-              callBack: () => context
-                  .pushNamed(MyAppRouteConst.locationPageRoute, extra: true),
+              callBack: () => Navigator.pushNamed(
+                context,
+                MyAppRouteConst.locationPageRoute,
+                arguments: true,
+              ),
               title: AppIngoMsg.interestEmptyTitle,
               subtitle: AppIngoMsg.interestEmptyinfo,
             );

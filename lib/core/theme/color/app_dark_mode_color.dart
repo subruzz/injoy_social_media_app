@@ -9,7 +9,12 @@ class AppDarkColor extends AppColor {
   }
   AppDarkColor._()
       : super(
-        statusborder: const Color.fromARGB(255, 255, 0, 85),
+          replyMessageContainerColor: const Color.fromARGB(255, 135, 68, 78),
+          chatCommon: const Color.fromARGB(212, 242, 49, 110),
+          chatSideBar: const Color(0xFFFF9AA2),
+          chatTileGradientOne: const Color.fromARGB(255, 240, 93, 130),
+          chatTileGradientTwo: const Color(0xFFfe526a),
+          statusborder: const Color.fromARGB(255, 255, 0, 85),
           buttonWhitishBackground: const Color(0xFFFFFFFF).withOpacity(0.9),
           iconSoftColor: const Color.fromARGB(255, 151, 152, 155),
           iconPrimaryColor: const Color.fromARGB(255, 164, 164, 164),

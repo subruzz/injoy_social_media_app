@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
@@ -81,17 +82,28 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           .collection(FirebaseCollectionConst.users)
           .doc(userCredential.user!.uid);
       DocumentSnapshot userSnapshot = await userDocRef.get();
+      final fcm = FirebaseMessaging.instance;
+      await fcm.requestPermission();
+      final token = await fcm.getToken();
+
       if (userSnapshot.exists) {
+        if (token != null) {
+          await userDocRef.update({
+            'token': FieldValue.arrayUnion([token] ),
+          });
+        }
         final data = userSnapshot.data() as Map<String, dynamic>;
         final authUser = AppUserModel.fromJson(data);
         return authUser;
       }
+
       AppUserModel userModel = AppUserModel(
         id: userCredential.user!.uid,
         onlineStatus: false,
         email: userCredential.user!.email ?? '',
         hasPremium: false,
         followersCount: 0,
+        token: [if (token != null) token],
         followingCount: 0,
       );
 
@@ -108,6 +120,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       log(e.toString());
       throw AuthError.from(e);
     } catch (e) {
+      log(e.toString());
       throw const MainException(errorMsg: AppErrorMessages.googleSignInFailed);
     }
   }
@@ -115,13 +128,21 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<AppUserModel> login(String email, String password) async {
     try {
+      final fcm = FirebaseMessaging.instance;
+      await fcm.requestPermission();
+      final token = await fcm.getToken();
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
 //getting user ref
       final userDocRef = _firebaseStorage
           .collection(FirebaseCollectionConst.users)
           .doc(credential.user!.uid);
-
+      // Login:
+      if (token != null) {
+        await userDocRef.update({
+          'token': FieldValue.arrayUnion([token]),
+        });
+      }
       DocumentSnapshot userSnapshot = await userDocRef.get();
       //checking if user  exist
       //if so return  the user details
@@ -156,6 +177,10 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           errorMsg: AppErrorMessages.signUpFailed,
         );
       }
+      final fcm = FirebaseMessaging.instance;
+      await fcm.requestPermission();
+      final token = await fcm.getToken();
+
       //adding user details to firebasedb
       final userDocRef = _firebaseStorage
           .collection(FirebaseCollectionConst.users)
@@ -167,6 +192,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         hasPremium: false,
         followersCount: 0,
         followingCount: 0,
+        token: [if (token != null) token],
       );
       await _firebaseStorage.runTransaction((transaction) async {
         transaction.set(userDocRef, userModel.toJson());

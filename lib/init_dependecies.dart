@@ -23,6 +23,17 @@ import 'package:social_media_app/features/auth/presentation/bloc/forgot_password
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/google_auth/google_auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/call/data/datasource/call_remote_datasource.dart';
+import 'package:social_media_app/features/call/data/repository/call_repository_impl.dart';
+import 'package:social_media_app/features/call/domain/repository/call_repository.dart';
+import 'package:social_media_app/features/call/domain/usecases/end_call.dart';
+import 'package:social_media_app/features/call/domain/usecases/get_channel_id.dart';
+import 'package:social_media_app/features/call/domain/usecases/get_user_calling.dart';
+import 'package:social_media_app/features/call/domain/usecases/make_call.dart';
+import 'package:social_media_app/features/call/domain/usecases/save_call_history.dart';
+import 'package:social_media_app/features/call/presentation/agora/agora_cubit.dart';
+import 'package:social_media_app/features/call/presentation/call/call_cubit.dart';
+import 'package:social_media_app/features/call/presentation/call_history/call_history_cubit.dart';
 import 'package:social_media_app/features/chat/data/datasource/chat_remote_datasource.dart';
 import 'package:social_media_app/features/chat/data/repositories/chat_repository_impl.dart';
 import 'package:social_media_app/features/chat/domain/repositories/chat_repository.dart';
@@ -152,6 +163,7 @@ Future<void> initDependencies() async {
   _initLocation();
   _localAsset();
   _post();
+  _call();
   _getUserPosts();
   _postFeed();
   _statusCreation();
@@ -469,4 +481,28 @@ void _chat() {
     ..registerFactory(
         () => MessageAttributeBloc(serviceLocator(), serviceLocator()))
     ..registerFactory(() => ChatCubit(serviceLocator()));
+}
+
+void _call() {
+  serviceLocator
+    ..registerFactory<CallRemoteDatasource>(() =>
+        CallRemoteDatasourceImpl(firebaseFirestore: FirebaseFirestore.instance))
+    ..registerFactory<CallRepository>(
+        () => CallRepositoryImpl(callRemoteDatasource: serviceLocator()))
+    ..registerFactory(() => MakeCallUseCase(callRepository: serviceLocator()))
+    ..registerFactory(
+        () => GetAllChannelIdUseCase(callRepository: serviceLocator()))
+    ..registerFactory(() => EndCallUseCase(callRepository: serviceLocator()))
+    ..registerFactory(
+        () => SaveCallHistoryUseCase(callRepository: serviceLocator()))
+    ..registerFactory(
+        () => GetUserCallingUseCase(callRepository: serviceLocator()))
+    // ..registerLazySingleton(() => AgoraCubit())
+    ..registerLazySingleton(() => CallCubit(
+        getUserCallingUseCase: serviceLocator(),
+        makeCallUseCase: serviceLocator(),
+        messageStroreCubit: serviceLocator(),
+        endCallUseCase: serviceLocator(),
+        saveCallHistoryUseCase: serviceLocator()))
+    ..registerLazySingleton(() => CallHistoryCubit());
 }

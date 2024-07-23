@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';
@@ -29,8 +28,11 @@ class _PostLocationState extends State<PostLocation> {
       ),
       trailing: const Icon(Icons.arrow_forward, color: Colors.grey),
       onTap: () async {
-        final UserLocation? res =
-            await context.pushNamed(MyAppRouteConst.locationPageRoute);
+        final UserLocation? res = await Navigator.pushNamed(
+          context,
+          MyAppRouteConst.locationPageRoute,
+        ) as UserLocation?;
+
         log('result of locations is $res');
         if (res != null) {
           setState(() {

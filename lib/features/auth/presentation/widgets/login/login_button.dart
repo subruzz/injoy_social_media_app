@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
@@ -33,10 +32,16 @@ class LoginButton extends StatelessWidget {
             if (state.user.fullName != null) {
               context.read<InitialSetupCubit>().startInitialSetup(
                   uId: state.user.id, following: state.user.following);
-              context.pushReplacementNamed(MyAppRouteConst.bottomNavRoute);
+              Navigator.pushReplacementNamed(
+                context,
+                MyAppRouteConst.bottomNavRoute,
+              );
             } else {
-              context.pushReplacementNamed(MyAppRouteConst.addProfilePage,
-                  extra: state.user);
+              Navigator.pushReplacementNamed(
+                context,
+                MyAppRouteConst.addProfilePage,
+                arguments: state.user,
+              );
             }
           }
         },

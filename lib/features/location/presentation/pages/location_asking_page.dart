@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/app_info_dialog.dart';
@@ -49,7 +48,7 @@ class LocationAskingPage extends StatelessWidget {
               context
                   .read<GetUserPostsBloc>()
                   .add(GetUserPostsrequestedEvent(uid: user.id));
-              context.goNamed(MyAppRouteConst.bottomNavRoute);
+              Navigator.pushNamed(context, MyAppRouteConst.bottomNavRoute);
             }
             if (state is CompleteProfileSetupFailure) {
               Messenger.showSnackBar(message: state.errorMsg);

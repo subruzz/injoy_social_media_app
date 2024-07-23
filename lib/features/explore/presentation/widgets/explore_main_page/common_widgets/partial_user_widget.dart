@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/add_at_symbol.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
@@ -24,9 +23,10 @@ class PartialUserWidget extends StatelessWidget {
     final me = context.read<AppUserBloc>().appUser;
     return GestureDetector(
       onTap: () {
-        context.pushNamed(
+        Navigator.pushNamed(
+          context,
           MyAppRouteConst.otherUserProfile,
-          extra: {
+          arguments: {
             'userName': user.userName ?? '',
             'otherUserId': user.id,
           },

@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/status/presentation/widgets/create_multiple_status/multiple_status_input_bar.dart';
@@ -28,8 +26,7 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
     super.initState();
     _selectedAssets.value = widget.assets;
     // Initializing captions list with empty strings
-    _captions =
-        List.generate(widget.assets.length, (index) => '');
+    _captions = List.generate(widget.assets.length, (index) => '');
     _pageController.addListener(_onPageChanged);
   }
 
@@ -79,10 +76,14 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
               captions: _captions,
               onCaptionChanged: _onCaptionChanged,
               leadingIconPressed: () async {
-                final List<SelectedByte>? res = await context
-                    .pushNamed(MyAppRouteConst.mediaPickerRoute, extra: {
-                  'selectedAssets': widget.assets,
-                });
+                final List<SelectedByte>? res = await Navigator.pushNamed(
+                  context,
+                  MyAppRouteConst.mediaPickerRoute,
+                  arguments: {
+                    'selectedAssets': widget.assets,
+                  },
+                ) as List<SelectedByte>?;
+
                 if (res != null) {
                   _selectedAssets.value = res;
                   _captions = List.generate(res.length, (index) => '');

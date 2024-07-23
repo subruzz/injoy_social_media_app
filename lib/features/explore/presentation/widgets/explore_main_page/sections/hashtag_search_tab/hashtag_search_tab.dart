@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/add_at_symbol.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/explore_search_loading.dart';
@@ -27,9 +26,10 @@ class HashtagSearchTab extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  context.pushNamed(
+                  Navigator.pushNamed(
+                    context,
                     MyAppRouteConst.hashtagPostsRoute,
-                    extra: {
+                    arguments: {
                       'hashTagName': state.searchedHashtags[index].hashtagName,
                       'hashTagPostCount': state.searchedHashtags[index].count,
                     },

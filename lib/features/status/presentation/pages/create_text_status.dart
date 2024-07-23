@@ -1,8 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_msg/app_success_msg.dart';
 import 'package:social_media_app/core/const/messenger.dart';
@@ -38,10 +35,12 @@ class CreateTextStatusPage extends StatelessWidget {
               padding: AppPadding.floatingActionBottomPaddng,
               child: AppCustomFloatingButton(
                   onPressed: () async {
-                    final List<SelectedByte>? res = await context.pushNamed(
+                    final List<SelectedByte>? res = await Navigator.pushNamed(
+                      context,
                       MyAppRouteConst.mediaPickerRoute,
-                      extra: {'pickerType': MediaPickerType.status},
-                    );
+                      arguments: {'pickerType': MediaPickerType.status},
+                    ) as List<SelectedByte>?;
+
                     selectedAssets.clear();
 
                     if (res != null) {

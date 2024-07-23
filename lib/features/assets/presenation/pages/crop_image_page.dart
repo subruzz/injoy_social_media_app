@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:image_cropper/image_cropper.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_floating_button.dart';
@@ -30,14 +30,22 @@ class _CropImagePageState extends State<CropImagePage> {
           color: Colors.white,
         ),
         onPressed: () {
-          widget.pickerType == MediaPickerType.post
-              ? context.pushNamed(MyAppRouteConst.createPostRoute,
-                  extra: widget.selectedImages.selectedFiles)
-              : context
-                  .pushNamed(MyAppRouteConst.createMultipleStatusRoute, extra: {
-                  'selectedAssets': widget.selectedImages.selectedFiles,
-                  'isChat': widget.pickerType == MediaPickerType.chat
-                });
+          if (widget.pickerType == MediaPickerType.post) {
+            Navigator.pushNamed(
+              context,
+              MyAppRouteConst.createPostRoute,
+              arguments: widget.selectedImages.selectedFiles,
+            );
+          } else {
+            Navigator.pushNamed(
+              context,
+              MyAppRouteConst.createMultipleStatusRoute,
+              arguments: {
+                'selectedAssets': widget.selectedImages.selectedFiles,
+                'isChat': widget.pickerType == MediaPickerType.chat,
+              },
+            );
+          }
         },
       ),
       appBar: AppBar(

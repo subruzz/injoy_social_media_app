@@ -1,12 +1,12 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/app_error_gif.dart';
 import 'package:social_media_app/core/const/app_info_dialog.dart';
+import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
+import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/const/message_type.dart';
-import 'package:social_media_app/core/extensions/time_ago.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
@@ -40,8 +40,7 @@ class ChatListingSectionSection extends StatelessWidget {
           if (state is MessageLoaded) {
             if (state.messages.isEmpty) {
               return const EmptyChatHolder(
-                message: 'No Chat history found,\nStart messaging!',
-              );
+                  message: AppUiStringConst.noPersonalChatFound);
             }
             WidgetsBinding.instance.addPostFrameCallback((_) {
               goToBottom();
@@ -54,7 +53,6 @@ class ChatListingSectionSection extends StatelessWidget {
                   if (!message.isSeen &&
                       message.senderUid !=
                           context.read<AppUserBloc>().appUser.id) {
-                    log('seen caleed');
                     context
                         .read<MessageCubit>()
                         .seeMessage(messageId: message.messageId);
@@ -69,43 +67,37 @@ class ChatListingSectionSection extends StatelessWidget {
                           caption: message.message);
                     },
                     child: ChatItem(
-                        onTap: message.messageType ==
-                                    MessageTypeConst.photoMessage ||
-                                message.messageType ==
-                                    MessageTypeConst.photoMessage
-                            ? () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => MediaGalleryView(
-                                      messages: state.messages,
-                                      initialIndex: index),
-                                ));
-                              }
-                            : null,
-                        messageItem: message,
-                        messageType: message.messageType,
-                        createAt:
-                            message.createdAt!.toDate().timeAgoChatExtension(),
-                        message: message.message,
-                        isSeen: false,
-                        isShowTick: message.senderUid == user.id ? true : false,
-                        isMe: message.senderUid ==
-                            context.read<AppUserBloc>().appUser.id,
-                        onLongPress: () {
-                          if (message.senderUid ==
-                              context.read<AppUserBloc>().appUser.id) {
-                            HapticFeedback.heavyImpact();
-                            AppInfoDialog.showInfoDialog(
-                                context: context,
-                                subtitle:
-                                    'Are you you want to delete this message?',
-                                callBack: () {
-                                  context.read<MessageCubit>().deleteMessage(
-                                      messageId: message.messageId);
-                                },
-                                buttonText: 'Delete');
-                          }
-                        },
-                        onSwipe: () {}),
+                      onTap: message.messageType ==
+                                  MessageTypeConst.photoMessage ||
+                              message.messageType ==
+                                  MessageTypeConst.photoMessage
+                          ? () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => MediaGalleryView(
+                                    messages: state.messages,
+                                    initialIndex: index),
+                              ));
+                            }
+                          : null,
+                      messageItem: message,
+                      isShowTick: message.senderUid == user.id ? true : false,
+                      isMe: message.senderUid ==
+                          context.read<AppUserBloc>().appUser.id,
+                      onLongPress: () {
+                        if (message.senderUid ==
+                            context.read<AppUserBloc>().appUser.id) {
+                          HapticFeedback.heavyImpact();
+                          AppInfoDialog.showInfoDialog(
+                              context: context,
+                              subtitle: AppIngoMsg.deleteMessage,
+                              callBack: () {
+                                context.read<MessageCubit>().deleteMessage(
+                                    messageId: message.messageId);
+                              },
+                              buttonText: AppUiStringConst.delete);
+                        }
+                      },
+                    ),
                   );
                 });
           }

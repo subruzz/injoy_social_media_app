@@ -4,6 +4,9 @@ import 'package:provider/single_child_widget.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
+import 'package:social_media_app/features/call/presentation/agora/agora_cubit.dart';
+import 'package:social_media_app/features/call/presentation/call/call_cubit.dart';
+import 'package:social_media_app/features/call/presentation/call_history/call_history_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat/chat_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
@@ -170,4 +173,14 @@ List<SingleChildWidget> myProviders = [
   // ),
 
   BlocProvider(create: (context) => serviceLocator<InitialSetupCubit>()),
+  // BlocProvider(
+  //   create: (context) => serviceLocator<AgoraCubit>(),
+  // ),
+ 
+  BlocProvider(
+    create: (context) => serviceLocator<CallCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<CallHistoryCubit>(),
+  ),
 ];

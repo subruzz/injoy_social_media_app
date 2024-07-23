@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/extensions/time_ago.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
@@ -30,7 +29,10 @@ class ChatCallItem extends StatelessWidget {
               receiverProfile: chat!.recipientProfile,
               receiverName: chat!.recipientName,
               recipientId: chat!.recipientUid);
-          context.pushNamed(MyAppRouteConst.personaChatRoute);
+          Navigator.pushNamed(
+            context,
+            MyAppRouteConst.personaChatRoute,
+          );
         }
       },
       leading: CircularUserProfile(

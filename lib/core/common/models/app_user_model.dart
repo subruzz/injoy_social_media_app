@@ -1,7 +1,7 @@
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 
 class AppUserModel extends AppUser {
-   AppUserModel({
+  AppUserModel({
     required super.id,
     required super.email,
     required super.hasPremium,
@@ -13,6 +13,7 @@ class AppUserModel extends AppUser {
     super.occupation,
     super.about,
     super.profilePic,
+    required super.token,
     super.location,
     super.latitude,
     super.longitude,
@@ -67,7 +68,8 @@ class AppUserModel extends AppUser {
 
   factory AppUserModel.fromJson(Map<String, dynamic> json) {
     return AppUserModel(
-      onlineStatus:json['onlineStatus'],
+      token: List<String>.from(json['token'] ?? []),
+      onlineStatus: json['onlineStatus'],
       viewedSetupIndex: json['viewedSetupIndex'],
       id: json['id'],
       followersCount: json['followersCount'],
@@ -93,9 +95,10 @@ class AppUserModel extends AppUser {
 
   Map<String, dynamic> toJson() {
     return {
+      'token': token,
       'viewedSetupIndex': viewedSetupIndex,
       'id': id,
-      'onlineStatus':onlineStatus,
+      'onlineStatus': onlineStatus,
       'email': email,
       'hasPremium': hasPremium,
       'fullName': fullName,

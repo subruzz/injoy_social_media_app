@@ -64,10 +64,8 @@ final class AppBorderRadius {
   static const double homeCardRadiusValue = 10.0;
 
   // Additional Specific Radius Values
-  static double topLeftRadius(double value) => value.w;
-  static double topRightRadius(double value) => value.w;
-  static double bottomLeftRadius(double value) => value.w;
-  static double bottomRightRadius(double value) => value.w;
+  static double getRadius(double value) => value.w;
+
 
   // Complex Radius Cases (with two corners)
   static double topLeftBottomRight(double topLeft, double bottomRight) =>

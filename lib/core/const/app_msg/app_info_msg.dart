@@ -8,4 +8,7 @@ final class AppIngoMsg {
       'Allowing location services helps us provide you with a more personalized experience, including relevant content and local recommendations. You can enable this feature anytime in your settings';
   static const locationinfo =
       'We need your location to enhance your experience by providing personalized services and recommendations. Your location data will be kept confidential and secure';
+
+  static const String deleteMessage =
+      'Are you you want to delete this message?';
 }

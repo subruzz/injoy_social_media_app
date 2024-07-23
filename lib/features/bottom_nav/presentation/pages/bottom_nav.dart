@@ -1,6 +1,11 @@
+import 'dart:developer';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/core/const/zego_const.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_event.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
@@ -11,6 +16,9 @@ import 'package:social_media_app/features/profile/presentation/pages/user_profil
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/core/utils/rive/model.dart';
 import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
+import 'package:social_media_app/notification.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 const Color bottonNavBgColor = Color(0xFF17203A);
 
@@ -45,8 +53,26 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
     }
   }
 
+  // void send() async {
+  //   final fcm = FirebaseMessaging.instance;
+  //   await fcm.requestPermission();
+  //   final token = await fcm.getToken();
+  //   print('token is $token');
+  // }
+
   @override
   void initState() {
+    // send();
+    // PushNotificiationServices.sendNotificationToUser(
+    //     'fCEODIumSvq-KH1rgjQO5_:APA91bFeT-FkhA22sW4wEe6OJYdMg1U4y3iWIns4K4xLXJ0uowUTgRA_YcpW9_dFwgBkq3pWcCo6B8YHnjclNEieoZZZC8OLvM2BzsYKnPaSCv23HUfv_VwWZhVNQUeslUvL2AZMzkwk');
+    // final user = context.read<AppUserBloc>().appUser;
+    // ZegoUIKitPrebuiltCallInvitationService().init(
+    //   appID: ZegoConst.zegoAppId,
+    //   appSign: ZegoConst.zegoAppSignIn,
+    //   userID: user.id,
+    //   userName: user.userName ?? '',
+    //   plugins: [ZegoUIKitSignalingPlugin()],
+    // );
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }

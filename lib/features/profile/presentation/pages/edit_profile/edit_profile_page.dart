@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
@@ -135,8 +135,11 @@ class _AddProfilePageState extends State<EditProfilePage> {
                       AppSizedBox.sizedBox15H,
                       InkWell(
                         onTap: () async {
-                          final UserLocation? res = await context
-                              .pushNamed(MyAppRouteConst.locationPageRoute);
+                          final UserLocation? res = await Navigator.pushNamed(
+                            context,
+                            MyAppRouteConst.locationPageRoute,
+                          ) as UserLocation?;
+
                           if (res != null) {
                             _userLocation = res;
                             _locationController.text =

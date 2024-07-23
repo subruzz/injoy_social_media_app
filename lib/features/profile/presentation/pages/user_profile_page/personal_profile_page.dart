@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
@@ -101,8 +101,11 @@ class CustomBottomSheet {
                 text: 'Edit Interests',
                 onTap: () {
                   Navigator.pop(context);
-                  context.pushNamed(MyAppRouteConst.interestSelectRoute,
-                      extra: context.read<AppUserBloc>().appUser.interests);
+                  Navigator.pushNamed(
+                    context,
+                    MyAppRouteConst.interestSelectRoute,
+                    arguments: context.read<AppUserBloc>().appUser.interests,
+                  );
                 },
               ),
               _buildListTile(
@@ -122,7 +125,7 @@ class CustomBottomSheet {
               //     // Add your onTap code here
               //   },
               // ),
-            
+
               // _buildListTile(
               //   icon: Icons.people,
               //   text: 'Close Friends',
@@ -131,7 +134,7 @@ class CustomBottomSheet {
               //     // Add your onTap code here
               //   },
               // ),
-             
+
               _buildListTile(
                 color: AppDarkColor().iconSecondarycolor,
                 icon: Icons.logout,
@@ -141,9 +144,10 @@ class CustomBottomSheet {
                       context: context,
                       callBack: () {
                         FirebaseAuth.instance.signOut().then((value) {
-                          context.pop(context);
+                          Navigator.pop(context);
 
-                          context.goNamed(MyAppRouteConst.loginRoute);
+                          Navigator.pushNamed(
+                              context, MyAppRouteConst.loginRoute);
                         }).catchError((error) {
                           print('Sign out failed: $error');
                         });
@@ -167,8 +171,7 @@ class CustomBottomSheet {
       required VoidCallback onTap,
       Color? color}) {
     return ListTile(
-      splashColor: Colors.transparent, 
-
+      splashColor: Colors.transparent,
       leading: Icon(icon, color: AppDarkColor().iconSoftColor),
       title: Text(
         text,

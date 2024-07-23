@@ -1,20 +1,15 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/message_type.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
-import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message_attribute/message_attribute_bloc.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_bottom_input_bar/chat_input_bar_section.dart';
+import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_bottom_input_bar/widgets/chat_send_button.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/chat_listing_section_section.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/personal_chat_top_bar/personal_page_top_bar.dart';
-import 'package:social_media_app/init_dependecies.dart';
-import 'package:video_player/video_player.dart';
 
 class PersonChatPage extends StatefulWidget {
   const PersonChatPage({
@@ -31,15 +26,24 @@ class _PersonChatPageState extends State<PersonChatPage> {
   final ValueNotifier<bool> _toggleButton = ValueNotifier(false);
   final ValueNotifier<bool> _showAttachWindow = ValueNotifier(false);
   final ScrollController _scrollController = ScrollController();
-  void _scrollToBottom() {
+  Future<void> _scrollToBottom() async {
     if (_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      await Future.delayed(const Duration(milliseconds: 100));
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
     }
   }
 
+  final FocusNode _focusNode = FocusNode();
   late MessageInfoStoreCubit _msgInfo;
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToBottom();
+    });
     _msgInfo = context.read<MessageInfoStoreCubit>();
     context.read<MessageCubit>().getPersonalChats(
         recipientId: _msgInfo.receiverId,
@@ -51,6 +55,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
+      // top bar section ----> (online status ,name..)
       appBar: PersonalPageTopBar(
         id: _msgInfo.receiverId,
         userName: _msgInfo.receiverName,
@@ -78,8 +83,9 @@ class _PersonChatPageState extends State<PersonChatPage> {
                     },
                     goToBottom: _scrollToBottom,
                     scrollController: _scrollController),
-//input field for creating chat
+                //input field for creating chat
                 ChatInputBarSection(
+                    focusNode: _focusNode,
                     messageController: _textMsgController,
                     showAttachWindow: _showAttachWindow,
                     sendMessage: () {
@@ -197,6 +203,13 @@ class _PersonChatPageState extends State<PersonChatPage> {
                       )
                     : EmptyDisplay();
               },
+            ),
+            ChatSendButton(
+              toggleButton: _toggleButton,
+              sendMessage: () {
+                _sendTextMsg();
+              },
+              messageController: _textMsgController,
             ),
             // Align(
             //   alignment: Alignment.topCenter,

@@ -2,14 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
-import 'package:social_media_app/features/status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
-import 'package:social_media_app/features/status/presentation/bloc/get_my_status/get_my_status_bloc.dart';
-import 'features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -47,15 +42,19 @@ class _SplashScreenState extends State<SplashScreen>
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthNotLoggedIn) {
-            context.goNamed(MyAppRouteConst.loginRoute);
+            Navigator.pushReplacementNamed(context, MyAppRouteConst.loginRoute);
           }
           if (state is AuthLoggedInOrUpdate) {
             context.read<InitialSetupCubit>().startInitialSetup(
                 uId: state.user.id, following: state.user.following);
-            context.goNamed(MyAppRouteConst.bottomNavRoute, extra: state.user);
+            Navigator.pushReplacementNamed(
+                context, MyAppRouteConst.bottomNavRoute,
+                arguments: state.user);
           }
           if (state is AuthLoggedInButProfileNotSet) {
-            context.goNamed(MyAppRouteConst.addProfilePage, extra: state.user);
+            Navigator.pushReplacementNamed(
+                context, MyAppRouteConst.addProfilePage,
+                arguments: state.user);
           }
         },
         child: Center(
