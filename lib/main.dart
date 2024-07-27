@@ -1,61 +1,99 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/const/stripe.dart';
 import 'package:social_media_app/core/providers.dart';
 import 'package:social_media_app/core/routes/app_routes_config.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/app_theme.dart';
+import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
 import 'package:social_media_app/firebase_options.dart';
 import 'package:social_media_app/init_dependecies.dart';
 import 'package:social_media_app/notification.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
-Future _firebaseBackgroundMessage(RemoteMessage message) async {
-  if (message.notification != null) {
-    log('message got in backgur');
-  }
-}
-
-final navigatorKey = GlobalKey<NavigatorState>();
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   runApp(const MyApp());
-// }
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+@pragma('vm:entry-point')
+Future<void> firebaseBackgroundNotification(RemoteMessage message) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // String payload = jsonEncode(message.data);
+
+  // if (message.notification != null) {
+  //   LocalNotificationService.showNotification(
+  //       title: message.notification!.title ?? '',
+  //       body: message.notification!.body ?? '',
+  //       payload: payload);
+  // }
+  log('bckgournd notification came');
+}
+
+final navigatorKey = GlobalKey<NavigatorState>();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
+  await Stripe.instance.applySettings();
   await LocalNotificationService.localNotificationInit();
-  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
+  FirebaseMessaging.onBackgroundMessage(firebaseBackgroundNotification);
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     if (message.notification != null) {
+      String payload = jsonEncode(message.data);
+
       log('taped message');
-      navigatorKey.currentState!.pushNamed(MyAppRouteConst.homeRoute);
+      Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+        builder: (context) => OtherUserProfilePage(
+            otherUserId: 'q0BZNmIL4IdfNMPb2FqYzqYYZb63', userName: 'subru'),
+      )); // arguments: message is NotificationResponse? );
     }
+  });
+  //terminated
+
+  final RemoteMessage? message =
+      await FirebaseMessaging.instance.getInitialMessage();
+
+  if (message != null) {
+    Future.delayed(Duration.zero);
+  }
+
+  //foreground
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    String payload = jsonEncode(message.data);
+    log('payload is $payload');
+    if (message.notification != null) {
+      LocalNotificationService.showNotification(
+          title: message.notification!.title ?? '',
+          body: message.notification!.body ?? '',
+          payload: payload);
+    }
+    // Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+    //   builder: (context) => OtherUserProfilePage(
+    //       otherUserId: 'q0BZNmIL4IdfNMPb2FqYzqYYZb63', userName: 'subru'),
+    // )); // a
   });
   await initDependencies();
 
-  /// 1.1.2: set navigator key to ZegoUIKitPrebuiltCallInvitationService
-  ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
+  // /// 1.1.2: set navigator key to ZegoUIKitPrebuiltCallInvitationService
+  // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
 
-  // call the useSystemCallingUI
-  ZegoUIKit().initLog().then((value) {
-    ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
-      [ZegoUIKitSignalingPlugin()],
-    );
+  // // call the useSystemCallingUI
+  // ZegoUIKit().initLog().then((value) {
+  //   ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
+  //     [ZegoUIKitSignalingPlugin()],
+  //   );
 
-    runApp(MyApp(navigatorKey: navigatorKey));
-  });
+  runApp(MyApp(navigatorKey: navigatorKey));
+//   });
+// }
 }
 
 class MyApp extends StatelessWidget {

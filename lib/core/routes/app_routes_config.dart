@@ -18,6 +18,7 @@ import 'package:social_media_app/features/profile/presentation/pages/interest_pa
 import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
 import 'package:social_media_app/features/status/presentation/pages/create_mutliple_status_page.dart';
+import 'package:social_media_app/features/who_visited_premium_feature/presentation/pages/user_visited_listing_page.dart';
 import 'package:social_media_app/splash_screen.dart';
 
 class MyAppRouter {
@@ -40,16 +41,19 @@ class MyAppRouter {
         return MaterialPageRoute(builder: (_) => const SignupPage());
 
       case MyAppRouteConst.bottomNavRoute:
-        return MaterialPageRoute(builder: (_) => const BottonNavWithAnimatedIcons());
+        return MaterialPageRoute(
+            builder: (_) => const BottonNavWithAnimatedIcons());
 
       case MyAppRouteConst.addProfilePage:
         final AppUser appUser = settings.arguments as AppUser;
-        return MaterialPageRoute(builder: (_) => AddProfilePage(appUser: appUser));
+        return MaterialPageRoute(
+            builder: (_) => AddProfilePage(appUser: appUser));
 
       case MyAppRouteConst.interestSelectRoute:
         final List<String>? interest = settings.arguments as List<String>?;
         return MaterialPageRoute(
-          builder: (_) => InterestSelectionPage(alreadySelectedInterests: interest),
+          builder: (_) =>
+              InterestSelectionPage(alreadySelectedInterests: interest),
         );
 
       case MyAppRouteConst.locationPageRoute:
@@ -62,22 +66,27 @@ class MyAppRouter {
         return MaterialPageRoute(builder: (_) => const AppLoadingGif());
 
       case MyAppRouteConst.mediaPickerRoute:
-        final Map<String, dynamic>? extras = settings.arguments as Map<String, dynamic>?;
-        final MediaPickerType pickerType = extras?['pickerType'] as MediaPickerType? ?? MediaPickerType.post;
+        final Map<String, dynamic>? extras =
+            settings.arguments as Map<String, dynamic>?;
+        final MediaPickerType pickerType =
+            extras?['pickerType'] as MediaPickerType? ?? MediaPickerType.post;
         return MaterialPageRoute(
           builder: (_) => CustomMediaPickerPage(pickerType: pickerType),
         );
 
       case MyAppRouteConst.createMultipleStatusRoute:
-        final Map<String, dynamic> params = settings.arguments as Map<String, dynamic>;
+        final Map<String, dynamic> params =
+            settings.arguments as Map<String, dynamic>;
         final List<SelectedByte> selectedAssets = params['selectedAssets'];
         final bool isChat = params['isChat'];
         return MaterialPageRoute(
-          builder: (_) => CreateMutlipleStatusPage(assets: selectedAssets, isChat: isChat),
+          builder: (_) =>
+              CreateMutlipleStatusPage(assets: selectedAssets, isChat: isChat),
         );
 
       case MyAppRouteConst.createPostRoute:
-        final List<SelectedByte> selectedAssets = settings.arguments as List<SelectedByte>;
+        final List<SelectedByte> selectedAssets =
+            settings.arguments as List<SelectedByte>;
         return MaterialPageRoute(
           builder: (_) => CreatePostScreen(selectedImages: selectedAssets),
         );
@@ -87,24 +96,30 @@ class MyAppRouter {
         return MaterialPageRoute(builder: (_) => ViewPost(post: post));
 
       case MyAppRouteConst.otherUserProfile:
-        final Map<String, dynamic> params = settings.arguments as Map<String, dynamic>;
+        final Map<String, dynamic> params =
+            settings.arguments as Map<String, dynamic>;
         final String userName = params['userName'];
         final String otherUserId = params['otherUserId'];
         return MaterialPageRoute(
-          builder: (_) => OtherUserProfilePage(userName: userName, otherUserId: otherUserId),
+          builder: (_) => OtherUserProfilePage(
+              userName: userName, otherUserId: otherUserId),
         );
 
       case MyAppRouteConst.hashtagPostsRoute:
-        final Map<String, dynamic> params = settings.arguments as Map<String, dynamic>;
+        final Map<String, dynamic> params =
+            settings.arguments as Map<String, dynamic>;
         final String hashTagName = params['hashTagName'];
         final int? hashTagPostCount = params['hashTagPostCount'];
         return MaterialPageRoute(
-          builder: (_) => ViewHashTagPostsScreen(hashTagName: hashTagName, hashTagPostCount: hashTagPostCount),
+          builder: (_) => ViewHashTagPostsScreen(
+              hashTagName: hashTagName, hashTagPostCount: hashTagPostCount),
         );
 
       case MyAppRouteConst.personaChatRoute:
         return MaterialPageRoute(builder: (_) => const PeronalChatBuilder());
-
+      case MyAppRouteConst.userVisitedListingRoute:
+        return MaterialPageRoute(
+            builder: (_) => const UserVisitedListingPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

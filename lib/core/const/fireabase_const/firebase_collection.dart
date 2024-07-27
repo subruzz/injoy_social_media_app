@@ -12,4 +12,6 @@ final class FirebaseCollectionConst {
   static const String messages = 'messages';
   static const String calls = 'calls';
   static const String callHistory = 'callHistory';
+  static const String whoVisitedMe = 'whoVisitedMe';
+  static const String visitors = 'visitors';
 }

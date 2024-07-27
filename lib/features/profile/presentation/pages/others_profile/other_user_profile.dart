@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/app_error_gif.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/custom_divider.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_other_user_posts/get_other_user_posts_cubit.dart';
@@ -12,29 +13,44 @@ import 'package:social_media_app/features/profile/presentation/pages/others_prof
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/top_bar_section/top_bar_section.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_basic_details_section/user_basic_detail_section.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_social_action_details_section/user_social_action_details_section.dart';
+import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 import 'package:social_media_app/init_dependecies.dart';
 
-class OtherUserProfilePage extends StatelessWidget {
+class OtherUserProfilePage extends StatefulWidget {
   const OtherUserProfilePage(
       {super.key, required this.userName, required this.otherUserId});
   final String userName;
   final String otherUserId;
+
+  @override
+  State<OtherUserProfilePage> createState() => _OtherUserProfilePageState();
+}
+
+class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<WhoVisitedBloc>().add(AddUserToVisited(
+        myId: context.read<AppUserBloc>().appUser.id,
+        visitedUserId: widget.otherUserId));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) =>
-              serviceLocator<OtherProfileCubit>()..getOtherProfile(otherUserId),
+          create: (context) => serviceLocator<OtherProfileCubit>()
+            ..getOtherProfile(widget.otherUserId),
         ),
         BlocProvider(
           create: (context) => serviceLocator<GetOtherUserPostsCubit>()
-            ..getOtherUserPosts(otherUserId),
+            ..getOtherUserPosts(widget.otherUserId),
         ),
       ],
       child: Scaffold(
         appBar: ProfilePageTopBarSection(
-          userName: userName,
+          userName: widget.userName,
           isMe: false,
         ),
         body: BlocConsumer<OtherProfileCubit, OtherProfileState>(
@@ -68,7 +84,7 @@ class OtherUserProfilePage extends StatelessWidget {
                   ),
                   // TabBarView for displaying content of each tab
                   OtherUserPosts(
-                    userName: userName,
+                    userName: widget.userName,
                   )
                 ],
               );

@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButton: const FloatingButton(),
       appBar: HomeTopBar(
+        isPremium: context.read<AppUserBloc>().appUser.hasPremium,
         profile: context.read<AppUserBloc>().appUser.profilePic,
       ),
       body: SafeArea(

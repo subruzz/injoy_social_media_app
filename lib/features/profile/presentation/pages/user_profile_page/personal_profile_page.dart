@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/features/premium_subscription/presentation/pages/premium_subscription_page.dart';
 
 import 'package:social_media_app/features/profile/presentation/pages/edit_profile/edit_profile_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/top_bar_section/top_bar_section.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_basic_details_section/user_basic_detail_section.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_profile_tab_section/user_profile_tab_section.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_social_action_details_section/user_social_action_details_section.dart';
+import 'package:social_media_app/features/settings/pages/settings_page.dart';
 
 import '../../../../../core/const/app_info_dialog.dart';
 import '../../../../../core/routes/app_routes_const.dart';
@@ -80,8 +82,22 @@ class CustomBottomSheet {
                 icon: Icons.settings,
                 text: 'Settings',
                 onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SettingsPage(),
+                      ));
+                },
+              ),
+              _buildListTile(
+                icon: Icons.people_alt_outlined,
+                text: 'See who visited me',
+                onTap: () {
                   Navigator.pop(context);
-                  // Add your onTap code here
+                  Navigator.pushNamed(
+                    context,
+                    MyAppRouteConst.userVisitedListingRoute,
+                  );
                 },
               ),
               _buildListTile(
@@ -113,6 +129,12 @@ class CustomBottomSheet {
                 text: 'Get Premium',
                 onTap: () {
                   Navigator.pop(context);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PremiumSubscriptionPage(),
+                      ));
                   // Add your onTap code here
                 },
               ),

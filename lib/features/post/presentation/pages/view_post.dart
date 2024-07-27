@@ -13,9 +13,10 @@ import 'package:social_media_app/features/post/presentation/widgets/view_posts/s
 
 class ViewPost extends StatefulWidget {
   final PostEntity post;
-  const ViewPost({super.key, required this.post, this.isEdit = false});
+  const ViewPost(
+      {super.key, required this.post, this.isEdit = false, this.postId});
   final bool isEdit;
-
+  final String? postId;
   @override
   State<ViewPost> createState() => _ViewPostState();
 }
@@ -80,6 +81,7 @@ class _ViewPostState extends State<ViewPost> {
                                     final comment = state.postComments[index];
 
                                     return EachComment(
+                                        creatorId: widget.post.creatorUid,
                                         postId: widget.post.postId,
                                         commentId: comment.commentId,
                                         editCall: () {
@@ -116,6 +118,7 @@ class _ViewPostState extends State<ViewPost> {
           ),
           if (!widget.post.isCommentOff)
             CommentBottomInputSection(
+                creatorId: widget.post.creatorUid,
                 commentController: _commentController,
                 commentSubmitSelection: _commentSubmitSelection,
                 myId: appUser.id,

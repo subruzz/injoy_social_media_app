@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 class AppUser extends Equatable {
   final String id;
   final String email;
-  final bool hasPremium;
+  bool hasPremium;
   final String? fullName;
   final String? userName;
   final String? dob;
@@ -14,6 +14,7 @@ class AppUser extends Equatable {
   final String? profilePic;
   final String? location;
   final Timestamp? lastSeen;
+  final int visitedUserCount;
   final List<String> token;
   final double? latitude;
   final double? longitude;
@@ -45,7 +46,8 @@ class AppUser extends Equatable {
     this.location,
     this.latitude,
     this.longitude,
-   required  this.token,
+    required this.visitedUserCount,
+    required this.token,
 
     // this.followers = const [],
     this.following = const [],
@@ -62,10 +64,10 @@ class AppUser extends Equatable {
         dob, lastSeen,
         phoneNumber,
         occupation,
-        about,token,
+        about, token,
         profilePic,
         location,
-        latitude,
+        latitude, visitedUserCount,
         longitude, onlineStatus,
         // ...followers,
         // ...following,

@@ -20,5 +20,7 @@ class AppAssetsConst {
   static const String call = 'assets/svgs/call.svg';
   static const String video = 'assets/svgs/video.svg';
   static const String nochatHolder = 'assets/images/no_chat.json';
+  static const String noNotification = 'assets/gifs/no_noti.gif';
+  static const String commentIcon = 'assets/svgs/comment.svg';
   static const String explore = 'assets/svgs/explore.svg';
 }

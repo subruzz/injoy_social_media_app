@@ -68,7 +68,7 @@ class UserSocialActionDetailsSection extends StatelessWidget {
                           .following
                           .length
                           .toString())
-                      : CustomText(user.followingCount.toString());
+                      : CustomText(user.following.length.toString());
                 },
               ),
             ),

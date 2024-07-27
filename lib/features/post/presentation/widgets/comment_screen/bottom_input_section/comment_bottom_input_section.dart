@@ -15,13 +15,14 @@ class CommentBottomInputSection extends StatelessWidget {
       required this.commentSubmitSelection,
       this.inputNode,
       required this.myId,
+      required this.creatorId,
       required this.postId,
       required this.commentId});
   final TextEditingController commentController;
   final ValueNotifier<({bool isComment, bool isEdit, bool isTextEmpty})>
       commentSubmitSelection;
   final FocusNode? inputNode;
-
+  final String creatorId;
   final String myId;
   final String postId;
   final String commentId;
@@ -67,6 +68,7 @@ class CommentBottomInputSection extends StatelessWidget {
                     commentController: commentController),
                 AppSizedBox.sizedBox10H,
                 CommentSumbissitionVisibilityWidget(
+                    creatorId: creatorId,
                     commentSubmitSelection: commentSubmitSelection,
                     myId: myId,
                     postId: postId,

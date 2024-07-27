@@ -28,8 +28,8 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
     final postcollection = _firestore.collection(FirebaseCollectionConst.posts);
     try {
       Query<Map<String, dynamic>> postsQuery = postcollection
-          .where('creatorUid',
-              isNotEqualTo: userId) // Example .where clause causing issues
+          .where('creatorUid', isNotEqualTo: userId)
+          .where('creatorUid', whereIn: following)
           .orderBy('createAt', descending: true)
           .limit(limit);
 

@@ -14,13 +14,14 @@ class MessageInfoStoreCubit extends Cubit<MessageInfoStoreState> {
       : _senderId = id,
         super(MessageInfoStoreInitial());
   StreamSubscription<DocumentSnapshot>? _userStatusSubscription;
-
+  List<String> _token = [];
   final String _senderId;
   String _receiverId = '';
   String _receiverName = '';
   String? _receiverProfile;
 
   // Getters
+  List<String> get token => _token;
   String get senderId => _senderId;
   String get receiverId => _receiverId;
   String get receiverName => _receiverName;
@@ -43,6 +44,9 @@ class MessageInfoStoreCubit extends Cubit<MessageInfoStoreState> {
     _receiverProfile = receiverProfile;
     _receiverName = receiverName;
     _receiverId = recipientId;
+    _token = [
+      'eEiJrGBeSVGqgbc4FCDSvQ:APA91bE8sEjf9GZpsXn7BokCWVJGT8OFLcxIAdMs4Vi7KOOCOFIvuf-BXIZOvEvKlq3HtA0u0xO8MxpsCxs3foj2FlOSMrN2yZD1x2wzlDYQQ7RM6qKEmCKoRD2UmTVSZYDJfOu0rGfS'
+    ];
 
     if (areDetailsComplete()) {
       emit(MessageInfoSet());
@@ -79,6 +83,4 @@ class MessageInfoStoreCubit extends Cubit<MessageInfoStoreState> {
   void replyRemoved() {
     emit(MessageReplyRemoved());
   }
-
- 
 }

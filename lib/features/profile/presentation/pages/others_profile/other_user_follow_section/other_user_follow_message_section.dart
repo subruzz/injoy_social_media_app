@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +14,9 @@ import 'package:social_media_app/core/widgets/button/custom_button_with_icon.dar
 import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';
+import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
+import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
+import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 
 import '../../../../../../core/const/app_config/app_border_radius.dart';
@@ -30,6 +36,9 @@ class OtherUserFollowMessageSection extends StatelessWidget {
       child: Row(
         children: [
           BlocConsumer<FollowunfollowCubit, FollowunfollowState>(
+            buildWhen: (previous, current) =>
+                current is FollowLoading ||
+                (previous is FollowLoading && current is FollowLoading),
             builder: (context, state) {
               return Expanded(
                 child: CustomButtonWithIcon(
@@ -42,20 +51,49 @@ class OtherUserFollowMessageSection extends StatelessWidget {
                     onClick: () {
                       final amIFollowing =
                           me.following.contains(currentVisitedUser.id);
+                      log('in the follow butto $amIFollowing');
                       if (amIFollowing) {
+                        me.following.remove(currentVisitedUser.id);
                         --currentVisitedUser.followersCount;
-                        context.read<FollowunfollowCubit>().unfollowUser(
-                              myId: me.id,
-                              otherId: currentVisitedUser.id,
-                            );
+                        // context.read<NotificationCubit>().deleteNotification(
+                        //     notificationCheck: NotificationCheck(
+                        //         receiverId: currentVisitedUser.id,
+                        //         senderId: me.id,
+                        //         uniqueId: currentVisitedUser.id,
+                        //         notificationType: NotificationType.profile,
+                        //         isThatLike: false,
+                        //         isThatPost: false));
+                        // context.read<FollowunfollowCubit>().unfollowUser(
+                        //       myId: me.id,
+                        //       otherId: currentVisitedUser.id,
+                        //     );
                       } else {
                         ++currentVisitedUser.followersCount;
+                        me.following.add(currentVisitedUser.id);
 
-                        context.read<FollowunfollowCubit>().followUser(
-                              me.id,
-                              currentVisitedUser.id,
-                            );
+                        // context.read<NotificationCubit>().createNotification(
+                        //         notification: CustomNotification(
+                        //       text: "started following you.",
+                        //       time: Timestamp.now(),
+                        //       senderId: me.id,
+                        //       uniqueId: currentVisitedUser.id,
+                        //       receiverId: currentVisitedUser.id,
+                        //       personalUserName: me.userName ?? '',
+                        //       personalProfileImageUrl: me.profilePic,
+                        //       notificationType: NotificationType.profile,
+                        //       senderName: me.userName ?? '',
+                        //     ));
+                        // context.read<FollowunfollowCubit>().followUser(
+                        //       me.id,
+                        //       currentVisitedUser.id,
+                        //     );
                       }
+                      log('state is ${context.read<FollowunfollowCubit>().state}');
+                      context.read<FollowunfollowCubit>().followUnfollowAction(
+                          user: me,
+                          myid: me.id,
+                          otherId: currentVisitedUser.id,
+                          isFollowing: amIFollowing);
                     }),
               );
             },

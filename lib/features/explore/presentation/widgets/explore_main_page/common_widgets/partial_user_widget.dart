@@ -74,15 +74,49 @@ class PartialUserWidget extends StatelessWidget {
                 ),
                 onClick: () {
                   final me = context.read<AppUserBloc>().appUser;
-                  if (me.following.contains(user.id)) {
-                    context
-                        .read<FollowunfollowCubit>()
-                        .unfollowUser(myId: me.id, otherId: user.id);
+                  final amIFollowing = me.following.contains(user.id);
+                  if (amIFollowing) {
+                    me.following.remove(user.id);
+                    --user.followersCount;
+                    // context.read<NotificationCubit>().deleteNotification(
+                    //     notificationCheck: NotificationCheck(
+                    //         receiverId: user.id,
+                    //         senderId: me.id,
+                    //         uniqueId: user.id,
+                    //         notificationType: NotificationType.profile,
+                    //         isThatLike: false,
+                    //         isThatPost: false));
+                    // context.read<FollowunfollowCubit>().unfollowUser(
+                    //       myId: me.id,
+                    //       otherId: user.id,
+                    //     );
                   } else {
-                    context
-                        .read<FollowunfollowCubit>()
-                        .followUser(me.id, user.id);
+                    ++user.followersCount;
+                    me.following.add(user.id);
+
+                    // context.read<NotificationCubit>().createNotification(
+                    //         notification: CustomNotification(
+                    //       text: "started following you.",
+                    //       time: Timestamp.now(),
+                    //       senderId: me.id,
+                    //       uniqueId: user.id,
+                    //       receiverId: user.id,
+                    //       personalUserName: me.userName ?? '',
+                    //       personalProfileImageUrl: me.profilePic,
+                    //       notificationType: NotificationType.profile,
+                    //       senderName: me.userName ?? '',
+                    //     ));
+                    // context.read<FollowunfollowCubit>().followUser(
+                    //       me.id,
+                    //       user.id,
+                    //     );
                   }
+                  log('state is ${context.read<FollowunfollowCubit>().state}');
+                  context.read<FollowunfollowCubit>().followUnfollowAction(
+                      user: me,
+                      myid: me.id,
+                      otherId: user.id,
+                      isFollowing: amIFollowing);
                 }),
           ],
         ),

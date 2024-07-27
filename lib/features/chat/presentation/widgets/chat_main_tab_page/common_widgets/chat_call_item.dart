@@ -26,6 +26,7 @@ class ChatCallItem extends StatelessWidget {
       onTap: () {
         if (chat != null) {
           context.read<MessageInfoStoreCubit>().setDataForChat(
+       
               receiverProfile: chat!.recipientProfile,
               receiverName: chat!.recipientName,
               recipientId: chat!.recipientUid);

@@ -12,13 +12,9 @@ import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_
 import 'package:social_media_app/features/explore/presentation/pages/explore.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/personal_profile_page.dart';
-import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/profile_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/core/utils/rive/model.dart';
 import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
-import 'package:social_media_app/notification.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 const Color bottonNavBgColor = Color(0xFF17203A);
 

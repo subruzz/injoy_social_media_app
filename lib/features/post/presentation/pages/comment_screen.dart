@@ -73,6 +73,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                 itemBuilder: (context, index) {
                                   final comment = state.postComments[index];
                                   return EachComment(
+                                      creatorId: widget.post.creatorUid,
                                       postId: widget.post.postId,
                                       commentId: comment.commentId,
                                       editCall: () {
@@ -93,6 +94,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               ),
                       ),
                       CommentBottomInputSection(
+                          creatorId: widget.post.creatorUid,
                           commentController: _commentController,
                           commentSubmitSelection: _commentSubmitSelection,
                           myId: appUser.id,

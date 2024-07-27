@@ -9,20 +9,23 @@ sealed class LikePostEvent extends Equatable {
 
 final class LikePostClickEvent extends LikePostEvent {
   final String postId;
-  final String currentUserId;
-
+  final AppUser user;
+  final String otherUserId;
   const LikePostClickEvent({
+    required this.user,
     required this.postId,
-    required this.currentUserId,
+    required this.otherUserId,
   });
 }
 
 final class UnlikePostClickEvent extends LikePostEvent {
   final String postId;
-  final String currentUserId;
+  final String myId;
+  final String ohterUseId;
 
   const UnlikePostClickEvent({
     required this.postId,
-    required this.currentUserId,
+    required this.myId,
+    required this.ohterUseId,
   });
 }

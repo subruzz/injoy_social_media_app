@@ -17,11 +17,15 @@ import 'package:social_media_app/features/explore/presentation/blocs/get_recomme
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
+import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
+import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/get_post_comment/get_post_comment_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/like_comment/like_comment_cubit.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/for_you_posts/for_you_post_bloc.dart';
+import 'package:social_media_app/features/premium_subscription/presentation/bloc/premium_subscription_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
+import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 import 'package:social_media_app/init_dependecies.dart';
 import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubits/Pick_multiple_image/pick_multiple_image_cubit.dart';
@@ -160,14 +164,29 @@ List<SingleChildWidget> myProviders = [
     create: (context) => serviceLocator<MessageInfoStoreCubit>(),
   ),
   BlocProvider(
+    create: (context) => serviceLocator<WhoVisitedBloc>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<NotificationCubit>()
+      ..getMynotifications(myId: context.read<AppUserBloc>().appUser.id),
+  ),
+  BlocProvider(
     create: (context) => serviceLocator<ForYouPostBloc>()
       ..add(ForYouPostFeedGetEvent(user: context.read<AppUserBloc>().appUser)),
   ),
+  BlocProvider(
+      create: (context) => serviceLocator<FollowingPostFeedBloc>()
+        ..add(FollowingPostFeedGetEvent(
+            isLoadMore: false,
+            lastDoc: null,
+            following: context.read<AppUserBloc>().appUser.following,
+            uId: context.read<AppUserBloc>().appUser.id))),
 
   BlocProvider(
     create: (context) => FollowHashtagCubit(
         FirebaseFirestore.instance, context.read<AppUserBloc>().appUser.id),
   ),
+
   // BlocProvider(
   //   create: (context) => serviceLocator<OtherProfileCubit>(),
   // ),
@@ -176,11 +195,14 @@ List<SingleChildWidget> myProviders = [
   // BlocProvider(
   //   create: (context) => serviceLocator<AgoraCubit>(),
   // ),
- 
+
   BlocProvider(
     create: (context) => serviceLocator<CallCubit>(),
   ),
   BlocProvider(
     create: (context) => serviceLocator<CallHistoryCubit>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<PremiumSubscriptionBloc>(),
   ),
 ];

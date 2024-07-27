@@ -98,6 +98,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       AppUserModel userModel = AppUserModel(
+        visitedUserCount: 0,
         id: userCredential.user!.uid,
         onlineStatus: false,
         email: userCredential.user!.email ?? '',
@@ -186,6 +187,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           .collection(FirebaseCollectionConst.users)
           .doc(user.uid);
       AppUserModel userModel = AppUserModel(
+        visitedUserCount: 0,
         id: user.uid,
         onlineStatus: false,
         email: email,

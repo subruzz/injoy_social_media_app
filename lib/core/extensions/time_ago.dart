@@ -4,9 +4,9 @@ extension TimeAgo on DateTime {
     final difference = now.difference(this);
 
     if (difference.inSeconds < 60) {
-      return '${difference.inSeconds} seconds ago';
+      return '${difference.inSeconds} sec ago';
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes} minutes ago';
+      return '${difference.inMinutes} min ago';
     } else if (difference.inHours < 24) {
       return '${difference.inHours} hours ago';
     } else if (difference.inDays < 7) {

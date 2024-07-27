@@ -16,7 +16,8 @@ class MyAppRouteConst {
   static const String hashtagPostsRoute = 'hashtagPostsPage';
   static const String viewPostsDetailedRoute = 'viewPostDetailsPage';
   static const String createMultipleStatusRoute = 'createMultipleStatusPage';
-  static const String personaChatRoute='personChatPage';
+  static const String personaChatRoute = 'personChatPage';
+  static const String userVisitedListingRoute = 'userVisitedListingPage';
 }
 
 enum MediaPickerType { chat, post, status }

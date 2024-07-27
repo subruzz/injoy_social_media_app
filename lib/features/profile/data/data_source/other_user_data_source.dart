@@ -39,6 +39,7 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
       // _cachedUser.set(uid, user);
       return user;
     } catch (e) {
+      log('error is this ${e.toString()}');
       throw const MainException();
     }
   }

@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/time_ago.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/features/post/domain/enitities/comment_entity.dart';
@@ -18,11 +21,13 @@ class EachComment extends StatelessWidget {
       required this.editCall,
       required this.comment,
       required this.myId,
-      this.isCompleteView = false});
+      this.isCompleteView = false,
+      required this.creatorId});
   final String postId;
   final String commentId;
   final VoidCallback editCall;
   final String myId;
+  final String creatorId;
   final CommentEntity comment;
   final bool isCompleteView;
   @override
@@ -31,6 +36,7 @@ class EachComment extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onLongPressStart: (details) async {
+          log(comment.creatorId);
           if (comment.creatorId != myId) return;
           HapticFeedback.heavyImpact();
           final offset = details.globalPosition;
@@ -47,9 +53,11 @@ class EachComment extends StatelessWidget {
                 PopupMenuItem(
                   child: const Text('Delete'),
                   onTap: () {
-                    context
-                        .read<CommentBasicCubit>()
-                        .deleteComment(postId: postId, commentId: commentId);
+                    context.read<CommentBasicCubit>().deleteComment(
+                        postId: postId,
+                        commentId: commentId,
+                        myId: myId,
+                        otherId: creatorId);
                   },
                 ),
                 PopupMenuItem(

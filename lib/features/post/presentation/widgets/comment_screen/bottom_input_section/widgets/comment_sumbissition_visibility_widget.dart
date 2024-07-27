@@ -13,12 +13,14 @@ class CommentSumbissitionVisibilityWidget extends StatelessWidget {
       required this.commentSubmitSelection,
       required this.myId,
       required this.postId,
+      required this.creatorId,
       required this.commentId,
       required this.commentController});
   final ValueNotifier<({bool isComment, bool isEdit, bool isTextEmpty})>
       commentSubmitSelection;
   final String myId;
   final String postId;
+  final String creatorId;
   final String commentId;
   final TextEditingController commentController;
   @override
@@ -33,10 +35,11 @@ class CommentSumbissitionVisibilityWidget extends StatelessWidget {
                   final user = context.read<AppUserBloc>().appUser;
                   commentSubmitSelection.value.isComment
                       ? context.read<CommentBasicCubit>().addComment(
+                          user: user,
                           comment: sanitizeComment(commentController.text),
                           userName: user.userName ?? '',
                           postId: postId,
-                          creatorId: user.id)
+                          creatorId:creatorId)
                       : commentId.isNotEmpty
                           ? context.read<CommentBasicCubit>().updateComment(
                                 postId: postId,

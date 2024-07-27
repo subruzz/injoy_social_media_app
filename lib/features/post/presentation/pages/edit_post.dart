@@ -9,8 +9,8 @@ import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_b
 import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
-import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
-import 'package:social_media_app/core/widgets/post/post_single_image.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_multiple_images.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_single_image.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/select_tags_cubit/select_tags_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/update_post/update_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post_input_section/widget/description_textfield.dart';

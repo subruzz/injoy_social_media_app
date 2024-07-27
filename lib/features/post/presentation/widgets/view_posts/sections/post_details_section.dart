@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/time_stamp_to_string.dart';
-import 'package:social_media_app/core/widgets/post/post_action_bar.dart';
-import 'package:social_media_app/core/widgets/post/post_description.dart';
-import 'package:social_media_app/core/widgets/post/post_hashtag.dart';
-import 'package:social_media_app/core/widgets/post/post_multiple_images.dart';
-import 'package:social_media_app/core/widgets/post/post_single_image.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/post_action_section.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_content_section/widgets/post_description.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_content_section/widgets/post_hashtag.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_multiple_images.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_single_image.dart';
 
 class PostDetailsSection extends StatelessWidget {
   const PostDetailsSection({super.key, required this.post});

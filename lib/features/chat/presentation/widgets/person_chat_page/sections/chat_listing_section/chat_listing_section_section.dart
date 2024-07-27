@@ -1,11 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/app_error_gif.dart';
+import 'package:social_media_app/core/common_empty_holder.dart';
 import 'package:social_media_app/core/const/app_info_dialog.dart';
 import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
+import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/message_type.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
@@ -13,7 +14,6 @@ import 'package:social_media_app/features/chat/domain/entities/message_entity.da
 import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/pages/custom_gallery.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/chat_main_tab_page/common_widgets/empty_chat_holder.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_item.dart';
 import 'package:swipe_to/swipe_to.dart';
 
@@ -39,7 +39,8 @@ class ChatListingSectionSection extends StatelessWidget {
           }
           if (state is MessageLoaded) {
             if (state.messages.isEmpty) {
-              return const EmptyChatHolder(
+              return const CommonEmptyHolder(
+                  asset: AppAssetsConst.nochatHolder,
                   message: AppUiStringConst.noPersonalChatFound);
             }
             WidgetsBinding.instance.addPostFrameCallback((_) {

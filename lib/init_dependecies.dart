@@ -65,6 +65,14 @@ import 'package:social_media_app/features/explore/presentation/blocs/get_recomme
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
+import 'package:social_media_app/features/notification/data/datacource/notification_datasource.dart';
+import 'package:social_media_app/features/notification/data/repository/notification_repository_impl.dart';
+import 'package:social_media_app/features/notification/domain/repository/notification_repository.dart';
+import 'package:social_media_app/features/notification/domain/usecases/create_notification_use_case.dart';
+import 'package:social_media_app/features/notification/domain/usecases/delete_my_notification.dart';
+import 'package:social_media_app/features/notification/domain/usecases/delete_notification.dart';
+import 'package:social_media_app/features/notification/domain/usecases/get_my_notification.dart';
+import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import 'package:social_media_app/features/post/data/datasources/remote/comment_remote_datasource.dart';
 import 'package:social_media_app/features/post/data/datasources/remote/post_remote_datasource.dart';
 import 'package:social_media_app/features/post/data/repository/comment_repository_impl.dart';
@@ -101,6 +109,13 @@ import 'package:social_media_app/features/post_status_feed/data/repository/statu
 import 'package:social_media_app/features/post_status_feed/domain/repositories/status_feed_repository.dart';
 import 'package:social_media_app/features/post_status_feed/domain/usecases/get_for_you_posts.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/for_you_posts/for_you_post_bloc.dart';
+import 'package:social_media_app/features/premium_subscription/data/datasource/premium_subscription_datasource.dart';
+import 'package:social_media_app/features/premium_subscription/data/repository/premium_subsription_repo_impl.dart';
+import 'package:social_media_app/features/premium_subscription/domain/repositories/premium_subscription_repository.dart';
+import 'package:social_media_app/features/premium_subscription/domain/usecases/create_payment_intent.dart';
+import 'package:social_media_app/features/premium_subscription/domain/usecases/setup_stripe_for_payment.dart';
+import 'package:social_media_app/features/premium_subscription/domain/usecases/update_user_premium_status.dart';
+import 'package:social_media_app/features/premium_subscription/presentation/bloc/premium_subscription_bloc.dart';
 import 'package:social_media_app/features/profile/data/data_source/other_user_data_source.dart';
 import 'package:social_media_app/features/profile/data/repository/other_user_profile_impl.dart';
 import 'package:social_media_app/features/profile/domain/repository/other_user_repository.dart';
@@ -151,6 +166,12 @@ import 'package:social_media_app/features/profile/domain/usecases/get_user_posts
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/add_interests/select_interest_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
+import 'package:social_media_app/features/who_visited_premium_feature/data/datasource/who_visited_data_source.dart';
+import 'package:social_media_app/features/who_visited_premium_feature/data/repository/who_visited_repo_impl.dart';
+import 'package:social_media_app/features/who_visited_premium_feature/domain/repositories/who_visited_repository.dart';
+import 'package:social_media_app/features/who_visited_premium_feature/domain/usecases/add_visited_user.dart';
+import 'package:social_media_app/features/who_visited_premium_feature/domain/usecases/get_all_visited_user.dart';
+import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 
 import 'features/profile/domain/usecases/get_my_liked_posts.dart';
 
@@ -164,11 +185,14 @@ Future<void> initDependencies() async {
   _localAsset();
   _post();
   _call();
+  _notification();
   _getUserPosts();
   _postFeed();
   _statusCreation();
   _comment();
   _exploreApp();
+  _whoVisitedPremiumFeature();
+  _premiumsubscription();
   _chat();
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(),
@@ -270,7 +294,7 @@ void _initProfile() {
     ..registerFactory(
         () => UnfollowUserUseCase(userProfileRepository: serviceLocator()))
     ..registerLazySingleton(() => FollowunfollowCubit(
-        serviceLocator(), serviceLocator(), serviceLocator()))
+        serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()))
     ..registerFactory(() => GetOtherUserPostsCubit(serviceLocator()))
     ..registerFactory(
         () => GetFollowingListUseCase(userProfileRepository: serviceLocator()))
@@ -323,8 +347,8 @@ void _post() {
     ..registerFactory(() => LikePostsUseCase(postRepository: serviceLocator()))
     ..registerFactory(
         () => UnlikePostsUseCase(postRepository: serviceLocator()))
-    ..registerLazySingleton(
-        () => LikePostBloc(serviceLocator(), serviceLocator()))
+    ..registerLazySingleton(() =>
+        LikePostBloc(serviceLocator(), serviceLocator(), serviceLocator()))
     ..registerFactory(() => SelectTagsCubit());
 }
 
@@ -393,6 +417,7 @@ void _comment() {
         () => LikeCommentCubit(serviceLocator(), serviceLocator()))
     ..registerFactory(() => GetPostCommentCubit(serviceLocator()))
     ..registerLazySingleton(() => CommentBasicCubit(
+        notificationCubit: serviceLocator(),
         createCommentUsecase: serviceLocator(),
         updateCommentUseCase: serviceLocator(),
         deleteCommentUseCase: serviceLocator()));
@@ -505,4 +530,53 @@ void _call() {
         endCallUseCase: serviceLocator(),
         saveCallHistoryUseCase: serviceLocator()))
     ..registerLazySingleton(() => CallHistoryCubit());
+}
+
+void _notification() {
+  serviceLocator
+    ..registerFactory<NotificationDatasource>(() => NotificationDatasourceImple(
+        firebaseFirestore: FirebaseFirestore.instance))
+    ..registerFactory<NotificationRepository>(() =>
+        NotificationRepositoryImpl(notificationDatasource: serviceLocator()))
+    ..registerFactory(() =>
+        CreateNotificationUseCase(notificationRepository: serviceLocator()))
+    ..registerFactory(() =>
+        DeleteNotificationUseCase(notificationRepository: serviceLocator()))
+    ..registerFactory(() =>
+        GetMyNotificationUseCase(notificationRepository: serviceLocator()))
+    ..registerFactory(() =>
+        DeleteMyNotificationUseCase(notificationRepository: serviceLocator()))
+    ..registerLazySingleton(() => NotificationCubit(serviceLocator(),
+        serviceLocator(), serviceLocator(), serviceLocator()));
+}
+
+void _premiumsubscription() {
+  serviceLocator
+    ..registerFactory<PremiumSubscriptionDatasource>(
+        () => PremiumSubscriptionDatasourceImpl())
+    ..registerFactory<PremiumSubscriptionRepository>(() =>
+        PremiumSubsriptionRepoImpl(
+            premiumSubscriptionDatasource: serviceLocator()))
+    ..registerFactory(() => CreatePaymentIntentUseCase(
+        premiumSubscriptionRepository: serviceLocator()))
+    ..registerFactory(() => SetupStripeForPaymentUseCase(
+        premiumSubscriptionRepository: serviceLocator()))
+    ..registerFactory(() => UpdateUserPremiumStatusUseCase(
+        premiumSubscriptionRepository: serviceLocator()))
+    ..registerLazySingleton(
+        () => PremiumSubscriptionBloc(serviceLocator(), serviceLocator()));
+}
+
+void _whoVisitedPremiumFeature() {
+  serviceLocator
+    ..registerFactory<WhoVisitedDataSource>(() =>
+        WhoVisitedDataSourceImpl(firebaseFirestore: FirebaseFirestore.instance))
+    ..registerFactory<WhoVisitedRepository>(
+        () => WhoVisitedRepoImpl(whoVisitedDataSource: serviceLocator()))
+    ..registerFactory(
+        () => AddVisitedUserUseCase(whoVisitedRepository: serviceLocator()))
+    ..registerFactory(
+        () => GetAllVisitedUserUseCase(whoVisitedRepository: serviceLocator()))
+    ..registerLazySingleton(
+        () => WhoVisitedBloc(serviceLocator(), serviceLocator()));
 }
