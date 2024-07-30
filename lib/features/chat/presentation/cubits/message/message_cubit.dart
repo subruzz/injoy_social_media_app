@@ -13,8 +13,6 @@ import 'package:social_media_app/features/chat/domain/usecases/seen_message_upda
 import 'package:social_media_app/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
-import 'package:social_media_app/main.dart';
-import 'package:social_media_app/notification.dart';
 
 part 'message_state.dart';
 

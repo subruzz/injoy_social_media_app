@@ -44,7 +44,7 @@ void main() async {
   );
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
   await Stripe.instance.applySettings();
-  await LocalNotificationService.localNotificationInit();
+  // await LocalNotificationService.localNotificationInit();
   FirebaseMessaging.onBackgroundMessage(firebaseBackgroundNotification);
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     if (message.notification != null) {
@@ -71,10 +71,10 @@ void main() async {
     String payload = jsonEncode(message.data);
     log('payload is $payload');
     if (message.notification != null) {
-      LocalNotificationService.showNotification(
-          title: message.notification!.title ?? '',
-          body: message.notification!.body ?? '',
-          payload: payload);
+      // LocalNotificationService.showNotification(
+      //     title: message.notification!.title ?? '',
+      //     body: message.notification!.body ?? '',
+      //     payload: payload);
     }
     // Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
     //   builder: (context) => OtherUserProfilePage(
