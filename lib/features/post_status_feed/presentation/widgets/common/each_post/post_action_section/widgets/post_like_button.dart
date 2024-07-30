@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/like_post/like_post_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/social_action_text.dart';
 
@@ -44,8 +42,8 @@ class PostLikeButton extends StatelessWidget {
                         ? Icons.favorite
                         : Icons.favorite_border,
                     color: post.likes.contains(me.id)
-                        ? AppDarkColor().iconSecondarycolor
-                        : AppDarkColor().iconSoftColor)),
+                        ? AppDarkColor().iconSoftColor
+                        : AppDarkColor().iconSecondarycolor)),
             AppSizedBox.sizedBox5W,
             SocialActionText(text: post.likes.length.toString())
           ],

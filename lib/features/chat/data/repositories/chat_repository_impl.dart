@@ -6,7 +6,6 @@ import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/chat/data/datasource/chat_remote_datasource.dart';
 import 'package:social_media_app/features/chat/data/model/chat_model.dart';
-import 'package:social_media_app/features/chat/data/model/message_model.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/domain/repositories/chat_repository.dart';
@@ -17,9 +16,9 @@ class ChatRepositoryImpl implements ChatRepository {
   ChatRepositoryImpl({required ChatRemoteDatasource chatRemoteDatasource})
       : _chatRemoteDatasource = chatRemoteDatasource;
   @override
-  Future<Either<Failure, Unit>> deleteChat(ChatEntity chat) async {
+  Future<Either<Failure, Unit>> deleteChat(String myid) async {
     try {
-      await _chatRemoteDatasource.deleteChat(chat);
+      await _chatRemoteDatasource.deleteChat(myid);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

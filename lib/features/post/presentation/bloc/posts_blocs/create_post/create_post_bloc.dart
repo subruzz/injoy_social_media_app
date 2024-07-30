@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -38,6 +37,7 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
           latitude: event.latitude,
           longitude: event.longitude,
           totalComments: 0,
+          
           hashtags: event.hashtags,
           userProfileUrl: event.userProfileUrl,
           postImageUrl: const []);

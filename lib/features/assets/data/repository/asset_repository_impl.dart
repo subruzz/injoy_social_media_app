@@ -3,7 +3,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/assets/domain/repository/asset_repository.dart';
-import 'package:social_media_app/features/assets/data/datasource/asset_local_datasource.dart';
+import 'package:social_media_app/features/assets/data/datasource/local/asset_local_datasource.dart';
 
 class AssetRepositoryImpl implements AssetRepository {
   final AssetLocalSource _assetLocalSource;
@@ -23,7 +23,7 @@ class AssetRepositoryImpl implements AssetRepository {
   }
 
   @override
-  Future<Either<Failure, List<AssetPathEntity>>> fetchAlbums(
+  Future<Either<Failure, (List<AssetPathEntity>, bool hasPermission)>> fetchAlbums(
       {required RequestType type}) async {
     try {
       final assets = await _assetLocalSource.fetchAlbums(type);

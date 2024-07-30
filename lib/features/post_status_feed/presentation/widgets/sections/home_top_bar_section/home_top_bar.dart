@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/widgets/premium_badge.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 
 class HomeTopBar extends StatelessWidget implements PreferredSizeWidget {
@@ -45,22 +46,4 @@ class HomeTopBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class PremiumBadge extends StatelessWidget {
-  const PremiumBadge({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(4.0),
-      decoration: BoxDecoration(
-        color: Colors.amber, // Premium color
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        Icons.star,
-        color: Colors.white,
-        size: 12.0,
-      ),
-    );
-  }
-}

@@ -6,7 +6,7 @@ import 'package:social_media_app/core/widgets/animated/border_widget.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/features/status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
-import 'package:social_media_app/features/status/presentation/pages/view_status_page.dart';
+import '../../../../../../../core/routes/app_routes_const.dart';
 
 class FollowingUserStatus extends StatelessWidget {
   const FollowingUserStatus({super.key});
@@ -25,14 +25,9 @@ class FollowingUserStatus extends StatelessWidget {
                   final userAttribute = state.allStatus[index];
                   return GestureDetector(
                     onTap: () {
-                      //       GestureDetector(
-                      //         onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ViewStatusPage(
-                          index: 0,
-                          statusEntity: userAttribute,
-                        ),
-                      ));
+                      Navigator.pushNamed(
+                          context, MyAppRouteConst.viewStatusRoute,
+                          arguments: {'index': 0, 'statuses': userAttribute});
                     },
                     child: Padding(
                       padding: AppPadding.onlyRightMedium,

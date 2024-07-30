@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +28,6 @@ class UpdatePostBloc extends Bloc<UpdatePostEvent, UpdatePostState> {
     final res = await _updatePostsUseCase(
         UpdatePostsUseCaseParams(post: updatedPost, postId: event.postId));
     res.fold((failure) => emit(UpdatePostsError(errorMsg: failure.message)),
-        (success) => emit(UpdatePostSuccess(updatePost: success)));
+        (success) => emit(UpdatePostSuccess()));
   }
 }

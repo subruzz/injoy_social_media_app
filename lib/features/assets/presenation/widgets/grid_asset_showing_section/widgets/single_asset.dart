@@ -19,9 +19,7 @@ class SingleAsset extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           width: isSelected ? 3 : 1,
-          color: isSelected
-              ? AppDarkColor().iconSecondarycolor
-              : Colors.transparent,
+          color: isSelected ? AppDarkColor().iconSoftColor : Colors.transparent,
         ),
       ),
       child: ClipRRect(

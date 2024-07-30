@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -18,7 +16,7 @@ import 'package:social_media_app/features/post/domain/enitities/update_post.dart
 
 abstract interface class PostRemoteDatasource {
   Future<void> createPost(PostEntity post, List<SelectedByte> postImage);
-  Future<PostModel> updatePost(
+  Future<void> updatePost(
     UpdatePostEntity post,
     String pId,
   );
@@ -28,7 +26,8 @@ abstract interface class PostRemoteDatasource {
 
   Future<String?> getCurrentUserId();
   Future<List<HashTag>> searchHashTags(String query);
-  Future<List<String>> uploadPostImages(List<SelectedByte> postImages, String pId);
+  Future<List<String>> uploadPostImages(
+      List<SelectedByte> postImages, String pId);
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDatasource {
@@ -127,7 +126,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   }
 
   @override
-  Future<PostModel> updatePost(
+  Future<void> updatePost(
     UpdatePostEntity post,
     String postId,
   ) async {
@@ -139,9 +138,6 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
         hashtags: post.hashtags,
       );
       await postCollection.doc(postId).update(newPost.toJson());
-      final updatedPostSnapshot = await postCollection.doc(postId).get();
-      return PostModel.fromJson(
-          updatedPostSnapshot.data() as Map<String, dynamic>); //
     } catch (e) {
       throw const MainException(
           errorMsg: 'Error updating post',
@@ -232,15 +228,18 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   @override
   Future<List<HashtagModel>> searchHashTags(String query) async {
     try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('hashtags')
+      final hashTagCollection =
+          FirebaseFirestore.instance.collection('hashtags');
+      final querySnapshot = await hashTagCollection
           .where('hashtagName', isGreaterThanOrEqualTo: query)
-          .where('hashtagName', isLessThan: '${query}z')
+          .where('hashtagName', isLessThanOrEqualTo: '$query\uf8ff')
           .get();
 
-      return snapshot.docs
+      // Convert the query results to a list of AppUserModel
+      final hashTags = querySnapshot.docs
           .map((doc) => HashtagModel.fromJson(doc.data()))
           .toList();
+      return hashTags;
     } catch (e) {
       throw MainException(details: e.toString());
     }

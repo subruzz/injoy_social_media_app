@@ -4,7 +4,6 @@ class MyAppRouteConst {
   static const String homeRoute = 'homePage';
   static const String loginRoute = 'loginPage';
   static const String signUpRoute = 'singupPage';
-  static const String createStatusRoute = 'createStatusPage';
   static const String createPostRoute = 'createPostPage';
   static const String bottomNavRoute = 'bottomNavPage';
   static const String addProfilePage = 'addProfilePage';
@@ -18,6 +17,8 @@ class MyAppRouteConst {
   static const String createMultipleStatusRoute = 'createMultipleStatusPage';
   static const String personaChatRoute = 'personChatPage';
   static const String userVisitedListingRoute = 'userVisitedListingPage';
+  static const String statusCreationRoute = 'statusCreationPage';
+  static const String viewStatusRoute = 'viewStatusPage';
 }
 
-enum MediaPickerType { chat, post, status }
+enum MediaPickerType { chat, post, status, wallapaper }

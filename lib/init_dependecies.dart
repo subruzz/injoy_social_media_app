@@ -9,7 +9,7 @@ import 'package:social_media_app/core/shared_providers/cubits/Pick_multiple_imag
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
 import 'package:social_media_app/features/assets/data/repository/asset_repository_impl.dart';
 import 'package:social_media_app/features/assets/domain/repository/asset_repository.dart';
-import 'package:social_media_app/features/assets/data/datasource/asset_local_datasource.dart';
+import 'package:social_media_app/features/assets/data/datasource/local/asset_local_datasource.dart';
 import 'package:social_media_app/features/auth/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:social_media_app/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:social_media_app/features/auth/domain/repostiories/auth_repository.dart';
@@ -87,8 +87,8 @@ import 'package:social_media_app/features/post/domain/usecases/comment/remove_li
 import 'package:social_media_app/features/post/domain/usecases/comment/update_comment.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/create_posts.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/delete_post.dart';
-import 'package:social_media_app/features/assets/domain/usecae/get_albums.dart';
-import 'package:social_media_app/features/assets/domain/usecae/get_assets.dart';
+import 'package:social_media_app/features/assets/domain/usecase/get_albums.dart';
+import 'package:social_media_app/features/assets/domain/usecase/get_assets.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/like_post.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/searh_hashtag.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/unlike_post.dart';
@@ -132,6 +132,11 @@ import 'package:social_media_app/features/profile/presentation/bloc/get_followin
 import 'package:social_media_app/features/profile/presentation/bloc/get_other_user_posts/get_other_user_posts_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_liked_posts/get_user_liked_posts_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_profile/other_profile_cubit.dart';
+import 'package:social_media_app/features/settings/data/datasource/settings_datasource.dart';
+import 'package:social_media_app/features/settings/data/repository/setting_repo_impl.dart';
+import 'package:social_media_app/features/settings/domain/repository/settings_repository.dart';
+import 'package:social_media_app/features/settings/domain/usecases/edit_notification_preference.dart';
+import 'package:social_media_app/features/settings/presentation/cubit/settings/settings_cubit.dart';
 import 'package:social_media_app/features/status/data/datasource/status_remote_datasource.dart';
 import 'package:social_media_app/features/status/data/repository/create_status_repository_impl.dart';
 import 'package:social_media_app/features/status/domain/repository/status_repository.dart';
@@ -189,6 +194,7 @@ Future<void> initDependencies() async {
   _getUserPosts();
   _postFeed();
   _statusCreation();
+  _settings();
   _comment();
   _exploreApp();
   _whoVisitedPremiumFeature();
@@ -505,7 +511,7 @@ void _chat() {
         serviceLocator(), serviceLocator(), serviceLocator()))
     ..registerFactory(
         () => MessageAttributeBloc(serviceLocator(), serviceLocator()))
-    ..registerFactory(() => ChatCubit(serviceLocator()));
+    ..registerFactory(() => ChatCubit(serviceLocator(),serviceLocator()));
 }
 
 void _call() {
@@ -579,4 +585,15 @@ void _whoVisitedPremiumFeature() {
         () => GetAllVisitedUserUseCase(whoVisitedRepository: serviceLocator()))
     ..registerLazySingleton(
         () => WhoVisitedBloc(serviceLocator(), serviceLocator()));
+}
+
+void _settings() {
+  serviceLocator
+    ..registerFactory<SettingsDatasource>(() =>
+        SettingsDatasourceImpl(firebaseFirestore: FirebaseFirestore.instance))
+    ..registerFactory<SettingsRepository>(
+        () => SettingRepoImpl(settingsDatasource: serviceLocator()))
+    ..registerFactory(() =>
+        EditNotificationPreferenceUseCase(settingsRepository: serviceLocator()))
+    ..registerLazySingleton(() => SettingsCubit(serviceLocator()));
 }

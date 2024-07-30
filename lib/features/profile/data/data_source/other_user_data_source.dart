@@ -88,6 +88,14 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
   Future<({List<PostModel> userPosts, List<String> userPostImages})>
       getAllPostsByOtherUser(String userId) async {
     try {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      if (!userDoc.exists) {
+        throw const MainException();
+      }
+      final PartialUser postUser = PartialUser.fromJson(userDoc.data()!);
       final posts = await FirebaseFirestore.instance
           .collection('posts')
           .where("creatorUid", isEqualTo: userId)
@@ -100,7 +108,7 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
           postImages.addAll(currentPostImages);
         }
         return PostModel.fromJson(
-          posts.data(),
+          posts.data(),postUser
         );
       }).toList();
       return (userPosts: userAllPosts, userPostImages: postImages);

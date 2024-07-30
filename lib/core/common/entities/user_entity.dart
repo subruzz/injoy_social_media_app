@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
 class AppUser extends Equatable {
   final String id;
@@ -14,6 +15,7 @@ class AppUser extends Equatable {
   final String? profilePic;
   final String? location;
   final Timestamp? lastSeen;
+  final NotificationPreferences notificationPreferences;
   final int visitedUserCount;
   final List<String> token;
   final double? latitude;
@@ -30,6 +32,7 @@ class AppUser extends Equatable {
   AppUser({
     required this.id,
     this.viewedSetupIndex = 0,
+    required this.notificationPreferences,
     required this.email,
     this.lastSeen,
     required this.hasPremium,
@@ -65,7 +68,7 @@ class AppUser extends Equatable {
         phoneNumber,
         occupation,
         about, token,
-        profilePic,
+        profilePic, notificationPreferences,
         location,
         latitude, visitedUserCount,
         longitude, onlineStatus,

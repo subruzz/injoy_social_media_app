@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/message_type.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_bottom_input_bar/chat_input_bar_section.dart';
@@ -66,14 +69,23 @@ class _PersonChatPageState extends State<PersonChatPage> {
         },
         child: Stack(
           children: [
-            // Positioned.fill(
-            //   child: Image.asset(
-            //     height: 1.sh,
-            //     width: 1.sw,
-            //     'assets/images/bg.jpeg',
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
+            BlocBuilder<ChatWallapaperCubit, ChatWallapaperState>(
+              builder: (context, state) {
+                return state is ChatWallapaperSuccess
+                    ? Image.file(
+                        File(
+                          state.wallapaperPath,
+                        ),
+                        fit: BoxFit.cover,
+                      )
+                    : Positioned.fill(
+                        child: Image.asset(
+                          'assets/images/bg.jpeg',
+                          fit: BoxFit.cover,
+                        ),
+                      );
+              },
+            ),
             Column(
               children: [
                 //messages listing

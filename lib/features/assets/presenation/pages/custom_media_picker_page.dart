@@ -6,15 +6,18 @@ import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
-import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/album_bloc/album_bloc.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/assets_bloc/assets_bloc.dart';
+import 'package:social_media_app/features/assets/presenation/bloc/cubit/asset_file_cubit.dart';
 import 'package:social_media_app/features/assets/presenation/pages/crop_image_page.dart';
 import 'package:social_media_app/features/assets/presenation/widgets/drop_down_album_section/album_select_section.dart';
 import 'package:social_media_app/features/assets/presenation/widgets/grid_asset_showing_section/grid_asset_section.dart';
 import 'package:social_media_app/features/assets/presenation/widgets/main_asset_section/main_asset_section.dart';
 import 'package:social_media_app/features/assets/presenation/widgets/selected_image_only_button.dart';
+import 'package:social_media_app/features/settings/presentation/pages/chat_wallapaper_preview_page.dart';
 import 'package:social_media_app/init_dependecies.dart';
+
+import '../../../../core/widgets/overlay_loading_holder.dart';
 
 class CustomMediaPickerPage extends StatefulWidget {
   const CustomMediaPickerPage({super.key, required this.pickerType});
@@ -33,6 +36,13 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
   //   }
   //   super.initState();
   // }
+  void initState() {
+    context.read<AlbumBloc>().add(GetAlbumsEvent(
+        type: widget.pickerType == MediaPickerType.chat
+            ? RequestType.common
+            : RequestType.image));
+    super.initState();
+  }
 
   final List<AssetEntity> _selectedAssetList = [];
   final ValueNotifier<AssetPathEntity?> _selectedAlbum = ValueNotifier(null);
@@ -43,12 +53,6 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(
-              create: (context) => serviceLocator<AlbumBloc>()
-                ..add( GetAlbumsEvent(
-                    type: widget.pickerType == MediaPickerType.chat
-                        ? RequestType.common
-                        : RequestType.image))),
           BlocProvider(create: (context) => serviceLocator<AssetsBloc>()),
         ],
         child: SafeArea(
@@ -61,48 +65,23 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
                       if (widget.pickerType == MediaPickerType.post)
                         //next button ----> create post
                         Builder(builder: (context) {
-                          return BlocConsumer<AlbumBloc, AlbumBlocState>(
-                            buildWhen: (previous, current) =>
-                                current is AssetToFileLoading ||
-                                current is AssetToFileSuccess,
-                            listenWhen: (previous, current) =>
-                                current is AssetToFileLoading ||
-                                current is AssetToFileSuccess,
-                            listener: (context, state) {
-                              if (state is AssetToFileSuccess) {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => CropImagePage(
-                                      pickerType: widget.pickerType,
-                                      selectedImages: state.selectedImages),
-                                ));
-                              }
-                            },
-                            builder: (context, state) {
-                              if (state is AssetToFileLoading) {
-                                return const CircularLoadingGrey();
-                              }
-                              return IconButton(
-                                  onPressed: () {
-                                    final state =
-                                        context.read<AssetsBloc>().state;
-                                    if (state is AssetSuccess &&
-                                        _mainAsset.value != null) {
-                                      context.read<AlbumBloc>().add(
-                                          AssetToFileEvent(
-                                              selctedAssets:
-                                                  _selectedAssetList.isEmpty
-                                                      ? [_mainAsset.value!]
-                                                      : _selectedAssetList));
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_circle_right_outlined,
-                                    size: 40.w,
-                                    color: AppDarkColor().iconSecondarycolor,
-                                  ));
-                            },
-                          );
-                        })
+                          return IconButton(
+                              onPressed: () {
+                                final state = context.read<AssetsBloc>().state;
+                                if (state is AssetSuccess &&
+                                    _mainAsset.value != null) {
+                                  context.read<AssetFileCubit>().assetToFile(
+                                      selctedAssets: _selectedAssetList.isEmpty
+                                          ? [_mainAsset.value!]
+                                          : _selectedAssetList);
+                                }
+                              },
+                              icon: Icon(
+                                Icons.arrow_circle_right_outlined,
+                                size: 40.w,
+                                color: AppDarkColor().iconSoftColor,
+                              ));
+                        }),
                     ],
                   )
                 : null,
@@ -114,37 +93,76 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
                     return SelectedImageOnlyButton(
                       pickerType: widget.pickerType,
                       onPressed: () {
-                        context.read<AlbumBloc>().add(AssetToFileEvent(
-                            isPicKDiffAssets:
-                                widget.pickerType == MediaPickerType.chat,
-                            selctedAssets: _selectedAssetList));
+                        context
+                            .read<AssetFileCubit>()
+                            .assetToFile(selctedAssets: _selectedAssetList);
                       },
                       isSelectedEmpty: _isSelectedEmpty,
                     );
                   })
                 : null,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                //for showing the asset that is selected
-                //only while creating post
-                if (widget.pickerType == MediaPickerType.post)
-                  MainAssetSection(mainAsset: _mainAsset),
-                if (widget.pickerType == MediaPickerType.post)
-                  AppSizedBox.sizedBox10H,
-                //drop down for displaying and selecting the album available in the device
-                AlbumSelectSection(
-                  selectedAlbum: _selectedAlbum,
-                  isPost: widget.pickerType == MediaPickerType.post,
-                ),
-                AppSizedBox.sizedBox10H,
-                //shows the assets available in each album
-                GridAssetSection(
-                    isSelectedEmpty: _isSelectedEmpty,
-                    mainAsset: _mainAsset,
-                    isPost: widget.pickerType == MediaPickerType.post,
-                    selectedAssetList: _selectedAssetList)
-              ],
+            body: BlocConsumer<AssetFileCubit, AssetFileState>(
+              listener: (context, state) {
+                if (state is AssetFileSuccess) {
+                  if (widget.pickerType == MediaPickerType.wallapaper) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => WallpaperPreviewPage(
+                            imageFile: state.selectedImages.selectedFiles.first
+                                .selectedFile!)));
+                    return;
+                  }
+                  if (widget.pickerType == MediaPickerType.post) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CropImagePage(
+                            selectedImages: state.selectedImages,
+                            pickerType: widget.pickerType)));
+                  } else {
+                    Navigator.pushNamed(
+                      context,
+                      MyAppRouteConst.createMultipleStatusRoute,
+                      arguments: {
+                        'selectedAssets': state.selectedImages.selectedFiles,
+                        'isChat': widget.pickerType == MediaPickerType.chat,
+                      },
+                    );
+                  }
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //   builder: (context) => CropImagePage(
+                  //       pickerType: widget.pickerType,
+                  //       selectedImages: state.selectedImages),
+                  // ));
+                }
+              },
+              builder: (context, state) {
+                return Stack(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //for showing the asset that is selected
+                        //only while creating post
+                        if (widget.pickerType == MediaPickerType.post)
+                          MainAssetSection(mainAsset: _mainAsset),
+                        if (widget.pickerType == MediaPickerType.post)
+                          AppSizedBox.sizedBox10H,
+                        //drop down for displaying and selecting the album available in the device
+                        AlbumSelectSection(
+                          selectedAlbum: _selectedAlbum,
+                          isPost: widget.pickerType == MediaPickerType.post,
+                        ),
+                        AppSizedBox.sizedBox10H,
+                        //shows the assets available in each album
+                        GridAssetSection(
+                            isSelectedEmpty: _isSelectedEmpty,
+                            mainAsset: _mainAsset,
+                            mediaPickerType: widget.pickerType,
+                            selectedAssetList: _selectedAssetList)
+                      ],
+                    ),
+                    if (state is AssetFileLoading) const OverlayLoadingHolder()
+                  ],
+                );
+              },
             ),
           ),
         ));

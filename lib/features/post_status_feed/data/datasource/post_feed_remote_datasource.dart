@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/errors/exception.dart';
@@ -36,26 +37,32 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
       if (lastDoc != null) {
         // postsQuery = postsQuery.startAfterDocument(lastDoc);
       }
-      // if (lastDoc != null) {
-      //   // log('Document ID: ${lastDoc.id}');
-      //   // log('Document data: ${lastDoc.data()}');
-      //   // log('Document runtimeType: ${lastDoc.runtimeType}');
-      //   // log('Document metadata: ${lastDoc.metadata}');
-      //   // log('Document data: ${lastDoc.runtimeType}');
 
       //   postsQuery = postsQuery.startAfterDocument(lastDoc);
       // }
+      List<PostModel> posts = [];
+      final userRef = _firestore.collection(FirebaseCollectionConst.users);
       final QuerySnapshot<Map<String, dynamic>> allPosts =
           await postsQuery.get();
+      for (var post in allPosts.docs) {
+        final userDoc = await userRef.doc(post['creatorUid']).get();
+        if (!userDoc.exists) continue;
+        final PartialUser user =
+            PartialUser.fromJson(userDoc .data()!);
+        final currentPost = PostModel.fromJson(post.data(), user);
+        posts.add(currentPost);
+      }
 
-      final List<PostModel> result = allPosts.docs.map((doc) {
-        return PostModel.fromJson(doc.data());
-      }).toList();
-      log('res is ${result.length}');
-      final hasMore = result.length == limit;
+      // final List<PostModel> result = allPosts.docs.map((doc) {
+      //   return PostModel.fromJson(
+      //     doc.data(),
+      //   );
+      // }).toList();
+      // log('res is ${result.length}');
+      final hasMore = posts.length == limit;
 
       return PostsResult(
-        posts: result,
+        posts: posts,
         hasMore: hasMore,
         lastDoc: allPosts.docs.isNotEmpty ? allPosts.docs.last : null,
       );
@@ -93,10 +100,8 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
       double? userLat = user.latitude;
       double? userLon = user.longitude;
 
-      // Define a list to hold the futures for the queries
       List<Future<QuerySnapshot>> queryFutures = [];
 
-      // Query for posts by latitude and longitude if user location is provided
       if (userLat != null && userLon != null) {
         double latRange = 50 / 111; // Roughly 50km in latitude degrees
         double lonRange = 50 /
@@ -112,7 +117,6 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
         queryFutures.add(latitudeQuery.get());
       }
 
-      // Query for posts by interests
       if (interests.isNotEmpty) {
         Query hashtagQuery =
             postCollection.where('hashtags', arrayContainsAny: interests);
@@ -120,23 +124,28 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
         queryFutures.add(hashtagQuery.get());
       }
 
-      // Execute the queries in parallel and wait for all results
       List<QuerySnapshot> queryResults = await Future.wait(queryFutures);
 
-      // Combine and deduplicate the results
       Map<String, PostModel> uniquePosts = {};
       for (var querySnapshot in queryResults) {
         for (var doc in querySnapshot.docs) {
-          uniquePosts[doc.id] =
-              PostModel.fromJson(doc.data() as Map<String, dynamic>);
+          // Fetch user details for each post
+          final userDoc =
+              await _firestore.collection('users').doc(doc['creatorUid']).get();
+          if (!userDoc.exists) continue;
+
+          final PartialUser postUser = PartialUser.fromJson(userDoc.data()!);
+          final currentPost =
+              PostModel.fromJson(doc.data() as Map<String, dynamic>, postUser);
+          uniquePosts[doc.id] = currentPost;
         }
       }
 
-      // Convert the map values to a list
       List<PostModel> suggestedPosts = uniquePosts.values.toList();
 
       return suggestedPosts;
     } catch (e) {
+      // Log or handle the error as needed
       throw const MainException(
           errorMsg: AppErrorMessages.forYouPostFetchError);
     }

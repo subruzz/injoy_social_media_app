@@ -10,7 +10,7 @@ class AssetSelectinghCheckIcon extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppDarkColor().iconSecondarycolor,
+        color: AppDarkColor().iconSoftColor,
       ),
       child: const CustomAppPadding(
         padding: EdgeInsets.all(6),

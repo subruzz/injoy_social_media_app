@@ -24,7 +24,7 @@ abstract interface class ChatRemoteDatasource {
   Future<void> seenMessageUpdate(
       String sendorId, String recieverId, String messageId);
 
-  Future<void> deleteChat(ChatEntity chat);
+  Future<void> deleteChat(String myId);
 }
 
 class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
@@ -153,8 +153,23 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   }
 
   @override
-  Future<void> deleteChat(ChatEntity chat) async {
-    try {} catch (e) {
+  Future<void> deleteChat(String myId) async {
+    try {
+      final userRef = _firestore
+          .collection(FirebaseCollectionConst.users)
+          .doc(myId)
+          .collection(FirebaseCollectionConst.myChat);
+
+      // Fetch all documents in the sub-collection
+      final snapshot = await userRef.get();
+
+      // Delete each document in the sub-collection
+      for (DocumentSnapshot doc in snapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      print('Chat collection deleted successfully.');
+    } catch (e) {
       throw const MainException();
     }
   }

@@ -10,7 +10,7 @@ abstract interface class PostRepository {
   Future<Either<Failure, Unit>> createPost(
       PostEntity post, List<SelectedByte> postImage);
   Future<Either<Failure, List<PostEntity>>> getAllPosts(String uid);
-  Future<Either<Failure, PostEntity>> updatePost(
+  Future<Either<Failure, Unit>> updatePost(
     UpdatePostEntity post,
     String postId,
   );

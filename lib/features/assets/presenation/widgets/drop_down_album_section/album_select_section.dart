@@ -14,18 +14,14 @@ class AlbumSelectSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AlbumBloc, AlbumBlocState>(
-      listenWhen: (previous, current) =>
-          current is! AssetToFileLoading || current is! AssetToFileSuccess,
-      buildWhen: (previous, current) =>
-          current is! AssetToFileLoading ||
-          current is! AssetToFileSuccess ||
-          previous is! AssetToFileLoading ||
-          previous is! AssetToFileSuccess,
       builder: (context, state) {
         if (state is AlbumSuccess) {
-          context
-              .read<AssetsBloc>()
-              .add(GetAssetsEvent(selectedAlbum: state.allAlbums[0]));
+          final assetState = context.read<AssetsBloc>().state;
+          if (assetState is! AssetSuccess) {
+            context
+                .read<AssetsBloc>()
+                .add(GetAssetsEvent(selectedAlbum: state.allAlbums[0]));
+          }
           selectedAlbum.value = state.allAlbums[0];
           return ValueListenableBuilder(
             valueListenable: selectedAlbum,
@@ -77,7 +73,11 @@ class AlbumSelectSection extends StatelessWidget {
           child: CircularProgressIndicator(),
         );
       },
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is AlbumNoPermission) {
+          Navigator.of(context).pop();
+        }
+      },
     );
   }
 }

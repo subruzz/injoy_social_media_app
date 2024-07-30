@@ -12,9 +12,7 @@ final class UpdatePostInitial extends UpdatePostState {}
 final class UpdatePostLoading extends UpdatePostState {}
 
 final class UpdatePostSuccess extends UpdatePostState {
-  final PostEntity updatePost;
 
- const  UpdatePostSuccess({required this.updatePost});
 }
 
 final class UpdatePostsError extends UpdatePostState {

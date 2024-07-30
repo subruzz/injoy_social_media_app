@@ -18,8 +18,13 @@ import 'package:social_media_app/features/profile/presentation/pages/interest_pa
 import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
 import 'package:social_media_app/features/status/presentation/pages/create_mutliple_status_page.dart';
+import 'package:social_media_app/features/status/presentation/pages/create_status_page.dart';
+import 'package:social_media_app/features/status/presentation/pages/view_status_page.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/pages/user_visited_listing_page.dart';
 import 'package:social_media_app/splash_screen.dart';
+
+import '../common/entities/single_status_entity.dart';
+import '../common/entities/status_entity.dart';
 
 class MyAppRouter {
   final bool isAuth;
@@ -120,6 +125,27 @@ class MyAppRouter {
       case MyAppRouteConst.userVisitedListingRoute:
         return MaterialPageRoute(
             builder: (_) => const UserVisitedListingPage());
+      case MyAppRouteConst.statusCreationRoute:
+        return MaterialPageRoute(
+          builder: (_) => const StatusCreationPage(),
+        );
+      case MyAppRouteConst.viewStatusRoute:
+        final Map<String, dynamic> params =
+            settings.arguments as Map<String, dynamic>;
+        final bool isMe = params['isMe'] ?? false;
+        final int index = params['index'];
+        final List<SingleStatusEntity>? myStatus = params['myStatuses'];
+
+        final StatusEntity? statuses = params['statuses'];
+
+        return MaterialPageRoute(
+          builder: (_) => ViewStatusPage(
+            index: index,
+            isMe: isMe,
+            myStatuses: myStatus,
+            statusEntity: statuses,
+          ),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

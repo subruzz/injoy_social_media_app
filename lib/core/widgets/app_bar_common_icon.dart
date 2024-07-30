@@ -7,10 +7,15 @@ class AppBarCommonIcon extends StatelessWidget {
   final IconData? icon;
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      icon ?? Icons.close,
-      size: 30.w,
-      color: AppDarkColor().iconPrimaryColor,
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Icon(
+        icon ?? Icons.close,
+        size: 30.w,
+        color: AppDarkColor().iconPrimaryColor,
+      ),
     );
   }
 }

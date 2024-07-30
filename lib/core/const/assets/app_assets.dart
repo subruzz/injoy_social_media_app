@@ -23,4 +23,5 @@ class AppAssetsConst {
   static const String noNotification = 'assets/gifs/no_noti.gif';
   static const String commentIcon = 'assets/svgs/comment.svg';
   static const String explore = 'assets/svgs/explore.svg';
+  static const String send2 = 'assets/svgs/send2.svg';
 }

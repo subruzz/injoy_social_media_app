@@ -11,14 +11,14 @@ import 'package:story_view/controller/story_controller.dart';
 
 class ViewStatusPage extends StatefulWidget {
   final StatusEntity? statusEntity;
-  final List<SingleStatusEntity>? myStatues;
+  final List<SingleStatusEntity>? myStatuses;
   final int index;
   final bool isMe;
 
   const ViewStatusPage({
     super.key,
     this.isMe = false,
-    this.myStatues,
+    this.myStatuses,
     this.statusEntity,
     required this.index,
   });
@@ -33,7 +33,8 @@ class _MoreStoriesState extends State<ViewStatusPage> {
   late List<SingleStatusEntity> _statuses;
   @override
   void initState() {
-    _statuses = widget.isMe ? widget.myStatues! : widget.statusEntity!.statuses;
+    _statuses =
+        widget.isMe ? widget.myStatuses! : widget.statusEntity!.statuses;
     super.initState();
   }
 

@@ -1,7 +1,8 @@
 import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 
 class PostModel extends PostEntity {
-   PostModel({
+  PostModel({
     required super.postId,
     required super.creatorUid,
     required super.username,
@@ -22,24 +23,25 @@ class PostModel extends PostEntity {
   });
 
   // 1. From JSON (Firestore)
-  factory PostModel.fromJson(Map<String, dynamic> json) {
+  factory PostModel.fromJson(
+      Map<String, dynamic> json, PartialUser partialUser) {
     return PostModel(
       isEdited: json['isEdited'],
       likesCount: json['likesCount'],
       isCommentOff: json['isCommentOff'],
-      userFullName: json['userFullName'],
+      userFullName: partialUser.fullName??'',
       latitude: json['latitude'],
       longitude: json['longitude'],
       location: json['location'],
       postId: json['postId'],
       creatorUid: json['creatorUid'],
-      username: json['username'],
+      username:  partialUser.userName??'',
       description: json['description'],
       postImageUrl: List<String>.from(json['postImageUrl'] ?? []),
       likes: List<String>.from(json['likes'] ?? []),
       totalComments: json['totalComments'],
       createAt: json['createAt'],
-      userProfileUrl: json['userProfileUrl'],
+      userProfileUrl: partialUser.profilePic,
       hashtags: List<String>.from(json['hashtags'] ?? []),
     );
   }
@@ -47,22 +49,19 @@ class PostModel extends PostEntity {
   // 2. To JSON (Firestore)
   Map<String, dynamic> toJson() {
     return {
-      'isEdited':isEdited,
+      'isEdited': isEdited,
       'likesCount': likesCount,
       'isCommentOff': isCommentOff,
-      'userFullName': userFullName,
       'location': location,
       'latitude': latitude,
       'longitude': longitude,
       'postId': postId,
       'creatorUid': creatorUid,
-      'username': username,
       'description': description,
       'postImageUrl': postImageUrl,
       'likes': likes,
       'totalComments': totalComments,
       'createAt': createAt,
-      'userProfileUrl': userProfileUrl,
       'hashtags': hashtags,
     };
   }

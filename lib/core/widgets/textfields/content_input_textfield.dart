@@ -6,23 +6,24 @@ class ContentInputTextfield extends StatelessWidget {
     super.key,
     required this.controller,
     required this.hintText,
-    required this.prefixIcon,
-    required this.leadingPressed,
+    this.prefixIcon,
+    this.leadingPressed,
     this.onChanged,
   });
   final TextEditingController controller;
   final String hintText;
-  final Icon prefixIcon;
-  final VoidCallback leadingPressed;
+  final Icon? prefixIcon;
+  final VoidCallback? leadingPressed;
   final void Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      style:  TextStyle(color: AppDarkColor().primaryText),
+      style: TextStyle(color: AppDarkColor().primaryText),
       decoration: InputDecoration(
-        prefixIcon:
-            IconButton(onPressed: () => leadingPressed(), icon: prefixIcon),
+        prefixIcon: prefixIcon != null
+            ? IconButton(onPressed: () => leadingPressed, icon: prefixIcon!)
+            : null,
         hintText: hintText,
         enabledBorder: OutlineInputBorder(
           borderSide:

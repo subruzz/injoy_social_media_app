@@ -9,8 +9,19 @@ import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/explore_user/explore_user_cubit.dart';
 import 'package:social_media_app/init_dependecies.dart';
 
-class ExploreStartingPage extends StatelessWidget {
+class ExploreStartingPage extends StatefulWidget {
   const ExploreStartingPage({super.key});
+
+  @override
+  State<ExploreStartingPage> createState() => _ExploreStartingPageState();
+}
+
+class _ExploreStartingPageState extends State<ExploreStartingPage> {
+  @override
+  void initState() {
+    log('explore');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
+import 'package:social_media_app/features/assets/presenation/bloc/cubit/asset_file_cubit.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
 import 'package:social_media_app/features/call/presentation/agora/agora_cubit.dart';
 import 'package:social_media_app/features/call/presentation/call/call_cubit.dart';
 import 'package:social_media_app/features/call/presentation/call_history/call_history_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat/chat_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/explore_user/explore_user_cubit.dart';
@@ -25,6 +27,7 @@ import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/for_you_posts/for_you_post_bloc.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/bloc/premium_subscription_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
+import 'package:social_media_app/features/settings/presentation/cubit/settings/settings_cubit.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 import 'package:social_media_app/init_dependecies.dart';
 import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
@@ -166,6 +169,15 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<WhoVisitedBloc>(),
   ),
+  BlocProvider(
+    create: (context) => serviceLocator<AlbumBloc>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<SettingsCubit>(),
+  ),
+  BlocProvider(create: (context) => AssetFileCubit()),
+  BlocProvider(create: (context) => ChatWallapaperCubit()..getChatWallapaper()),
+
   BlocProvider(
     create: (context) => serviceLocator<NotificationCubit>()
       ..getMynotifications(myId: context.read<AppUserBloc>().appUser.id),

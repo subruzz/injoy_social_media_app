@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/utils/haptic_feedback.dart';
+import 'package:social_media_app/features/assets/presenation/bloc/cubit/asset_file_cubit.dart';
 import 'package:social_media_app/features/assets/presenation/widgets/grid_asset_showing_section/widgets/asset_selectingh_check.dart';
 import 'package:social_media_app/features/assets/presenation/widgets/grid_asset_showing_section/widgets/single_asset.dart';
 
@@ -12,12 +16,12 @@ class AssetItems extends StatefulWidget {
       required this.assetEntity,
       required this.selected,
       this.mainAsset,
-      required this.isPost});
+      required this.mediaPickerType});
 
   final VoidCallback addToSelected;
   final AssetEntity assetEntity;
   final List<AssetEntity> selected;
-  final bool isPost;
+  final MediaPickerType mediaPickerType;
   final ValueNotifier<AssetEntity?>? mainAsset;
 
   @override
@@ -34,11 +38,12 @@ class _AssetItemsState extends State<AssetItems> {
   }
 
   void onselect() {
+    if (widget.mediaPickerType == MediaPickerType.wallapaper) return;
     setState(() {
       if (isSelected) {
         widget.mainAsset!.value = widget.assetEntity;
+        HapticFeedbackHelper().heavyImpact();
 
-        HapticFeedback.vibrate();
         widget.selected.remove(widget.assetEntity);
       } else {
         if (widget.selected.length < 3) {
@@ -62,12 +67,19 @@ class _AssetItemsState extends State<AssetItems> {
     return GestureDetector(
       onLongPress: onselect,
       onTap: () {
+        if (widget.mediaPickerType == MediaPickerType.wallapaper) {
+          context
+              .read<AssetFileCubit>()
+              .assetToFile(selctedAssets: [widget.assetEntity]);
+
+          return;
+        }
         if (widget.selected.isNotEmpty) {
           onselect();
 
           return;
         }
-        if (!widget.isPost) {
+        if (widget.mediaPickerType != MediaPickerType.post) {
           onselect();
         } else {
           widget.mainAsset!.value = widget.assetEntity;

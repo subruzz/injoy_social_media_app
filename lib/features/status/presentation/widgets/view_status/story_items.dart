@@ -52,3 +52,48 @@ class StoryItems extends StatelessWidget {
     );
   }
 }
+
+class StatusContentWidget extends StatefulWidget {
+  final String content;
+  final int maxLines;
+
+  const StatusContentWidget({
+    required this.content,
+    this.maxLines = 2,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _StatusContentWidgetState createState() => _StatusContentWidgetState();
+}
+
+class _StatusContentWidgetState extends State<StatusContentWidget> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.content,
+          maxLines: _isExpanded ? null : widget.maxLines,
+          overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        if (widget.content.isNotEmpty) // Only show if there's content
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isExpanded = !_isExpanded;
+              });
+            },
+            child: Text(
+              _isExpanded ? 'Show Less' : 'Show More',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
+      ],
+    );
+  }
+}

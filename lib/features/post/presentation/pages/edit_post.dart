@@ -13,11 +13,12 @@ import 'package:social_media_app/features/post_status_feed/presentation/widgets/
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_single_image.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/select_tags_cubit/select_tags_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/update_post/update_post_bloc.dart';
-import 'package:social_media_app/features/post/presentation/widgets/create_post_input_section/widget/description_textfield.dart';
 import 'package:social_media_app/features/post/presentation/widgets/edit_post/edit_screen_feed_option.dart';
-import 'package:social_media_app/features/post/presentation/widgets/hashtag_section/widget/select_hashtag.dart';
-import 'package:social_media_app/features/post/presentation/widgets/hashtag_section/widget/selected_hashtags.dart';
+import 'package:social_media_app/features/post/presentation/widgets/create_post/section/hashtag_section/widget/select_hashtag.dart';
+import 'package:social_media_app/features/post/presentation/widgets/create_post/section/hashtag_section/widget/selected_hashtags.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
+
+import '../widgets/create_post/section/create_post_input_section/widgets/desc_text_field.dart';
 
 class EditPostPage extends StatefulWidget {
   final List<String> userAllPostImages;

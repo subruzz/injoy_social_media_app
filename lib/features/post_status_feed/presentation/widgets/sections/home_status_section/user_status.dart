@@ -9,13 +9,14 @@ class UserStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 90.h,
-        child: const Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            MyStatusView(),
-            FollowingUserStatus(),
-          ],
-        ));
+      height: 90.h,
+      child: const Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          MyStatusView(),
+          FollowingUserStatus(),
+        ],
+      ),
+    );
   }
 }

@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'dart:typed_data';
-
 import 'package:fpdart/fpdart.dart';
 
 import 'package:social_media_app/core/errors/exception.dart';
@@ -57,13 +55,13 @@ class PostRepostioryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, PostEntity>> updatePost(
+  Future<Either<Failure, Unit>> updatePost(
     UpdatePostEntity post,
     String postId,
   ) async {
     try {
-      final res = await _postRemoteDatasource.updatePost(post, postId);
-      return right(res);
+      await _postRemoteDatasource.updatePost(post, postId);
+      return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
     }

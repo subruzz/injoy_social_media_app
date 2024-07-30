@@ -76,6 +76,8 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
   @override
   Stream<List<StatusModel>> getStatuses(String uid) async* {
     try {
+      final cutoffTimestamp = cutOffTime;
+
       //fetching the current user details to get the following of the user
       final currentUserDoc = await firestore
           .collection(FirebaseCollectionConst.users)
@@ -90,6 +92,7 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
         // Yield a stream of snapshots representing statuses from followed users
         final statusCollection = FirebaseFirestore.instance
             .collection(FirebaseCollectionConst.statuses)
+            .where(FirebaseFieldConst.createdAt, isGreaterThan: cutoffTimestamp)
             .where(FirebaseFieldConst.uId, whereIn: followings)
             .orderBy(FirebaseFieldConst.createdAt, descending: true);
 

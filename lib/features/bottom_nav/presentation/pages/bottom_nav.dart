@@ -1,13 +1,9 @@
-import 'dart:developer';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
-import 'package:social_media_app/core/common/entities/user_entity.dart';
-import 'package:social_media_app/core/const/zego_const.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_event.dart';
+import 'package:social_media_app/core/utils/haptic_feedback.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
@@ -49,26 +45,8 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
     }
   }
 
-  // void send() async {
-  //   final fcm = FirebaseMessaging.instance;
-  //   await fcm.requestPermission();
-  //   final token = await fcm.getToken();
-  //   print('token is $token');
-  // }
-
   @override
   void initState() {
-    // send();
-    // PushNotificiationServices.sendNotificationToUser(
-    //     'fCEODIumSvq-KH1rgjQO5_:APA91bFeT-FkhA22sW4wEe6OJYdMg1U4y3iWIns4K4xLXJ0uowUTgRA_YcpW9_dFwgBkq3pWcCo6B8YHnjclNEieoZZZC8OLvM2BzsYKnPaSCv23HUfv_VwWZhVNQUeslUvL2AZMzkwk');
-    // final user = context.read<AppUserBloc>().appUser;
-    // ZegoUIKitPrebuiltCallInvitationService().init(
-    //   appID: ZegoConst.zegoAppId,
-    //   appSign: ZegoConst.zegoAppSignIn,
-    //   userID: user.id,
-    //   userName: user.userName ?? '',
-    //   plugins: [ZegoUIKitSignalingPlugin()],
-    // );
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
@@ -136,6 +114,11 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
         artboard: "USER",
         stateMachineName: "USER_Interactivity"),
   ];
+
+  // IndexedStack(
+  //           index: _currentPage,
+  //           children: pages,
+  //         ),
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BottomNavCubit, BottomNavState>(
@@ -165,6 +148,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
                   final riveIcon = bottomNavItems[index];
                   return GestureDetector(
                     onTap: () {
+                      HapticFeedbackHelper().vibrate();
                       animateTheIcon(index);
                       setState(() {
                         _currentPage = index;

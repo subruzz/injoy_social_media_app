@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/assets_bloc/assets_bloc.dart';
@@ -14,17 +15,19 @@ class GridAssetSection extends StatelessWidget {
       {super.key,
       required this.isSelectedEmpty,
       required this.mainAsset,
-      required this.isPost,
+      required this.mediaPickerType,
       required this.selectedAssetList});
   final ValueNotifier<AssetEntity?> mainAsset;
   final ValueNotifier<bool> isSelectedEmpty;
-  final bool isPost;
+  final MediaPickerType mediaPickerType;
   final List<AssetEntity> selectedAssetList;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AssetsBloc, AssetsState>(
       buildWhen: (previous, current) =>
-          previous is! AssetSuccess && current is AssetSuccess,
+          previous is! AssetSuccess && current is AssetSuccess ||
+          current is AssetLoading ||
+          current is AssetFailure,
       builder: (context, state) {
         if (state is AssetLoading) {
           return const Expanded(
@@ -49,7 +52,7 @@ class GridAssetSection extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 return AssetItems(
-                    isPost: isPost,
+                    mediaPickerType: mediaPickerType,
                     mainAsset: mainAsset,
                     addToSelected: () {
                       isSelectedEmpty.value = selectedAssetList.isNotEmpty;

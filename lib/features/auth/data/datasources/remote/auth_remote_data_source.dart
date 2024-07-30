@@ -9,6 +9,7 @@ import 'package:social_media_app/core/const/fireabase_const/firebase_collection.
 import 'package:social_media_app/core/errors/firebase_auth_errors.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
+import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
 abstract interface class AuthRemoteDataSource {
   Future<AppUserModel> login(String email, String password);
@@ -89,7 +90,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       if (userSnapshot.exists) {
         if (token != null) {
           await userDocRef.update({
-            'token': FieldValue.arrayUnion([token] ),
+            'token': FieldValue.arrayUnion([token]),
           });
         }
         final data = userSnapshot.data() as Map<String, dynamic>;
@@ -98,6 +99,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       AppUserModel userModel = AppUserModel(
+        notificationPreferences:  NotificationPreferences(),
         visitedUserCount: 0,
         id: userCredential.user!.uid,
         onlineStatus: false,
@@ -187,6 +189,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           .collection(FirebaseCollectionConst.users)
           .doc(user.uid);
       AppUserModel userModel = AppUserModel(
+        notificationPreferences:  NotificationPreferences(),
         visitedUserCount: 0,
         id: user.uid,
         onlineStatus: false,

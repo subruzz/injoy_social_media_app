@@ -11,7 +11,7 @@ import 'package:social_media_app/features/profile/presentation/pages/user_profil
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_basic_details_section/user_basic_detail_section.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_profile_tab_section/user_profile_tab_section.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_social_action_details_section/user_social_action_details_section.dart';
-import 'package:social_media_app/features/settings/pages/settings_page.dart';
+import 'package:social_media_app/features/settings/presentation/pages/settings_page.dart';
 
 import '../../../../../core/const/app_info_dialog.dart';
 import '../../../../../core/routes/app_routes_const.dart';
@@ -85,7 +85,7 @@ class CustomBottomSheet {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SettingsPage(),
+                        builder: (context) =>  SettingsScreen(),
                       ));
                 },
               ),

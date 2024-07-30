@@ -8,6 +8,8 @@ import 'package:social_media_app/core/const/fireabase_const/firebase_collection.
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/features/explore/data/model/explore_seearch_location_model.dart';
 
+import '../../../../core/const/app_msg/app_error_msg.dart';
+
 abstract interface class ExploreAppDatasource {
   Future<List<PartialUser>> searchUsers(String query);
   Future<List<HashtagModel>> searchHashTags(String query);
@@ -107,13 +109,31 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
             return map;
           })
           .values
-          .map((doc) => PostModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
 
-      return uniqueResults;
+      // Fetch user details and create PostModel instances
+      final userCollection =
+          _firebaseFirestore.collection(FirebaseCollectionConst.users);
+      final List<PostModel> recommendedPosts = [];
+
+      for (var doc in uniqueResults) {
+        final postData = doc.data() as Map<String, dynamic>;
+        final creatorUid = postData['creatorUid'] as String;
+
+        // Fetch user details for the creatorUid
+        final userDoc = await userCollection.doc(creatorUid).get();
+        if (!userDoc.exists) continue;
+        final user = PartialUser.fromJson(userDoc.data()!);
+
+        // Create PostModel with user details
+        final post = PostModel.fromJson(postData, user);
+        recommendedPosts.add(post);
+      }
+
+      return recommendedPosts;
     } catch (e) {
       // Improve error handling to provide more context
-      throw const MainException();
+      throw const MainException(errorMsg: AppErrorMessages.postFetchError);
     }
   }
 
@@ -150,17 +170,30 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       final List<String> postIds =
           querySnapshot.docs.map((doc) => doc.id).toList();
 
-      final postsQuery = await _firebaseFirestore
+      final allPosts = await _firebaseFirestore
           .collection('posts')
           .where(FieldPath.documentId, whereIn: postIds)
           .orderBy('likesCount', descending: true)
           .orderBy('totalComments', descending: true)
           .get();
 
-      final List<PostModel> posts = postsQuery.docs.map((doc) {
-        final data = doc.data();
-        return PostModel.fromJson(data);
-      }).toList();
+      List<PostModel> posts = [];
+      final userRef =
+          _firebaseFirestore.collection(FirebaseCollectionConst.users);
+
+      for (var post in allPosts.docs) {
+        final userDoc = await userRef.doc(post['creatorUid']).get();
+        if (!userDoc.exists) continue;
+        final PartialUser user =
+            PartialUser.fromJson(userDoc as Map<String, dynamic>);
+        final currentPost = PostModel.fromJson(post.data(), user);
+        posts.add(currentPost);
+      }
+
+      // final List<PostModel> posts = postsQuery.docs.map((doc) {
+      //   final data = doc.data();
+      //   return PostModel.fromJson(data,null);
+      // }).toList();
 
       return posts;
     } catch (e) {
@@ -180,17 +213,28 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       final List<String> postIds =
           querySnapshot.docs.map((doc) => doc.id).toList();
 
-      final postsQuery = await _firebaseFirestore
+      final allPosts = await _firebaseFirestore
           .collection('posts')
           .where(FieldPath.documentId, whereIn: postIds)
           .orderBy('createAt', descending: true)
           .orderBy('totalComments', descending: true)
           .get();
+      List<PostModel> posts = [];
+      final userRef =
+          _firebaseFirestore.collection(FirebaseCollectionConst.users);
 
-      final List<PostModel> posts = postsQuery.docs.map((doc) {
-        final data = doc.data();
-        return PostModel.fromJson(data);
-      }).toList();
+      for (var post in allPosts.docs) {
+        final userDoc = await userRef.doc(post['creatorUid']).get();
+        if (!userDoc.exists) continue;
+        final PartialUser user =
+            PartialUser.fromJson(userDoc as Map<String, dynamic>);
+        final currentPost = PostModel.fromJson(post.data(), user);
+        posts.add(currentPost);
+      }
+      // final List<PostModel> posts = postsQuery.docs.map((doc) {
+      //   final data = doc.data();
+      //   return PostModel.fromJson(data, null);
+      // }).toList();
 
       return posts;
     } catch (e) {
@@ -201,15 +245,26 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
   @override
   Future<List<PostModel>> getTopPostsOfHashTags(String tag) async {
     try {
-      final querySnapshot = await _firebaseFirestore
+      final allPosts = await _firebaseFirestore
           .collection('posts')
           .where('hashtags', arrayContains: tag)
           .get();
+      List<PostModel> posts = [];
+      final userRef =
+          _firebaseFirestore.collection(FirebaseCollectionConst.users);
 
-      final List<PostModel> posts = querySnapshot.docs.map((doc) {
-        final data = doc.data();
-        return PostModel.fromJson(data);
-      }).toList();
+      for (var post in allPosts.docs) {
+        final userDoc = await userRef.doc(post['creatorUid']).get();
+        if (!userDoc.exists) continue;
+        final PartialUser user =
+            PartialUser.fromJson(userDoc as Map<String, dynamic>);
+        final currentPost = PostModel.fromJson(post.data(), user);
+        posts.add(currentPost);
+      }
+      // final List<PostModel> posts = querySnapshot.docs.map((doc) {
+      //   final data = doc.data();
+      //   return PostModel.fromJson(data, null);
+      // }).toList();
 
       return posts;
     } catch (e) {
@@ -224,17 +279,28 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       final DateTime twentyFourHoursAgo =
           DateTime.now().subtract(const Duration(hours: 24));
 
-      final querySnapshot = await _firebaseFirestore
+      final allPosts = await _firebaseFirestore
           .collection('posts')
           .where('hashtags', arrayContains: tag)
           .where('createAt', isGreaterThanOrEqualTo: twentyFourHoursAgo)
           .orderBy('createAt', descending: true)
           .get();
+      List<PostModel> posts = [];
+      final userRef =
+          _firebaseFirestore.collection(FirebaseCollectionConst.users);
 
-      final List<PostModel> posts = querySnapshot.docs.map((doc) {
-        final data = doc.data();
-        return PostModel.fromJson(data);
-      }).toList();
+      for (var post in allPosts.docs) {
+        final userDoc = await userRef.doc(post['creatorUid']).get();
+        if (!userDoc.exists) continue;
+        final PartialUser user =
+            PartialUser.fromJson(userDoc as Map<String, dynamic>);
+        final currentPost = PostModel.fromJson(post.data(), user);
+        posts.add(currentPost);
+      }
+      // final List<PostModel> posts = querySnapshot.docs.map((doc) {
+      //   final data = doc.data();
+      //   return PostModel.fromJson(data, null);
+      // }).toList();
 
       return posts;
     } catch (e) {

@@ -1,10 +1,11 @@
 import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
 class AppUserModel extends AppUser {
   AppUserModel({
     required super.id,
     required super.email,
-   required super.hasPremium,
+    required super.hasPremium,
     super.fullName,
     super.userName,
     super.dob,
@@ -23,6 +24,7 @@ class AppUserModel extends AppUser {
     // super.followers,
     super.following,
     super.posts,
+    required super.notificationPreferences,
     super.interests,
     super.viewedSetupIndex,
   });
@@ -73,7 +75,7 @@ class AppUserModel extends AppUser {
       onlineStatus: json['onlineStatus'],
       viewedSetupIndex: json['viewedSetupIndex'],
       id: json['id'],
-      visitedUserCount:json['visitedUserCount'],
+      visitedUserCount: json['visitedUserCount'],
       followersCount: json['followersCount'] as int,
       followingCount: json['followingCount'],
       email: json['email'],
@@ -88,6 +90,8 @@ class AppUserModel extends AppUser {
       location: json['location'],
       latitude: json['latitude'],
       longitude: json['longitude'],
+      notificationPreferences: NotificationPreferences.fromMap(
+          json['notificationPreferences'] ?? {}),
       // followers: List<String>.from(json['followers'] ?? []),
       following: List<String>.from(json['following'] ?? []),
       posts: List<String>.from(json['posts'] ?? []),
@@ -102,6 +106,7 @@ class AppUserModel extends AppUser {
       'id': id,
       'onlineStatus': onlineStatus,
       'email': email,
+      'notificationPreferences': notificationPreferences.toMap(),
       'hasPremium': hasPremium,
       'fullName': fullName,
       'userName': userName,
@@ -111,7 +116,7 @@ class AppUserModel extends AppUser {
       'about': about,
       'profilePic': profilePic,
       'location': location,
-      'visitedUserCount':visitedUserCount,
+      'visitedUserCount': visitedUserCount,
       'latitude': latitude,
       'longitude': longitude,
       'followersCount': followersCount,

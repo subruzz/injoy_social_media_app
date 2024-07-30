@@ -6,10 +6,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:social_media_app/core/const/messenger.dart';
-import 'package:social_media_app/core/const/stripe.dart';
 import 'package:social_media_app/core/providers.dart';
 import 'package:social_media_app/core/routes/app_routes_config.dart';
 import 'package:social_media_app/core/theme/app_theme.dart';
@@ -17,6 +17,7 @@ import 'package:social_media_app/features/profile/presentation/pages/others_prof
 import 'package:social_media_app/firebase_options.dart';
 import 'package:social_media_app/init_dependecies.dart';
 import 'package:social_media_app/notification.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseBackgroundNotification(RemoteMessage message) async {
@@ -112,6 +113,17 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: myProviders,
           child: MaterialApp(
+            locale:const  Locale('ml'),
+            localizationsDelegates:  const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales:const [
+              Locale('en'), 
+              Locale('ml'), 
+            ],
             navigatorKey: navigatorKey,
 
             debugShowCheckedModeBanner: false,

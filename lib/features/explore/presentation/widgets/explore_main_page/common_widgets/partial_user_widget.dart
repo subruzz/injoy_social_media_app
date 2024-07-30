@@ -39,12 +39,9 @@ class PartialUserWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Hero(
-                  tag: user.id,
-                  child: CircularUserProfile(
-                    size: 27,
-                    profile: user.profilePic,
-                  ),
+                CircularUserProfile(
+                  size: 27,
+                  profile: user.profilePic,
                 ),
                 AppSizedBox.sizedBox15W,
                 Column(

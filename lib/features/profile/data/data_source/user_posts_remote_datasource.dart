@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
 
@@ -15,6 +16,15 @@ class UserPostsRemoteDatasourceImpl implements UserPostsRemoteDataSource {
   Future<({List<PostModel> userPosts, List<String> userPostImages})>
       getAllPostsByUser(String userId) async {
     try {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      if (!userDoc.exists) {
+        throw const MainException();
+      }
+      final PartialUser postUser = PartialUser.fromJson(userDoc.data()!);
+
       final posts = await FirebaseFirestore.instance
           .collection('posts')
           .where("creatorUid", isEqualTo: userId)
@@ -26,9 +36,7 @@ class UserPostsRemoteDatasourceImpl implements UserPostsRemoteDataSource {
           final currentPostImages = List<String>.from(posts['postImageUrl']);
           postImages.addAll(currentPostImages);
         }
-        return PostModel.fromJson(
-          posts.data(),
-        );
+        return PostModel.fromJson(posts.data(), postUser);
       }).toList();
       return (userPosts: userAllPosts, userPostImages: postImages);
     } catch (e) {
@@ -50,26 +58,27 @@ class UserPostsRemoteDatasourceImpl implements UserPostsRemoteDataSource {
       if (likedPostsSnapshot.docs.isEmpty) {
         return [];
       }
+      return [];
 
       // Extract the post IDs from the liked posts
-      final likedPostIds =
-          likedPostsSnapshot.docs.map((doc) => doc.id).toList();
+      // final likedPostIds =
+      //     likedPostsSnapshot.docs.map((doc) => doc.id).toList();
 
-      // Fetch the details of all liked posts from the posts collection
-      final postFutures = likedPostIds.map((postId) async {
-        final postSnapshot = await postCollection.doc(postId).get();
-        if (postSnapshot.exists) {
-          return PostModel.fromJson(
-              postSnapshot.data()!); // Ensure non-null data
-        }
-        return null; // Explicitly handle non-existent posts
-      }).toList();
+      // // Fetch the details of all liked posts from the posts collection
+      // final postFutures = likedPostIds.map((postId) async {
+      //   final postSnapshot = await postCollection.doc(postId).get();
+      //   if (postSnapshot.exists) {
+      //     return PostModel.fromJson(
+      //         postSnapshot.data()!); // Ensure non-null data
+      //   }
+      //   return null; // Explicitly handle non-existent posts
+      // }).toList();
 
-      // Wait for all post details to be fetched
-      final posts = await Future.wait(postFutures);
+      // // Wait for all post details to be fetched
+      // final posts = await Future.wait(postFutures);
 
-      // Filter out any null values (in case some posts were deleted)
-      return posts.where((post) => post != null).cast<PostModel>().toList();
+      // // Filter out any null values (in case some posts were deleted)
+      // return posts.where((post) => post != null).cast<PostModel>().toList();
     } catch (e) {
       throw const MainException();
     }

@@ -29,6 +29,14 @@ final class AppDarkTheme {
         ),
       ),
     ),
+    switchTheme: SwitchThemeData(
+      overlayColor: WidgetStatePropertyAll(_color.primaryText),
+        trackOutlineWidth: const WidgetStatePropertyAll(2),
+        trackOutlineColor: WidgetStatePropertyAll(_color.secondaryBackground),
+        thumbColor: WidgetStatePropertyAll(
+          _color.primaryText,
+        ),
+        trackColor: WidgetStatePropertyAll(_color.background)),
     textTheme: AppTextTheme.appTextTheme,
 
     chipTheme: ChipThemeData(

@@ -30,22 +30,11 @@ class _CropImagePageState extends State<CropImagePage> {
           color: Colors.white,
         ),
         onPressed: () {
-          if (widget.pickerType == MediaPickerType.post) {
-            Navigator.pushNamed(
-              context,
-              MyAppRouteConst.createPostRoute,
-              arguments: widget.selectedImages.selectedFiles,
-            );
-          } else {
-            Navigator.pushNamed(
-              context,
-              MyAppRouteConst.createMultipleStatusRoute,
-              arguments: {
-                'selectedAssets': widget.selectedImages.selectedFiles,
-                'isChat': widget.pickerType == MediaPickerType.chat,
-              },
-            );
-          }
+          Navigator.pushNamed(
+            context,
+            MyAppRouteConst.createPostRoute,
+            arguments: widget.selectedImages.selectedFiles,
+          );
         },
       ),
       appBar: AppBar(
