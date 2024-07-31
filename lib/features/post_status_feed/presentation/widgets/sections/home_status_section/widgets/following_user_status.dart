@@ -18,6 +18,7 @@ class FollowingUserStatus extends StatelessWidget {
         if (state is GetAllStatusSuccess) {
           return Expanded(
             child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
                 padding: AppPadding.onlyRightMedium,
                 scrollDirection: Axis.horizontal,
                 itemCount: state.allStatus.length,

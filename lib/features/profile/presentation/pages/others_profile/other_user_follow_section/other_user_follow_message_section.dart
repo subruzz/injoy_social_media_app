@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,17 +9,14 @@ import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/button/custom_button_with_icon.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
-import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';
-import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
-import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
-import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
+
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 
 import '../../../../../../core/const/app_config/app_border_radius.dart';
 import '../../../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../../../core/theme/color/app_colors.dart';
+import '../../../../../chat/presentation/widgets/person_chat_page/peronal_chat_builder.dart';
 
 class OtherUserFollowMessageSection extends StatelessWidget {
   const OtherUserFollowMessageSection(
@@ -125,12 +120,14 @@ class OtherUserFollowMessageSection extends StatelessWidget {
                   textColor: AppDarkColor().secondaryPrimaryText,
                   onClick: () {
                     context.read<MessageInfoStoreCubit>().setDataForChat(
+                        myName: me.userName ?? '',
+                        myProfil: me.profilePic,
                         receiverProfile: currentVisitedUser.profilePic,
                         receiverName: currentVisitedUser.userName ?? '',
                         recipientId: currentVisitedUser.id);
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const PersonChatPage(),
+                        builder: (context) => const PeronalChatBuilder(),
                       ),
                     );
                   })),

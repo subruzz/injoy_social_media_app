@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';

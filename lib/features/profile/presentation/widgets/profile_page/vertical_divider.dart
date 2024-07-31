@@ -10,7 +10,7 @@ class CustomVerticalDivider extends StatelessWidget {
     return SizedBox(
       height: 35.h,
       child: VerticalDivider(
-          width: 20.w, thickness: 2, color: AppDarkColor().iconSoftColor),
+          width: 20.w, thickness: 2, color: AppDarkColor().iconSecondarycolor),
     );
   }
 }

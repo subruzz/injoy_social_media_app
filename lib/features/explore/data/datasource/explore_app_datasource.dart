@@ -19,10 +19,14 @@ abstract interface class ExploreAppDatasource {
   Future<List<PostModel>> searchRecentPostsOfLocation(String location);
   Future<List<PostModel>> getTopPostsOfHashTags(String tag);
   Future<List<PostModel>> searchRecentPostsOfHashTags(String tag);
-  Future<List<PartialUser>> getSuggestedUsers(
-      List<String> interests, String myId);
-  Future<List<PartialUser>> getNearByUsers(
-      double latitude, double longitude, String myId);
+
+  Future<List<PartialUser>> getSuggestedOrNearbyUsers(
+    List<String> interests,
+    List<String> following,
+    double latitude,
+    double longitude,
+    String myId,
+  );
 }
 
 class ExploreAppDatasourceImpl implements ExploreAppDatasource {
@@ -308,34 +312,73 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
     }
   }
 
-  @override
-  Future<List<PartialUser>> getSuggestedUsers(
-      List<String> interests, String myId) async {
-    try {
-      final querySnapshot = await _firebaseFirestore
-          .collection('users')
-          .where('id', isNotEqualTo: myId)
-          .where('interests', arrayContainsAny: interests)
-          .limit(2)
-          .get();
-      final List<PartialUser> suggestedUsers = querySnapshot.docs.map((doc) {
-        final data = doc.data();
-        return PartialUser.fromJson(data);
-      }).toList();
-      return suggestedUsers;
-    } catch (e) {
-      throw const MainException();
-    }
-  }
+  // @override
+  // Future<List<PartialUser>> getSuggestedUsers(
+  //     List<String> interests, String myId) async {
+  //   try {
+  //     final querySnapshot = await _firebaseFirestore
+  //         .collection('users')
+  //         .where('id', isNotEqualTo: myId)
+  //         .where('interests', arrayContainsAny: interests)
+  //         .get();
+  //     final List<PartialUser> suggestedUsers = querySnapshot.docs.map((doc) {
+  //       final data = doc.data();
+  //       return PartialUser.fromJson(data);
+  //     }).toList();
+  //     return suggestedUsers;
+  //   } catch (e) {
+  //     throw const MainException();
+  //   }
+  // }
 
+  // @override
+  // Future<List<PartialUser>> getNearByUsers(
+  //     double latitude, double longitude, String myId) async {
+  //   try {
+  //     double latRange = 50 / 111; // Roughly 50km in latitude degrees
+  //     double lonRange =
+  //         50 / (111 * cos(latitude * (pi / 180))); // Adjusted for longitude
+  //     final querySnapshot = await _firebaseFirestore
+  //         .collection(FirebaseCollectionConst.users)
+  //         .where('id', isNotEqualTo: myId)
+  //         .where('latitude', isGreaterThanOrEqualTo: latitude - latRange)
+  //         .where('latitude', isLessThanOrEqualTo: latitude + latRange)
+  //         .where('longitude', isGreaterThanOrEqualTo: longitude - lonRange)
+  //         .where('longitude', isLessThanOrEqualTo: longitude + lonRange)
+  //         .get();
+  //     final List<PartialUser> nearByPeople = querySnapshot.docs.map((doc) {
+  //       final data = doc.data();
+  //       return PartialUser.fromJson(data);
+  //     }).toList();
+
+  //     return nearByPeople;
+  //   } catch (e) {
+  //     throw const MainException();
+  //   }
+  // }
   @override
-  Future<List<PartialUser>> getNearByUsers(
-      double latitude, double longitude, String myId) async {
+  Future<List<PartialUser>> getSuggestedOrNearbyUsers(
+    List<String> interests,
+    List<String> following,
+    double latitude,
+    double longitude,
+    String myId,
+  ) async {
     try {
+      // Define latitude and longitude ranges for proximity search
       double latRange = 50 / 111; // Roughly 50km in latitude degrees
       double lonRange =
           50 / (111 * cos(latitude * (pi / 180))); // Adjusted for longitude
-      final querySnapshot = await _firebaseFirestore
+
+      // Create a query to fetch users by interests
+      final interestsQuery = _firebaseFirestore
+          .collection(FirebaseCollectionConst.users)
+          .where('id', isNotEqualTo: myId)
+          .where('interests', arrayContainsAny: interests)
+          .get();
+
+      // Create a query to fetch users by proximity
+      final locationQuery = _firebaseFirestore
           .collection(FirebaseCollectionConst.users)
           .where('id', isNotEqualTo: myId)
           .where('latitude', isGreaterThanOrEqualTo: latitude - latRange)
@@ -343,12 +386,32 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
           .where('longitude', isGreaterThanOrEqualTo: longitude - lonRange)
           .where('longitude', isLessThanOrEqualTo: longitude + lonRange)
           .get();
-      final List<PartialUser> nearByPeople = querySnapshot.docs.map((doc) {
-        final data = doc.data();
-        return PartialUser.fromJson(data);
-      }).toList();
 
-      return nearByPeople;
+      // Wait for both queries to complete
+      final List<QuerySnapshot> queryResults =
+          await Future.wait([interestsQuery, locationQuery]);
+      final List<QueryDocumentSnapshot> docs =
+          queryResults.expand((qs) => qs.docs).toList();
+
+      // Create a set to track unique users and prevent duplicates
+      final Set<String> userIds = {};
+      final List<PartialUser> combinedUsers = [];
+
+      for (var doc in docs) {
+        final data = doc.data() as Map<String, dynamic>?;
+
+        if (data == null) continue;
+        print('fwolling is $following');
+        final id = data['id'];
+        if (id == null || following.contains(id)) continue;
+
+        final PartialUser user = PartialUser.fromJson(data);
+        if (userIds.add(user.id)) {
+          combinedUsers.add(user);
+        }
+      }
+
+      return combinedUsers;
     } catch (e) {
       throw const MainException();
     }

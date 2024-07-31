@@ -9,7 +9,7 @@ import 'package:social_media_app/features/explore/presentation/blocs/get_recomme
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/pages/explore_page.dart';
+import 'package:social_media_app/features/explore/presentation/pages/explore_welcome_page.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/sections/tab/explore_tab.dart';
 
 class ExplorePage extends StatefulWidget {
@@ -92,6 +92,7 @@ class _ExplorePageState extends State<ExplorePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: CustomAppPadding(
           padding: AppPadding.medium,
@@ -118,7 +119,7 @@ class _ExplorePageState extends State<ExplorePage>
                       currentTab: _currentTab,
                     );
                   } else {
-                    return const ExploreStartingPage();
+                    return const ExploreWelcomScreen();
                   }
                 },
               )

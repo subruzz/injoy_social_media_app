@@ -18,12 +18,14 @@ class MessageEntity extends Equatable {
   final String messageId;
   final bool isDeleted;
   final bool isEdited;
+  final String? repliedMessgeCreatorId;
   final DateTime? deletedAt;
 
   const MessageEntity({
     required this.isDeleted,
     required this.isEdited,
-     this.repliedMessageAssetLink,
+    this.repliedMessageAssetLink,
+    this.repliedMessgeCreatorId,
     required this.deletedAt,
     required this.senderUid,
     this.assetLink,
@@ -45,12 +47,14 @@ class MessageEntity extends Equatable {
         isEdited,
         assetPath,
         isDeleted,
+        repliedMessgeCreatorId,
         senderUid,
         recipientUid,
         assetLink,
         messageType,
         message,
-        createdAt,repliedMessageAssetLink,
+        createdAt,
+        repliedMessageAssetLink,
         isSeen,
         repliedTo,
         repliedMessage,

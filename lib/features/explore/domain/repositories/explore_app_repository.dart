@@ -12,10 +12,14 @@ abstract interface class ExploreAppRepository {
   Future<Either<Failure, List<PostEntity>>> getRecommended(String query);
   Future<Either<Failure, List<ExploreLocationSearchEntity>>>
       searchLocationInExplore(String query);
-  Future<Either<Failure, List<PartialUser>>> getSuggestedUsers(
-      List<String> interests, String myId);
-  Future<Either<Failure, List<PartialUser>>> getNearyByUsers(
-      double latitude, double longitude, String myId);
+
+  Future<Either<Failure, List<PartialUser>>> getSuggestedOrNearbyUsers(
+    List<String> interests,
+    List<String> following,
+    double latitude,
+    double longitude,
+    String myId,
+  );
   //posts based on location
   Future<Either<Failure, List<PostEntity>>> getTopPostsOfLocation(
       String location);

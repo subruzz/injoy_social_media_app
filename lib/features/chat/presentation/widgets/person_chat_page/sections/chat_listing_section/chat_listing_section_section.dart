@@ -61,6 +61,7 @@ class ChatListingSectionSection extends StatelessWidget {
                   return SwipeTo(
                     onRightSwipe: (details) {
                       context.read<MessageInfoStoreCubit>().replyClicked(
+                          repliedMessagecreator: message.senderUid,
                           isMe: message.senderUid ==
                               context.read<AppUserBloc>().appUser.id,
                           messageType: message.messageType,

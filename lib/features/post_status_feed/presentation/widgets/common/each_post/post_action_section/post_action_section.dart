@@ -10,12 +10,12 @@ import 'package:social_media_app/features/post_status_feed/presentation/widgets/
 class SocialActions extends StatelessWidget {
   const SocialActions(
       {super.key,
-      this.isCommentNeeded = true,
+      this.isCommentOff = true,
       required this.post,
       required this.likeAnim});
   final PostEntity post;
   final VoidCallback likeAnim;
-  final bool isCommentNeeded;
+  final bool isCommentOff;
   @override
   Widget build(BuildContext context) {
     final appUser = context.read<AppUserBloc>().appUser;
@@ -34,10 +34,10 @@ class SocialActions extends StatelessWidget {
                   PostLikeButton(me: appUser, post: post),
                   AppSizedBox.sizedBox20W,
                   // Comments
-                  if (isCommentNeeded) PostCommentButton(post: post)
+                  if (!isCommentOff) PostCommentButton(post: post)
                 ],
               ),
-             const PostSendButton()
+              const PostSendButton()
             ],
           ),
         ),

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
@@ -7,6 +10,7 @@ import 'package:social_media_app/core/utils/haptic_feedback.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/pages/explore_welcome_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/personal_profile_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/core/utils/rive/model.dart';
@@ -121,6 +125,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
   //         ),
   @override
   Widget build(BuildContext context) {
+    log(FirebaseAuth.instance.currentUser!.uid);
     return BlocBuilder<BottomNavCubit, BottomNavState>(
         builder: (context, state) {
       print(state.index);

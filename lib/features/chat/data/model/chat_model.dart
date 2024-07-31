@@ -11,6 +11,8 @@ class ChatModel extends ChatEntity {
       required super.recentTextMessage,
       required super.createdAt,
       super.recipientProfile,
+      super.senderName,
+      super.senderProfile,
       super.totalUnReadMessages});
 
   factory ChatModel.fromJson(DocumentSnapshot snapshot) {
@@ -38,6 +40,8 @@ class ChatModel extends ChatEntity {
       };
   factory ChatModel.fromChatEntity(ChatEntity entity) {
     return ChatModel(
+      senderName: entity.senderName,
+      senderProfile: entity.senderProfile,
       senderUid: entity.senderUid,
       recipientUid: entity.recipientUid,
       recipientName: entity.recipientName,
@@ -59,6 +63,8 @@ class ChatModel extends ChatEntity {
     int? totalUnReadMessages,
   }) {
     return ChatModel(
+      senderName: senderName?? this.senderName,
+      senderProfile: senderProfile??this.senderProfile,
       senderUid: senderUid ?? this.senderUid,
       recipientUid: recipientUid ?? this.recipientUid,
       recipientName: recipientName ?? this.recipientName,

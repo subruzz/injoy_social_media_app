@@ -33,7 +33,7 @@ class StatusAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: colorCubit?.color,
       title: Text(
-        'Create Status',
+        isChat ? 'Send Media' : 'Create Status',
         style: Theme.of(context).textTheme.headlineMedium,
       ),
       leading: const AppBarCommonIcon(

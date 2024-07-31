@@ -23,6 +23,7 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
   @override
   Future<PostsResult> fetchFollowedPosts(String userId, List<String> following,
       {int limit = 4, DocumentSnapshot? lastDoc}) async {
+    log('user id is $userId');
     if (following.isEmpty) {
       return PostsResult(posts: [], hasMore: false, lastDoc: null);
     }
@@ -47,8 +48,7 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
       for (var post in allPosts.docs) {
         final userDoc = await userRef.doc(post['creatorUid']).get();
         if (!userDoc.exists) continue;
-        final PartialUser user =
-            PartialUser.fromJson(userDoc .data()!);
+        final PartialUser user = PartialUser.fromJson(userDoc.data()!);
         final currentPost = PostModel.fromJson(post.data(), user);
         posts.add(currentPost);
       }

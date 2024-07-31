@@ -91,12 +91,19 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
         .collection(FirebaseCollectionConst.users)
         .doc(chat.recipientUid)
         .collection(FirebaseCollectionConst.myChat);
-
+    log('iam ${chat.senderName}');
     final myNewChat = chat
-        .copyWith(senderUid: senderId, recipientUid: receiverId)
+        .copyWith(
+          senderUid: senderId,
+          recipientUid: receiverId,
+        )
         .toJson(time: time);
     final otherNewChat = chat
-        .copyWith(senderUid: receiverId, recipientUid: senderId)
+        .copyWith(
+            senderUid: receiverId,
+            recipientUid: senderId,
+            recipientName: chat.senderName,
+            recipientProfile: chat.senderProfile)
         .toJson(time: time);
 
     // Use the provided transaction for Firestore operations

@@ -19,6 +19,8 @@ class MessageInfoStoreCubit extends Cubit<MessageInfoStoreState> {
   String _receiverId = '';
   String _receiverName = '';
   String? _receiverProfile;
+  String _myName = '';
+  String? _myProfile;
 
   // Getters
   List<String> get token => _token;
@@ -26,21 +28,26 @@ class MessageInfoStoreCubit extends Cubit<MessageInfoStoreState> {
   String get receiverId => _receiverId;
   String get receiverName => _receiverName;
   String? get receiverProfile => _receiverProfile;
+  String? get myProfile => _myProfile;
+  String get myName => _myName;
   set setMessageReply(MessageEntity reply) {
     _messageReply = _messageReply;
   }
 
   MessageReplyEntity _messageReply = MessageReplyEntity();
   MessageReplyEntity get getMessageReply => _messageReply;
-  void setDataForChat({
-    required String? receiverProfile,
-    required String receiverName,
-    required String recipientId,
-  }) {
+  void setDataForChat(
+      {required String? receiverProfile,
+      required String receiverName,
+      required String recipientId,
+      required String myName,
+      required String? myProfil}) {
     if (recipientId == receiverId) {
       return emit(MessageInfoSet());
     }
     // _userOnlineStatus(recipientId);
+    _myName = myName;
+    _myProfile = myProfil;
     _receiverProfile = receiverProfile;
     _receiverName = receiverName;
     _receiverId = recipientId;
@@ -59,6 +66,8 @@ class MessageInfoStoreCubit extends Cubit<MessageInfoStoreState> {
     _receiverId = '';
     _receiverName = '';
     _receiverProfile = null;
+    _myName = '';
+    _myProfile = null;
   }
 
   bool areDetailsComplete() {
@@ -71,10 +80,12 @@ class MessageInfoStoreCubit extends Cubit<MessageInfoStoreState> {
       {required bool isMe,
       required String messageType,
       String? assetPath,
+      required String repliedMessagecreator,
       String? caption}) {
     emit(MessageReplyClicked(
-        userName: isMe ? 'You' : _receiverName,
+        userName: _myName,
         isMe: isMe,
+        repliedMessageCreator: repliedMessagecreator,
         messageType: messageType,
         assetPath: assetPath,
         caption: caption));

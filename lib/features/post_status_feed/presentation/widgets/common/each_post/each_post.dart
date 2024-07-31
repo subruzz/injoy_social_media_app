@@ -84,6 +84,7 @@ class _EachPostState extends State<EachPost> {
                 Align(
                     alignment: Alignment.centerRight,
                     child: SocialActions(
+                      isCommentOff: widget.currentPost.isCommentOff,
                       likeAnim: () {
                         setState(() {
                           _isAnimating = true;

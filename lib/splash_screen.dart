@@ -46,8 +46,8 @@ class _SplashScreenState extends State<SplashScreen>
             Navigator.pushReplacementNamed(context, MyAppRouteConst.loginRoute);
           }
           if (state is AuthLoggedInOrUpdate) {
-            context.read<InitialSetupCubit>().startInitialSetup(
-                uId: state.user.id, following: state.user.following);
+            // context.read<InitialSetupCubit>().startInitialSetup(
+            //     uId: state.user.id, following: state.user.following);
             Navigator.pushReplacementNamed(
                 context, MyAppRouteConst.bottomNavRoute,
                 arguments: state.user);
@@ -64,12 +64,12 @@ class _SplashScreenState extends State<SplashScreen>
             children: [
               //logo needs to be changed
               Image.asset(
-                'assets/image.png',
+                'assets/images/app_logo.png',
                 height: 100,
                 width: 100,
               ),
               // Rotating Dots
-              for (int i = 0; i < 6; i++) _buildDot(i),
+              // for (int i = 0; i < 6; i++) _buildDot(i),
               // Bottom Icon
             ],
           ),

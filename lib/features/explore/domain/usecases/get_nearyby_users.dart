@@ -14,8 +14,12 @@ class GetNearybyUsersUseCase
   @override
   Future<Either<Failure, List<PartialUser>>> call(
       GetNearybyUsersUseCaseParams params) async {
-    return await _exploreAppRepository.getNearyByUsers(
-        params.latitude, params.longitude, params.myId);
+    return await _exploreAppRepository.getSuggestedOrNearbyUsers(
+        params.interests,
+        params.following,
+        params.latitude,
+        params.longitude,
+        params.myId);
   }
 }
 
@@ -23,7 +27,12 @@ class GetNearybyUsersUseCaseParams {
   final String myId;
   final double latitude;
   final double longitude;
-
+  final List<String> interests;
+  final List<String> following;
   GetNearybyUsersUseCaseParams(
-      {required this.myId, required this.latitude, required this.longitude});
+      {required this.myId,
+      required this.latitude,
+      required this.following,
+      required this.longitude,
+      required this.interests});
 }

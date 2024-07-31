@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/time_stamp_to_string.dart';
+import 'package:social_media_app/core/widgets/expandable_text.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/post_action_section.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_content_section/widgets/post_description.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_content_section/widgets/post_hashtag.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_multiple_images.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_single_image.dart';
@@ -17,9 +17,9 @@ class PostDetailsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (post.description != null)
-          PostDescription(
-            description: post.description ?? '',
-            seeFull: true,
+          ExpandableText(
+            text: post.description ?? '',
+            trimLines: 2,
           ),
         AppSizedBox.sizedBox5H,
         if (post.hashtags.isNotEmpty) PostHashtag(hashtags: post.hashtags),
@@ -41,7 +41,7 @@ class PostDetailsSection extends StatelessWidget {
         SocialActions(
           post: post,
           likeAnim: () {},
-          isCommentNeeded: false,
+          isCommentOff: post.isCommentOff,
         ),
         const Divider(),
         AppSizedBox.sizedBox10H,

@@ -54,6 +54,8 @@ class MessageCubit extends Cubit<MessageState> {
         messageInfoState is MessageReplyClicked ? messageInfoState : null;
 
     final newChat = ChatEntity(
+        senderName: _messageInfoStoreCubit.myName,
+        senderProfile: _messageInfoStoreCubit.myProfile,
         senderUid: _messageInfoStoreCubit.senderId,
         recipientUid: _messageInfoStoreCubit.receiverId,
         recipientName: _messageInfoStoreCubit.receiverName,
@@ -72,6 +74,7 @@ class MessageCubit extends Cubit<MessageState> {
         final newMessage = MessageEntity(
             isDeleted: false,
             createdAt: null,
+            repliedMessgeCreatorId: replyState?.repliedMessageCreator,
             repliedMessage: replyState?.caption,
             repliedMessageAssetLink: replyState?.assetPath,
             repliedMessageType: replyState?.messageType,
@@ -92,6 +95,7 @@ class MessageCubit extends Cubit<MessageState> {
     } else {
       newMessge = MessageEntity(
           isDeleted: false,
+          repliedMessgeCreatorId: replyState?.repliedMessageCreator,
           createdAt: null,
           message: recentTextMessage,
           isEdited: false,

@@ -19,11 +19,13 @@ final class MessageReplyClicked extends MessageInfoStoreState {
   final String? assetPath;
   final String? caption;
   final String userName;
+  final String repliedMessageCreator;
   const MessageReplyClicked(
       {required this.isMe,
       required this.messageType,
       required this.assetPath,
       required this.userName,
+      required this.repliedMessageCreator,
       required this.caption});
   @override
   List<Object?> get props => [isMe, messageType, caption, assetPath, userName];

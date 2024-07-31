@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
 import 'package:social_media_app/core/errors/exception.dart';
@@ -24,7 +23,7 @@ abstract interface class PostRemoteDatasource {
   Future<void> likePost(String postId, String currentUserUid);
   Future<void> unLikePost(String postId, String currentUserUid);
 
-  Future<String?> getCurrentUserId();
+
   Future<List<HashTag>> searchHashTags(String query);
   Future<List<String>> uploadPostImages(
       List<SelectedByte> postImages, String pId);
@@ -36,10 +35,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
 
   PostRemoteDataSourceImpl(
       {required this.firestore, required this.firebaseStorage});
-  @override
-  Future<String?> getCurrentUserId() async {
-    return FirebaseAuth.instance.currentUser?.uid;
-  }
+
 
   @override
   Future<void> createPost(PostEntity post, List<SelectedByte> postImage) async {

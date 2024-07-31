@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/extensions/time_ago.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
@@ -25,10 +26,13 @@ class ChatCallItem extends StatelessWidget {
     return ListTile(
       onTap: () {
         if (chat != null) {
+          final me=context.read<AppUserBloc>().appUser;
           context.read<MessageInfoStoreCubit>().setDataForChat(
        
               receiverProfile: chat!.recipientProfile,
-              receiverName: chat!.recipientName,
+              receiverName: chat!.recipientName??'',
+              myName: me.userName??''
+              ,myProfil: me.profilePic,
               recipientId: chat!.recipientUid);
           Navigator.pushNamed(
             context,

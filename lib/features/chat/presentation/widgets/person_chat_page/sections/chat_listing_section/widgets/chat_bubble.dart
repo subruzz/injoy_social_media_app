@@ -145,6 +145,7 @@ class MessageContentWidget extends StatelessWidget {
       case MessageTypeConst.photoMessage:
       case MessageTypeConst.gifMessage:
         return ChatPhotoWidget(
+          caption: messageItem.message,
           url: messageItem.messageType == MessageTypeConst.photoMessage
               ? messageItem.assetLink!
               : messageItem.message!,

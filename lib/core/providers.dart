@@ -186,13 +186,15 @@ List<SingleChildWidget> myProviders = [
     create: (context) => serviceLocator<ForYouPostBloc>()
       ..add(ForYouPostFeedGetEvent(user: context.read<AppUserBloc>().appUser)),
   ),
-  BlocProvider(
-      create: (context) => serviceLocator<FollowingPostFeedBloc>()
-        ..add(FollowingPostFeedGetEvent(
-            isLoadMore: false,
-            lastDoc: null,
-            following: context.read<AppUserBloc>().appUser.following,
-            uId: context.read<AppUserBloc>().appUser.id))),
+  BlocProvider(create: (context) {
+    final user = context.read<AppUserBloc>().appUser;
+    return serviceLocator<FollowingPostFeedBloc>()
+      ..add(FollowingPostFeedGetEvent(
+          isLoadMore: false,
+          lastDoc: null,
+          following: user.following,
+          uId: user.id));
+  }),
 
   BlocProvider(
     create: (context) => FollowHashtagCubit(
@@ -206,6 +208,7 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(create: (context) => serviceLocator<InitialSetupCubit>()),
   // BlocProvider(
   //   create: (context) => serviceLocator<AgoraCubit>(),
+  // ),
   // ),
 
   BlocProvider(

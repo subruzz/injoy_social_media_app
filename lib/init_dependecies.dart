@@ -480,10 +480,9 @@ void _exploreApp() {
           serviceLocator(),
         ))
     ..registerFactory(() => GetRecentHashtagPostsCubit(serviceLocator()))
+   
     ..registerFactory(
-        () => GetSuggestedUsersUseCase(exploreAppRepository: serviceLocator()))
-    ..registerFactory(
-        () => ExploreUserCubit(serviceLocator(), serviceLocator()))
+        () => ExploreUserCubit(serviceLocator(), ))
     ..registerFactory(
         () => GetNearybyUsersUseCase(exploreAppRepository: serviceLocator()));
 }

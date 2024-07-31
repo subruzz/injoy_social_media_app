@@ -85,7 +85,7 @@ class CustomBottomSheet {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>  SettingsScreen(),
+                        builder: (context) => SettingsScreen(),
                       ));
                 },
               ),
@@ -194,10 +194,10 @@ class CustomBottomSheet {
       Color? color}) {
     return ListTile(
       splashColor: Colors.transparent,
-      leading: Icon(icon, color: AppDarkColor().iconSoftColor),
+      leading: Icon(icon, color: AppDarkColor().iconSecondarycolor),
       title: Text(
         text,
-        style: TextStyle(color: color ?? AppDarkColor().iconSoftColor),
+        style: TextStyle(color: color ?? AppDarkColor().secondaryText),
       ),
       onTap: onTap,
     );

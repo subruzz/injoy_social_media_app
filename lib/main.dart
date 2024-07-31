@@ -16,7 +16,6 @@ import 'package:social_media_app/core/theme/app_theme.dart';
 import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
 import 'package:social_media_app/firebase_options.dart';
 import 'package:social_media_app/init_dependecies.dart';
-import 'package:social_media_app/notification.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 @pragma('vm:entry-point')

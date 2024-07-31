@@ -19,17 +19,22 @@ class HomePage extends StatelessWidget {
         isPremium: me.hasPremium,
         profile: me.profilePic,
       ),
-      body: DefaultTabController(
-        length: 2,
+      body: RefreshIndicator(
+        onRefresh: () async {},
         child: NestedScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverList(
-                  delegate: SliverChildListDelegate(
-                      [AppSizedBox.sizedBox5H, const UserStatus()]))
+                delegate: SliverChildListDelegate([
+                  AppSizedBox.sizedBox5H,
+                  const UserStatus(),
+                ]),
+              ),
             ];
           },
-          body: const HomeTabBarSection(),
+          body:
+              const DefaultTabController(length: 2, child: HomeTabBarSection()),
         ),
       ),
     );

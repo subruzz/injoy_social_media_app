@@ -36,7 +36,7 @@ class ChatMessageTabView extends StatelessWidget {
             itemBuilder: (context, index) {
               return ChatCallItem(
                 chat: state.chatItems[index],
-                name: state.chatItems[index].recipientName,
+                name: state.chatItems[index].recipientName??'',
                 time: state.chatItems[index].recentTextMessage,
               );
             },

@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/tag_location_symbol.dart';
 
@@ -24,6 +24,7 @@ class TagLocationItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: !giveOne
           ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 TagLocationSymbol(
@@ -43,20 +44,26 @@ class TagLocationItem extends StatelessWidget {
                           ),
                         ),
                 ),
-                const SizedBox(width: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      title,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 4),
-                    CustomText(
-                      '$postCount posts',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
+                AppSizedBox.sizedBox15W,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        title,
+                        maxLines: 2,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 4),
+                      CustomText(
+                        '$postCount posts',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             )
@@ -80,7 +87,7 @@ class TagLocationItem extends StatelessWidget {
                           ),
                         ),
                 ),
-                const SizedBox(width: 16),
+                AppSizedBox.sizedBox15W,
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

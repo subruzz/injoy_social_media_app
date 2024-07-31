@@ -23,6 +23,7 @@ class MessageModel extends MessageEntity {
     required super.isDeleted,
     required super.isEdited,
     required super.deletedAt,
+    super.repliedMessgeCreatorId,
   });
 
   factory MessageModel.fromMessageEntity(MessageEntity entity) {
@@ -34,6 +35,7 @@ class MessageModel extends MessageEntity {
       senderUid: entity.senderUid,
       recipientUid: entity.recipientUid,
       createdAt: entity.createdAt,
+      repliedMessgeCreatorId: entity.repliedMessgeCreatorId,
       isSeen: entity.isSeen,
       message: entity.message,
       messageType: entity.messageType,
@@ -55,6 +57,7 @@ class MessageModel extends MessageEntity {
       isEdited: snap['isEdited'],
       deletedAt: snap['deleteAt'],
       senderUid: snap['senderUid'],
+      repliedMessgeCreatorId: snap['repliedMessgeCreatorId'],
       recipientUid: snap['recipientUid'],
       createdAt: snap['createdAt'],
       isSeen: snap['isSeen'],
@@ -74,6 +77,7 @@ class MessageModel extends MessageEntity {
         'assetLink': assetLink,
         'deleteAt': deletedAt,
         'senderUid': senderUid,
+        'repliedMessgeCreatorId': repliedMessgeCreatorId,
         'recipientUid': recipientUid,
         'createdAt': time,
         'isSeen': isSeen,

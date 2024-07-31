@@ -26,6 +26,8 @@ import 'package:social_media_app/features/profile/presentation/bloc/get_user_pos
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
 
+import '../../../../core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
+
 class LocationAskingPage extends StatelessWidget {
   const LocationAskingPage({super.key, required this.isFirstTime});
   final bool isFirstTime;
@@ -42,6 +44,9 @@ class LocationAskingPage extends StatelessWidget {
           listener: (context, state) {
             if (state is CompleteProfileSetupSuceess) {
               final user = context.read<AppUserBloc>().appUser;
+              context
+                  .read<InitialSetupCubit>()
+                  .startInitialSetup(uId: user.id, following: user.following);
               // context.read<FollowingPostFeedBloc>().add(
               //     FollowingPostFeedGetEvent(
               //         uId: user.id, following: user.following));

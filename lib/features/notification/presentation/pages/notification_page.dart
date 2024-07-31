@@ -29,11 +29,6 @@ class NotificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                StripServices.instance.makePayment();
-              },
-              icon: Icon(Icons.payment)),
           automaticallyImplyLeading: false,
           title: Text(
             "Notifications",

@@ -204,7 +204,7 @@ class FollowunfollowCubit extends Cubit<FollowunfollowState> {
     emit(FollowUnfollowStarted());
 
     if (!_debouncers.containsKey(otherId)) {
-      _debouncers[otherId] = Debouncer(delay: const Duration(seconds: 1));
+      _debouncers[otherId] = Debouncer(delay: const Duration(milliseconds: 700));
     }
     emit(FollowLoading());
     final debouncer = _debouncers[otherId]!;

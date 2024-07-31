@@ -22,7 +22,7 @@ class CustomText extends StatelessWidget {
     return Text(
       text,
       style: style ?? Theme.of(context).textTheme.labelMedium,
-      overflow: overflow,
+      overflow: TextOverflow.ellipsis,
       maxLines: maxLines,
       textAlign: textAlign,
     );

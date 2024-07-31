@@ -33,12 +33,12 @@ class InitialSetupCubit extends Cubit<InitialSetupState> {
   void startInitialSetup(
       {required String uId,
       bool isFirstTime = false,
-      required  List<String> following}) {
+      required List<String> following}) {
     log('called the initial setup bloc');
     _getAllStatusBloc.add(GetAllstatusesEvent(uId: uId));
     _getMyStatusBloc.add(GetAllMystatusesEvent(uId: uId));
-    // _followingPostFeedBloc.add(FollowingPostFeedGetEvent(
-    //     uId: uId, following: following));
+    _followingPostFeedBloc.add(FollowingPostFeedGetEvent(
+        isLoadMore: false, lastDoc: null, uId: uId, following: following));
     _followingCubit.listenToFollowing(uId);
     // _getUserPostsBloc.add(GetUserPostsrequestedEvent(uid: uId));
   }

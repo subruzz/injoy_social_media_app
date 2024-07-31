@@ -100,23 +100,15 @@ class ExploreAppRepoImpl implements ExploreAppRepository {
   }
 
   @override
-  Future<Either<Failure, List<PartialUser>>> getSuggestedUsers(
-      List<String> interests, String myId) async {
+  Future<Either<Failure, List<PartialUser>>> getSuggestedOrNearbyUsers(
+      List<String> interests,
+      List<String> following,
+      double latitude,
+      double longitude,
+      String myId) async {
     try {
-      final res =
-          await _exploreAppDatasource.getSuggestedUsers(interests, myId);
-      return right(res);
-    } on MainException catch (e) {
-      return left(Failure(e.errorMsg));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<PartialUser>>> getNearyByUsers(
-      double latitude, double longitude, String myId) async {
-    try {
-      final res =
-          await _exploreAppDatasource.getNearByUsers(latitude, longitude, myId);
+      final res = await _exploreAppDatasource.getSuggestedOrNearbyUsers(
+          interests, following, latitude, longitude, myId);
       return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

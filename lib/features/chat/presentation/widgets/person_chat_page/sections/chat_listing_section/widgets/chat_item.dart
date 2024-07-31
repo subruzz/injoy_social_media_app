@@ -40,6 +40,7 @@ class ChatItem extends StatelessWidget {
                 //only when the message is a reply
                 if (messageItem.repliedTo != null)
                   ReplyPreviewWidget(
+                    messageItem: messageItem,
                     assetLink: messageItem.repliedMessageAssetLink,
                     gradient: isMe ? ChatConstants.chatGradient : null,
                     borderColor: isMe ? null : AppDarkColor().softBackground,
@@ -51,8 +52,10 @@ class ChatItem extends StatelessWidget {
                     message: messageItem.repliedMessage,
                     messageType: messageItem.repliedMessageType ?? '',
                     userName: messageItem.repliedTo ?? '',
+                    repliedmessageCreator:
+                        messageItem.repliedMessgeCreatorId ?? '',
                   ),
-                  //normal chat messages
+                //normal chat messages
                 ChatBubble(
                     messageItem: messageItem,
                     isMe: isMe,

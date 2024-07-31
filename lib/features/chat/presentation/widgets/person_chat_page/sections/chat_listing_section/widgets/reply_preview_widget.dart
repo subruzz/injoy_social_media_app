@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,8 +8,10 @@ import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/message_type.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
+import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_side_bar.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
@@ -17,15 +21,19 @@ class ReplyPreviewWidget extends StatelessWidget {
   final String userName;
   final bool isReplyChat;
   final Color? color;
+  final MessageEntity? messageItem;
   final String? message;
   final bool showIcon;
   final Color? borderColor;
   final String? assetLink;
   final Gradient? gradient;
+  final String? repliedmessageCreator;
   final bool showBackground;
   const ReplyPreviewWidget(
       {super.key,
       this.color,
+      this.messageItem,
+      this.repliedmessageCreator,
       required this.assetLink,
       this.borderColor,
       this.gradient,
@@ -71,10 +79,20 @@ class ReplyPreviewWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    HeaderRow(
-                      userName: userName,
-                      showIcon: showIcon,
-                    ),
+                    Builder(builder: (context) {
+                      log('check if ${repliedmessageCreator == context.read<AppUserBloc>().appUser.id}');
+                      return HeaderRow(
+                        userName: !isReplyChat
+                            ? userName
+                            : (isReplyChat && messageItem != null)
+                                ? repliedmessageCreator ==
+                                        context.read<AppUserBloc>().appUser.id
+                                    ? 'You'
+                                    : messageItem!.repliedTo ?? ''
+                                : '',
+                        showIcon: showIcon,
+                      );
+                    }),
                     AppSizedBox.sizedBox5H,
                     MessageContent(
                       isReplychat: isReplyChat,

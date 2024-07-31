@@ -34,7 +34,7 @@ class AppDarkColor extends AppColor {
           secondaryPrimaryText: const Color(0xFFFF4D67),
           buttonBackground: const Color(0xFFFF4D67),
           buttonForground: const Color(0xFFFFFFFF),
-          buttonSecondaryColor: const Color(0xFFf48A9A).withOpacity(0.9),
+        buttonSecondaryColor: const Color(0xFFf48A9A).withOpacity(0.9),
           bottomBar: const Color(0xFF202020),
           iconColor: const Color(0xFF4E4E4E),
           gradientPrimary: const Color(0xFF4E4E4E),
