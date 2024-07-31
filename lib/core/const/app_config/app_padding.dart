@@ -56,7 +56,9 @@ final class AppPadding {
   static EdgeInsets onlyRightSmall = only(right: 8.0);
   static EdgeInsets onlyRightMedium = only(right: 16.0);
   static EdgeInsets onlyRightLarge = only(right: 24.0);
-  //only top
+  //only top  static EdgeInsets onlyTopSmall = only(top: 8.0);
+  static EdgeInsets onlyTopExtraSmall = only(top: 4.0);
+
   static EdgeInsets onlyTopSmall = only(top: 8.0);
   static EdgeInsets onlyTopMedium = only(top: 16.0);
   static EdgeInsets onlyTopLarge = only(top: 24.0);

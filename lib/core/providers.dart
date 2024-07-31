@@ -124,14 +124,13 @@ List<SingleChildWidget> myProviders = [
     create: (context) => serviceLocator<FollowingCubit>(),
   ),
   BlocProvider(
-    create: (context) => serviceLocator<GetMyStatusBloc>(),
+    create: (context) => serviceLocator<GetMyStatusBloc>()
+      ..add(GetAllMystatusesEvent(uId: context.read<AppUserBloc>().appUser.id)),
   ),
+
   BlocProvider(
-    create: (context) => serviceLocator<GetMyStatusBloc>(),
-  ),
-  BlocProvider(
-    create: (context) => serviceLocator<GetAllStatusBloc>(),
-  ),
+      create: (context) => serviceLocator<GetAllStatusBloc>()
+        ..add(GetAllstatusesEvent(uId: context.read<AppUserBloc>().appUser.id))),
   BlocProvider(
     create: (context) => serviceLocator<CommentBasicCubit>(),
   ),

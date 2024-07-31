@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
@@ -20,6 +21,8 @@ class GetMyStatusBloc extends Bloc<GetMyStatusEvent, GetMyStatusState> {
   FutureOr<void> _getMystatuses(
       GetAllMystatusesEvent event, Emitter<GetMyStatusState> emit) async {
     try {
+      log('this called');
+
       final streamRes = _getMyStatusUseCase.call(event.uId);
       await for (var value in streamRes) {
         emit(GetMyStatusSuccess(myStatus: value));

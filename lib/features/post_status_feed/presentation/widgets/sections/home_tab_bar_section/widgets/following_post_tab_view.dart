@@ -9,6 +9,8 @@ import 'package:social_media_app/core/widgets/shimmer.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/no_post_holder.dart';
 
+import '../../../../pages/home.dart';
+
 class FollowingPostTabView extends StatefulWidget {
   const FollowingPostTabView({super.key});
 
@@ -79,7 +81,7 @@ class _FollowingPostTabViewState extends State<FollowingPostTabView> {
           if (state.followingPosts.isEmpty) {
             return const NoPostHolder();
           }
-          return ListView.builder(
+          return SliverList.builder(
             // controller: _scrollController,
             itemCount: state.followingPosts.length,
             //  state.hasMore

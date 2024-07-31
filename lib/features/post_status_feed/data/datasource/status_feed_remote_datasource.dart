@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
@@ -30,6 +32,7 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
     try {
       //*24 hour cut off time to fetch only status from last 24 hours;
       final cutoffTimestamp = cutOffTime;
+      log('this called');
 
       ///returning the list of statuses of current user from status collection using
       ///the user id
@@ -41,6 +44,7 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
           .map((doc) => SingleStatusEntity.fromJson(doc.data()))
           .toList());
     } catch (e) {
+      
       throw MainException(
           errorMsg: AppErrorMessages.myStatusFetchFailed,
           details: e.toString());
