@@ -19,11 +19,11 @@ class MediaGrid extends StatelessWidget {
         padding: const EdgeInsets.all(2.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ViewPost(
-                      post: medias[index],
-                      isEdit: isEdit,
-                    )));
+            // Navigator.of(context).push(MaterialPageRoute(
+            //     builder: (context) => ViewPost(
+            //           post: medias[index],
+            //           isEdit: isEdit,
+            //         )));
           },
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(10)),

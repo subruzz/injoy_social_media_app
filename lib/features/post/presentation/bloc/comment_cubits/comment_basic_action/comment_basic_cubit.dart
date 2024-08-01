@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +19,7 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
   final UpdateCommentUseCase _updateCommentUseCase;
   final DeleteCommentUseCase _deleteCommentUseCase;
   final NotificationCubit _notificationCubit;
+
   CommentBasicCubit({
     required CreateCommentUsecase createCommentUsecase,
     required NotificationCubit notificationCubit,
@@ -36,7 +39,7 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
       required String postId,
       required String creatorId}) async {
     emit(CommentLoading());
-    final commentId=IdGenerator.generateUniqueId();
+    final commentId = IdGenerator.generateUniqueId();
     final newComment = CommentEntity(
         comment: comment,
         creatorId: user.id,
@@ -110,5 +113,11 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
         postId: postId, commentId: commentId, comment: comment));
     res.fold((failure) => emit(CommentError(error: failure.message)),
         (success) => emit(CommentSuccess()));
+  }
+
+  @override
+  Future<void> close() {
+    log(' comment basic cubit closed');
+    return super.close();
   }
 }

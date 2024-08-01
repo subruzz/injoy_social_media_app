@@ -96,9 +96,9 @@ class MyAppRouter {
           builder: (_) => CreatePostScreen(selectedImages: selectedAssets),
         );
 
-      case MyAppRouteConst.viewPostsDetailedRoute:
-        final PostEntity post = settings.arguments as PostEntity;
-        return MaterialPageRoute(builder: (_) => ViewPost(post: post));
+      // case MyAppRouteConst.viewPostsDetailedRoute:
+      //   final PostEntity post = settings.arguments as PostEntity;
+      //   return MaterialPageRoute(builder: (_) => ViewPost(post: post));
 
       case MyAppRouteConst.otherUserProfile:
         final Map<String, dynamic> params =

@@ -8,18 +8,36 @@ import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/comment_bottom_input_section.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/widgets/each_comment.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/widgets/no_comment_display.dart';
+import 'package:social_media_app/init_dependecies.dart';
 
 class CommentScreen extends StatefulWidget {
-  const CommentScreen({
-    super.key,
-    required this.post,
-  });
+  const CommentScreen(
+      {super.key, required this.post, required this.onCommentAction});
   final PostEntity post;
+  final void Function(num) onCommentAction;
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
 
 class _CommentScreenState extends State<CommentScreen> {
+  final _commentBasic = serviceLocator<CommentBasicCubit>();
+  final _readComment = serviceLocator<GetPostCommentCubit>();
+  @override
+  void initState() {
+    _readComment.getPostComments(
+        postId: widget.post.postId, oncommentAction: widget.onCommentAction);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    inputNode?.dispose();
+    _commentController.dispose();
+    _commentBasic.close();
+    _readComment.close();
+    super.dispose();
+  }
+
   final FocusNode? inputNode = FocusNode();
 
   final TextEditingController _commentController = TextEditingController();
@@ -36,23 +54,18 @@ class _CommentScreenState extends State<CommentScreen> {
   Widget build(BuildContext context) {
     final appUser = context.read<AppUserBloc>().appUser;
     return BlocListener<CommentBasicCubit, CommentBasicState>(
+      bloc: _commentBasic,
       listenWhen: (previous, current) =>
           current is CommentDeletedSuccess || current is CommentAddedSuccess,
-      listener: (context, state) {
-        if (state is CommentDeletedSuccess) {
-          --widget.post.totalComments;
-        }
-        if (state is CommentAddedSuccess) {
-          ++widget.post.totalComments;
-        }
-      },
+      listener: (context, state) {},
       child: DraggableScrollableSheet(
-        initialChildSize: 0.6,
+        initialChildSize: 0.8,
         minChildSize: 0.5,
         maxChildSize: 0.9,
         expand: false,
         builder: (context, scrollController) {
           return BlocConsumer<GetPostCommentCubit, GetPostCommentState>(
+            bloc: _readComment,
             builder: (context, state) {
               if (state is GetPostCommentSuccess) {
                 return Padding(
@@ -73,6 +86,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                 itemBuilder: (context, index) {
                                   final comment = state.postComments[index];
                                   return EachComment(
+                                      commentBasicCubit: _commentBasic,
                                       creatorId: widget.post.creatorUid,
                                       postId: widget.post.postId,
                                       commentId: comment.commentId,
@@ -94,6 +108,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               ),
                       ),
                       CommentBottomInputSection(
+                          commentBasicCubit: _commentBasic,
                           creatorId: widget.post.creatorUid,
                           commentController: _commentController,
                           commentSubmitSelection: _commentSubmitSelection,

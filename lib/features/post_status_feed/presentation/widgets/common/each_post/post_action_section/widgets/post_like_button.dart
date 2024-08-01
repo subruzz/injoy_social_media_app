@@ -8,47 +8,55 @@ import 'package:social_media_app/features/post_status_feed/presentation/widgets/
 
 import '../../../../../../../../core/const/app_config/app_sizedbox.dart';
 
-class PostLikeButton extends StatelessWidget {
+class PostLikeButton extends StatefulWidget {
   const PostLikeButton({super.key, required this.me, required this.post});
   final AppUser me;
   final PostEntity post;
+
+  @override
+  State<PostLikeButton> createState() => _PostLikeButtonState();
+}
+
+class _PostLikeButtonState extends State<PostLikeButton> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LikePostBloc, LikePostState>(
-      builder: (context, state) {
-        return Row(
-          children: [
-            GestureDetector(
-                onTap: () {
-                  if (post.likes.contains(me.id)) {
-                    post.likes.remove(me.id);
+    return Row(
+      children: [
+        GestureDetector(
+            onTap: () {
+              if (widget.post.likes.contains(widget.me.id)) {
+                widget.post.likes.remove(widget.me.id);
 
-                    context.read<LikePostBloc>().add(UnlikePostClickEvent(
-                        postId: post.postId,
-                        myId: me.id,
-                        ohterUseId: post.creatorUid));
-                  } else {
-                    // likeAnim();
-                    post.likes.add(me.id);
-                    context.read<LikePostBloc>().add(LikePostClickEvent(
-                        user: me,
-                        postId: post.postId,
-                        otherUserId: post.creatorUid));
-                  }
-                },
-                child: Icon(
-                    size: 25,
-                    post.likes.contains(me.id)
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: post.likes.contains(me.id)
-                        ? AppDarkColor().iconSoftColor
-                        : AppDarkColor().iconSecondarycolor)),
-            AppSizedBox.sizedBox5W,
-            SocialActionText(text: post.likes.length.toString())
-          ],
-        );
-      },
+                context.read<LikePostBloc>().add(UnlikePostClickEvent(
+                    postId: widget.post.postId,
+                    myId: widget.me.id,
+                    ohterUseId: widget.post.creatorUid));
+              } else {
+                // likeAnim();
+                widget.post.likes.add(widget.me.id);
+                context.read<LikePostBloc>().add(LikePostClickEvent(
+                    user: widget.me,
+                    postId: widget.post.postId,
+                    otherUserId: widget.post.creatorUid));
+              }
+
+              /// it is better to user setstate here rather than bloc builder
+              /// since we are using single instance of the bloc
+              /// it will call the build of other like button as well
+              /// here setstate only build the like button of the post that liked
+              setState(() {});
+            },
+            child: Icon(
+                size: 25,
+                widget.post.likes.contains(widget.me.id)
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                color: widget.post.likes.contains(widget.me.id)
+                    ? AppDarkColor().iconSoftColor
+                    : AppDarkColor().iconSecondarycolor)),
+        AppSizedBox.sizedBox5W,
+        SocialActionText(text: widget.post.likes.length.toString())
+      ],
     );
   }
 }

@@ -14,7 +14,7 @@ class PostSendButton extends StatelessWidget {
           height: 25,
           'assets/svgs/send.svg',
           colorFilter: ColorFilter.mode(
-            AppDarkColor().iconSoftColor,
+            AppDarkColor().iconSecondarycolor,
             BlendMode.srcIn,
           ),
         ),

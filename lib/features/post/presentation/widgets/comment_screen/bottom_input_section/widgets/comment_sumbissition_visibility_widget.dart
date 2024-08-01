@@ -15,9 +15,11 @@ class CommentSumbissitionVisibilityWidget extends StatelessWidget {
       required this.postId,
       required this.creatorId,
       required this.commentId,
-      required this.commentController});
+      required this.commentController,
+      required this.commentBasicCubit});
   final ValueNotifier<({bool isComment, bool isEdit, bool isTextEmpty})>
       commentSubmitSelection;
+  final CommentBasicCubit commentBasicCubit;
   final String myId;
   final String postId;
   final String creatorId;
@@ -34,14 +36,15 @@ class CommentSumbissitionVisibilityWidget extends StatelessWidget {
                   log('comment id is $commentId');
                   final user = context.read<AppUserBloc>().appUser;
                   commentSubmitSelection.value.isComment
-                      ? context.read<CommentBasicCubit>().addComment(
+                      ?commentBasicCubit.addComment(
                           user: user,
                           comment: sanitizeComment(commentController.text),
                           userName: user.userName ?? '',
                           postId: postId,
-                          creatorId:creatorId)
+                          userProfile: user.profilePic,
+                          creatorId: creatorId)
                       : commentId.isNotEmpty
-                          ? context.read<CommentBasicCubit>().updateComment(
+                          ? commentBasicCubit.updateComment(
                                 postId: postId,
                                 commentId: commentId,
                                 comment:

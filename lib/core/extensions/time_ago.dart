@@ -4,22 +4,22 @@ extension TimeAgo on DateTime {
     final difference = now.difference(this);
 
     if (difference.inSeconds < 60) {
-      return '${difference.inSeconds} sec ago';
+      return '${difference.inSeconds}s';
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes} min ago';
+      return '${difference.inMinutes}m';
     } else if (difference.inHours < 24) {
-      return '${difference.inHours} hours ago';
+      return '${difference.inHours}h';
     } else if (difference.inDays < 7) {
-      return '${difference.inDays} days ago';
+      return '${difference.inDays}d';
     } else if (difference.inDays < 30) {
       final weeks = (difference.inDays / 7).floor();
-      return '$weeks ${weeks == 1 ? 'week' : 'weeks'} ago';
+      return '${weeks}w';
     } else if (difference.inDays < 365) {
-      final months = (difference.inDays / 30).floor();
-      return '$months ${months == 1 ? 'month' : 'months'} ago';
+      final weeks = (difference.inDays / 7).round();
+      return '${weeks}w';
     } else {
       final years = (difference.inDays / 365).floor();
-      return '$years ${years == 1 ? 'year' : 'years'} ago';
+      return '${years}y';
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/utils/id_generator.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
@@ -18,6 +19,8 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
   final LikePostsUseCase _likePostsUseCase;
   final UnlikePostsUseCase _unlikePostsUseCase;
   final NotificationCubit _notificationCubit;
+  final Debouncer _debouncer =
+      Debouncer(delay: const Duration(milliseconds: 300));
   LikePostBloc(
       this._likePostsUseCase, this._unlikePostsUseCase, this._notificationCubit)
       : super(LikePostInitial()) {
@@ -34,22 +37,25 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
         postId: event.postId, currentUserId: event.user.id));
     res.fold((failure) => emit(LikePostLoading()), (success) {
       emit(LikePostSuccess());
-      _notificationCubit.createNotification(
-        notification: CustomNotification(
-          notificationId: IdGenerator.generateUniqueId(),
-          text: "Liked your post",
-          time: Timestamp.now(),
-          senderId: event.user.id,
-          uniqueId: event.postId,
-          receiverId: event.otherUserId,
-          isThatLike: true,
-          isThatPost: true,
-          personalUserName: event.user.userName ?? '',
-          personalProfileImageUrl: event.user.profilePic,
-          notificationType: NotificationType.post,
-          senderName: event.user.userName ?? '',
-        ),
-      );
+      if (_debouncer.isRunning()) _debouncer.cancel();
+      _debouncer.run(() {
+        _notificationCubit.createNotification(
+          notification: CustomNotification(
+            notificationId: IdGenerator.generateUniqueId(),
+            text: "Liked your post",
+            time: Timestamp.now(),
+            senderId: event.user.id,
+            uniqueId: event.postId,
+            receiverId: event.otherUserId,
+            isThatLike: true,
+            isThatPost: true,
+            personalUserName: event.user.userName ?? '',
+            personalProfileImageUrl: event.user.profilePic,
+            notificationType: NotificationType.post,
+            senderName: event.user.userName ?? '',
+          ),
+        );
+      });
     });
   }
 
@@ -59,6 +65,8 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
         postId: event.postId, currentUserId: event.myId));
     res.fold((failure) => emit(LikePostLoading()), (success) {
       emit(LikePostSuccess());
+      if (_debouncer.isRunning()) _debouncer.cancel();
+
       _notificationCubit.deleteNotification(
         notificationCheck: NotificationCheck(
           receiverId: event.ohterUseId,

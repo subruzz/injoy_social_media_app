@@ -9,7 +9,7 @@ class ShimmerEachPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return SliverList.builder(
       itemCount: 5,
       itemBuilder: (context, index) {
         return CustomAppPadding(

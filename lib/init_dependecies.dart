@@ -422,7 +422,7 @@ void _comment() {
     ..registerLazySingleton(
         () => LikeCommentCubit(serviceLocator(), serviceLocator()))
     ..registerFactory(() => GetPostCommentCubit(serviceLocator()))
-    ..registerLazySingleton(() => CommentBasicCubit(
+    ..registerFactory(() => CommentBasicCubit(
         notificationCubit: serviceLocator(),
         createCommentUsecase: serviceLocator(),
         updateCommentUseCase: serviceLocator(),

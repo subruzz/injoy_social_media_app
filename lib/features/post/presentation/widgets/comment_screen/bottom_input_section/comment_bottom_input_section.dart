@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
+import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/widgets/comment_sumbissition_visibility_widget.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/widgets/comment_text_field.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/widgets/emoji_picker.dart';
@@ -16,6 +17,7 @@ class CommentBottomInputSection extends StatelessWidget {
       this.inputNode,
       required this.myId,
       required this.creatorId,
+      required this.commentBasicCubit,
       required this.postId,
       required this.commentId});
   final TextEditingController commentController;
@@ -26,6 +28,7 @@ class CommentBottomInputSection extends StatelessWidget {
   final String myId;
   final String postId;
   final String commentId;
+  final CommentBasicCubit commentBasicCubit;
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -73,6 +76,7 @@ class CommentBottomInputSection extends StatelessWidget {
                     myId: myId,
                     postId: postId,
                     commentId: commentId,
+                    commentBasicCubit: commentBasicCubit,
                     commentController: commentController)
               ],
             ),

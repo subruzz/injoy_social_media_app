@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/core/widgets/cached_image.dart';
 import 'package:social_media_app/features/post/presentation/widgets/edit_post/edit_screen_feed_option.dart';
 
 class PostMultipleImages extends StatelessWidget {
   const PostMultipleImages(
       {super.key,
       required this.postImageUrls,
-      this.size = .3,
+      this.size = .4,
       this.isEdit = false});
   final bool isEdit;
   final List<String> postImageUrls;
@@ -21,32 +22,26 @@ class PostMultipleImages extends StatelessWidget {
           PageView.builder(
             itemCount: postImageUrls.length,
             itemBuilder: (context, index) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.network(
-                      postImageUrls[index],
-                      fit: BoxFit.cover,
-                    ),
-                    Positioned(
-                        top: 2,
-                        left: 2,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                style: const TextStyle(fontSize: 8),
-                                '${index + 1}/${postImageUrls.length}'),
-                          ),
-                        )),
-                  ],
-                ),
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  CachedImage(img: postImageUrls[index]),
+                  Positioned(
+                      top: 2,
+                      left: 2,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                              style: const TextStyle(fontSize: 8),
+                              '${index + 1}/${postImageUrls.length}'),
+                        ),
+                      )),
+                ],
               );
             },
           ),

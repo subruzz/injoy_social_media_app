@@ -1,11 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/theme/color/app_colors.dart';
+
 class ExpandableText extends StatefulWidget {
   final String text;
   final int trimLines;
-
+  final Color? color;
   const ExpandableText(
-      {super.key, required this.text, required this.trimLines});
+      {super.key, this.color, required this.text, required this.trimLines});
 
   @override
   ExpandableTextState createState() => ExpandableTextState();
@@ -21,7 +23,7 @@ class ExpandableTextState extends State<ExpandableText> {
   Widget build(BuildContext context) {
     TextSpan link = TextSpan(
         text: _readMore ? "... read more" : " read less",
-        style: const TextStyle(color: Colors.blue),
+        style: TextStyle(color: widget.color ?? Colors.blue.withOpacity(.8)),
         recognizer: TapGestureRecognizer()..onTap = _onTapLink);
     Widget result = LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -56,7 +58,10 @@ class ExpandableTextState extends State<ExpandableText> {
         if (textPainter.didExceedMaxLines) {
           textSpan = TextSpan(
             text: _readMore ? widget.text.substring(0, endIndex) : widget.text,
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: AppDarkColor().primaryText.withOpacity(.9)),
             children: <TextSpan>[link],
           );
         } else {

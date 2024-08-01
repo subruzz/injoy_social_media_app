@@ -1,15 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/app_error_gif.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/each_post.dart';
 import 'package:social_media_app/core/widgets/shimmer.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/no_post_holder.dart';
 
-import '../../../../pages/home.dart';
 
 class FollowingPostTabView extends StatefulWidget {
   const FollowingPostTabView({super.key});
@@ -68,18 +64,15 @@ class _FollowingPostTabViewState extends State<FollowingPostTabView> {
 
   @override
   Widget build(BuildContext context) {
-    int count = 9;
     return BlocBuilder<FollowingPostFeedBloc, FollowingPostFeedState>(
       builder: (context, state) {
         if (state is FollowingPostFeedError) {
-          return const AppErrorGif();
+          return const SliverToBoxAdapter(child:  AppErrorGif());
         }
         if (state is FollowingPostFeedSuccess) {
-          count = state.followingPosts.length;
-          log('follwoing is ${context.read<AppUserBloc>().appUser.following.toString()}');
 
           if (state.followingPosts.isEmpty) {
-            return const NoPostHolder();
+            return const SliverToBoxAdapter(child:  NoPostHolder());
           }
           return SliverList.builder(
             // controller: _scrollController,

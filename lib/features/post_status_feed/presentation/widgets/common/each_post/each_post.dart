@@ -51,9 +51,9 @@ class _EachPostState extends State<EachPost> {
           AppSizedBox.sizedBox5W,
           GestureDetector(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ViewPost(post: widget.currentPost),
-              ));
+              // Navigator.of(context).push(MaterialPageRoute(
+              //   builder: (context) => ViewPost(post: widget.currentPost),
+              // ));
             },
             // onDoubleTap: () {
 
@@ -80,7 +80,7 @@ class _EachPostState extends State<EachPost> {
                 ),
                 AppSizedBox.sizedBox5H,
                 PostImageSection(postImages: widget.currentPost.postImageUrl),
-                AppSizedBox.sizedBox5H,
+                AppSizedBox.sizedBox10H,
                 Align(
                     alignment: Alignment.centerRight,
                     child: SocialActions(

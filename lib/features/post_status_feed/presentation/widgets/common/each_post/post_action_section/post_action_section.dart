@@ -33,11 +33,13 @@ class SocialActions extends StatelessWidget {
                 children: [
                   PostLikeButton(me: appUser, post: post),
                   AppSizedBox.sizedBox20W,
+
                   // Comments
-                  if (!isCommentOff) PostCommentButton(post: post)
+                  if (!isCommentOff) PostCommentButton(post: post),
+                  if (!isCommentOff) AppSizedBox.sizedBox20W,
+                  const PostSendButton()
                 ],
               ),
-              const PostSendButton()
             ],
           ),
         ),

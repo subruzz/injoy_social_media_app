@@ -131,13 +131,13 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
       create: (context) => serviceLocator<GetAllStatusBloc>()
         ..add(GetAllstatusesEvent(uId: context.read<AppUserBloc>().appUser.id))),
-  BlocProvider(
-    create: (context) => serviceLocator<CommentBasicCubit>(),
-  ),
+  // BlocProvider(
+  //   create: (context) => serviceLocator<CommentBasicCubit>(),
+  // ),
 
-  BlocProvider(
-    create: (context) => serviceLocator<GetPostCommentCubit>(),
-  ),
+  // BlocProvider(
+  //   create: (context) => serviceLocator<GetPostCommentCubit>(),
+  // ),
   BlocProvider(
     create: (context) => serviceLocator<LikeCommentCubit>(),
   ),
