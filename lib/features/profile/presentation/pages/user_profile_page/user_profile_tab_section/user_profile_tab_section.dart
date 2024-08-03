@@ -14,11 +14,8 @@ class UserProfileTabSection extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         AppSizedBox.sizedBox5H,
-        TabBar(
-          labelColor: AppDarkColor().secondaryPrimaryText,
-          dividerColor: AppDarkColor().secondaryBackground,
-          indicatorColor: AppDarkColor().iconSecondarycolor,
-          tabs: const [
+        const TabBar(
+          tabs: [
             UserTab(icon: '', tabTitle: 'Posts'),
             UserTab(icon: '', tabTitle: 'Liked')
           ],

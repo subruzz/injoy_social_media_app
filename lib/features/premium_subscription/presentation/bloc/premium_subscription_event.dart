@@ -12,3 +12,9 @@ class CreatePremiumsubscriptionIntent extends PremiumSubscriptionEvent {
 
   const CreatePremiumsubscriptionIntent({required this.userid});
 }
+
+class SelectPremiumOption extends PremiumSubscriptionEvent {
+  final PremiumSubType premiumSubType;
+
+ const  SelectPremiumOption({required this.premiumSubType});
+}

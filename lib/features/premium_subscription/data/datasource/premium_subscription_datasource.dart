@@ -7,12 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
+import 'package:social_media_app/core/const/location_enum.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/features/premium_subscription/domain/entities/payment_intent_basic.dart';
 import 'package:http/http.dart' as http;
 
 abstract interface class PremiumSubscriptionDatasource {
-  Future<PaymentIntentBasic> createPaymentIntent();
+  Future<PaymentIntentBasic> createPaymentIntent(PremiumSubType premType);
   Future<void> setUpStripeToCompletePayment(
       {required PaymentIntentBasic paymentIntent});
   Future<void> updateUserPremiumStatus(
@@ -24,12 +25,17 @@ class PremiumSubscriptionDatasourceImpl
   final stripePaymentEndPoint = "https://api.stripe.com/v1/payment_intents";
 
   @override
-  Future<PaymentIntentBasic> createPaymentIntent() async {
+  Future<PaymentIntentBasic> createPaymentIntent(
+      PremiumSubType premType) async {
+    log(premType.toString());
+    String amount = getAmount(premType);
+
     try {
       final Uri url = Uri.parse(stripePaymentEndPoint);
       final body = {
-        'amount': calculateAmount(299),
+        'amount': amount,
         'currency': 'INR',
+       
       };
       final stripeSecretKey = dotenv.env['STRIPE_SECRET_KEY']!;
       final response = await http.post(url,
@@ -49,11 +55,28 @@ class PremiumSubscriptionDatasourceImpl
         throw const MainException();
       }
     } on StripeConfigException catch (e) {
+      log(e.toString());
       throw const MainException();
     } catch (e) {
       log(e.toString());
       throw const MainException();
     }
+  }
+
+  String getAmount(PremiumSubType type) {
+    int amount = 0;
+    switch (type) {
+      case PremiumSubType.oneMonth:
+        amount = 299;
+        break;
+      case PremiumSubType.threeMonth:
+        amount = 499;
+        break;
+      case PremiumSubType.oneYear:
+        amount = 1599;
+        break;
+    }
+    return calculateAmount(amount);
   }
 
   String calculateAmount(int amount) {

@@ -216,7 +216,5 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<CallHistoryCubit>(),
   ),
-  BlocProvider(
-    create: (context) => serviceLocator<PremiumSubscriptionBloc>(),
-  ),
+
 ];

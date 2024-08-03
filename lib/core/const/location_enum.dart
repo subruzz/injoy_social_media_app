@@ -4,3 +4,5 @@ enum LocationStatus {
   locationPermissionDeniedForever,
   locationPermissionAllowed,
 }
+
+enum PremiumSubType { oneMonth, threeMonth, oneYear }

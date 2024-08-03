@@ -4,7 +4,10 @@ import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/premium_subscription/domain/entities/payment_intent_basic.dart';
 import 'package:social_media_app/features/premium_subscription/domain/repositories/premium_subscription_repository.dart';
 
-class CreatePaymentIntentUseCase implements UseCase<PaymentIntentBasic, NoParams> {
+import '../../../../core/const/location_enum.dart';
+
+class CreatePaymentIntentUseCase
+    implements UseCase<PaymentIntentBasic, CreatePaymentIntentParams> {
   final PremiumSubscriptionRepository _premiumSubscriptionRepository;
 
   CreatePaymentIntentUseCase(
@@ -12,7 +15,15 @@ class CreatePaymentIntentUseCase implements UseCase<PaymentIntentBasic, NoParams
       : _premiumSubscriptionRepository = premiumSubscriptionRepository;
 
   @override
-  Future<Either<Failure, PaymentIntentBasic>> call(NoParams params) async {
-    return await _premiumSubscriptionRepository.createPaymentIntent();
+  Future<Either<Failure, PaymentIntentBasic>> call(
+      CreatePaymentIntentParams params) async {
+    return await _premiumSubscriptionRepository
+        .createPaymentIntent(params.premType);
   }
+}
+
+class CreatePaymentIntentParams {
+  final PremiumSubType premType;
+
+  CreatePaymentIntentParams({required this.premType});
 }

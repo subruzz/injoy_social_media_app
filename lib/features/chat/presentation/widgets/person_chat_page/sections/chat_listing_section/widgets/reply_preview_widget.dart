@@ -86,8 +86,8 @@ class ReplyPreviewWidget extends StatelessWidget {
                         userName: !isReplyChat
                             ? userName
                             : (isReplyChat && messageItem != null)
-                                ? (messageItem!.repliedToMe != null &&
-                                        messageItem!.repliedToMe!)
+                                ? (messageItem!.repliedMessgeCreatorId ==
+                                        context.read<AppUserBloc>().appUser.id)
                                     ? 'You'
                                     : messageItem!.repliedTo ?? ''
                                 : '',

@@ -45,9 +45,11 @@ class MessageCubit extends Cubit<MessageState> {
       required String messageType,
       String? assetPath,
       required String repliedMessagecreator,
+      required GetMessageState otherUserState,
       String? caption}) {
+    if (otherUserState.otherUser == null) return;
     emit(MessageReplyClicked(
-        userName: _appUserBloc.appUser.userName ?? '',
+        userName:  _appUserBloc.appUser.userName ?? '',
         repliedToMe: isMe,
         repliedMessageCreator: repliedMessagecreator,
         messageType: messageType,

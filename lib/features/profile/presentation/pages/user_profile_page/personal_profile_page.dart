@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/features/premium_subscription/presentation/pages/premium_subscripti_builder.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/pages/premium_subscription_page.dart';
 
 import 'package:social_media_app/features/profile/presentation/pages/edit_profile/edit_profile_page.dart';
@@ -133,7 +134,7 @@ class CustomBottomSheet {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PremiumSubscriptionPage(),
+                        builder: (context) =>const  PremiumSubscriptiBuilder(),
                       ));
                   // Add your onTap code here
                 },

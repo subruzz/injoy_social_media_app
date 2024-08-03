@@ -21,7 +21,7 @@ class UserTab extends StatelessWidget {
             assetPath: AppAssetsConst.explore,
             width: 18,
             height: 18,
-            color: AppDarkColor().iconSecondarycolor,
+            color: AppDarkColor().iconSoftColor,
           ),
           AppSizedBox.sizedBox10W,
           Text(

@@ -586,7 +586,7 @@ void _premiumsubscription() {
         premiumSubscriptionRepository: serviceLocator()))
     ..registerFactory(() => UpdateUserPremiumStatusUseCase(
         premiumSubscriptionRepository: serviceLocator()))
-    ..registerLazySingleton(
+    ..registerFactory(
         () => PremiumSubscriptionBloc(serviceLocator(), serviceLocator()));
 }
 

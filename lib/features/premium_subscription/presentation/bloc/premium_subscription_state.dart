@@ -30,3 +30,9 @@ class PremiumSubscriptionFailure extends PremiumSubscriptionState {
   @override
   List<Object?> get props => [error];
 }
+
+class PremiumOptionSelected extends PremiumSubscriptionState {
+  final PremiumSubType premiumSubType;
+
+  const PremiumOptionSelected({required this.premiumSubType});
+}

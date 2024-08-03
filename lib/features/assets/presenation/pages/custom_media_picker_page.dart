@@ -59,7 +59,7 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
           child: Scaffold(
             appBar: widget.pickerType == MediaPickerType.post
                 ? AppCustomAppbar(
-                    title: const Text('Select Image'),
+                    title: 'Select Image',
                     showLeading: true,
                     actions: [
                       if (widget.pickerType == MediaPickerType.post)

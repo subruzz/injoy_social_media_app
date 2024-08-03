@@ -66,11 +66,12 @@ class ChatListingSectionSection extends StatelessWidget {
                 }
                 return SwipeTo(
                   onRightSwipe: (details) {
+                    final state = context.read<GetMessageCubit>().state;
                     context.read<MessageCubit>().replyClicked(
+                        otherUserState: state,
                         repliedMessagecreator: message.senderUid,
                         isMe: message.senderUid == myid,
                         messageType: message.messageType,
-                        
                         assetPath: message.assetLink,
                         caption: message.message);
                   },
