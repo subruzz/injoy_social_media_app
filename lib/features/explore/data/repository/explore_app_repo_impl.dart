@@ -6,7 +6,7 @@ import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/explore/data/datasource/explore_app_datasource.dart';
 import 'package:social_media_app/features/explore/domain/entities/explore_search_location.dart';
 import 'package:social_media_app/features/explore/domain/repositories/explore_app_repository.dart';
-import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';
+import '../../../post/domain/enitities/hash_tag.dart';
 
 class ExploreAppRepoImpl implements ExploreAppRepository {
   final ExploreAppDatasource _exploreAppDatasource;
@@ -109,6 +109,16 @@ class ExploreAppRepoImpl implements ExploreAppRepository {
     try {
       final res = await _exploreAppDatasource.getSuggestedOrNearbyUsers(
           interests, following, latitude, longitude, myId);
+      return right(res);
+    } on MainException catch (e) {
+      return left(Failure(e.errorMsg));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<PostEntity>>> getAllPosts(String id) async {
+    try {
+      final res = await _exploreAppDatasource.getAllPosts(id);
       return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

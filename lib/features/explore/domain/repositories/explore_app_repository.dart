@@ -20,6 +20,8 @@ abstract interface class ExploreAppRepository {
     double longitude,
     String myId,
   );
+  Future<Either<Failure,List<PostEntity>> >getAllPosts(String id);
+
   //posts based on location
   Future<Either<Failure, List<PostEntity>>> getTopPostsOfLocation(
       String location);

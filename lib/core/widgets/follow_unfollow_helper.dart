@@ -33,13 +33,14 @@ class FollowUnfollowHelper extends StatelessWidget {
         onClick: () {
           final me = context.read<AppUserBloc>().appUser;
           final amIFollowing = me.following.contains(user.id);
-          if (amIFollowing) {
-            me.following.remove(user.id);
-            --user.followersCount;
-          } else {
-            ++user.followersCount;
-            me.following.add(user.id);
-          }
+          // if (user.followersCount == null) return;
+          // if (amIFollowing) {
+          //   me.following.remove(user.id);
+          //   --user.followersCount!;
+          // } else {
+          //   ++user.followersCount!;
+          //   me.following.add(user.id);
+          // }
           context.read<FollowunfollowCubit>().followUnfollowAction(
               user: me,
               myid: me.id,

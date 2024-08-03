@@ -7,12 +7,14 @@ class ChatModel extends ChatEntity {
   const ChatModel(
       {required super.senderUid,
       required super.recipientUid,
-      required super.recipientName,
+      super.recipientName,
       required super.recentTextMessage,
       required super.createdAt,
       super.recipientProfile,
       super.senderName,
       super.senderProfile,
+      super.otherUserName,
+      super.otherUserProfile,
       super.totalUnReadMessages});
 
   factory ChatModel.fromJson(DocumentSnapshot snapshot) {
@@ -20,22 +22,22 @@ class ChatModel extends ChatEntity {
     log('time is ${snap['createdAt']}');
     return ChatModel(
       recentTextMessage: snap['recentTextMessage'],
-      recipientName: snap['recipientName'],
+      otherUserProfile: snap['otherUserProfile'],
       totalUnReadMessages: snap['totalUnReadMessages'],
       recipientUid: snap['recipientUid'],
       senderUid: snap['senderUid'],
-      recipientProfile: snap['recipientProfile'],
+      otherUserName: snap['otherUserName'],
       createdAt: snap['createdAt'],
     );
   }
 
   Map<String, dynamic> toJson({required FieldValue time}) => {
         "recentTextMessage": recentTextMessage,
-        "recipientName": recipientName,
+        "otherUserName": otherUserName,
         "totalUnReadMessages": totalUnReadMessages,
         "recipientUid": recipientUid,
         "senderUid": senderUid,
-        "recipientProfile": recipientProfile,
+        "otherUserProfile": otherUserProfile,
         "createdAt": time,
       };
   factory ChatModel.fromChatEntity(ChatEntity entity) {
@@ -59,12 +61,16 @@ class ChatModel extends ChatEntity {
     String? recentTextMessage,
     Timestamp? createdAt,
     String? senderProfile,
+    String? otherUserProfile,
+    String? otherUserName,
     String? recipientProfile,
     int? totalUnReadMessages,
   }) {
     return ChatModel(
-      senderName: senderName?? this.senderName,
-      senderProfile: senderProfile??this.senderProfile,
+      otherUserName: otherUserName ?? this.otherUserName,
+      otherUserProfile: otherUserProfile ?? this.otherUserProfile,
+      senderName: senderName ?? this.senderName,
+      senderProfile: senderProfile ?? this.senderProfile,
       senderUid: senderUid ?? this.senderUid,
       recipientUid: recipientUid ?? this.recipientUid,
       recipientName: recipientName ?? this.recipientName,

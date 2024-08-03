@@ -1,28 +1,28 @@
 part of 'explore_user_cubit.dart';
 
-sealed class ExploreUserState extends Equatable {
-  const ExploreUserState();
+sealed class ExploreAllPostsState extends Equatable {
+  const ExploreAllPostsState();
 
   @override
   List<Object> get props => [];
 }
 
-final class ExploreUserInitial extends ExploreUserState {}
+final class ExploreUserInitial extends ExploreAllPostsState {}
 
-class ExploreUsersLoading extends ExploreUserState {}
+class ExplorePostsLoading extends ExploreAllPostsState {}
 
-class ExploreUsersLoaded extends ExploreUserState {
-  final List<PartialUser> suggestedUsers;
-  
-  const ExploreUsersLoaded({
-    required this.suggestedUsers,
+class ExploreAllPostsLoaded extends ExploreAllPostsState {
+  final List<PostEntity> allPosts;
+
+  const ExploreAllPostsLoaded({
+    required this.allPosts,
   });
   @override
   List<Object> get props => [];
 }
 
-class ExploreUsersError extends ExploreUserState {
+class ExplorePostsError extends ExploreAllPostsState {
   final String message;
 
-  const ExploreUsersError(this.message);
+  const ExplorePostsError(this.message);
 }

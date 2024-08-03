@@ -16,6 +16,7 @@ class MessageModel extends MessageEntity {
     required super.isSeen,
     super.repliedTo,
     super.assetLink,
+    super.repliedToMe,
     super.repliedMessage,
     super.repliedMessageType,
     super.repliedMessageAssetLink,
@@ -43,6 +44,7 @@ class MessageModel extends MessageEntity {
       repliedTo: entity.repliedTo,
       assetPath: entity.assetPath,
       messageId: entity.messageId,
+      repliedToMe: entity.repliedToMe,
       repliedMessageType: entity.repliedMessageType,
     );
   }
@@ -57,6 +59,7 @@ class MessageModel extends MessageEntity {
       isEdited: snap['isEdited'],
       deletedAt: snap['deleteAt'],
       senderUid: snap['senderUid'],
+      repliedToMe: snap['repliedToMe'],
       repliedMessgeCreatorId: snap['repliedMessgeCreatorId'],
       recipientUid: snap['recipientUid'],
       createdAt: snap['createdAt'],
@@ -81,6 +84,7 @@ class MessageModel extends MessageEntity {
         'recipientUid': recipientUid,
         'createdAt': time,
         'isSeen': isSeen,
+        'repliedToMe': repliedToMe,
         'message': message,
         'messageType': messageType,
         'repliedMessage': repliedMessage,
@@ -100,12 +104,14 @@ class MessageModel extends MessageEntity {
     Timestamp? createdAt,
     SelectedByte? assetPath,
     bool? isSeen,
+    bool? repliedToMe,
     String? repliedTo,
     String? repliedMessage,
     String? repliedMessageType,
     String? messageId,
     bool? isDeleted,
     bool? isEdited,
+    bool?isThisreply,
     DateTime? deletedAt,
   }) {
     return MessageModel(
@@ -116,8 +122,10 @@ class MessageModel extends MessageEntity {
         messageType: messageType ?? this.messageType,
         message: message ?? this.message,
         createdAt: createdAt ?? this.createdAt,
+        repliedToMe: repliedToMe ?? this.repliedToMe,
         assetPath: assetPath ?? this.assetPath,
         isSeen: isSeen ?? this.isSeen,
+        
         repliedTo: repliedTo ?? this.repliedTo,
         repliedMessage: repliedMessage ?? this.repliedMessage,
         repliedMessageType: repliedMessageType ?? this.repliedMessageType,

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/hashtag_model.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
@@ -19,7 +20,7 @@ abstract interface class ExploreAppDatasource {
   Future<List<PostModel>> searchRecentPostsOfLocation(String location);
   Future<List<PostModel>> getTopPostsOfHashTags(String tag);
   Future<List<PostModel>> searchRecentPostsOfHashTags(String tag);
-
+  Future<List<PostModel>> getAllPosts(String id);
   Future<List<PartialUser>> getSuggestedOrNearbyUsers(
     List<String> interests,
     List<String> following,
@@ -27,6 +28,7 @@ abstract interface class ExploreAppDatasource {
     double longitude,
     String myId,
   );
+  Future<List<PostModel>> getSuggestedPostBasedOnaPost(PostEntity post);
 }
 
 class ExploreAppDatasourceImpl implements ExploreAppDatasource {
@@ -34,6 +36,33 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
 
   ExploreAppDatasourceImpl({required FirebaseFirestore firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore;
+  @override
+  Future<List<PostModel>> getAllPosts(
+    String id,
+  ) async {
+    try {
+      final postRef = _firebaseFirestore
+          .collection(FirebaseCollectionConst.posts)
+          .where('creatorUid', isNotEqualTo: id);
+
+      List<PostModel> posts = [];
+      final userRef =
+          _firebaseFirestore.collection(FirebaseCollectionConst.users);
+      final QuerySnapshot<Map<String, dynamic>> allPosts = await postRef.get();
+      for (var post in allPosts.docs) {
+        final userDoc = await userRef.doc(post['creatorUid']).get();
+        if (!userDoc.exists) continue;
+        final PartialUser user = PartialUser.fromJson(userDoc.data()!);
+        final currentPost = PostModel.fromJson(post.data(), user);
+        posts.add(currentPost);
+      }
+      return posts;
+//
+    } catch (e) {
+      throw const MainException();
+    }
+  }
+
   @override
   Future<List<HashtagModel>> searchHashTags(String query) async {
     // ! Implement fullname searching as well(To do)
@@ -365,55 +394,87 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
     String myId,
   ) async {
     try {
-      // Define latitude and longitude ranges for proximity search
-      double latRange = 50 / 111; // Roughly 50km in latitude degrees
-      double lonRange =
-          50 / (111 * cos(latitude * (pi / 180))); // Adjusted for longitude
-
-      // Create a query to fetch users by interests
-      final interestsQuery = _firebaseFirestore
+      final allUsersQuery = _firebaseFirestore
           .collection(FirebaseCollectionConst.users)
           .where('id', isNotEqualTo: myId)
-          .where('interests', arrayContainsAny: interests)
           .get();
 
-      // Create a query to fetch users by proximity
-      final locationQuery = _firebaseFirestore
-          .collection(FirebaseCollectionConst.users)
-          .where('id', isNotEqualTo: myId)
-          .where('latitude', isGreaterThanOrEqualTo: latitude - latRange)
-          .where('latitude', isLessThanOrEqualTo: latitude + latRange)
-          .where('longitude', isGreaterThanOrEqualTo: longitude - lonRange)
-          .where('longitude', isLessThanOrEqualTo: longitude + lonRange)
-          .get();
+// Wait for the query to complete
+      final queryResults = await allUsersQuery;
+      final List<QueryDocumentSnapshot> docs = queryResults.docs;
 
-      // Wait for both queries to complete
-      final List<QuerySnapshot> queryResults =
-          await Future.wait([interestsQuery, locationQuery]);
-      final List<QueryDocumentSnapshot> docs =
-          queryResults.expand((qs) => qs.docs).toList();
-
-      // Create a set to track unique users and prevent duplicates
+// Create a set to track unique users and prevent duplicates
       final Set<String> userIds = {};
-      final List<PartialUser> combinedUsers = [];
+      final List<PartialUser> allUsers = [];
 
       for (var doc in docs) {
         final data = doc.data() as Map<String, dynamic>?;
 
         if (data == null) continue;
-        print('fwolling is $following');
+        print('following is $following');
         final id = data['id'];
         if (id == null || following.contains(id)) continue;
 
         final PartialUser user = PartialUser.fromJson(data);
         if (userIds.add(user.id)) {
-          combinedUsers.add(user);
+          allUsers.add(user);
         }
       }
 
-      return combinedUsers;
+      return allUsers;
     } catch (e) {
       throw const MainException();
     }
   }
+
+  @override
+  Future<List<PostModel>> getSuggestedPostBasedOnaPost(PostEntity post) async {
+    // TODO: implement getSuggestedPostBasedOnaPost
+    throw UnimplementedError();
+  }
 }
+ // Define latitude and longitude ranges for proximity search
+      // double latRange = 50 / 111; // Roughly 50km in latitude degrees
+      // double lonRange =
+      //     50 / (111 * cos(latitude * (pi / 180))); // Adjusted for longitude
+
+      // // Create a query to fetch users by interests
+      // final interestsQuery = _firebaseFirestore
+      //     .collection(FirebaseCollectionConst.users)
+      //     .where('id', isNotEqualTo: myId)
+      //     .where('interests', arrayContainsAny: interests)
+      //     .get();
+
+      // // Create a query to fetch users by proximity
+      // final locationQuery = _firebaseFirestore
+      //     .collection(FirebaseCollectionConst.users)
+      //     .where('id', isNotEqualTo: myId)
+      //     .where('latitude', isGreaterThanOrEqualTo: latitude - latRange)
+      //     .where('latitude', isLessThanOrEqualTo: latitude + latRange)
+      //     .where('longitude', isGreaterThanOrEqualTo: longitude - lonRange)
+      //     .where('longitude', isLessThanOrEqualTo: longitude + lonRange)
+      //     .get();
+
+      // // Wait for both queries to complete
+      // final List<QuerySnapshot> queryResults =
+      //     await Future.wait([interestsQuery, locationQuery]);
+      // final List<QueryDocumentSnapshot> docs =
+      //     queryResults.expand((qs) => qs.docs).toList();
+
+      // // Create a set to track unique users and prevent duplicates
+      // final Set<String> userIds = {};
+      // final List<PartialUser> combinedUsers = [];
+
+      // for (var doc in docs) {
+      //   final data = doc.data() as Map<String, dynamic>?;
+
+      //   if (data == null) continue;
+      //   print('fwolling is $following');
+      //   final id = data['id'];
+      //   if (id == null || following.contains(id)) continue;
+
+      //   final PartialUser user = PartialUser.fromJson(data);
+      //   if (userIds.add(user.id)) {
+      //     combinedUsers.add(user);
+      //   }
+      // }

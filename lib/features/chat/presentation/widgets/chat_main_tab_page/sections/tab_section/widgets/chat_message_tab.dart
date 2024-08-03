@@ -28,15 +28,19 @@ class ChatMessageTabView extends StatelessWidget {
         if (state is ChatLoaded) {
           if (state.chatItems.isEmpty) {
             return const Center(
-              child: CommonEmptyHolder(asset: AppAssetsConst.nochatHolder,message: 'No chats found',),
+              child: CommonEmptyHolder(
+                asset: AppAssetsConst.nochatHolder,
+                message: 'No chats found',
+              ),
             );
           }
           return ListView.builder(
             itemCount: state.chatItems.length,
             itemBuilder: (context, index) {
               return ChatCallItem(
+                otherUserId: state.chatItems[index].senderUid,
                 chat: state.chatItems[index],
-                name: state.chatItems[index].recipientName??'',
+                name: state.chatItems[index].otherUserName ?? '',
                 time: state.chatItems[index].recentTextMessage,
               );
             },

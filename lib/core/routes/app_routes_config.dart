@@ -6,6 +6,7 @@ import 'package:social_media_app/features/assets/presenation/pages/custom_media_
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
+import 'package:social_media_app/features/chat/presentation/pages/personal_chat_builder.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/peronal_chat_builder.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/explore/presentation/pages/view_hash_tag_posts.dart';
@@ -120,8 +121,8 @@ class MyAppRouter {
               hashTagName: hashTagName, hashTagPostCount: hashTagPostCount),
         );
 
-      case MyAppRouteConst.personaChatRoute:
-        return MaterialPageRoute(builder: (_) => const PeronalChatBuilder());
+      // case MyAppRouteConst.personaChatRoute:
+      //   return MaterialPageRoute(builder: (_) => const PersonalChatBuilder());
       case MyAppRouteConst.userVisitedListingRoute:
         return MaterialPageRoute(
             builder: (_) => const UserVisitedListingPage());

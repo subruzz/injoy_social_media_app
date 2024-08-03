@@ -8,12 +8,12 @@ import '../../../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../../../core/theme/color/app_colors.dart';
 import '../../../../../../core/widgets/user_profile.dart';
 
-class UserCard extends StatelessWidget {
+class WelcomeUserCard extends StatelessWidget {
   final PartialUser user;
   final ValueNotifier<int> isActive;
   final int index;
 
-  const UserCard({
+  const WelcomeUserCard({
     super.key,
     required this.user,
     required this.isActive,

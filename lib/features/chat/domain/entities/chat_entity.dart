@@ -6,6 +6,8 @@ class ChatEntity extends Equatable {
   final String recipientUid;
   final String? senderName;
   final String? recipientName;
+  final String? otherUserName;
+  final String? otherUserProfile;
   final String recentTextMessage;
   final Timestamp createdAt;
   final String? senderProfile;
@@ -20,6 +22,8 @@ class ChatEntity extends Equatable {
       required this.recentTextMessage,
       required this.createdAt,
       this.senderProfile,
+      this.otherUserProfile,
+      this.otherUserName,
       this.recipientProfile,
       this.totalUnReadMessages});
 
@@ -28,6 +32,8 @@ class ChatEntity extends Equatable {
         senderUid,
         recipientUid,
         recipientName,
+        otherUserProfile,
+        otherUserName,
         recentTextMessage,
         createdAt,
         recipientProfile,

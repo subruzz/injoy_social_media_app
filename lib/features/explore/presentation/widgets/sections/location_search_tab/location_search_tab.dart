@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/explore_search_loading.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/search_empty_error_text.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/tag_location_item.dart';
+import 'package:social_media_app/features/explore/presentation/widgets/common_widget/explore_search_loading.dart';
+import 'package:social_media_app/features/explore/presentation/widgets/common_widget/search_empty_error_text.dart';
+import 'package:social_media_app/features/explore/presentation/widgets/common_widget/tag_location_item.dart';
 class LocationSearchTab extends StatelessWidget {
   const LocationSearchTab({super.key});
   @override

@@ -1,44 +1,44 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/features/explore/domain/usecases/get_nearyby_users.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 
-import '../../../../../core/common/models/partial_user_model.dart';
+import '../../../domain/usecases/get_all_posts.dart';
 
 part 'explore_user_state.dart';
 
-class ExploreUserCubit extends Cubit<ExploreUserState> {
+class ExploreAllPostsCubit extends Cubit<ExploreAllPostsState> {
   // final GetSuggestedUsersUseCase _getSuggestedUsersUseCase;
-  final GetNearybyUsersUseCase _getNearybyUsersUseCase;
-  ExploreUserCubit(this._getNearybyUsersUseCase) : super(ExploreUserInitial());
-  // Future<void> getSuggestedUsers(
-  //     {required String myId, required List<String> interests}) async {
-  //   emit(ExploreUsersLoading());
+  final GetAllPostsUseCase _getAllPostsUseCase;
+  ExploreAllPostsCubit(this._getAllPostsUseCase) : super(ExploreUserInitial());
+  Future<void> getAllposts({
+    required String myId,
+  }) async {
+    emit(ExplorePostsLoading());
 
-  //   final res = await _getSuggestedUsersUseCase(
-  //       GetSuggestedUsersUseCaseParams(myId: myId, interests: interests));
+    final res = await _getAllPostsUseCase(GetAllPostsUseCaseParams(id: myId));
+
+    res.fold((failure) => emit(ExplorePostsError(failure.message)),
+        (success) => emit(ExploreAllPostsLoaded(allPosts: success)));
+  }
+
+  // Future<void> getNearAndInteretsMatchingUsers(
+  //     {required String myId,
+  //     required double? latitude,
+  //     required List<String> interests,
+  //     required List<String> following,
+  //     required double? longitude}) async {
+  //   if (longitude == null || latitude == null) {
+  //     return;
+  //   }
+  //   emit(ExploreUsersLoading());
+  //   final res = await _getNearybyUsersUseCase(GetNearybyUsersUseCaseParams(
+  //       interests: interests,
+  //       following: following,
+  //       myId: myId,
+  //       latitude: latitude,
+  //       longitude: longitude));
 
   //   res.fold((failure) => emit(ExploreUsersError(failure.message)),
   //       (success) => emit(ExploreUsersLoaded(suggestedUsers: success)));
   // }
-
-  Future<void> getNearAndInteretsMatchingUsers(
-      {required String myId,
-      required double? latitude,
-      required List<String> interests,
-      required List<String> following,
-      required double? longitude}) async {
-    if (longitude == null || latitude == null) {
-      return;
-    }
-    emit(ExploreUsersLoading());
-    final res = await _getNearybyUsersUseCase(GetNearybyUsersUseCaseParams(
-        interests: interests,
-        following: following,
-        myId: myId,
-        latitude: latitude,
-        longitude: longitude));
-
-    res.fold((failure) => emit(ExploreUsersError(failure.message)),
-        (success) => emit(ExploreUsersLoaded(suggestedUsers: success)));
-  }
 }

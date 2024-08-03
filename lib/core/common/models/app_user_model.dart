@@ -9,6 +9,7 @@ class AppUserModel extends AppUser {
     super.fullName,
     super.userName,
     super.dob,
+    super.lastSeen,
     required super.visitedUserCount,
     required super.onlineStatus,
     super.phoneNumber,
@@ -71,7 +72,8 @@ class AppUserModel extends AppUser {
 
   factory AppUserModel.fromJson(Map<String, dynamic> json) {
     return AppUserModel(
-      token: List<String>.from(json['token'] ?? []),
+      token: json['token'] ?? '',
+      lastSeen: json['lastSeen'],
       onlineStatus: json['onlineStatus'],
       viewedSetupIndex: json['viewedSetupIndex'],
       id: json['id'],

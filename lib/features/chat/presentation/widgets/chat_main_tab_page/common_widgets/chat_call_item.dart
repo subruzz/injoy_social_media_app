@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/extensions/time_ago.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';
+import 'package:social_media_app/features/chat/presentation/pages/personal_chat_builder.dart';
 
 import '../../../../../../core/theme/color/app_colors.dart';
 
@@ -13,9 +11,11 @@ class ChatCallItem extends StatelessWidget {
   final String name;
   final String time;
   final bool isCall;
+  final String otherUserId;
   final ChatEntity? chat;
   const ChatCallItem(
       {super.key,
+      required this.otherUserId,
       required this.name,
       required this.time,
       this.isCall = false,
@@ -26,22 +26,26 @@ class ChatCallItem extends StatelessWidget {
     return ListTile(
       onTap: () {
         if (chat != null) {
-          final me=context.read<AppUserBloc>().appUser;
-          context.read<MessageInfoStoreCubit>().setDataForChat(
-       
-              receiverProfile: chat!.recipientProfile,
-              receiverName: chat!.recipientName??'',
-              myName: me.userName??''
-              ,myProfil: me.profilePic,
-              recipientId: chat!.recipientUid);
-          Navigator.pushNamed(
-            context,
-            MyAppRouteConst.personaChatRoute,
-          );
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => PersonalChatBuilder(otherUserId: otherUserId),
+          ));
+          // context.read<MessageInfoStoreCubit>().setDataForChat(
+          //     receiverProfile: chat!.recipientProfile,
+          //     receiverName: chat!.recipientName ?? '',
+          //     myName: me.userName ?? '',
+          //     myProfil: me.profilePic,
+          //     recipientId: chat!.recipientUid);
+          // context.read<MessageCubit>().getPersonalChats(
+          //     recipientId: otherUserId,
+          //     sendorId: context.read<AppUserBloc>().appUser.id);
+          // Navigator.pushNamed(
+          //   context,
+          //   MyAppRouteConst.personaChatRoute,
+          // );
         }
       },
       leading: CircularUserProfile(
-        profile: chat?.recipientProfile,
+        profile: chat?.otherUserProfile,
       ),
       title: Text(
         name,

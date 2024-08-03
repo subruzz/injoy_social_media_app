@@ -19,3 +19,10 @@ class FollowingPostFeedGetEvent extends FollowingPostFeedEvent {
       required this.lastDoc,
       required this.following});
 }
+
+class GetAllUsers extends FollowingPostFeedEvent {
+  final String id;
+  final List<String> following;
+
+  const GetAllUsers({required this.id, required this.following});
+}

@@ -17,7 +17,7 @@ class AppUser extends Equatable {
   final Timestamp? lastSeen;
   final NotificationPreferences notificationPreferences;
   final int visitedUserCount;
-  final List<String> token;
+  final String token;
   final double? latitude;
   final double? longitude;
   int followersCount;
@@ -67,6 +67,7 @@ class AppUser extends Equatable {
         dob, lastSeen,
         phoneNumber,
         occupation,
+        viewedSetupIndex, visitedUserCount,
         about, token,
         profilePic, notificationPreferences,
         location,

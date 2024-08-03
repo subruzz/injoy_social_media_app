@@ -13,6 +13,7 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_side_bar.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 
@@ -85,8 +86,8 @@ class ReplyPreviewWidget extends StatelessWidget {
                         userName: !isReplyChat
                             ? userName
                             : (isReplyChat && messageItem != null)
-                                ? repliedmessageCreator ==
-                                        context.read<AppUserBloc>().appUser.id
+                                ? (messageItem!.repliedToMe != null &&
+                                        messageItem!.repliedToMe!)
                                     ? 'You'
                                     : messageItem!.repliedTo ?? ''
                                 : '',
@@ -143,7 +144,7 @@ class HeaderRow extends StatelessWidget {
         if (showIcon)
           GestureDetector(
             onTap: () {
-              context.read<MessageInfoStoreCubit>().replyRemoved();
+              context.read<MessageCubit>().initialState();
             },
             child: Icon(Icons.close, size: 16.w),
           ),

@@ -10,7 +10,7 @@ import 'package:social_media_app/core/utils/haptic_feedback.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/pages/explore_welcome_page.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/pages/welcome_card.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/personal_profile_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/core/utils/rive/model.dart';

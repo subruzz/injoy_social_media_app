@@ -10,7 +10,6 @@ import 'package:social_media_app/features/call/presentation/call/call_cubit.dart
 import 'package:social_media_app/features/call/presentation/call_history/call_history_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat/chat_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/explore_user/explore_user_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/follow_hashtag/follow_hashtag_cubit.dart';
@@ -53,6 +52,8 @@ import 'package:social_media_app/features/status/presentation/bloc/status_bloc/s
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
+
+import '../features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 
 List<SingleChildWidget> myProviders = [
   BlocProvider(
@@ -117,6 +118,7 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<SearchHashtagBloc>(),
   ),
+  BlocProvider(create: (context) => serviceLocator<MessageCubit>()),
   BlocProvider(
     create: (context) => serviceLocator<LikePostBloc>(),
   ),
@@ -130,7 +132,8 @@ List<SingleChildWidget> myProviders = [
 
   BlocProvider(
       create: (context) => serviceLocator<GetAllStatusBloc>()
-        ..add(GetAllstatusesEvent(uId: context.read<AppUserBloc>().appUser.id))),
+        ..add(
+            GetAllstatusesEvent(uId: context.read<AppUserBloc>().appUser.id))),
   // BlocProvider(
   //   create: (context) => serviceLocator<CommentBasicCubit>(),
   // ),
@@ -159,12 +162,9 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
       create: (context) => serviceLocator<ChatCubit>()
         ..getMyChats(myId: context.read<AppUserBloc>().appUser.id)),
-  BlocProvider(
-    create: (context) => serviceLocator<MessageCubit>(),
-  ),
-  BlocProvider(
-    create: (context) => serviceLocator<MessageInfoStoreCubit>(),
-  ),
+
+ 
+
   BlocProvider(
     create: (context) => serviceLocator<WhoVisitedBloc>(),
   ),
@@ -210,9 +210,9 @@ List<SingleChildWidget> myProviders = [
   // ),
   // ),
 
-  BlocProvider(
-    create: (context) => serviceLocator<CallCubit>(),
-  ),
+  // BlocProvider(
+  //   create: (context) => serviceLocator<CallCubit>(),
+  // ),
   BlocProvider(
     create: (context) => serviceLocator<CallHistoryCubit>(),
   ),

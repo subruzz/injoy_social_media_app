@@ -27,11 +27,10 @@ class NotificationDatasourceImple implements NotificationDatasource {
     try {
       log('called');
       AppUserModel user = await getUserInfo(notification.receiverId);
-      List<String> tokens = user.token;
-      log(tokens.toString());
-      if (tokens.isNotEmpty) {
+      String token = user.token;
+      if (token.isNotEmpty) {
         await DeviceNotification.sendNotificationToUser(
-            deviceToken: tokens.first, notification: notification);
+            deviceToken: token, notification: notification);
       }
       await _createNotification(notification);
     } catch (e) {

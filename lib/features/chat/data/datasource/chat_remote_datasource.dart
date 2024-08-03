@@ -1,16 +1,11 @@
 import 'dart:developer';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/message_type.dart';
 import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/utils/id_generator.dart';
 import 'package:social_media_app/features/chat/data/model/chat_model.dart';
 import 'package:social_media_app/features/chat/data/model/message_model.dart';
-import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 
@@ -47,11 +42,10 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   @override
   Future<void> sendMessage(ChatModel chat, List<MessageEntity> messages) async {
     final time = FieldValue.serverTimestamp();
-    // *firebase transaction will cause an error if we we perfom any
-    //* kind of write operation before read opeation
+
     try {
       await _firestore.runTransaction((transaction) async {
-        // Performing read operations
+        // Read operations
         final myChatRef = _firestore
             .collection(FirebaseCollectionConst.users)
             .doc(chat.senderUid)
@@ -60,9 +54,8 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
 
         final myChatDoc = await transaction.get(myChatRef);
 
-        // Then only perform write operations
-        await sendMessagesByType(transaction, messages, time, chat);
-
+        // Write operations
+        await addMessagesToChat(transaction, messages, time, chat);
         await addToChat(
             transaction,
             chat.copyWith(
@@ -74,7 +67,7 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
       });
     } catch (e) {
       log(e.toString());
-      throw const MainException();
+      throw Exception("Error sending message");
     }
   }
 
@@ -85,45 +78,53 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
     final myChatRef = _firestore
         .collection(FirebaseCollectionConst.users)
         .doc(chat.senderUid)
-        .collection(FirebaseCollectionConst.myChat);
+        .collection(FirebaseCollectionConst.myChat)
+        .doc(chat.recipientUid);
 
     final otherChatRef = _firestore
         .collection(FirebaseCollectionConst.users)
         .doc(chat.recipientUid)
-        .collection(FirebaseCollectionConst.myChat);
-    log('iam ${chat.senderName}');
-    final myNewChat = chat
-        .copyWith(
-          senderUid: senderId,
-          recipientUid: receiverId,
-        )
-        .toJson(time: time);
-    final otherNewChat = chat
-        .copyWith(
-            senderUid: receiverId,
-            recipientUid: senderId,
-            recipientName: chat.senderName,
-            recipientProfile: chat.senderProfile)
-        .toJson(time: time);
+        .collection(FirebaseCollectionConst.myChat)
+        .doc(chat.senderUid);
 
-    // Use the provided transaction for Firestore operations
+    final myNewChat = chat.copyWith(
+      senderUid: senderId,
+      otherUserProfile: chat.senderProfile,
+      otherUserName: chat.senderName,
+      recipientUid: receiverId,
+    );
+
+    final otherNewChat = chat.copyWith(
+      senderUid: receiverId,
+      recipientUid: senderId,
+      otherUserName: chat.recipientName,
+      otherUserProfile: chat.recipientProfile,
+    );
+
     if (!isChatDocExists) {
-      transaction.set(myChatRef.doc(chat.recipientUid), myNewChat);
-      transaction.set(otherChatRef.doc(chat.senderUid), otherNewChat);
+      transaction.set(otherChatRef, myNewChat.toJson(time: time));
+      transaction.set(myChatRef, otherNewChat.toJson(time: time));
     } else {
-      transaction.update(myChatRef.doc(chat.recipientUid), myNewChat);
-      transaction.update(otherChatRef.doc(chat.senderUid), otherNewChat);
+      transaction.update(otherChatRef, myNewChat.toJson(time: time));
+      transaction.update(myChatRef, otherNewChat.toJson(time: time));
     }
   }
 
-  Future<void> sendMessagesByType(Transaction transaction,
+  Future<void> addMessagesToChat(Transaction transaction,
       List<MessageEntity> messages, FieldValue time, ChatModel chat) async {
-    final combinedId = combineIds(chat.senderUid, chat.recipientUid);
+    final myMessagesRef = _firestore
+        .collection(FirebaseCollectionConst.users)
+        .doc(chat.senderUid)
+        .collection(FirebaseCollectionConst.myChat)
+        .doc(chat.recipientUid)
+        .collection(FirebaseCollectionConst.messages);
 
-    final myMessageRef = _firestore
-        .collection(FirebaseCollectionConst.messages)
-        .doc(combinedId)
-        .collection('oneToOneMessages');
+    final otherMessagesRef = _firestore
+        .collection(FirebaseCollectionConst.users)
+        .doc(chat.recipientUid)
+        .collection(FirebaseCollectionConst.myChat)
+        .doc(chat.senderUid)
+        .collection(FirebaseCollectionConst.messages);
 
     for (var messageEntity in messages) {
       var message = MessageModel.fromMessageEntity(messageEntity);
@@ -131,16 +132,20 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
       if (message.messageType != MessageTypeConst.textMessage &&
           message.messageType != MessageTypeConst.gifMessage) {
         log(message.assetPath?.toString() ?? 'null');
-        if (message.assetPath == null) throw const MainException();
+        if (message.assetPath == null) {
+          throw const MainException(errorMsg: "Asset path missing");
+        }
         final fileUrl = await uploadMessageAssets(
-            message.assetPath!, combinedId, message.messageId);
+            message.assetPath!, chat.senderUid, message.messageId);
         message = message.copyWith(assetLink: fileUrl);
         log(fileUrl);
       }
 
       final newMessage = message.toDocument(time: time);
 
-      transaction.set(myMessageRef.doc(message.messageId), newMessage);
+      // Use set to create a new document for each message
+      transaction.set(myMessagesRef.doc(message.messageId), newMessage);
+      transaction.set(otherMessagesRef.doc(message.messageId), newMessage);
     }
   }
 
@@ -220,11 +225,13 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   @override
   Stream<List<MessageModel>> getSingleUserMessages(
       String sendorId, String recipientId) {
-    final combinedId = combineIds(sendorId, recipientId);
+    log('id is && $sendorId  && $recipientId');
     final messagesRef = _firestore
+        .collection(FirebaseCollectionConst.users)
+        .doc(sendorId)
+        .collection(FirebaseCollectionConst.myChat)
+        .doc(recipientId)
         .collection(FirebaseCollectionConst.messages)
-        .doc(combinedId)
-        .collection('oneToOneMessages')
         .orderBy("createdAt", descending: false);
     // final messagesRef = _firestore
     //     .collection(FirebaseCollectionConst.users)
@@ -258,15 +265,15 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   @override
   Future<void> seenMessageUpdate(
       String sendorId, String recieverId, String messageId) async {
-    try {
-      final combinedId = combineIds(sendorId, recieverId);
-      final messagesRef = _firestore
-          .collection(FirebaseCollectionConst.messages)
-          .doc(combinedId)
-          .collection('oneToOneMessages');
-      await messagesRef.doc(messageId).update({'isSeen': true});
-    } catch (e) {
-      throw const MainException();
-    }
+    // try {
+    //   final combinedId = combineIds(sendorId, recieverId);
+    //   final messagesRef = _firestore
+    //       .collection(FirebaseCollectionConst.messages)
+    //       .doc(combinedId)
+    //       .collection('oneToOneMessages');
+    //   await messagesRef.doc(messageId).update({'isSeen': true});
+    // } catch (e) {
+    //   throw const MainException();
+    // }
   }
 }

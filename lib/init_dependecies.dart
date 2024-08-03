@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:social_media_app/core/firebase_helper.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
@@ -44,12 +45,14 @@ import 'package:social_media_app/features/chat/domain/usecases/get_single_user_m
 import 'package:social_media_app/features/chat/domain/usecases/seen_message_update_usecase.dart';
 import 'package:social_media_app/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat/chat_cubit.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_attribute/message_attribute_bloc.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/receiver_chat_info/reciever_chat_info_cubit.dart';
 import 'package:social_media_app/features/explore/data/datasource/explore_app_datasource.dart';
 import 'package:social_media_app/features/explore/data/repository/explore_app_repo_impl.dart';
 import 'package:social_media_app/features/explore/domain/repositories/explore_app_repository.dart';
+import 'package:social_media_app/features/explore/domain/usecases/get_all_posts.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_hashtag_top_posts.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_nearyby_users.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_recent_posts_hashtag.dart';
@@ -107,6 +110,7 @@ import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/upd
 import 'package:social_media_app/features/post_status_feed/data/datasource/status_feed_remote_datasource.dart';
 import 'package:social_media_app/features/post_status_feed/data/repository/status_feed_repository_impl.dart';
 import 'package:social_media_app/features/post_status_feed/domain/repositories/status_feed_repository.dart';
+import 'package:social_media_app/features/post_status_feed/domain/usecases/get_all_users.dart';
 import 'package:social_media_app/features/post_status_feed/domain/usecases/get_for_you_posts.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/for_you_posts/for_you_post_bloc.dart';
 import 'package:social_media_app/features/premium_subscription/data/datasource/premium_subscription_datasource.dart';
@@ -178,6 +182,7 @@ import 'package:social_media_app/features/who_visited_premium_feature/domain/use
 import 'package:social_media_app/features/who_visited_premium_feature/domain/usecases/get_all_visited_user.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 
+import 'features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import 'features/profile/domain/usecases/get_my_liked_posts.dart';
 
 final serviceLocator = GetIt.instance;
@@ -203,6 +208,8 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(),
   );
+  serviceLocator.registerFactory(
+      () => FirebaseHelper(firestore: FirebaseFirestore.instance));
   serviceLocator.registerLazySingleton(() => FollowingCubit());
   serviceLocator.registerLazySingleton(() => InitialSetupCubit(
       getAllStatusBloc: serviceLocator(),
@@ -382,7 +389,10 @@ void _postFeed() {
         () => PostFeedRepositoryImpl(feedRemoteDatasource: serviceLocator()))
     ..registerFactory(
         () => GetFollowingPostsUseCase(postFeedRepository: serviceLocator()))
-    ..registerLazySingleton(() => (FollowingPostFeedBloc(serviceLocator())))
+    ..registerFactory(
+        () => GetAllUsersUseCase(postFeedRepository: serviceLocator()))
+    ..registerLazySingleton(
+        () => (FollowingPostFeedBloc(serviceLocator(), serviceLocator())))
     ..registerFactory<StatusFeedRemoteDatasource>(() =>
         StatusFeedRemoteDatasourceimpl(
             firebasefirestore: FirebaseFirestore.instance))
@@ -479,10 +489,12 @@ void _exploreApp() {
     ..registerFactory(() => GetHashTagPostsCubit(
           serviceLocator(),
         ))
-    ..registerFactory(() => GetRecentHashtagPostsCubit(serviceLocator()))
-   
     ..registerFactory(
-        () => ExploreUserCubit(serviceLocator(), ))
+        () => GetAllPostsUseCase(exploreAppRepository: serviceLocator()))
+    ..registerFactory(() => GetRecentHashtagPostsCubit(serviceLocator()))
+    ..registerFactory(() => ExploreAllPostsCubit(
+          serviceLocator(),
+        ))
     ..registerFactory(
         () => GetNearybyUsersUseCase(exploreAppRepository: serviceLocator()));
 }
@@ -504,13 +516,19 @@ void _chat() {
         () => SeenMessageUpdateUsecase(chatRepository: serviceLocator()))
     ..registerFactory(
         () => SendMessageUseCase(chatRepository: serviceLocator()))
-    ..registerLazySingleton(() =>
-        MessageInfoStoreCubit(id: serviceLocator<AppUserBloc>().appUser.id))
-    ..registerFactory(() => MessageCubit(serviceLocator(), serviceLocator(),
-        serviceLocator(), serviceLocator(), serviceLocator()))
-    ..registerFactory(
-        () => MessageAttributeBloc(serviceLocator(), serviceLocator()))
-    ..registerFactory(() => ChatCubit(serviceLocator(),serviceLocator()));
+    // ..registerFactory(() =>
+    //     MessageInfoStoreCubit(id: serviceLocator<AppUserBloc>().appUser.id))
+    // ..registerFactory(()=>RecieverChatInfoCubit())
+    ..registerFactory(() => GetMessageCubit(serviceLocator()))
+    ..registerFactory(() => MessageCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ))
+    // ..registerFactory(
+    //     () => MessageAttributeBloc(serviceLocator(), serviceLocator()))
+    ..registerFactory(() => ChatCubit(serviceLocator(), serviceLocator()));
 }
 
 void _call() {
@@ -528,12 +546,12 @@ void _call() {
     ..registerFactory(
         () => GetUserCallingUseCase(callRepository: serviceLocator()))
     // ..registerLazySingleton(() => AgoraCubit())
-    ..registerLazySingleton(() => CallCubit(
-        getUserCallingUseCase: serviceLocator(),
-        makeCallUseCase: serviceLocator(),
-        messageStroreCubit: serviceLocator(),
-        endCallUseCase: serviceLocator(),
-        saveCallHistoryUseCase: serviceLocator()))
+    // ..registerLazySingleton(() => CallCubit(
+    //     getUserCallingUseCase: serviceLocator(),
+    //     makeCallUseCase: serviceLocator(),
+    //     messageStroreCubit: serviceLocator(),
+    //     endCallUseCase: serviceLocator(),
+    //     saveCallHistoryUseCase: serviceLocator()))
     ..registerLazySingleton(() => CallHistoryCubit());
 }
 

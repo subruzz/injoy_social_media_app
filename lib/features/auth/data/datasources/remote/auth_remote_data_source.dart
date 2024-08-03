@@ -90,7 +90,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       if (userSnapshot.exists) {
         if (token != null) {
           await userDocRef.update({
-            'token': FieldValue.arrayUnion([token]),
+            'token': token,
           });
         }
         final data = userSnapshot.data() as Map<String, dynamic>;
@@ -99,14 +99,14 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       AppUserModel userModel = AppUserModel(
-        notificationPreferences:  NotificationPreferences(),
+        notificationPreferences: NotificationPreferences(),
         visitedUserCount: 0,
         id: userCredential.user!.uid,
         onlineStatus: false,
         email: userCredential.user!.email ?? '',
         hasPremium: false,
         followersCount: 0,
-        token: [if (token != null) token],
+        token: token ?? '',
         followingCount: 0,
       );
 
@@ -143,7 +143,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       // Login:
       if (token != null) {
         await userDocRef.update({
-          'token': FieldValue.arrayUnion([token]),
+          'token': token,
         });
       }
       DocumentSnapshot userSnapshot = await userDocRef.get();
@@ -189,7 +189,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           .collection(FirebaseCollectionConst.users)
           .doc(user.uid);
       AppUserModel userModel = AppUserModel(
-        notificationPreferences:  NotificationPreferences(),
+        notificationPreferences: NotificationPreferences(),
         visitedUserCount: 0,
         id: user.uid,
         onlineStatus: false,
@@ -197,7 +197,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         hasPremium: false,
         followersCount: 0,
         followingCount: 0,
-        token: [if (token != null) token],
+        token: token ?? '',
       );
       await _firebaseStorage.runTransaction((transaction) async {
         transaction.set(userDocRef, userModel.toJson());

@@ -1,24 +1,28 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/message_type.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message/message_cubit.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_bottom_input_bar/chat_input_bar_section.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_bottom_input_bar/widgets/chat_send_button.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/chat_listing_section_section.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/personal_chat_top_bar/personal_page_top_bar.dart';
+
+import '../cubits/messages_cubits/message/message_cubit.dart';
+import '../widgets/person_chat_page/sections/personal_chat_top_bar/personal_page_top_bar.dart';
 
 class PersonChatPage extends StatefulWidget {
   const PersonChatPage({
     super.key,
+    required this.otherUserId,
+    required this.myId,
   });
-
+  final String otherUserId;
+  final String myId;
   @override
   State<PersonChatPage> createState() => _PersonChatPageState();
 }
@@ -26,7 +30,7 @@ class PersonChatPage extends StatefulWidget {
 class _PersonChatPageState extends State<PersonChatPage> {
   bool isRecording = false;
   final TextEditingController _textMsgController = TextEditingController();
-  final ValueNotifier<bool> _toggleButton = ValueNotifier(false);
+  final ValueNotifier<bool> _toggleButton = ValueNotifier(true);
   final ValueNotifier<bool> _showAttachWindow = ValueNotifier(false);
   final ScrollController _scrollController = ScrollController();
   Future<void> _scrollToBottom() async {
@@ -41,16 +45,14 @@ class _PersonChatPageState extends State<PersonChatPage> {
   }
 
   final FocusNode _focusNode = FocusNode();
-  late MessageInfoStoreCubit _msgInfo;
+
   @override
   void initState() {
+    log('otherUserId is ${widget.otherUserId}');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToBottom();
     });
-    _msgInfo = context.read<MessageInfoStoreCubit>();
-    context.read<MessageCubit>().getPersonalChats(
-        recipientId: _msgInfo.receiverId,
-        sendorId: context.read<AppUserBloc>().appUser.id);
+
     super.initState();
   }
 
@@ -59,10 +61,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       // top bar section ----> (online status ,name..)
-      appBar: PersonalPageTopBar(
-        id: _msgInfo.receiverId,
-        userName: _msgInfo.receiverName,
-      ),
+      appBar: const PersonalPageTopBar(),
       body: GestureDetector(
         onTap: () {
           _showAttachWindow.value = false;
@@ -96,6 +95,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
               children: [
                 //messages listing
                 ChatListingSectionSection(
+                    myid: widget.myId,
                     onSwipe: (message) {
                       onMessageSwipe(message: message);
                     },
@@ -277,7 +277,16 @@ class _PersonChatPageState extends State<PersonChatPage> {
   }
 
   void _sendMessage({required String message, required String type}) {
-    context.read<MessageCubit>().sendMessage(
-        recentTextMessage: message, messageType: type, captions: []);
+    final state = context.read<GetMessageCubit>().state;
+    final messageCubit = context.read<MessageCubit>();
+    if (type == MessageTypeConst.textMessage) {
+      messageCubit.sendMessage(
+          messageState: state,
+          recentTextMessage: message,
+          messageType: type,
+          captions: []);
+    } else if (type == MessageTypeConst.audioMessage) {
+      messageCubit.voiceRecordStopped(state);
+    }
   }
 }

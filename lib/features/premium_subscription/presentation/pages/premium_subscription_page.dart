@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/bloc/premium_subscription_bloc.dart';
 
@@ -16,16 +15,16 @@ class PremiumSubscriptionPage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Handle back button press
+            Navigator.pop(context);
           },
         ),
+        title: Text('Premium Subscription'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: BlocConsumer<PremiumSubscriptionBloc, PremiumSubscriptionState>(
           listener: (context, state) {
             if (state is PremiumSubscriptionCompleted) {
-          
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
@@ -38,63 +37,75 @@ class PremiumSubscriptionPage extends StatelessWidget {
           builder: (context, state) {
             return Stack(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Premium',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      '₹299/mo',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    const FeatureTile(
-                      text: 'See who visited your profile',
-                    ),
-                    FeatureTile(
-                      text: 'Download posts from other users',
-                    ),
-                    FeatureTile(
-                      text: 'Edit posts after posting',
-                    ),
-                    Spacer(),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.read<PremiumSubscriptionBloc>().add(
-                              CreatePremiumsubscriptionIntent(
-                                  userid: context.read<AppUserBloc>().appUser.id));
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: const Text(
-                          'Buy now',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Choose Your Plan',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 20),
+                      Wrap(
+                        children: [
+                          SubscriptionCard(
+                            title: '1 Month',
+                            price: '₹299/mo',
+                            features: [
+                              'See who visited your profile',
+                              'Download posts from other users',
+                              'Edit posts after posting',
+                            ],
+                            onPressed: () {
+                              context
+                                  .read<PremiumSubscriptionBloc>()
+                                  .add(CreatePremiumsubscriptionIntent(
+                                    userid:
+                                        context.read<AppUserBloc>().appUser.id,
+                                  ));
+                            },
+                          ),
+                          SubscriptionCard(
+                            title: '3 Months',
+                            price: '₹499/3mo',
+                            features: [
+                              'See who visited your profile',
+                              'Download posts from other users',
+                              'Edit posts after posting',
+                            ],
+                            onPressed: () {
+                              context
+                                  .read<PremiumSubscriptionBloc>()
+                                  .add(CreatePremiumsubscriptionIntent(
+                                    userid:
+                                        context.read<AppUserBloc>().appUser.id,
+                                  ));
+                            },
+                          ),
+                          SubscriptionCard(
+                            title: '1 Year',
+                            price: '₹1599/yr',
+                            features: [
+                              'See who visited your profile',
+                              'Download posts from other users',
+                              'Edit posts after posting',
+                            ],
+                            onPressed: () {
+                              context
+                                  .read<PremiumSubscriptionBloc>()
+                                  .add(CreatePremiumsubscriptionIntent(
+                                    userid:
+                                        context.read<AppUserBloc>().appUser.id,
+                                  ));
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 if (state is PremiumSubscriptionLoading ||
                     state is PremiumSubscriptionIntentSuccess)
@@ -113,33 +124,95 @@ class PremiumSubscriptionPage extends StatelessWidget {
   }
 }
 
-class FeatureTile extends StatelessWidget {
-  final String text;
+class SubscriptionCard extends StatelessWidget {
+  final String title;
+  final String price;
+  final List<String> features;
+  final VoidCallback onPressed;
 
-  const FeatureTile({required this.text});
+  const SubscriptionCard({
+    required this.title,
+    required this.price,
+    required this.features,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Icon(
-            Icons.check_circle,
-            color: Colors.green,
-            size: 24,
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              text,
+    return Card(
+      color: AppDarkColor().softBackground,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-          ),
-        ],
+            SizedBox(height: 10),
+            Text(
+              price,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.yellow,
+              ),
+            ),
+            SizedBox(height: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: features
+                  .map((feature) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 18,
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                feature,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ))
+                  .toList(),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child: Text(
+                'Select',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

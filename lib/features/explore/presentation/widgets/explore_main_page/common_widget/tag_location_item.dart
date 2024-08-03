@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/tag_location_symbol.dart';
+
+import '../../common_widget/tag_location_symbol.dart';
 
 class TagLocationItem extends StatelessWidget {
   final String title;

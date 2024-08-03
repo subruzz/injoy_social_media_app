@@ -14,6 +14,8 @@ abstract class PostFeedRemoteDatasource {
   Future<PostsResult> fetchFollowedPosts(String userId, List<String> following,
       {int limit = 4, DocumentSnapshot? lastDoc});
   Future<List<PostModel>> fetchSuggestedPosts(AppUser user);
+  Future<List<PartialUser>> getAllUser(
+      {required String id, required List<String> following});
 }
 
 class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
@@ -148,6 +150,43 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
       // Log or handle the error as needed
       throw const MainException(
           errorMsg: AppErrorMessages.forYouPostFetchError);
+    }
+  }
+
+  @override
+  Future<List<PartialUser>> getAllUser(
+      {required String id, required List<String> following}) async {
+    try {
+      final allUsersQuery = _firestore
+          .collection(FirebaseCollectionConst.users)
+          .where('id', isNotEqualTo: id)
+          .get();
+
+// Wait for the query to complete
+      final queryResults = await allUsersQuery;
+      final List<QueryDocumentSnapshot> docs = queryResults.docs;
+
+// Create a set to track unique users and prevent duplicates
+      final Set<String> userIds = {};
+      final List<PartialUser> allUsers = [];
+
+      for (var doc in docs) {
+        final data = doc.data() as Map<String, dynamic>?;
+
+        if (data == null) continue;
+        print('following is $following');
+        final id = data['id'];
+        if (id == null || following.contains(id)) continue;
+
+        final PartialUser user = PartialUser.fromJson(data);
+        if (userIds.add(user.id)) {
+          allUsers.add(user);
+        }
+      }
+
+      return allUsers;
+    } catch (e) {
+      throw const MainException();
     }
   }
 

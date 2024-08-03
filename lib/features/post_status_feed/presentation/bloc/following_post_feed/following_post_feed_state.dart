@@ -29,3 +29,11 @@ final class FollowingPostFeedSuccess extends FollowingPostFeedState {
       required this.hasMore,
       required this.lastDoc});
 }
+
+final class AllUsersLoading extends FollowingPostFeedState {}
+
+final class AllUsersLoaded extends FollowingPostFeedState {
+  final List<PartialUser> allUsers;
+
+  const AllUsersLoaded({required this.allUsers});
+}

@@ -5,12 +5,10 @@ class PartialUser extends Equatable {
   final String? userName;
   final String? fullName;
   final String? profilePic;
-   int followersCount;
-   PartialUser({
+  const PartialUser({
     required this.id,
     this.userName,
     this.fullName,
-    required this.followersCount,
     this.profilePic,
   });
 
@@ -20,7 +18,6 @@ class PartialUser extends Equatable {
   factory PartialUser.fromJson(Map<String, dynamic> json) {
     return PartialUser(
       id: json['id'],
-      followersCount: json['followersCount'],
       userName: json['userName'],
       fullName: json['fullName'],
       profilePic: json['profilePic'],

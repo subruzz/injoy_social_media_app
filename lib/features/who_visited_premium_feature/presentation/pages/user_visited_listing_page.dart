@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/explore_main_page/common_widgets/partial_user_widget.dart';
+import 'package:social_media_app/core/partial_user_widget.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/domain/entity/uservisit.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 
