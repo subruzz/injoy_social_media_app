@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/custom_divider.dart';
-import 'package:social_media_app/features/settings/presentation/pages/account_settings_page.dart';
+import 'package:social_media_app/features/settings/presentation/pages/account_settings/account_settings_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_settings_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/notification_preference_screen.dart';
 
@@ -16,6 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appuser = context.read<AppUserBloc>().appUser;
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -28,7 +31,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             icon: Icons.account_circle,
             title: 'Account',
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AccountSettingsPage()),
+              MaterialPageRoute(
+                  builder: (context) => AccountSettingsPage(
+                        appUser: appuser,
+                      )),
             ),
           ),
 
@@ -44,9 +50,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ChatSettingsPage(),
                   ))),
-          SettingsTile(icon: Icons.lock, title: 'Privacy',onTap: (){
-            // FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('myChat').
-          },),
+          SettingsTile(
+            icon: Icons.lock,
+            title: 'Privacy',
+            onTap: () {
+              // FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('myChat').
+            },
+          ),
           SettingsTile(icon: Icons.security, title: 'Security'),
           SettingsTile(icon: Icons.help, title: 'Help'),
           SettingsTile(icon: Icons.info, title: 'About'),

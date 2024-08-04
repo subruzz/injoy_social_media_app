@@ -23,3 +23,17 @@ class UserNameCheckError extends UserNameState {
   @override
   List<Object> get props => [error];
 }
+
+class AddUserNameLoading extends UserNameState {}
+
+class AddUserNameSuccess extends UserNameState {
+  final String userName;
+
+  const AddUserNameSuccess({required this.userName});
+}
+
+class AddUserNameFailure extends UserNameState {
+  final String error;
+
+  const AddUserNameFailure({required this.error});
+}

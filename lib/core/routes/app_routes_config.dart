@@ -47,13 +47,14 @@ class MyAppRouter {
 
       case MyAppRouteConst.signUpRoute:
         return MaterialPageRoute(builder: (_) => const SignupPage());
-      case MyAppRouteConst.usenameRoute:
-        final String? userName = settings.arguments as String?;
-        return MaterialPageRoute(
-          builder: (_) => UsernameCheckPage(
-            userName: userName,
-          ),
-        );
+      // case MyAppRouteConst.usenameRoute:
+      //   final String? userName = settings.arguments as String?;
+      //   return MaterialPageRoute(
+      //     builder: (_) => UsernameCheckPage(
+      //       userid: ,
+      //       userName: userName,
+      //     ),
+      //   );
       case MyAppRouteConst.dobPageRoute:
         final String? dob = settings.arguments as String?;
         return MaterialPageRoute(

@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
-import 'package:social_media_app/features/settings/domain/repository/settings_repository.dart';
 import 'package:social_media_app/features/settings/domain/usecases/edit_notification_preference.dart';
+
+import '../../../domain/entity/ui_entity/enums.dart';
 
 part 'settings_state.dart';
 

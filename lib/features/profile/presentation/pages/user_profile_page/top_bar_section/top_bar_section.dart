@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
@@ -7,18 +10,30 @@ import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_svg.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/personal_profile_page.dart';
 
+import '../../../../../../core/shared_providers/blocs/app_user/app_user_bloc.dart';
+
 class ProfilePageTopBarSection extends StatelessWidget
     implements PreferredSizeWidget {
-  const ProfilePageTopBarSection(
-      {super.key, required this.userName, this.isMe = true});
-  final String userName;
+  const ProfilePageTopBarSection({super.key, this.userName, this.isMe = true});
+  final String? userName;
   final bool isMe;
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(
-        addAtSymbol(userName),
-        style: Theme.of(context).textTheme.displaySmall,
+      title: BlocBuilder<AppUserBloc, AppUserState>(
+        buildWhen: (previous, current) {
+          if (previous is AppUserLoggedIn && current is AppUserLoggedIn) {
+            return (previous.user.userName != current.user.userName);
+          }
+          return false;
+        },
+        builder: (context, state) {
+          log('build called');
+          return Text(
+            addAtSymbol(state.currentUser?.userName),
+            style: Theme.of(context).textTheme.displaySmall,
+          );
+        },
       ),
       actions: [
         AppSizedBox.sizedBox10W,

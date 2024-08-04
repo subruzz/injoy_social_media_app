@@ -125,11 +125,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       UpdateProfilEvent event, Emitter<ProfileState> emit) async {
     log(event.phoneNumber ?? '');
     emit(CompleteProfileSetupLoading());
-   
+
     final UserProfile userProfile = UserProfile(
+        dob: '',
         fullName: event.fullName,
-        dob: event.dob,
-        userName: event.userName,
+        profilePic: event.userProfil,
         phoneNumber:
             event.phoneNumber?.isEmpty ?? true ? null : event.phoneNumber,
         occupation: event.occupation?.isEmpty ?? true ? null : event.occupation,

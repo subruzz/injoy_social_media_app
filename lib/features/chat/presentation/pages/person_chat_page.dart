@@ -71,11 +71,8 @@ class _PersonChatPageState extends State<PersonChatPage> {
             BlocBuilder<ChatWallapaperCubit, ChatWallapaperState>(
               builder: (context, state) {
                 return state is ChatWallapaperSuccess
-                    ? Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        top: 0,
+                    ? Positioned.fill(
+                       
                         child: Image.file(
                           File(
                             state.wallapaperPath,

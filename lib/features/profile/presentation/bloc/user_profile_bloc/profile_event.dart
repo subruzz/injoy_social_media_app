@@ -79,23 +79,22 @@ class DateOfBirthSelected extends ProfileEvent {
 
 class UpdateProfilEvent extends ProfileEvent {
   final String fullName;
-  final String userName;
-  final String dob;
+
   final String? phoneNumber;
   final String? occupation;
   final String? about;
+  final String? userProfil;
   final File? profilePic;
   final String uid;
   final UserLocation? location;
 
   const UpdateProfilEvent(
       {required this.fullName,
-      required this.userName,
-      required this.dob,
+      this.userProfil,
       required this.phoneNumber,
       required this.occupation,
       required this.about,
       required this.profilePic,
       required this.uid,
-      required this.location});
+      this.location});
 }

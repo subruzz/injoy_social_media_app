@@ -14,8 +14,19 @@ final class NotifiationPreferenceLoading extends SettingsState {}
 final class NotifiationPreferenceError extends SettingsState {
   final String errorMsg;
 
-  const NotifiationPreferenceError(
-      {required this.errorMsg,});
+  const NotifiationPreferenceError({
+    required this.errorMsg,
+  });
 }
 
 final class NotifiationPreferenceSuccess extends SettingsState {}
+
+final class ChangePasswordLoading extends SettingsState {}
+
+final class ChangePasswordError extends SettingsState {
+  final String error;
+
+  const ChangePasswordError({required this.error});
+}
+
+final class ChangeEmailSuccess extends SettingsState {}

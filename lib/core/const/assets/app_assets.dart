@@ -17,6 +17,7 @@ class AppAssetsConst {
   static const String visibility = 'assets/svgs/visibility.svg';
   static const String visibilityoff = 'assets/svgs/visibility_off.svg';
   static const String calendar = 'assets/svgs/calendar.svg';
+  static const String delete = 'assets/svgs/delete.svg';
 
   static const String userSecondaryProfile = 'assets/images/profile_icon.png';
 

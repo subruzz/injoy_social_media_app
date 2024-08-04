@@ -7,7 +7,7 @@ class AppUser extends Equatable {
   final String email;
   bool hasPremium;
   final String? fullName;
-  final String? userName;
+  String? userName;
   final String? dob;
   final String? phoneNumber;
   final String? occupation;
@@ -22,7 +22,6 @@ class AppUser extends Equatable {
   final double? longitude;
   int followersCount;
   int followingCount;
-  // final List<String> followers;
   final List<String> following;
   final List<String> interests;
   final bool onlineStatus;
@@ -51,12 +50,11 @@ class AppUser extends Equatable {
     this.longitude,
     required this.visitedUserCount,
     required this.token,
-
-    // this.followers = const [],
     this.following = const [],
     this.posts = const [],
     this.interests = const [],
   });
+
   @override
   List<Object?> get props => [
         id,
@@ -64,18 +62,78 @@ class AppUser extends Equatable {
         hasPremium,
         fullName,
         userName,
-        dob, lastSeen,
+        dob,
         phoneNumber,
         occupation,
-        viewedSetupIndex, visitedUserCount,
-        about, token,
-        profilePic, notificationPreferences,
+        about,
+        profilePic,
         location,
-        latitude, visitedUserCount,
-        longitude, onlineStatus,
-        // ...followers,
-        // ...following,
+        lastSeen,
+        notificationPreferences,
+        visitedUserCount,
+        token,
+        latitude,
+        longitude,
+        followersCount,
+        followingCount,
+        onlineStatus,
+        viewedSetupIndex,
+        ...following,
         ...interests,
         ...posts,
       ];
+
+  AppUser copyWith({
+    String? id,
+    String? email,
+    bool? hasPremium,
+    String? fullName,
+    String? userName,
+    String? dob,
+    String? phoneNumber,
+    String? occupation,
+    String? about,
+    String? profilePic,
+    String? location,
+    Timestamp? lastSeen,
+    NotificationPreferences? notificationPreferences,
+    int? visitedUserCount,
+    String? token,
+    double? latitude,
+    double? longitude,
+    int? followersCount,
+    int? followingCount,
+    List<String>? following,
+    List<String>? interests,
+    bool? onlineStatus,
+    List<String>? posts,
+    int? viewedSetupIndex,
+  }) {
+    return AppUser(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      hasPremium: hasPremium ?? this.hasPremium,
+      fullName: fullName ?? this.fullName,
+      userName: userName ?? this.userName,
+      dob: dob ?? this.dob,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      occupation: occupation ?? this.occupation,
+      about: about ?? this.about,
+      profilePic: profilePic ?? this.profilePic,
+      location: location ?? this.location,
+      lastSeen: lastSeen ?? this.lastSeen,
+      notificationPreferences: notificationPreferences ?? this.notificationPreferences,
+      visitedUserCount: visitedUserCount ?? this.visitedUserCount,
+      token: token ?? this.token,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      followersCount: followersCount ?? this.followersCount,
+      followingCount: followingCount ?? this.followingCount,
+      following: following ?? this.following,
+      interests: interests ?? this.interests,
+      onlineStatus: onlineStatus ?? this.onlineStatus,
+      posts: posts ?? this.posts,
+      viewedSetupIndex: viewedSetupIndex ?? this.viewedSetupIndex,
+    );
+  }
 }

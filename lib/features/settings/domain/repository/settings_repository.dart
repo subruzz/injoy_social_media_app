@@ -8,4 +8,3 @@ abstract interface class SettingsRepository {
       required NotificationPreferences notificationPreference});
 }
 
-enum NotificationPreferenceEnum { pauseAll, likes, comments, follow, messages }

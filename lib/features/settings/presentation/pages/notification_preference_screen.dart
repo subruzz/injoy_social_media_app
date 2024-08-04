@@ -2,16 +2,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/common_switch.dart';
-import 'package:social_media_app/core/widgets/custom_divider.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
-import 'package:social_media_app/features/settings/domain/repository/settings_repository.dart';
+import 'package:social_media_app/features/settings/domain/entity/ui_entity/ui_consts.dart';
 import 'package:social_media_app/features/settings/presentation/cubit/settings/settings_cubit.dart';
 
 import '../../../../core/widgets/loading/circular_loading.dart';
+import '../../domain/entity/ui_entity/enums.dart';
 
 class NotificationPreferenceScreen extends StatefulWidget {
   const NotificationPreferenceScreen({super.key});
@@ -56,76 +57,35 @@ class _NotificationPreferenceScreenState
           listener: (context, state) {
             if (state is NotifiationPreferenceError) {
               log('state is eerror');
+              Messenger.showSnackBar(message: 'ererejdsklfhksdhf');
               // _notificationPreferences = state.notificationPreferences;
             }
           },
           builder: (context, state) {
             return Stack(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Push notification',
-                        style: Theme.of(context).textTheme.titleMedium),
-                    const CustomDivider(),
-                    CommonListTile(
-                        subtitle: 'Pause all notifications',
-                        text: 'Pause all',
-                        trailing: CommonSwitch(
-                          value: _notificationPreferences.isNotificationPaused,
-                          onChanged: (value) {
-                            editNotification(
-                                NotificationPreferenceEnum.pauseAll, value);
-                          },
-                        )),
-                    CommonListTile(
-                        subtitle: 'Pauses the notification of post likes',
-                        text: 'Likes',
-                        trailing: CommonSwitch(
-                          value:
-                              _notificationPreferences.isLikeNotificationPaused,
-                          onChanged: (value) {
-                            editNotification(
-                                NotificationPreferenceEnum.likes, value);
-                          },
-                        )),
-                    CommonListTile(
-                        text: 'Follow',
-                        subtitle:
-                            'Pauses the notification when someone follows you',
-                        trailing: CommonSwitch(
-                          value: _notificationPreferences
-                              .isFollowNotificationPaused,
-                          onChanged: (value) {
-                            editNotification(
-                                NotificationPreferenceEnum.follow, value);
-                          },
-                        )),
-                    CommonListTile(
-                        text: 'Comments',
-                        subtitle: 'Pauses the notification of post comments',
-                        trailing: CommonSwitch(
-                          value: _notificationPreferences
-                              .isCommentNotificationPaused,
-                          onChanged: (value) {
-                            editNotification(
-                                NotificationPreferenceEnum.comments, value);
-                          },
-                        )),
-                    CommonListTile(
-                        subtitle:
-                            'Pauses the notification when a new message arrives',
-                        text: 'Messages',
-                        trailing: CommonSwitch(
-                          value: _notificationPreferences
-                              .isMessageNotificationPaused,
-                          onChanged: (value) {
-                            editNotification(
-                                NotificationPreferenceEnum.messages, value);
-                          },
-                        ))
-                  ],
-                ),
+                CustomAppPadding(
+                    child: ListView.builder(
+                  itemCount: SettingsUiConst.notificationSettings.length,
+                  itemBuilder: (context, index) {
+                    final notificationSettings =
+                        SettingsUiConst.notificationSettings[index];
+                    return CommonListTile(
+                      noPadding: true,
+                      text: notificationSettings.title,
+                      subtitle: notificationSettings.subTitle,
+                      trailing: CommonSwitch(
+                        value: _getCurrentNotificationValue(
+                            notificationSettings.notificationSettingsType!),
+                        onChanged: (value) {
+                          editNotification(
+                              notificationSettings.notificationSettingsType!,
+                              value);
+                        },
+                      ),
+                    );
+                  },
+                )),
                 if (state is NotifiationPreferenceLoading)
                   Container(
                     color: Colors.black.withOpacity(0.5),
@@ -139,5 +99,22 @@ class _NotificationPreferenceScreenState
         ),
       ),
     );
+  }
+
+  bool _getCurrentNotificationValue(NotificationPreferenceEnum type) {
+    switch (type) {
+      case NotificationPreferenceEnum.pauseAll:
+        return _notificationPreferences.isNotificationPaused;
+      case NotificationPreferenceEnum.likes:
+        return _notificationPreferences.isLikeNotificationPaused;
+      case NotificationPreferenceEnum.follow:
+        return _notificationPreferences.isFollowNotificationPaused;
+      case NotificationPreferenceEnum.comments:
+        return _notificationPreferences.isCommentNotificationPaused;
+      case NotificationPreferenceEnum.messages:
+        return _notificationPreferences.isMessageNotificationPaused;
+      default:
+        return false;
+    }
   }
 }

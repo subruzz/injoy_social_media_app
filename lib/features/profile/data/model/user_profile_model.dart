@@ -81,7 +81,7 @@ class UserProfileModel extends UserProfile {
   Map<String, dynamic> toJson({bool edit = false}) {
     return {
       'fullName': fullName,
-      'dob': dob,
+      if (!edit) 'dob': dob,
       'phoneNumber': phoneNumber,
       'occupation': occupation,
       'about': about,
@@ -89,7 +89,7 @@ class UserProfileModel extends UserProfile {
       'location': location,
       'latitude': latitude,
       'longitude': longitude,
-      'userName': userName,
+      if (!edit) 'userName': userName,
       if (!edit) 'interests': interests,
     };
   }

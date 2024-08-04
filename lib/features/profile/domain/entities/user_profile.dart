@@ -9,13 +9,13 @@ class UserProfile {
   double? latitude;
   double? longitude;
   List<String> interests;
-  final String userName;
+  final String? userName;
   UserProfile({
     required this.fullName,
     required this.dob,
     this.phoneNumber,
     this.occupation,
-    required this.userName,
+     this.userName,
     this.about,
     this.profilePic,
     this.location,

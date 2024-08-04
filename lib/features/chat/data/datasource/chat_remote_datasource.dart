@@ -171,16 +171,17 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
           .collection(FirebaseCollectionConst.users)
           .doc(myId)
           .collection(FirebaseCollectionConst.myChat);
+      final batch = _firestore.batch();
 
       // Fetch all documents in the sub-collection
       final snapshot = await userRef.get();
 
       // Delete each document in the sub-collection
-      for (DocumentSnapshot doc in snapshot.docs) {
-        await doc.reference.delete();
+      for (var doc in snapshot.docs) {
+        batch.delete(doc.reference);
       }
+      await batch.commit();
 
-      print('Chat collection deleted successfully.');
     } catch (e) {
       throw const MainException();
     }

@@ -12,6 +12,7 @@ import 'package:social_media_app/features/status/presentation/pages/create_statu
 import '../../../../../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../../../../../core/widgets/user_profile.dart';
 import '../../../../../../../core/routes/app_routes_const.dart';
+import '../../../../../../../core/widgets/app_related/empty_display.dart';
 
 class MyStatusView extends StatefulWidget {
   const MyStatusView({super.key});
@@ -84,11 +85,23 @@ class MyStatusViewState extends State<MyStatusView> {
                             }
                           },
                           child: Hero(
-                            tag: user.id,
-                            child: CircularUserProfile(
-                              profile: user.profilePic,
-                            ),
-                          )),
+                              tag: user.id,
+                              child: BlocBuilder<AppUserBloc, AppUserState>(
+                                buildWhen: (previous, current) {
+                                  if (previous is AppUserLoggedIn &&
+                                      current is AppUserLoggedIn) {
+                                    return (previous.user.profilePic !=
+                                        current.user.profilePic);
+                                  }
+                                  return false;
+                                },
+                                builder: (context, state) {
+                                  return state is AppUserLoggedIn
+                                      ? CircularUserProfile(
+                                          profile: state.user.profilePic)
+                                      : const EmptyDisplay();
+                                },
+                              ))),
                     ),
                     if (!isAnimating) const CreateStatusButton()
                   ],

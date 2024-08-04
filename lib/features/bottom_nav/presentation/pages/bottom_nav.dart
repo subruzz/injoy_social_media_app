@@ -123,6 +123,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
   //           index: _currentPage,
   //           children: pages,
   //         ),
+
   @override
   Widget build(BuildContext context) {
     log(FirebaseAuth.instance.currentUser!.uid);

@@ -17,6 +17,7 @@ final class ChatWallapaperStored extends ChatWallapaperState {}
 
 final class ChatWallapaperSuccess extends ChatWallapaperState {
   final String wallapaperPath;
-
+  @override
+  List<Object> get props => [wallapaperPath];
   const ChatWallapaperSuccess({required this.wallapaperPath});
 }

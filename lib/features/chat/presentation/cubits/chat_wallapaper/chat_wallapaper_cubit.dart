@@ -15,20 +15,12 @@ class ChatWallapaperCubit extends Cubit<ChatWallapaperState> {
     emit(ChatWallapaperLoading());
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? existingChatImagePath = prefs.getString(chatWallapaper);
 
-      // Delete the existing wallpaper file if it exists
-      if (existingChatImagePath != null && existingChatImagePath.isNotEmpty) {
-        File existingFile = File(existingChatImagePath);
-        if (await existingFile.exists()) {
-          await existingFile.delete();
-          log('Deleted previous wallpaper');
-        }
-      }
-
+      await prefs.clear();
       // Store the new wallpaper file path
       await prefs.setString(chatWallapaper, file.path);
       emit(ChatWallapaperStored());
+      emit(ChatWallapaperSuccess(wallapaperPath: file.path));
       log('Stored new wallpaper');
     } catch (e) {
       log('Exception: $e');
@@ -40,11 +32,16 @@ class ChatWallapaperCubit extends Cubit<ChatWallapaperState> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? chatImage = prefs.getString(chatWallapaper);
+      log('image file is $chatImage');
+
       if (chatImage == null) {
-        return emit(ChatWallapaperError());
+        emit(ChatWallapaperError());
+        return;
       }
+
       emit(ChatWallapaperSuccess(wallapaperPath: chatImage));
     } catch (e) {
+      log(e.toString());
       emit(ChatWallapaperError());
     }
   }

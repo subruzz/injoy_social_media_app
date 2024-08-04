@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
 import '../../pages/forgot_password_page.dart';
 
 class ForgotPasswordText extends StatelessWidget {
-  const ForgotPasswordText({super.key});
+  const ForgotPasswordText({super.key, this.onTap});
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +13,14 @@ class ForgotPasswordText extends StatelessWidget {
       alignment: Alignment.centerRight,
       child: TextButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ForgotPasswordPage(),
-              ),
-            );
+            onTap != null
+                ? onTap!()
+                : Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ForgotPasswordPage(),
+                    ),
+                  );
           },
           child: Text(
             'Forgot Password?',

@@ -26,12 +26,10 @@ class PersonalProfilePage extends StatefulWidget {
 class _PersonalProfilePageState extends State<PersonalProfilePage> {
   @override
   Widget build(BuildContext context) {
-    final user = context.watch<AppUserBloc>().appUser;
+    final user = context.read<AppUserBloc>().appUser;
 
     return Scaffold(
-      appBar: ProfilePageTopBarSection(
-        userName: user.userName ?? '',
-      ),
+      appBar: const ProfilePageTopBarSection(),
       body: Center(
         child: SizedBox(
           child: DefaultTabController(
@@ -43,7 +41,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                       delegate: SliverChildListDelegate([
                     Column(
                       children: [
-                        UserBasicDetailSection(user: user),
+                        const MyProfileBasicDetails(),
                         AppSizedBox.sizedBox15H,
                         UserSocialActionDetailsSection(
                           user: user,
@@ -132,7 +130,7 @@ class CustomBottomSheet {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>const  PremiumSubscriptiBuilder(),
+                        builder: (context) => const PremiumSubscriptiBuilder(),
                       ));
                   // Add your onTap code here
                 },
