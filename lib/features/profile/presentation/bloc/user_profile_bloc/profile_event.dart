@@ -13,7 +13,6 @@ sealed class ProfileEvent extends Equatable {
 
 class ProfileSetUpUserDetailsEvent extends ProfileEvent {
   final String fullName;
-  final String userName;
   final String dob;
   final String? phoneNumber;
   final String? occupation;
@@ -22,7 +21,6 @@ class ProfileSetUpUserDetailsEvent extends ProfileEvent {
   final String uid;
   const ProfileSetUpUserDetailsEvent({
     required this.fullName,
-    required this.userName,
     required this.dob,
     required this.phoneNumber,
     required this.occupation,
@@ -34,7 +32,6 @@ class ProfileSetUpUserDetailsEvent extends ProfileEvent {
   @override
   List<Object> get props => [
         fullName,
-        userName,
         if (phoneNumber != null) phoneNumber!,
         if (occupation != null) occupation!,
         if (about != null) about!,
@@ -55,8 +52,9 @@ class ProfileInterestSelectedEvent extends ProfileEvent {
 final class CompleteProfileSetup extends ProfileEvent {
   final UserLocation? location;
   final String uid;
-
-  const CompleteProfileSetup({this.location, required this.uid});
+  final String userName;
+  const CompleteProfileSetup(
+      {this.location, required this.uid, required this.userName});
 }
 
 class ProfileSetUpLocationEvent extends ProfileEvent {
@@ -74,15 +72,9 @@ class ProfileSetUpLocationEvent extends ProfileEvent {
 class ProfileSubmitEvent extends ProfileEvent {}
 
 class DateOfBirthSelected extends ProfileEvent {
-  final Future<String?> Function() onDateSelected;
+  final String dob;
 
-  const DateOfBirthSelected({required this.onDateSelected});
-}
-
-class UserNameExistCheckEvent extends ProfileEvent {
-  final String userName;
-
-  const UserNameExistCheckEvent({required this.userName});
+  const DateOfBirthSelected({required this.dob});
 }
 
 class UpdateProfilEvent extends ProfileEvent {

@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
-import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
-import 'package:social_media_app/core/utils/debouncer.dart';
+import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
+import 'package:social_media_app/core/widgets/common_text_button.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
-import 'package:social_media_app/features/profile/presentation/widgets/add_profile/add_profile_button.dart';
-import 'package:social_media_app/features/profile/presentation/widgets/add_profile/index.dart';
+
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/profile_form.dart';
 
 class AddProfilePage extends StatefulWidget {
-  const AddProfilePage({super.key, required this.appUser});
-  final AppUser appUser;
+  const AddProfilePage({super.key});
 
   @override
   State<AddProfilePage> createState() => _AddProfilePageState();
@@ -21,20 +21,16 @@ class AddProfilePage extends StatefulWidget {
 
 class _AddProfilePageState extends State<AddProfilePage> {
   final _nameController = TextEditingController();
-  final _userNameController = TextEditingController();
   final _phoneNoController = TextEditingController();
   final _occupationController = TextEditingController();
   final _aboutController = TextEditingController();
   final _selectImageCubit = GetIt.instance<PickSingleImageCubit>();
   final _dobController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Debouncer _debouncer =
-      Debouncer(delay: const Duration(milliseconds: 500));
   final bool isValid = false;
   @override
   void dispose() {
     _nameController.dispose();
-    _userNameController.dispose();
     _phoneNoController.dispose();
     _occupationController.dispose();
     _aboutController.dispose();
@@ -42,55 +38,48 @@ class _AddProfilePageState extends State<AddProfilePage> {
     super.dispose();
   }
 
-  void _profileCompleted() {
+  void _profileCompleted(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      if (_debouncer.isRunning()) {
-        Messenger.showSnackBar(message: 'Checking username availability');
-        return;
-      }
-      if (context.read<ProfileBloc>().state is! UserNameAvailabelState) {
-        Messenger.showSnackBar(message: 'Username already taken');
-        return;
-      }
       context.read<ProfileBloc>().add(ProfileSetUpUserDetailsEvent(
           fullName: _nameController.text.trim(),
-          userName: _userNameController.text.trim(),
           phoneNumber: _phoneNoController.text.trim(),
           occupation: _occupationController.text.trim(),
           about: _aboutController.text.trim(),
           profilePic: _selectImageCubit.img,
           dob: _dobController.text.trim(),
-          uid: widget.appUser.id));
+          uid: context.read<AppUserBloc>().appUser.id));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton:
-          AddProfileButton(onPressed: _profileCompleted, isValid: isValid),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          const SliverAppBar(
-            title: AddProfileTopText(),
-            pinned: true,
-            floating: true,
-            snap: true,
-          ),
-        ],
-        body: CustomAppPadding(
-          child: SingleChildScrollView(
-            child: ProfileForm(
-              debouncer: _debouncer,
-              formKey: _formKey,
-              nameController: _nameController,
-              userNameController: _userNameController,
-              phoneNoController: _phoneNoController,
-              occupationController: _occupationController,
-              aboutController: _aboutController,
-              dobController: _dobController,
-              selectImageCubit: _selectImageCubit,
+      appBar: AppCustomAppbar(
+        title: 'Fill Your Profile',
+        actions: [
+          Padding(
+            padding: AppPadding.onlyRightSmall,
+            child: CommonTextButton(
+              text: 'Skip',
+              onPressed: () {},
             ),
+          )
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      body: CustomAppPadding(
+        child: SingleChildScrollView(
+          child: ProfileForm(
+            onPress: () {
+              _profileCompleted(context);
+            },
+            formKey: _formKey,
+            nameController: _nameController,
+            phoneNoController: _phoneNoController,
+            occupationController: _occupationController,
+            aboutController: _aboutController,
+            dobController: _dobController,
+            selectImageCubit: _selectImageCubit,
           ),
         ),
       ),

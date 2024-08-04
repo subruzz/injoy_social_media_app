@@ -107,7 +107,7 @@ class _ExplorePageState extends State<ExplorePage>
                     _performSearch();
                   });
                 },
-                prefixIcon: Icons.search,
+                // prefixIcon: Icons.search,
                 controller: _searchController,
                 hintText: 'Search ...',
               ),

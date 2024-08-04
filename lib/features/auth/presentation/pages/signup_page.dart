@@ -32,8 +32,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppCustomAppbar(
-        leadingIcon: Icons.arrow_back_ios_new_rounded,
-        leadingOnPressed: () => Navigator.pop(context),
+        showLeading: true,
       ),
       body: CustomAppPadding(
         child: CustomScrollableContent(

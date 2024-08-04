@@ -1,47 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
-import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/utils/functions/date_picker.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
-import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_name_check_field.dart';
+import 'package:social_media_app/features/profile/presentation/pages/add_profile/date_of_birth_page.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_profile_pic.dart';
 
-import '../../bloc/user_profile_bloc/profile_bloc.dart';
+import '../../../../../core/widgets/button/custom_elevated_button.dart';
 
 class ProfileForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nameController;
-  final TextEditingController userNameController;
   final TextEditingController phoneNoController;
   final TextEditingController occupationController;
   final TextEditingController aboutController;
   final TextEditingController dobController;
   final PickSingleImageCubit selectImageCubit;
-  final Debouncer debouncer;
+  final VoidCallback onPress;
   // final TextEditingController locationController;
   const ProfileForm({
     super.key,
     required this.formKey,
-    required this.debouncer,
     required this.nameController,
-    required this.userNameController,
     required this.phoneNoController,
     required this.occupationController,
     required this.aboutController,
+    required this.onPress,
     required this.dobController,
     required this.selectImageCubit,
   });
-
   @override
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppSizedBox.sizedBox40H,
@@ -52,34 +51,21 @@ class ProfileForm extends StatelessWidget {
             hintText: 'Full Name',
             validation: Validation.simpleValidation,
           ),
-          AppSizedBox.sizedBox20H,
-          UserNameCheckField(userNameController: userNameController,debouncer: debouncer,),
           AppSizedBox.sizedBox15H,
-          BlocListener<ProfileBloc, ProfileState>(
-            listenWhen: (previous, current) => current is DateOfBirthSet,
-            listener: (context, state) {
-              if (state is DateOfBirthSet) {
-                dobController.text = state.dateOfBirth;
+          CustomTextField(
+            readOnly: true,
+            controller: dobController,
+            showSuffixIcon: true,
+            hintText: 'Date of Birth',
+            datePicker: () async {
+              final String? dob = await pickDate(context);
+
+              if (dob != null) {
+                dobController.text = dob;
               }
             },
-            child: CustomTextField(
-              readOnly: true,
-              controller: dobController,
-              showSuffixIcon: true,
-              hintText: 'Date of Birth',
-              datePicker: () {
-                context.read<ProfileBloc>().add(
-                  DateOfBirthSelected(
-                    onDateSelected: () async {
-                      return await pickDate(context);
-                    },
-                  ),
-                );
-              },
-              validation: Validation.simpleValidation,
-            ),
+            validation: Validation.dateOfBirthValidation,
           ),
-       
           AppSizedBox.sizedBox15H,
           CustomTextField(
             controller: phoneNoController,
@@ -97,7 +83,18 @@ class ProfileForm extends StatelessWidget {
             hintText: 'About',
             maxLine: 3,
           ),
-          AppSizedBox.sizedBox15H,
+          AppSizedBox.sizedBox25H,
+          BlocListener<ProfileBloc, ProfileState>(
+            listener: (context, state) {
+              if (state is ProfileSetupSuccess) {
+                Navigator.pushNamed(context, MyAppRouteConst.usenameRoute);
+              }
+            },
+            child: CustomButton(
+              onClick: onPress,
+              child: const Text('Next'),
+            ),
+          ),
         ],
       ),
     );

@@ -36,14 +36,14 @@ class CustomButton extends StatelessWidget {
       delay: const Duration(milliseconds: 0),
       duration: const Duration(milliseconds: 0),
       child: SizedBox(
-        width: width,
-        height: height,
+        width: width?.w,
+        height: height?.h,
         child: ElevatedButton(
             style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
                 backgroundColor: WidgetStatePropertyAll(color),
                 shape: WidgetStatePropertyAll(
                   RoundedRectangleBorder(
-                    borderRadius: radius ?? AppBorderRadius.small,
+                    borderRadius: radius ?? AppBorderRadius.large,
                     side: BorderSide(
                         color:
                             borderColor ?? AppDarkColor().secondaryBackground,

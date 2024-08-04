@@ -4,35 +4,32 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_name_cubit/user_name_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
 
 class UserNameCheckField extends StatelessWidget {
   const UserNameCheckField(
-      {super.key, required this.userNameController, required this.debouncer});
+      {super.key,
+      required this.userNameController,
+      required this.debouncer,
+      required this.userNameCubit});
   final TextEditingController userNameController;
   final Debouncer debouncer;
+  final UserNameCubit userNameCubit;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileBloc, ProfileState>(
-      buildWhen: (previous, current) =>
-          current is UserNamecheckingLoading ||
-          current is UserNameCheckError ||
-          current is UserNameAvailabelState ||
-          current is UserNameNotAvailabelState||
-          current is UserNameCheckInitial,
+    return BlocBuilder(
+      bloc: userNameCubit,
       builder: (context, state) {
         // final bool isEmpty = state is UserNameCheckInitial;
         final bool isChecking = state is UserNamecheckingLoading;
-        final bool isAvailable = state is UserNameAvailabelState;
-        final bool isTaken = state is UserNameNotAvailabelState;
+        final bool isAvailable = state is UserNameAvailableState;
+        final bool isTaken = state is UserNameNotAvailableState;
         return CustomTextField(
             onChanged: (value) {
               debouncer.run(() {
-                context
-                    .read<ProfileBloc>()
-                    .add(UserNameExistCheckEvent(userName: value));
+                userNameCubit.userNameCheck(value);
               });
             },
             showPrefixIcon: true,

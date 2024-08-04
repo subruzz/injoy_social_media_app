@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
@@ -16,10 +18,11 @@ class FollowUnfollowHelper extends StatelessWidget {
   final bool isFromCard;
   @override
   Widget build(BuildContext context) {
+    print(isFromCard);
     return CustomButton(
         width: isFromCard ? 120 : null,
         height: isFromCard ? 40 : 35,
-        radius: isFromCard ? null : AppBorderRadius.horizontalExtraLarge,
+        radius: isFromCard ? AppBorderRadius.small : null,
         child: BlocBuilder<FollowunfollowCubit, FollowunfollowState>(
           builder: (context, state) {
             final me = context.read<AppUserBloc>().appUser;
@@ -33,14 +36,12 @@ class FollowUnfollowHelper extends StatelessWidget {
         onClick: () {
           final me = context.read<AppUserBloc>().appUser;
           final amIFollowing = me.following.contains(user.id);
-          // if (user.followersCount == null) return;
-          // if (amIFollowing) {
-          //   me.following.remove(user.id);
-          //   --user.followersCount!;
-          // } else {
-          //   ++user.followersCount!;
-          //   me.following.add(user.id);
-          // }
+          log(amIFollowing.toString());
+          if (amIFollowing) {
+            me.following.remove(user.id);
+          } else {
+            me.following.add(user.id);
+          }
           context.read<FollowunfollowCubit>().followUnfollowAction(
               user: me,
               myid: me.id,

@@ -136,6 +136,7 @@ import 'package:social_media_app/features/profile/presentation/bloc/get_followin
 import 'package:social_media_app/features/profile/presentation/bloc/get_other_user_posts/get_other_user_posts_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_liked_posts/get_user_liked_posts_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_profile/other_profile_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_name_cubit/user_name_cubit.dart';
 import 'package:social_media_app/features/settings/data/datasource/settings_datasource.dart';
 import 'package:social_media_app/features/settings/data/repository/setting_repo_impl.dart';
 import 'package:social_media_app/features/settings/domain/repository/settings_repository.dart';
@@ -288,10 +289,12 @@ void _initProfile() {
     )
     ..registerFactory(
         () => CheckUsernameExistUseCasse(profileRepository: serviceLocator()))
-    ..registerLazySingleton(
-      () => ProfileBloc(serviceLocator(), serviceLocator(), serviceLocator(),
-          serviceLocator()),
-    )
+    ..registerFactory(() => UserNameCubit(serviceLocator()))
+    ..registerLazySingleton(() => ProfileBloc(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ))
     ..registerFactory(
         () => AddInterestUseCase(profileRepository: serviceLocator()))
     ..registerLazySingleton(() => SelectInterestCubit(serviceLocator()))

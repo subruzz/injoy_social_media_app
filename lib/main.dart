@@ -112,7 +112,7 @@ class MyApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: myProviders,
           child: MaterialApp(
-            locale:const  Locale('ml'),
+            locale:const  Locale('en'),
             localizationsDelegates:  const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

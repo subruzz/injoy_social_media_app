@@ -3,7 +3,6 @@ import 'package:social_media_app/features/profile/domain/entities/user_profile.d
 class UserProfileModel extends UserProfile {
   UserProfileModel({
     required super.fullName,
-    required super.userName,
     required super.dob,
     super.phoneNumber,
     super.occupation,
@@ -12,6 +11,7 @@ class UserProfileModel extends UserProfile {
     super.location,
     super.latitude,
     super.longitude,
+    required super.userName,
     List<String>? interests,
   }) : super(
           interests: interests ?? [],
@@ -20,8 +20,8 @@ class UserProfileModel extends UserProfile {
   factory UserProfileModel.fromUserProfile(UserProfile userProfile) {
     return UserProfileModel(
       fullName: userProfile.fullName,
-      userName: userProfile.userName,
       dob: userProfile.dob,
+      userName: userProfile.userName,
       phoneNumber: userProfile.phoneNumber,
       occupation: userProfile.occupation,
       about: userProfile.about,
@@ -35,7 +35,6 @@ class UserProfileModel extends UserProfile {
 
   UserProfileModel copyWith({
     String? fullName,
-    String? userName,
     String? dob,
     String? phoneNumber,
     String? occupation,
@@ -44,12 +43,13 @@ class UserProfileModel extends UserProfile {
     String? location,
     double? latitude,
     double? longitude,
+    String? userName,
     List<String>? interests,
   }) {
     return UserProfileModel(
       fullName: fullName ?? this.fullName,
-      userName: userName ?? this.userName,
       dob: dob ?? this.dob,
+      userName: userName ?? this.userName,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       occupation: occupation ?? this.occupation,
       about: about ?? this.about,
@@ -81,7 +81,6 @@ class UserProfileModel extends UserProfile {
   Map<String, dynamic> toJson({bool edit = false}) {
     return {
       'fullName': fullName,
-      'userName': userName,
       'dob': dob,
       'phoneNumber': phoneNumber,
       'occupation': occupation,
@@ -90,6 +89,7 @@ class UserProfileModel extends UserProfile {
       'location': location,
       'latitude': latitude,
       'longitude': longitude,
+      'userName': userName,
       if (!edit) 'interests': interests,
     };
   }

@@ -151,7 +151,7 @@ class _AddProfilePageState extends State<EditProfilePage> {
                             controller: _locationController,
                             autoValidate: false,
                             readOnly: true,
-                            prefixIcon: Icons.location_on,
+                            // prefixIcon: Icons.location_on,
                             hintText: 'Location',
                           ),
                         ),

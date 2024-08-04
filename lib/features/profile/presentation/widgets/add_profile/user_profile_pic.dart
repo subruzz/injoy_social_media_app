@@ -25,14 +25,12 @@ class UserProfilePicSelect extends StatelessWidget {
           BlocBuilder<PickSingleImageCubit, PickSingleImageState>(
             bloc: selectImageCuit,
             builder: (context, state) {
-              return Builder(
-                builder: (context) {
-                  return CircularUserProfile(
-                    fileImg: selectImageCuit.img,
-                    size: 70,
-                  );
-                }
-              );
+              return Builder(builder: (context) {
+                return CircularUserProfile(
+                  fileImg: selectImageCuit.img,
+                  size: 65,
+                );
+              });
             },
           ),
           Positioned(

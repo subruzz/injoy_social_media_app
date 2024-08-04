@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/widgets/custom_divider.dart';
 import 'package:social_media_app/features/settings/presentation/pages/account_settings_page.dart';

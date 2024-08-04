@@ -11,8 +11,6 @@ import 'package:social_media_app/features/profile/domain/usecases/add_interest.d
 import 'package:social_media_app/features/profile/domain/usecases/check_username_exist.dart';
 import 'package:social_media_app/features/profile/domain/usecases/create_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
 // import 'package:stream_transform/stream_transform.dart';
 
 // const _duration = Duration(milliseconds: 500);
@@ -23,16 +21,11 @@ import 'package:social_media_app/features/profile/presentation/bloc/user_profile
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AppUserBloc _appUserBloc;
-  final CheckUsernameExistUseCasse _checkUsernameExistUseCasse;
   final CreateUserProfileUseCase _createUserProfileUseCase;
   final AddInterestUseCase _addInterestUseCase;
   ProfileBloc(this._createUserProfileUseCase, this._appUserBloc,
-      this._checkUsernameExistUseCasse, this._addInterestUseCase)
+      this._addInterestUseCase)
       : super(ProfileInitial()) {
-    on<UserNameExistCheckEvent>(
-      _checkUserNameAvailableOrNot,
-      // transformer: debounce(_duration)
-    );
     on<ProfileSetUpUserDetailsEvent>(_onUserDetailsSet);
     on<ProfileInterestSelectedEvent>(_onInterestsSet);
     // on<ProfileSetUpLocationEvent>(_onLocationSet);
@@ -41,7 +34,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<UpdateProfilEvent>(_updateProfile);
   }
   String _fullName = '';
-  String _userName = '';
   String _dob = '';
   String? _phoneNum;
   String? _about;
@@ -51,12 +43,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> _onDateOfBirthSelected(
       DateOfBirthSelected event, Emitter<ProfileState> emit) async {
-    final String? selecteDob = await event.onDateSelected();
-    if (selecteDob == null) {
-      return;
-    }
-
-    emit(DateOfBirthSet(dateOfBirth: selecteDob));
+    if (event.dob.isEmpty) return;
+    _dob = event.dob;
+    emit(DateOfBirthSet(dateOfBirth: event.dob));
   }
 
   FutureOr<void> _onUserDetailsSet(
@@ -64,9 +53,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProfileSetUpLoading());
     _fileImg = event.profilePic;
     _fullName = event.fullName;
-    _userName = event.userName;
-    _dob = event.dob;
     _phoneNum = event.phoneNumber;
+    _dob = event.dob;
     _about = event.about;
     _occupation = event.occupation;
     emit(ProfileSetupSuccess());
@@ -102,33 +90,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   //       (success) => _emitAuthSuccess(success, emit));
   // }
 
-  FutureOr<void> _checkUserNameAvailableOrNot(
-      UserNameExistCheckEvent event, Emitter<ProfileState> emit) async {
-    if (event.userName.isEmpty) {
-      emit(UserNameCheckInitial());
-      return;
-    }
-
-    emit(UserNamecheckingLoading());
-
-    final result = await _checkUsernameExistUseCasse(
-      CheckUsernameExistUseCasseParams(userName: event.userName),
-    );
-
-    result.fold(
-      (failure) => emit(UserNameCheckError(failure.message)),
-      (success) => emit(
-          success ? UserNameAvailabelState() : UserNameNotAvailabelState()),
-    );
-  }
-
   FutureOr<void> _completeProfileSetup(
       CompleteProfileSetup event, Emitter<ProfileState> emit) async {
     emit(CompleteProfileSetupLoading());
     final UserProfile userProfile = UserProfile(
         fullName: _fullName,
-        userName: _userName,
         dob: _dob,
+        userName: event.userName,
         phoneNumber: _phoneNum?.isEmpty ?? true ? null : _phoneNum,
         occupation: _occupation?.isEmpty ?? true ? null : _occupation,
         about: _about?.isEmpty ?? true ? null : _about,
@@ -157,10 +125,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       UpdateProfilEvent event, Emitter<ProfileState> emit) async {
     log(event.phoneNumber ?? '');
     emit(CompleteProfileSetupLoading());
+   
     final UserProfile userProfile = UserProfile(
         fullName: event.fullName,
-        userName: event.userName,
         dob: event.dob,
+        userName: event.userName,
         phoneNumber:
             event.phoneNumber?.isEmpty ?? true ? null : event.phoneNumber,
         occupation: event.occupation?.isEmpty ?? true ? null : event.occupation,

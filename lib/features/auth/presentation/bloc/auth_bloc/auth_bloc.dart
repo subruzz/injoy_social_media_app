@@ -26,7 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthCurrentUser event, Emitter<AuthState> emit) async {
     final res = await _currentUser(NoParams());
     res.fold((failure) => emit(AuthNotLoggedIn()), (success) {
-      if (success.fullName == null) {
+      if (success.userName == null) {
         emit(AuthLoggedInButProfileNotSet(user: success));
         _appUserBloc.add(UpdateUserModelEvent(userModel: success));
       } else {

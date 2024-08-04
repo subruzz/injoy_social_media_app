@@ -72,7 +72,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-
+      log('credent is $credential');
       // Once signed in, return the UserCredential
       final userCredential =
           await _firebaseAuth.signInWithCredential(credential);

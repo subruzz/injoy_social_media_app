@@ -7,8 +7,7 @@ class AppLoadingGif extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -19,7 +18,7 @@ class AppLoadingGif extends StatelessWidget {
           ),
           const CustomText('Building Your Profile..')
         ],
-      )),
+      ),
     );
   }
 }

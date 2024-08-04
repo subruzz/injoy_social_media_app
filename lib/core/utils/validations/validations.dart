@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:intl/intl.dart';
 import 'package:social_media_app/core/extensions/email_val.dart';
 import 'package:social_media_app/core/extensions/number_only_string.dart';
 
@@ -35,5 +38,46 @@ class Validation {
       return "Please fill in this field";
     }
     return null;
+  }
+
+  static String? dateOfBirthValidation(String? dateOfBirth) {
+    if (dateOfBirth == null || dateOfBirth.isEmpty) {
+      return "Please enter your date of birth";
+    }
+
+    try {
+      // Expected format: dd/MM/yyyy
+      final parts = dateOfBirth.split('/');
+      if (parts.length != 3) {
+        return 'Invalid date of birth';
+      }
+
+      final day = int.parse(parts[0]);
+      final month = int.parse(parts[1]);
+      final year = int.parse(parts[2]);
+
+      // Check if date is valid
+      final selectedDate = DateTime(year, month, day);
+      if (selectedDate.day != day ||
+          selectedDate.month != month ||
+          selectedDate.year != year) {
+        return 'Invalid date of birth';
+      }
+
+      // Calculate age
+      final currentDate = DateTime.now();
+      final age = currentDate.year - selectedDate.year;
+      final hasHadBirthdayThisYear = (currentDate.month > selectedDate.month) ||
+          (currentDate.month == selectedDate.month &&
+              currentDate.day >= selectedDate.day);
+
+      if (age > 14 || (age == 14 && hasHadBirthdayThisYear)) {
+        return null; // Date is valid (user is at least 14 years old)
+      } else {
+        return "You must be at least 14 years old";
+      }
+    } catch (e) {
+      return "Invalid date format";
+    }
   }
 }

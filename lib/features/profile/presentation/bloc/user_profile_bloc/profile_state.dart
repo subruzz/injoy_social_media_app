@@ -69,23 +69,6 @@ class ProfileLocationSet extends ProfileState {
   List<Object> get props => [userProfile];
 }
 
-//username availability checking
-class UserNameAvailabelState extends ProfileState {}
-
-class UserNameNotAvailabelState extends ProfileState {}
-
-class UserNamecheckingLoading extends ProfileState {}
-
-class UserNameCheckInitial extends ProfileState {}
-
-class UserNameCheckError extends ProfileState {
-  final String error;
-
-  const UserNameCheckError(this.error);
-
-  @override
-  List<Object> get props => [error];
-}
 
 //date of birth selecting
 class DateOfBirthSet extends ProfileState {

@@ -32,7 +32,7 @@ class LocationAskingPage extends StatelessWidget {
   const LocationAskingPage({super.key, required this.isFirstTime});
   final bool isFirstTime;
   void submitProfile(BuildContext context, UserLocation? location) {
-    context.read<ProfileBloc>().add(CompleteProfileSetup(
+    context.read<ProfileBloc>().add(CompleteProfileSetup(userName: '',
         location: location, uid: context.read<AppUserBloc>().appUser.id));
   }
 
@@ -125,7 +125,7 @@ class LocationAskingPage extends StatelessWidget {
                     AppSizedBox.sizedBox15H,
                     const CustomTextField(
                       hintText: 'Search manually..',
-                      prefixIcon: Icons.search,
+                      // prefixIcon: Icons.search,
                     ),
                     if (isFirstTime)
                       const AppLottieAnimation(

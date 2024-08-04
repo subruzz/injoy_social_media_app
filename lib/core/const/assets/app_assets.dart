@@ -12,9 +12,14 @@ class AppAssetsConst {
   static const String person = 'assets/svgs/person.svg';
   static const String locationIcon = 'assets/svgs/location.svg';
   static const String hashtag = 'assets/svgs/hashtag.svg';
+  static const String email = 'assets/svgs/email.svg';
+  static const String lock = 'assets/svgs/lock_icon.svg';
+  static const String visibility = 'assets/svgs/visibility.svg';
+  static const String visibilityoff = 'assets/svgs/visibility_off.svg';
+  static const String calendar = 'assets/svgs/calendar.svg';
 
-  static const String userSecondaryProfile =
-      'assets/images/profile_icon.png'; //svgs
+  static const String userSecondaryProfile = 'assets/images/profile_icon.png';
+
   static const String closesqaure = 'assets/svgs/close_square.svg';
   static const String moreIcon = 'assets/svgs/more.svg';
   static const String call = 'assets/svgs/call.svg';

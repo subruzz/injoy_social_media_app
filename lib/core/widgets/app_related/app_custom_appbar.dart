@@ -31,7 +31,11 @@ class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       title: title != null
           ? Text(
               title!,
-              style: style ?? Theme.of(context).textTheme.headlineMedium,
+              style: style ??
+                  Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(fontWeight: FontWeight.w600),
             )
           : null,
       centerTitle: centerTitle,

@@ -15,6 +15,8 @@ import 'package:social_media_app/features/post/presentation/pages/create_post_pa
 import 'package:social_media_app/features/post/presentation/pages/view_post.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile/add_profile_page.dart';
+import 'package:social_media_app/features/profile/presentation/pages/add_profile/date_of_birth_page.dart';
+import 'package:social_media_app/features/profile/presentation/pages/add_profile/username_check_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/interest_page/interest_selection_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
@@ -45,15 +47,27 @@ class MyAppRouter {
 
       case MyAppRouteConst.signUpRoute:
         return MaterialPageRoute(builder: (_) => const SignupPage());
-
+      case MyAppRouteConst.usenameRoute:
+        final String? userName = settings.arguments as String?;
+        return MaterialPageRoute(
+          builder: (_) => UsernameCheckPage(
+            userName: userName,
+          ),
+        );
+      case MyAppRouteConst.dobPageRoute:
+        final String? dob = settings.arguments as String?;
+        return MaterialPageRoute(
+          builder: (_) => DateOfBirthPage(
+            dob: dob,
+          ),
+        );
       case MyAppRouteConst.bottomNavRoute:
         return MaterialPageRoute(
             builder: (_) => const BottonNavWithAnimatedIcons());
 
       case MyAppRouteConst.addProfilePage:
-        final AppUser appUser = settings.arguments as AppUser;
         return MaterialPageRoute(
-            builder: (_) => AddProfilePage(appUser: appUser));
+            builder: (_) => AddProfilePage());
 
       case MyAppRouteConst.interestSelectRoute:
         final List<String>? interest = settings.arguments as List<String>?;

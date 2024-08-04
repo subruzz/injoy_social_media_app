@@ -1,6 +1,7 @@
 class MyAppRouteConst {
   MyAppRouteConst._();
   static const String splashRote = 'splashPage';
+  static const String usenameRoute = 'userNamePage';
   static const String homeRoute = 'homePage';
   static const String loginRoute = 'loginPage';
   static const String signUpRoute = 'singupPage';
@@ -19,6 +20,9 @@ class MyAppRouteConst {
   static const String userVisitedListingRoute = 'userVisitedListingPage';
   static const String statusCreationRoute = 'statusCreationPage';
   static const String viewStatusRoute = 'viewStatusPage';
+  static const String dobPageRoute = 'dobPageRoute';
+
+
 }
 
 enum MediaPickerType { chat, post, status, wallapaper }

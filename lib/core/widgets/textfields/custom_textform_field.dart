@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/const/assets/app_assets.dart';
+import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/widgets/app_svg.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String hintText;
   final TextInputType? keyboardType;
   final bool obsecureText;
-  final IconData? prefixIcon;
+  final Widget? prefixIcon;
   final String? Function(String?)? validation;
   final FocusNode? focusNode;
   final String? errorMsg;
@@ -59,6 +62,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         controller: widget.controller,
         obscureText: isPassWordVisible,
         decoration: InputDecoration(
+            fillColor: AppDarkColor().secondaryBackground,
             errorStyle: TextStyle(color: widget.errorColor),
             errorText: widget.errorMsg,
             suffixIcon: widget.showSuffixIcon
@@ -74,15 +78,23 @@ class _CustomTextFieldState extends State<CustomTextField> {
                                 : null;
                           }
                         : widget.datePicker,
-                    icon: Icon(widget.obsecureText
-                        ? isPassWordVisible
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined
-                        : Icons.calendar_month_outlined),
-                  )
+                    icon: CustomSvgIcon(
+                        height: 20,
+                        width: 20,
+                        assetPath: widget.obsecureText
+                            ? isPassWordVisible
+                                ? AppAssetsConst.visibilityoff
+                                : AppAssetsConst.visibility
+                            : AppAssetsConst.calendar))
                 : null,
-            prefixIcon:
-                widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
+            // Icon(widget.obsecureText
+            //     ? isPassWordVisible
+            //         ? Icons.visibility_outlined
+            //         : Icons.visibility_off_outlined
+            //     : Icons.calendar_month_outlined),
+            // )
+            // : null,
+            prefixIcon: widget.prefixIcon,
             hintText: widget.hintText),
         validator: widget.validation,
         autovalidateMode:

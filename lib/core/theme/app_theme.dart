@@ -22,7 +22,7 @@ final class AppDarkTheme {
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         foregroundColor: WidgetStatePropertyAll(
-          _color.primaryTextSoft,
+          _color.secondaryPrimaryText,
         ),
         overlayColor: WidgetStatePropertyAll(
           _color.glassEffect,
