@@ -37,6 +37,7 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
         postId: event.postId, currentUserId: event.user.id));
     res.fold((failure) => emit(LikePostLoading()), (success) {
       emit(LikePostSuccess());
+      if (event.otherUserId == event.user.id) return;
       if (_debouncer.isRunning()) _debouncer.cancel();
       _debouncer.run(() {
         _notificationCubit.createNotification(

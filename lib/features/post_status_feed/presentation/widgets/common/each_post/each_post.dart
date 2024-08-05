@@ -6,7 +6,6 @@ import 'package:social_media_app/features/post_status_feed/presentation/widgets/
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_content_section/post_content_section.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/post_image_section.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_top_section/post_top_details.dart';
-import 'package:social_media_app/features/post/presentation/pages/view_post.dart';
 
 class EachPost extends StatefulWidget {
   const EachPost({

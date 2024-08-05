@@ -6,11 +6,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/shared_providers/cubit/app_language/app_language_cubit.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/button/custom_button_with_icon.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
-import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';
 
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 
@@ -18,7 +18,6 @@ import '../../../../../../core/const/app_config/app_border_radius.dart';
 import '../../../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../../../core/theme/color/app_colors.dart';
 import '../../../../../chat/presentation/pages/personal_chat_builder.dart';
-import '../../../../../chat/presentation/widgets/person_chat_page/peronal_chat_builder.dart';
 
 class OtherUserFollowMessageSection extends StatelessWidget {
   const OtherUserFollowMessageSection(
@@ -26,8 +25,8 @@ class OtherUserFollowMessageSection extends StatelessWidget {
   final AppUser currentVisitedUser;
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final me = context.read<AppUserBloc>().appUser;
-
     return CustomAppPadding(
       padding: AppPadding.horizontalSmall,
       child: Row(
@@ -39,12 +38,16 @@ class OtherUserFollowMessageSection extends StatelessWidget {
             builder: (context, state) {
               return Expanded(
                 child: CustomButtonWithIcon(
+                    fontSize: context.read<AppLanguageCubit>().state.locale ==
+                            const Locale('ml')
+                        ? 13
+                        : null,
                     iconSize: 20.w,
                     iconData: Icons.person_add_alt,
                     radius: AppBorderRadius.horizontalExtraLarge,
                     title: me.following.contains(currentVisitedUser.id)
-                        ? 'Following'
-                        : 'Follow',
+                        ? l10n!.follow
+                        : l10n!.following,
                     onClick: () {
                       final amIFollowing =
                           me.following.contains(currentVisitedUser.id);
@@ -96,14 +99,10 @@ class OtherUserFollowMessageSection extends StatelessWidget {
             },
             listener: (context, state) {
               if (state is FollowFailure) {
-                Messenger.showSnackBar(
-                    message:
-                        'An error occured while following this user,Please try again!');
+                Messenger.showSnackBar(message: l10n!.errorFollow);
               }
               if (state is UnfollowFailure) {
-                Messenger.showSnackBar(
-                    message:
-                        'An error occured while Unfollowing this user,Please try again!');
+                Messenger.showSnackBar(message: l10n!.errorUnfollow);
 
                 // following.add(currentUser.id);
               }
@@ -118,7 +117,7 @@ class OtherUserFollowMessageSection extends StatelessWidget {
                   borderColor: AppDarkColor().buttonBackground,
                   color: AppDarkColor().background,
                   radius: AppBorderRadius.extraLarge,
-                  title: 'Message',
+                  title: l10n!.message,
                   textColor: AppDarkColor().secondaryPrimaryText,
                   onClick: () {
                     // context.read<MessageInfoStoreCubit>().setDataForChat(

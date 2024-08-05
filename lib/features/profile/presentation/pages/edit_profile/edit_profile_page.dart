@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
@@ -19,8 +20,10 @@ import 'package:social_media_app/features/profile/presentation/widgets/add_profi
 import '../../../../../core/services/image_pick_services/image_picker.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key, required this.appUser});
-  final AppUser appUser;
+  const EditProfilePage({
+    super.key,
+  });
+
   @override
   State<EditProfilePage> createState() => _AddProfilePageState();
 }
@@ -34,14 +37,16 @@ class _AddProfilePageState extends State<EditProfilePage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ValueNotifier<File?> _userProfile = ValueNotifier(null);
+  late AppUser appUser;
   @override
   void initState() {
     super.initState();
-    _profileImage = widget.appUser.profilePic;
-    _nameController.text = widget.appUser.fullName ?? '';
-    _phoneNoController.text = widget.appUser.phoneNumber ?? '';
-    _occupationController.text = widget.appUser.occupation ?? '';
-    _aboutController.text = widget.appUser.about ?? '';
+    appUser = context.read<AppUserBloc>().appUser;
+    _profileImage = appUser.profilePic;
+    _nameController.text = appUser.fullName ?? '';
+    _phoneNoController.text = appUser.phoneNumber ?? '';
+    _occupationController.text = appUser.occupation ?? '';
+    _aboutController.text = appUser.about ?? '';
   }
 
   @override
@@ -118,7 +123,6 @@ class _AddProfilePageState extends State<EditProfilePage> {
                           hintText: 'Full Name',
                           validation: Validation.simpleValidation,
                           obsecureText: false),
-                    
                       AppSizedBox.sizedBox15H,
                       CustomTextField(
                         showPrefixIcon: false,
@@ -152,7 +156,7 @@ class _AddProfilePageState extends State<EditProfilePage> {
                                         _occupationController.text.trim(),
                                     about: _aboutController.text.trim(),
                                     profilePic: _userProfile.value,
-                                    uid: widget.appUser.id,
+                                    uid: appUser.id,
                                   ));
                             }
                           })

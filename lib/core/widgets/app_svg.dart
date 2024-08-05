@@ -9,23 +9,27 @@ class CustomSvgIcon extends StatelessWidget {
   final double height;
   final Color? color;
   final BlendMode blendMode;
-
+  final VoidCallback? onTap;
   const CustomSvgIcon({
     super.key,
     required this.assetPath,
     this.width = 24.0,
     this.height = 24.0,
     this.color,
+    this.onTap,
     this.blendMode = BlendMode.srcIn,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset(assetPath,
-        width: width.w,
-        height: height.h,
-        colorFilter: ColorFilter.mode(
-            color != null ? color! : AppDarkColor().iconSecondarycolor,
-            blendMode));
+    return GestureDetector(
+      onTap: onTap,
+      child: SvgPicture.asset(assetPath,
+          width: width.w,
+          height: height.h,
+          colorFilter: ColorFilter.mode(
+              color != null ? color! : AppDarkColor().iconSecondarycolor,
+              blendMode)),
+    );
   }
 }

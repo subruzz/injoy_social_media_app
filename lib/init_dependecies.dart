@@ -8,6 +8,11 @@ import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initi
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubits/Pick_multiple_image/pick_multiple_image_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
+import 'package:social_media_app/features/ai_chat/data/datasource/ai_chat_datasource.dart';
+import 'package:social_media_app/features/ai_chat/data/repostiory/ai_chat_repo_impl.dart';
+import 'package:social_media_app/features/ai_chat/domain/repository/ai_chat_repository.dart';
+import 'package:social_media_app/features/ai_chat/domain/usecases/generate_ai_message.dart';
+import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
 import 'package:social_media_app/features/assets/data/repository/asset_repository_impl.dart';
 import 'package:social_media_app/features/assets/domain/repository/asset_repository.dart';
 import 'package:social_media_app/features/assets/data/datasource/local/asset_local_datasource.dart';
@@ -68,7 +73,6 @@ import 'package:social_media_app/features/explore/presentation/blocs/get_recomme
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
-import 'package:social_media_app/features/notification/data/datacource/notification_datasource.dart';
 import 'package:social_media_app/features/notification/data/repository/notification_repository_impl.dart';
 import 'package:social_media_app/features/notification/domain/repository/notification_repository.dart';
 import 'package:social_media_app/features/notification/domain/usecases/create_notification_use_case.dart';
@@ -184,6 +188,7 @@ import 'package:social_media_app/features/who_visited_premium_feature/domain/use
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 
 import 'features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
+import 'features/notification/data/datacource/remote/notification_datasource.dart';
 import 'features/profile/domain/usecases/get_my_liked_posts.dart';
 
 final serviceLocator = GetIt.instance;
@@ -206,6 +211,7 @@ Future<void> initDependencies() async {
   _whoVisitedPremiumFeature();
   _premiumsubscription();
   _chat();
+  _aiChat();
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(),
   );
@@ -616,4 +622,14 @@ void _settings() {
     ..registerFactory(() =>
         EditNotificationPreferenceUseCase(settingsRepository: serviceLocator()))
     ..registerLazySingleton(() => SettingsCubit(serviceLocator()));
+}
+
+void _aiChat() {
+  serviceLocator
+    ..registerFactory<AiChatDatasource>(() => AiChatDatasourceImpl())
+    ..registerFactory<AiChatRepository>(
+        () => AiChatRepoImpl(aiChatDatasource: serviceLocator()))
+    ..registerFactory(
+        () => GenerateAiMessageUseCase(aiChatRepository: serviceLocator()))
+    ..registerLazySingleton(() => AiChatCubit(serviceLocator()));
 }

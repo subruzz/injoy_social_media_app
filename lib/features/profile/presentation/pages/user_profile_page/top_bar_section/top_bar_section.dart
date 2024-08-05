@@ -6,17 +6,21 @@ import 'package:social_media_app/core/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_svg.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/personal_profile_page.dart';
 
 import '../../../../../../core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import '../../edit_profile/edit_profile_page.dart';
 
 class ProfilePageTopBarSection extends StatelessWidget
     implements PreferredSizeWidget {
-  const ProfilePageTopBarSection({super.key, this.userName, this.isMe = true});
+  const ProfilePageTopBarSection(
+      {super.key, this.userName, this.isMe = true, this.localization});
   final String? userName;
   final bool isMe;
+  final AppLocalizations? localization;
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -38,11 +42,22 @@ class ProfilePageTopBarSection extends StatelessWidget
       actions: [
         AppSizedBox.sizedBox10W,
         if (isMe)
+          CustomSvgIcon(
+              height: 21,
+              width: 21,
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const EditProfilePage(),
+                ));
+              },
+              assetPath: 'assets/svgs/edit.svg'),
+        AppSizedBox.sizedBox20W,
+        if (isMe)
           CustomAppPadding(
             padding: AppPadding.onlyRightMedium,
             child: GestureDetector(
                 onTap: () {
-                  CustomBottomSheet.showOptions(context);
+                  CustomBottomSheet.showOptions(context, localization!);
                 },
                 child: const CustomSvgIcon(assetPath: AppAssetsConst.moreIcon)),
           ),

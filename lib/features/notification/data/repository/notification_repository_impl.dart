@@ -4,9 +4,10 @@ import 'dart:io';
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/features/notification/data/datacource/notification_datasource.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 import 'package:social_media_app/features/notification/domain/repository/notification_repository.dart';
+
+import '../datacource/remote/notification_datasource.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
   final NotificationDatasource _notificationDatasource;

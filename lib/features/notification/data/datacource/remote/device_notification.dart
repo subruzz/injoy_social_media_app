@@ -1,15 +1,60 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart ' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
+import 'package:social_media_app/features/notification/data/datacource/local/locatl_notification.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 import 'package:social_media_app/features/notification/domain/entities/push_notification.dart';
 
 class DeviceNotification {
   static final _firebaseMessaging = FirebaseMessaging.instance;
+
+  static void requestPermission() async {
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: true,
+      criticalAlert: true,
+      provisional: true,
+      sound: true,
+    );
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      log('permission available');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      log('only provisional');
+    }
+  }
+
+  static void deviceNotificationInit() {
+    //foreground
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      String payload = jsonEncode(message.data);
+      log('payload is $payload');
+      if (message.notification != null) {
+        LocatlNotification.showNotification(
+            message); // LocalNotificationService.showNotification(
+        //     title: message.notification!.title ?? '',
+        //     body: message.notification!.body ?? '',
+        //     payload: payload);
+      }
+      // Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+      //   builder: (context) => OtherUserProfilePage(
+      //       otherUserId: 'q0BZNmIL4IdfNMPb2FqYzqYYZb63', userName: 'subru'),
+      // )); // a
+    });
+  }
+
+  static void tokenRefresh() {
+    _firebaseMessaging.onTokenRefresh.listen((value) async{
+    });
+  }
 
   static Future<String?> getAccessToken() async {
     final serviceAccountJson = dotenv.env['SERVICE_ACCOUNT_JSON'];
@@ -85,7 +130,7 @@ class DeviceNotification {
       if (response.statusCode == 200) {
         log('success ');
       } else {
-        log('error while sening notif');
+        log('error while sening notif${response.statusCode}');
       }
     } catch (e) {
       log('error while sening notif${e.toString()}');

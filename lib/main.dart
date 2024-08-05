@@ -1,4 +1,4 @@
-  import 'dart:convert';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -12,27 +12,13 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:social_media_app/core/const/messenger.dart';
 import 'package:social_media_app/core/providers.dart';
 import 'package:social_media_app/core/routes/app_routes_config.dart';
+import 'package:social_media_app/core/shared_providers/cubit/app_language/app_language_cubit.dart';
 import 'package:social_media_app/core/theme/app_theme.dart';
-import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
+import 'package:social_media_app/features/notification/data/datacource/local/locatl_notification.dart';
+import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
 import 'package:social_media_app/firebase_options.dart';
 import 'package:social_media_app/init_dependecies.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-@pragma('vm:entry-point')
-Future<void> firebaseBackgroundNotification(RemoteMessage message) async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  // String payload = jsonEncode(message.data);
-
-  // if (message.notification != null) {
-  //   LocalNotificationService.showNotification(
-  //       title: message.notification!.title ?? '',
-  //       body: message.notification!.body ?? '',
-  //       payload: payload);
-  // }
-  log('bckgournd notification came');
-}
 
 final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
@@ -43,57 +29,32 @@ void main() async {
   );
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
   await Stripe.instance.applySettings();
-  // await LocalNotificationService.localNotificationInit();
+  await LocatlNotification.initLocalNotification();
+  DeviceNotification.deviceNotificationInit();
   FirebaseMessaging.onBackgroundMessage(firebaseBackgroundNotification);
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    if (message.notification != null) {
-      String payload = jsonEncode(message.data);
+  // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  //   if (message.notification != null) {
+  //     String payload = jsonEncode(message.data);
 
-      log('taped message');
-      Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
-        builder: (context) => OtherUserProfilePage(
-            otherUserId: 'q0BZNmIL4IdfNMPb2FqYzqYYZb63', userName: 'subru'),
-      )); // arguments: message is NotificationResponse? );
-    }
-  });
+  //     log('taped message');
+  //     Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+  //       builder: (context) => OtherUserProfilePage(
+  //           otherUserId: 'q0BZNmIL4IdfNMPb2FqYzqYYZb63', userName: 'subru'),
+  //     )); // arguments: message is NotificationResponse? );
+  //   }
+  // });
   //terminated
 
-  final RemoteMessage? message =
-      await FirebaseMessaging.instance.getInitialMessage();
+  // final RemoteMessage? message =
+  //     await FirebaseMessaging.instance.getInitialMessage();
 
-  if (message != null) {
-    Future.delayed(Duration.zero);
-  }
+  // if (message != null) {
+  //   Future.delayed(Duration.zero);
+  // }
 
-  //foreground
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    String payload = jsonEncode(message.data);
-    log('payload is $payload');
-    if (message.notification != null) {
-      // LocalNotificationService.showNotification(
-      //     title: message.notification!.title ?? '',
-      //     body: message.notification!.body ?? '',
-      //     payload: payload);
-    }
-    // Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
-    //   builder: (context) => OtherUserProfilePage(
-    //       otherUserId: 'q0BZNmIL4IdfNMPb2FqYzqYYZb63', userName: 'subru'),
-    // )); // a
-  });
   await initDependencies();
 
-  // /// 1.1.2: set navigator key to ZegoUIKitPrebuiltCallInvitationService
-  // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
-
-  // // call the useSystemCallingUI
-  // ZegoUIKit().initLog().then((value) {
-  //   ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
-  //     [ZegoUIKitSignalingPlugin()],
-  //   );
-
   runApp(MyApp(navigatorKey: navigatorKey));
-//   });
-// }
 }
 
 class MyApp extends StatelessWidget {
@@ -111,27 +72,31 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return MultiBlocProvider(
           providers: myProviders,
-          child: MaterialApp(
-            locale:const  Locale('en'),
-            localizationsDelegates:  const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales:const [
-              Locale('en'), 
-              Locale('ml'), 
-            ],
-            navigatorKey: navigatorKey,
+          child: BlocBuilder<AppLanguageCubit, AppLanguageState>(
+            builder: (context, state) {
+              return MaterialApp(
+                locale: state.locale,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: const [
+                  Locale('en'),
+                  Locale('ml'),
+                ],
+                navigatorKey: navigatorKey,
 
-            debugShowCheckedModeBanner: false,
-            scaffoldMessengerKey: Messenger.scaffoldKey,
-            onGenerateRoute: MyAppRouter(isAuth: false).generateRoute,
-            initialRoute: '/',
-            title: 'First Method',
-            // You can use the library anywhere in the app even in theme
-            theme: AppDarkTheme.darkTheme,
+                debugShowCheckedModeBanner: false,
+                scaffoldMessengerKey: Messenger.scaffoldKey,
+                onGenerateRoute: MyAppRouter(isAuth: false).generateRoute,
+                initialRoute: '/',
+                title: 'First Method',
+                // You can use the library anywhere in the app even in theme
+                theme: AppDarkTheme.darkTheme,
+              );
+            },
           ),
         );
       },

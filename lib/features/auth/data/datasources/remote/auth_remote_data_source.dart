@@ -84,7 +84,6 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           .doc(userCredential.user!.uid);
       DocumentSnapshot userSnapshot = await userDocRef.get();
       final fcm = FirebaseMessaging.instance;
-      await fcm.requestPermission();
       final token = await fcm.getToken();
 
       if (userSnapshot.exists) {
@@ -132,7 +131,6 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
   Future<AppUserModel> login(String email, String password) async {
     try {
       final fcm = FirebaseMessaging.instance;
-      await fcm.requestPermission();
       final token = await fcm.getToken();
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -181,7 +179,6 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
       final fcm = FirebaseMessaging.instance;
-      await fcm.requestPermission();
       final token = await fcm.getToken();
 
       //adding user details to firebasedb

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/app_error_gif.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/partial_user_widget.dart';
+import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/domain/entity/uservisit.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 
@@ -18,7 +19,9 @@ class _UserVisitedListingPageState extends State<UserVisitedListingPage> {
   @override
   void initState() {
     super.initState();
-    context.read<WhoVisitedBloc>().add(GetAllVisitedUser(myId: context.read<AppUserBloc>().appUser.id));
+    context
+        .read<WhoVisitedBloc>()
+        .add(GetAllVisitedUser(myId: context.read<AppUserBloc>().appUser.id));
   }
 
   @override
@@ -33,6 +36,11 @@ class _UserVisitedListingPageState extends State<UserVisitedListingPage> {
       body: BlocConsumer<WhoVisitedBloc, WhoVisitedState>(
         builder: (context, state) {
           if (state is GetVisitedUserSuccess) {
+            if (state.visitedUsers.isEmpty) {
+              return const Center(
+                child: Text("No visited Found!"),
+              );
+            }
             final categorizedVisits = categorizeVisits(state.visitedUsers);
             return ListView(
               padding: AppPadding.medium,
@@ -40,15 +48,24 @@ class _UserVisitedListingPageState extends State<UserVisitedListingPage> {
                 if (categorizedVisits.todayVisits.isNotEmpty)
                   _buildCategorySection('Today', categorizedVisits.todayVisits),
                 if (categorizedVisits.lastWeekVisits.isNotEmpty)
-                  _buildCategorySection('This Week', categorizedVisits.lastWeekVisits),
+                  _buildCategorySection(
+                      'This Week', categorizedVisits.lastWeekVisits),
                 if (categorizedVisits.lastMonthVisits.isNotEmpty)
-                  _buildCategorySection('This Month', categorizedVisits.lastMonthVisits),
+                  _buildCategorySection(
+                      'This Month', categorizedVisits.lastMonthVisits),
                 if (categorizedVisits.olderVisits.isNotEmpty)
                   _buildCategorySection('Older', categorizedVisits.olderVisits),
               ],
             );
           }
-          return const EmptyDisplay();
+          if (state is GetVisitedUserError) {
+            return const Center(
+              child: AppErrorGif(),
+            );
+          }
+          return const Center(
+            child: CircularLoadingGrey(),
+          );
         },
         listener: (context, state) {},
       ),
@@ -66,7 +83,7 @@ class _UserVisitedListingPageState extends State<UserVisitedListingPage> {
             style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
-        ...visits.map((visit) => PartialUserWidget(user: visit.user)).toList(),
+        ...visits.map((visit) => PartialUserWidget(user: visit.user)),
       ],
     );
   }

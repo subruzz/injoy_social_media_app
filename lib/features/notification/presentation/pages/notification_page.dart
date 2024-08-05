@@ -148,22 +148,24 @@ class NotificationCard extends StatelessWidget {
                     profile: notification.personalProfileImageUrl,
                   ),
                   AppSizedBox.sizedBox15W,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${notification.senderName} ${notification.text}',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      AppSizedBox.sizedBox5H,
-                      Text(notification.time.toDate().timeAgo(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(
-                                  color: AppDarkColor().secondaryPrimaryText,
-                                  fontSize: 10.sp)),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${notification.senderName} ${notification.text}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        AppSizedBox.sizedBox5H,
+                        Text(notification.time.toDate().timeAgo(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                    color: AppDarkColor().secondaryPrimaryText,
+                                    fontSize: 10.sp)),
+                      ],
+                    ),
                   ),
                 ],
               ),

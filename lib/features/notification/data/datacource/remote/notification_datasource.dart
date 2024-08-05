@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/features/notification/data/datacource/device_notification.dart';
+import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 
 abstract interface class NotificationDatasource {
@@ -28,11 +28,12 @@ class NotificationDatasourceImple implements NotificationDatasource {
       log('called');
       AppUserModel user = await getUserInfo(notification.receiverId);
       String token = user.token;
+      log(token);
       if (token.isNotEmpty) {
         await DeviceNotification.sendNotificationToUser(
             deviceToken: token, notification: notification);
+        await _createNotification(notification);
       }
-      await _createNotification(notification);
     } catch (e) {
       log('error is this from the notification${e.toString()}');
       throw const MainException();

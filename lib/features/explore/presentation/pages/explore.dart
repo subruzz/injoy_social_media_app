@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
@@ -28,6 +29,7 @@ class _ExplorePageState extends State<ExplorePage>
   final ValueNotifier<bool> _isTextEntered = ValueNotifier(false);
   final Debouncer _debouncer =
       Debouncer(delay: const Duration(milliseconds: 500));
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +95,8 @@ class _ExplorePageState extends State<ExplorePage>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
@@ -109,7 +113,7 @@ class _ExplorePageState extends State<ExplorePage>
                 },
                 // prefixIcon: Icons.search,
                 controller: _searchController,
-                hintText: 'Search ...',
+                hintText: '${l10n!.search} ...',
               ),
               AppSizedBox.sizedBox10H,
               ValueListenableBuilder(

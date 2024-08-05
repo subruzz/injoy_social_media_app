@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/features/post/presentation/pages/view_post.dart';
+
+import '../../../../explore/presentation/pages/all_post_view.dart';
 
 class MediaGrid extends StatelessWidget {
   const MediaGrid({super.key, required this.medias, this.isEdit = false});
@@ -19,11 +20,11 @@ class MediaGrid extends StatelessWidget {
         padding: const EdgeInsets.all(2.0),
         child: GestureDetector(
           onTap: () {
-            // Navigator.of(context).push(MaterialPageRoute(
-            //     builder: (context) => ViewPost(
-            //           post: medias[index],
-            //           isEdit: isEdit,
-            //         )));
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) {
+                return AllPostView(initialIndex: index, posts: medias);
+              },
+            ));
           },
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(10)),

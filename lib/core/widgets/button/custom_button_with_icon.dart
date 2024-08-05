@@ -18,12 +18,13 @@ class CustomButtonWithIcon extends StatelessWidget {
   final double? iconSize;
   final String title;
   final Color? textColor;
-
+  final double? fontSize;
   const CustomButtonWithIcon({
     required this.onClick,
     this.color,
     this.textColor,
     required this.title,
+    this.fontSize,
     this.radius,
     this.height,
     this.borderColor,
@@ -62,7 +63,7 @@ class CustomButtonWithIcon extends StatelessWidget {
           icon: Icon(iconData, color: iconColor, size: iconSize),
           label: Text(title,
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: textColor)), // Display child widget as label
+                  color: textColor,fontSize: fontSize?.sp)), // Display child widget as label
         ),
       ),
     );

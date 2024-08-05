@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/core/shared_providers/cubit/app_language/app_language_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
+import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/cubit/asset_file_cubit.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
 import 'package:social_media_app/features/call/presentation/agora/agora_cubit.dart';
@@ -110,6 +112,9 @@ List<SingleChildWidget> myProviders = [
     create: (context) => serviceLocator<UpdatePostBloc>(),
   ),
   BlocProvider(
+    create: (context) => serviceLocator<AiChatCubit>(),
+  ),
+  BlocProvider(
     create: (context) => serviceLocator<DeletePostBloc>(),
   ),
   BlocProvider(
@@ -163,8 +168,6 @@ List<SingleChildWidget> myProviders = [
       create: (context) => serviceLocator<ChatCubit>()
         ..getMyChats(myId: context.read<AppUserBloc>().appUser.id)),
 
- 
-
   BlocProvider(
     create: (context) => serviceLocator<WhoVisitedBloc>(),
   ),
@@ -174,6 +177,8 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<SettingsCubit>(),
   ),
+  BlocProvider(create: (_) => AppLanguageCubit()),
+
   BlocProvider(create: (context) => AssetFileCubit()),
   BlocProvider(create: (context) => ChatWallapaperCubit()..getChatWallapaper()),
 
@@ -216,5 +221,4 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<CallHistoryCubit>(),
   ),
-
 ];

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/app_error_gif.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/custom_divider.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
@@ -37,6 +38,8 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -71,6 +74,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                         UserBasicDetailSection(user: currentUser),
                         AppSizedBox.sizedBox10H,
                         UserSocialActionDetailsSection(
+                          localizations: l10n!,
                           user: currentUser,
                           isMe: false,
                         ),

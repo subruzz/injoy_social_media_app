@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
+import 'package:social_media_app/core/shared_providers/cubit/app_language/app_language_cubit.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/pages/premium_subscripti_builder.dart';
-import 'package:social_media_app/features/profile/presentation/pages/edit_profile/edit_profile_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/top_bar_section/top_bar_section.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_basic_details_section/user_basic_detail_section.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_profile_tab_section/user_profile_tab_section.dart';
@@ -15,6 +16,7 @@ import 'package:social_media_app/features/settings/presentation/pages/settings_p
 import '../../../../../core/const/app_info_dialog.dart';
 import '../../../../../core/routes/app_routes_const.dart';
 import '../../../../../core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import '../../../../../core/widgets/premium_badge.dart';
 
 class PersonalProfilePage extends StatefulWidget {
   const PersonalProfilePage({super.key});
@@ -27,9 +29,11 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
   @override
   Widget build(BuildContext context) {
     final user = context.read<AppUserBloc>().appUser;
-
+    final l10n = context.l10n;
     return Scaffold(
-      appBar: const ProfilePageTopBarSection(),
+      appBar: ProfilePageTopBarSection(
+        localization: l10n,
+      ),
       body: Center(
         child: SizedBox(
           child: DefaultTabController(
@@ -44,6 +48,7 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                         const MyProfileBasicDetails(),
                         AppSizedBox.sizedBox15H,
                         UserSocialActionDetailsSection(
+                          localizations: l10n,
                           user: user,
                         ),
                       ],
@@ -51,7 +56,9 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
                   ]))
                 ];
               },
-              body: const UserProfileTabSection(),
+              body: UserProfileTabSection(
+                localizations: l10n!,
+              ),
             ),
           ),
         ),
@@ -60,8 +67,45 @@ class _PersonalProfilePageState extends State<PersonalProfilePage> {
   }
 }
 
+class CustomListTile extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final bool isPremium;
+  final VoidCallback onTap;
+  final Color? color;
+
+  const CustomListTile({
+    super.key,
+    required this.icon,
+    required this.text,
+    this.isPremium = false,
+    required this.onTap,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      splashColor: Colors.transparent,
+      leading: Icon(icon, color: AppDarkColor().iconSecondarycolor),
+      title: Row(
+        children: [
+          Text(
+            text,
+            style: TextStyle(color: color ?? AppDarkColor().secondaryText),
+          ),
+          if (isPremium) AppSizedBox.sizedBox10W,
+          if (isPremium) const PremiumBadge(),
+        ],
+      ),
+      onTap: onTap,
+    );
+  }
+}
+
 class CustomBottomSheet {
-  static void showOptions(BuildContext context) {
+  static void showOptions(BuildContext context, AppLocalizations localization) {
+    final appuser = context.read<AppUserBloc>().appUser;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -75,128 +119,113 @@ class CustomBottomSheet {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildListTile(
+              CustomListTile(
                 icon: Icons.settings,
-                text: 'Settings',
+                text: localization.settings,
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SettingsScreen(),
+                        builder: (context) => const SettingsScreen(),
                       ));
                 },
               ),
-              _buildListTile(
+              CustomListTile(
+                isPremium: true,
                 icon: Icons.people_alt_outlined,
-                text: 'See who visited me',
+                text: localization.seeWhoVisitedMe,
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(
-                    context,
-                    MyAppRouteConst.userVisitedListingRoute,
-                  );
+                  appuser.hasPremium
+                      ? Navigator.pushNamed(
+                          context,
+                          MyAppRouteConst.userVisitedListingRoute,
+                        )
+                      : AppInfoDialog.showInfoDialog(
+                          title: 'Premium Feature',
+                          subtitle:
+                              'Unlock this feature with a premium subscription for an enhanced experience.',
+                          context: context,
+                          callBack: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PremiumSubscriptiBuilder(),
+                                ));
+                          },
+                          buttonText: 'Get Premium');
                 },
               ),
-              _buildListTile(
-                icon: Icons.person,
-                text: 'Edit Profile',
+              CustomListTile(
+                isPremium: true,
+                icon: Icons.language,
+                text: localization.changeAppLanguage,
                 onTap: () {
-                  Navigator.pop(context);
+                  if (appuser.hasPremium) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => LanguageSelectionDialog(
+                          languages: ['English', 'Malayalam', 'Hindi'],
+                          onLanguageSelected: (language) {
+                            context
+                                .read<AppLanguageCubit>()
+                                .changeLanguage(Locale('ml'));
+                          }),
+                    );
+                    return;
+                  }
 
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => EditProfilePage(
-                        appUser: context.read<AppUserBloc>().appUser),
-                  ));
+                  AppInfoDialog.showInfoDialog(
+                      title: 'Premium Feature',
+                      subtitle:
+                          'Unlock this feature with a premium subscription for an enhanced experience.',
+                      context: context,
+                      callBack: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const PremiumSubscriptiBuilder(),
+                            ));
+                      },
+                      buttonText: 'Get Premium');
                 },
               ),
-              _buildListTile(
-                icon: Icons.interests,
-                text: 'Edit Interests',
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(
-                    context,
-                    MyAppRouteConst.interestSelectRoute,
-                    arguments: context.read<AppUserBloc>().appUser.interests,
-                  );
-                },
-              ),
-              _buildListTile(
+              CustomListTile(
                 icon: Icons.star,
                 text: 'Get Premium',
                 onTap: () {
                   Navigator.pop(context);
-
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const PremiumSubscriptiBuilder(),
                       ));
-                  // Add your onTap code here
                 },
               ),
-
-              // _buildListTile(
-              //   icon: Icons.qr_code,
-              //   text: 'QR Code',
-              //   onTap: () {
-              //     Navigator.pop(context);
-              //     // Add your onTap code here
-              //   },
-              // ),
-
-              // _buildListTile(
-              //   icon: Icons.people,
-              //   text: 'Close Friends',
-              //   onTap: () {
-              //     Navigator.pop(context);
-              //     // Add your onTap code here
-              //   },
-              // ),
-
-              _buildListTile(
+              CustomListTile(
                 color: AppDarkColor().iconSecondarycolor,
                 icon: Icons.logout,
-                text: 'Log out',
+                text: localization.logOut,
                 onTap: () {
                   AppInfoDialog.showInfoDialog(
-                      context: context,
-                      callBack: () {
-                        FirebaseAuth.instance.signOut().then((value) {
-                          Navigator.pop(context);
-
-                          Navigator.pushNamed(
-                              context, MyAppRouteConst.loginRoute);
-                        }).catchError((error) {
-                          print('Sign out failed: $error');
-                        });
-                      },
-                      title: 'Are You Sure?',
-                      buttonText: 'Log Out');
-
-                  // Add your onTap code here
+                    context: context,
+                    callBack: () {
+                      FirebaseAuth.instance.signOut().then((value) {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(
+                            context, MyAppRouteConst.loginRoute);
+                      }).catchError((error) {});
+                    },
+                    title: localization.areYouSure,
+                    buttonText: localization.logOut,
+                  );
                 },
               ),
             ],
           ),
         );
       },
-    );
-  }
-
-  static ListTile _buildListTile(
-      {required IconData icon,
-      required String text,
-      required VoidCallback onTap,
-      Color? color}) {
-    return ListTile(
-      splashColor: Colors.transparent,
-      leading: Icon(icon, color: AppDarkColor().iconSecondarycolor),
-      title: Text(
-        text,
-        style: TextStyle(color: color ?? AppDarkColor().secondaryText),
-      ),
-      onTap: onTap,
     );
   }
 }

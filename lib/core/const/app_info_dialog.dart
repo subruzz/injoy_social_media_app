@@ -61,3 +61,84 @@ class AppInfoDialog {
     );
   }
 }
+
+class LanguageSelectionDialog extends StatefulWidget {
+  final List<String> languages; // List of language names or codes
+  final String? title;
+  final String closeText;
+  final String okText;
+  final void Function(String) onLanguageSelected;
+
+  const LanguageSelectionDialog({
+    Key? key,
+    required this.languages,
+    required this.onLanguageSelected,
+    this.title,
+    this.closeText = 'Close',
+    this.okText = 'Change ',
+  }) : super(key: key);
+
+  @override
+  _LanguageSelectionDialogState createState() =>
+      _LanguageSelectionDialogState();
+}
+
+class _LanguageSelectionDialogState extends State<LanguageSelectionDialog> {
+  String _selectedLanguage = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      insetPadding: AppPadding.extraLarge,
+      backgroundColor: AppDarkColor().secondaryBackground,
+      title: widget.title != null
+          ? Text(
+              widget.title!,
+              style: Theme.of(context).textTheme.headlineLarge,
+            )
+          : null,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: widget.languages.map((language) {
+          final isSelected = _selectedLanguage == language;
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundColor: isSelected
+                  ? AppDarkColor().buttonBackground // Selected color
+                  : AppDarkColor().secondaryBackground, // Default color
+              radius: 12.0,
+              child: isSelected
+                  ? Icon(Icons.check,
+                      color: AppDarkColor().primaryText, size: 16.0)
+                  : null,
+            ),
+            title: Text(language),
+            onTap: () {
+              setState(() {
+                _selectedLanguage = language;
+              });
+              widget.onLanguageSelected(language);
+            },
+          );
+        }).toList(),
+      ),
+      actions: [
+        TextButton(
+          child: Text(
+            widget.closeText,
+            style: TextStyle(color: AppDarkColor().primaryText),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(widget.okText),
+        ),
+      ],
+    );
+  }
+}

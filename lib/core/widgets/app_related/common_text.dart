@@ -15,14 +15,13 @@ class CustomText extends StatelessWidget {
       this.letterSpacing,
       this.overflow,
       this.maxLines,
-      this.textAlign});
+      this.textAlign = TextAlign.center});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       style: style ?? Theme.of(context).textTheme.labelMedium,
-      overflow: TextOverflow.ellipsis,
       maxLines: maxLines,
       textAlign: textAlign,
     );
