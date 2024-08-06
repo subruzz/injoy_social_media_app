@@ -15,8 +15,8 @@ class FollowingPostFeedGetEvent extends FollowingPostFeedEvent {
 
   const FollowingPostFeedGetEvent(
       {required this.uId,
-      required this.isLoadMore,
-      required this.lastDoc,
+       this.isLoadMore=false,
+       this.lastDoc,
       required this.following});
 }
 

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/message_type.dart';
+import 'package:social_media_app/core/extensions/datetime_to_string.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
@@ -56,6 +57,14 @@ class _PersonChatPageState extends State<PersonChatPage> {
     super.initState();
   }
 
+  String? _selectedDate;
+
+  void _handleDateChange(String date) {
+    log(date);
+    // You can navigate to another page or perform additional actions here
+    log('Selected date: $date');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,7 +81,6 @@ class _PersonChatPageState extends State<PersonChatPage> {
               builder: (context, state) {
                 return state is ChatWallapaperSuccess
                     ? Positioned.fill(
-                       
                         child: Image.file(
                           File(
                             state.wallapaperPath,
@@ -92,6 +100,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
               children: [
                 //messages listing
                 ChatListingSectionSection(
+                    onmessageDateChange: _handleDateChange,
                     myid: widget.myId,
                     onSwipe: (message) {
                       onMessageSwipe(message: message);
@@ -109,116 +118,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
                     toggleButton: _toggleButton),
               ],
             ),
-            ValueListenableBuilder(
-              valueListenable: _showAttachWindow,
-              builder: (context, value, child) {
-                return value
-                    ? Positioned(
-                        bottom: 65,
-                        top: 280,
-                        left: 15,
-                        right: 15,
-                        child: Container(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.width * 0.20,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _attachWindowItem(
-                                    icon: Icons.document_scanner,
-                                    color: Colors.deepPurpleAccent,
-                                    title: "Document",
-                                  ),
-                                  _attachWindowItem(
-                                      icon: Icons.camera_alt,
-                                      color: Colors.pinkAccent,
-                                      title: "Camera",
-                                      onTap: () {}),
-                                  _attachWindowItem(
-                                      icon: Icons.image,
-                                      color: Colors.purpleAccent,
-                                      title: "Gallery"),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _attachWindowItem(
-                                      icon: Icons.headphones,
-                                      color: Colors.deepOrange,
-                                      title: "Audio"),
-                                  _attachWindowItem(
-                                      icon: Icons.location_on,
-                                      color: Colors.green,
-                                      title: "Location"),
-                                  _attachWindowItem(
-                                      icon: Icons.account_circle,
-                                      color: Colors.deepPurpleAccent,
-                                      title: "Contact"),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _attachWindowItem(
-                                    icon: Icons.bar_chart,
-                                    color: Colors.green,
-                                    title: "Poll",
-                                  ),
-                                  _attachWindowItem(
-                                      icon: Icons.gif_box_outlined,
-                                      color: Colors.indigoAccent,
-                                      title: "Gif",
-                                      onTap: () {
-                                        // _sendGifMessage();
-                                      }),
-                                  _attachWindowItem(
-                                      icon: Icons.videocam_rounded,
-                                      color: Colors.lightGreen,
-                                      title: "Video",
-                                      onTap: () {
-                                        // selectVideo().then((value) {
-                                        //   if (_video != null) {
-                                        //     WidgetsBinding.instance.addPostFrameCallback(
-                                        //       (timeStamp) {
-                                        //         showVideoPickedBottomModalSheet(context,
-                                        //             recipientName:
-                                        //                 widget.message.recipientName,
-                                        //             file: _video, onTap: () {
-                                        //           _sendVideoMessage();
-                                        //           Navigator.pop(context);
-                                        //         });
-                                        //       },
-                                        //     );
-                                        //   }
-                                        // });
-                                      }),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    : EmptyDisplay();
-              },
-            ),
+
             ChatSendButton(
               toggleButton: _toggleButton,
               sendMessage: () {
@@ -226,6 +126,12 @@ class _PersonChatPageState extends State<PersonChatPage> {
               },
               messageController: _textMsgController,
             ),
+            // Align(
+            //   alignment: Alignment.topCenter,
+            //   child: DateHeader(
+            //     date: DateTime.now().toFormattedString(),
+            //   ),
+            // )
             // Align(
             //   alignment: Alignment.topCenter,
             //   child: Padding(
@@ -285,5 +191,26 @@ class _PersonChatPageState extends State<PersonChatPage> {
     } else if (type == MessageTypeConst.audioMessage) {
       messageCubit.voiceRecordStopped(state);
     }
+  }
+}
+
+class DateHeader extends StatelessWidget {
+  final String date;
+
+  const DateHeader({Key? key, required this.date}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey[200],
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+      child: Text(
+        date,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.black54,
+        ),
+      ),
+    );
   }
 }

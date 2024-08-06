@@ -1,8 +1,10 @@
 class AiChatEntity {
   final String role;
   final List<ChatPartModel> parts;
+  final bool isWaitingForRes;
 
-  AiChatEntity({required this.role, required this.parts});
+  AiChatEntity(
+      {required this.role, required this.parts, this.isWaitingForRes = false});
 
   factory AiChatEntity.fromJson(Map<String, dynamic> json) {
     return AiChatEntity(

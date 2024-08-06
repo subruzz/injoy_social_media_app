@@ -25,5 +25,10 @@
   "about": "About",
   "darkTheme": "Dark Theme",
   "errorFollow": "An error occurred while following this user. Please try again!",
-  "errorUnfollow": "An error occurred while unfollowing this user. Please try again!"
+  "errorUnfollow": "An error occurred while unfollowing this user. Please try again!",
+  "noPostsYet": "No Posts Found!",
+  "followFriendsDiscoverStories": "Follow friends and discover amazing stories.",
+  "somethingWentWrong": "Oops, Something went wrong, please refresh.",
+  "noResultFound": "No result found for {query}."
+
 }

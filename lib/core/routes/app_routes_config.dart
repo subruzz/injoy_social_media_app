@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/core/common/entities/user_entity.dart';
+
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/features/assets/presenation/pages/custom_media_picker_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';

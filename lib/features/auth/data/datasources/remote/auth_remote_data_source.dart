@@ -54,6 +54,10 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
   Future<AppUserModel> googleSignIn() async {
     log('came here');
     try {
+      if (GoogleSignIn().currentUser != null) {
+        log('came here');
+      }
+
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
@@ -66,13 +70,12 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       // Obtain the auth details from the request
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      log('credent is $credential');
+
       // Once signed in, return the UserCredential
       final userCredential =
           await _firebaseAuth.signInWithCredential(credential);
@@ -257,8 +260,20 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> signOut(String uid) {
-    // TODO: implement signOut
-    throw UnimplementedError();
+  Future<void> signOut(String uid) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        bool isGoogleSignIn = user.providerData
+            .any((userInfo) => userInfo.providerId == 'google.com');
+        await FirebaseAuth.instance.signOut();
+        if (isGoogleSignIn) {
+          await GoogleSignIn().disconnect();
+        }
+      }
+    } catch (e) {
+      throw const MainException();
+    }
   }
 }

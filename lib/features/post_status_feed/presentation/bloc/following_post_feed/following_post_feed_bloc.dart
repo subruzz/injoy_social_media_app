@@ -45,14 +45,14 @@ class FollowingPostFeedBloc
       //   log('in the bloc currently we have ${currentState.followingPosts.length} and new is ${success.posts.length}');
       //   final allPosts = currentState.followingPosts + success.posts;
       //   log('all posts is ${allPosts.length}');
-        if (success.posts.isEmpty) {
-          log('post is empty');
-          return add(GetAllUsers(id: event.uId, following: event.following));
-        }
-        emit(FollowingPostFeedSuccess(
-            followingPosts: success.posts,
-            hasMore: success.hasMore,
-            lastDoc: success.lastDoc));
+      if (success.posts.isEmpty) {
+        log('post is empty');
+        return add(GetAllUsers(id: event.uId, following: event.following));
+      }
+      emit(FollowingPostFeedSuccess(
+          followingPosts: success.posts,
+          hasMore: success.hasMore,
+          lastDoc: success.lastDoc));
       //  else {
       //   log('else case');
       //   emit(FollowingPostFeedSuccess(

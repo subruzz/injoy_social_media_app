@@ -29,8 +29,7 @@ class GoogleAuthButton extends StatelessWidget {
               arguments: state.user,
             );
           } else {
-            context.read<InitialSetupCubit>().startInitialSetup(
-                uId: state.user.id, following: state.user.following);
+     
             Navigator.pushReplacementNamed(
               context,
               MyAppRouteConst.bottomNavRoute,

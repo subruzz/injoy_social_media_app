@@ -6,32 +6,56 @@ import 'package:social_media_app/features/ai_chat/domain/enitity/ai_chat_entity.
 import 'package:social_media_app/features/ai_chat/domain/usecases/generate_ai_message.dart';
 
 part 'ai_chat_state.dart';
+// ai_chat_cubit.dart
 
 class AiChatCubit extends Cubit<AiChatState> {
   final GenerateAiMessageUseCase _aiMessageUseCase;
-  AiChatCubit(this._aiMessageUseCase) : super(AiChatInitial());
-  final List<AiChatEntity> aiChatMessages = [];
+
+  AiChatCubit(this._aiMessageUseCase) : super(const AiChatState());
 
   void chatGenerateNewTextMessage(String chatMsg) async {
-    aiChatMessages.add(
-      AiChatEntity(
-        role: 'user',
-        parts: [ChatPartModel(text: chatMsg)],
-      ),
+    // Add the new user message
+    final newUserMessage = AiChatEntity(
+      role: 'user',
+      parts: [ChatPartModel(text: chatMsg)],
     );
-    emit(AiChatSuccess(chatMessages: aiChatMessages));
-    emit(AiChatLoading());
-    final res = await _aiMessageUseCase(
-        GenerateAiMessageUseCaseParams(aiChatMessages, message: chatMsg));
-    res.fold((failure) {
-      log('ai chat error');
-      aiChatMessages.removeLast();
-      emit(AiChatFailure());
-    }, (success) {
-      log('ai chat success');
 
-      aiChatMessages.add(
-          AiChatEntity(role: 'model', parts: [ChatPartModel(text: success)]));
-    });
+    // Emit the new state with the new user message and set loading to true
+    emit(state.copyWith(
+      chatMessages: List.from(state.chatMessages)..add(newUserMessage),
+      isLoading: true,
+      isError: false,
+    ));
+
+    final res = await _aiMessageUseCase(
+      GenerateAiMessageUseCaseParams(state.chatMessages, message: chatMsg),
+    );
+
+    res.fold(
+      (failure) {
+        log('ai chat error');
+        // Remove the user message in case of failure and set error state
+        emit(state.copyWith(
+          chatMessages: List.from(state.chatMessages)..removeLast(),
+          isLoading: false,
+          isError: true,
+        ));
+      },
+      (success) {
+        log('ai chat success');
+        final aiMessage = AiChatEntity(
+          role: 'model',
+          parts: [ChatPartModel(text: success)],
+        );
+
+        // Add the AI-generated message and set success state
+        emit(state.copyWith(
+          chatMessages: List.from(state.chatMessages)..add(aiMessage),
+          isLoading: false,
+          isError: false,
+        ));
+      },
+    );
   }
 }
+

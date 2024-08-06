@@ -22,7 +22,14 @@ final class LocationFailure extends LocationState {}
 final class LocationSuccess extends LocationState {
   final UserLocation location;
 
-  const LocationSuccess(
-      {required this.location
-  });
+  const LocationSuccess({required this.location});
+}
+
+class LocationSearchLoaded extends LocationState {
+  final List<SuggestedLocation> suggestions;
+
+  const LocationSearchLoaded(this.suggestions);
+
+  @override
+  List<Object> get props => [suggestions];
 }

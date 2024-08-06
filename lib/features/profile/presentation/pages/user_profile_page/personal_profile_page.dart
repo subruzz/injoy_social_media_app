@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/shared_providers/cubit/app_language/app_language_cubit.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/pages/premium_subscripti_builder.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/top_bar_section/top_bar_section.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_basic_details_section/user_basic_detail_section.dart';
@@ -212,9 +214,14 @@ class CustomBottomSheet {
                     context: context,
                     callBack: () {
                       FirebaseAuth.instance.signOut().then((value) {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(
-                            context, MyAppRouteConst.loginRoute);
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const LoginPage(),
+                          ),
+                          (route) => false,
+                        );
                       }).catchError((error) {});
                     },
                     title: localization.areYouSure,

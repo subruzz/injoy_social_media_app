@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
 
 import '../../../../../../core/const/app_config/app_sizedbox.dart';
 
@@ -7,14 +8,15 @@ class WelcomeCardMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('No Posts Yet!', style: Theme.of(context).textTheme.displaySmall),
+        Text(l10n!.noPostsYet, style: Theme.of(context).textTheme.displaySmall),
         AppSizedBox.sizedBox5H,
         Text(
-          'Follow friends and discover amazing stories.',
+          l10n.followFriendsDiscoverStories,
           style: Theme.of(context).textTheme.bodyMedium,
           textAlign: TextAlign.center,
         ),

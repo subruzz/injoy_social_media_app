@@ -34,8 +34,7 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
       Query<Map<String, dynamic>> postsQuery = postcollection
           .where('creatorUid', isNotEqualTo: userId)
           .where('creatorUid', whereIn: following)
-          .orderBy('createAt', descending: true)
-          .limit(limit);
+          .orderBy('createAt', descending: true);
 
       if (lastDoc != null) {
         // postsQuery = postsQuery.startAfterDocument(lastDoc);

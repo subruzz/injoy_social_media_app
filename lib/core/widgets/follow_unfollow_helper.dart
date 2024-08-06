@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 
@@ -18,7 +19,8 @@ class FollowUnfollowHelper extends StatelessWidget {
   final bool isFromCard;
   @override
   Widget build(BuildContext context) {
-    print(isFromCard);
+    final l10n = context.l10n;
+
     return CustomButton(
         width: isFromCard ? 120 : null,
         height: isFromCard ? 40 : 35,
@@ -28,7 +30,9 @@ class FollowUnfollowHelper extends StatelessWidget {
             final me = context.read<AppUserBloc>().appUser;
 
             return CustomText(
-                me.following.contains(user.id) ? 'Following' : 'Follow',
+             me.following.contains(user.id)
+                        ? l10n!.following
+                        : l10n!.follow,
                 style: AppTextTheme.bodyMeidumwhiteVariant.bodyMedium
                     ?.copyWith(fontSize: 12));
           },

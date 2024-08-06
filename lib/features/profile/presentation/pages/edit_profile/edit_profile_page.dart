@@ -16,6 +16,7 @@ import 'package:social_media_app/features/profile/presentation/bloc/user_profile
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/edit_profile.dart';
+import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_profile_img.dart';
 
 import '../../../../../core/services/image_pick_services/image_picker.dart';
 
@@ -78,43 +79,10 @@ class _AddProfilePageState extends State<EditProfilePage> {
                     children: [
                       AppSizedBox.sizedBox20H,
                       Center(
-                        child: Stack(
-                          children: [
-                            ValueListenableBuilder(
-                              valueListenable: _userProfile,
-                              builder: (context, value, child) {
-                                return CircularUserProfile(
-                                  size: 70,
-                                  fileImg: value,
-                                  profile: value == null ? _profileImage : null,
-                                );
-                              },
-                            ),
-                            Positioned(
-                              right: 10.r,
-                              top: 10,
-                              child: GestureDetector(
-                                  onTap: () {},
-                                  child: const Icon(
-                                    Icons.close,
-                                    size: 17,
-                                  )),
-                            ),
-                            Positioned(
-                              right: 20.r,
-                              bottom: 0,
-                              child: GestureDetector(
-                                  onTap: () async {
-                                    final img =
-                                        await ImagePickerService.pickOneImage();
-                                    if (img == null) return;
-                                    _userProfile.value = img;
-                                  },
-                                  child: const EditProfileIcon()),
-                            ),
-                          ],
-                        ),
-                      ),
+                          child: UserProfileImg(
+                        userProfile: _userProfile,
+                        profilePic: _profileImage,
+                      )),
                       AppSizedBox.sizedBox15H,
                       CustomTextField(
                           showPrefixIcon: false,

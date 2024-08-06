@@ -8,9 +8,8 @@ import 'package:social_media_app/core/widgets/premium_badge.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 
 class HomeTopBar extends StatelessWidget {
-  const HomeTopBar({super.key, this.profile, this.isPremium = true});
+  const HomeTopBar({super.key,  this.isPremium = true});
 
-  final String? profile;
   final bool isPremium;
 
   @override
@@ -37,7 +36,6 @@ class HomeTopBar extends StatelessWidget {
             ],
           ),
         ),
-        // This space is for custom widgets
         background: Container(
           padding: AppPadding.only(left: 16, right: 16, bottom: 8),
           child: Align(
@@ -67,18 +65,6 @@ class HomeTopBar extends StatelessWidget {
         ),
       ),
       // Keep the actions fixed to the right side of the app bar
-      actions: [
-        if (profile != null)
-          Padding(
-            padding: AppPadding.onlyRightMedium,
-            child: Stack(
-              alignment: Alignment.topRight,
-              children: [
-                CircularUserProfile(size: 21, profile: profile),
-              ],
-            ),
-          ),
-      ],
     );
   }
 }

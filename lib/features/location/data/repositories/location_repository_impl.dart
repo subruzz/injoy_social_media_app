@@ -3,15 +3,18 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:social_media_app/core/const/location_enum.dart';
+import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/location/data/datasource/local/location_local_datasource.dart';
+import 'package:social_media_app/features/location/data/datasource/remote/search_location.dart';
+import 'package:social_media_app/features/location/data/models/location_search_model.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';
 import '../../domain/repositories/location_repository.dart';
 
 class LocationRepositoryImpl implements LocationRepository {
   final LocationLocalDataSource _locationLocalDataSource;
-
-  LocationRepositoryImpl(
+  final SearchLocationDataSource _locationDataSource;
+  LocationRepositoryImpl(this._locationDataSource,
       {required LocationLocalDataSource locationLocalDataSource})
       : _locationLocalDataSource = locationLocalDataSource;
 
@@ -65,13 +68,13 @@ class LocationRepositoryImpl implements LocationRepository {
   }
 
   @override
-  Future<Either<Failure, List<Location>>> searchLocation(String query) async {
-    throw UnimplementedError();
-    // try {
-    //   final locations = await remoteDataSource.searchLocation(query);
-    //   return Right(locations);
-    // } on SearchException {
-    //   return Left(SearchFailure());
-    // }
+  Future<Either<Failure, List<SuggestedLocation>>> searchLocation(
+      String query) async {
+    try {
+      final locations = await _locationDataSource.fetchSugestedLocation(query);
+      return Right(locations);
+    } on MainException catch (e) {
+      return Left(Failure(e.errorMsg));
+    }
   }
 }

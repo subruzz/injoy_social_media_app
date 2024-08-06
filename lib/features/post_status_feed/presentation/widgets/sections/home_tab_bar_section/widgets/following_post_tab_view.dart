@@ -80,7 +80,6 @@ class _FollowingPostTabViewState extends State<FollowingPostTabView> {
           );
         }
         if (state is FollowingPostFeedSuccess) {
-          if (state.followingPosts.isEmpty) {}
           return SliverList.builder(
             // controller: _scrollController,
             itemCount: state.followingPosts.length,

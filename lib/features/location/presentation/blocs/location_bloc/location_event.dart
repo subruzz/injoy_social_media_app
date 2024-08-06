@@ -8,3 +8,9 @@ sealed class LocationEvent extends Equatable {
 }
 
 final class LocationCurrentEvent extends LocationEvent {}
+
+final class GetSuggestedLocation extends LocationEvent {
+  final String query;
+
+  const GetSuggestedLocation({required this.query});
+}

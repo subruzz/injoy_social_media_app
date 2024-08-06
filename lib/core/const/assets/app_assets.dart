@@ -3,6 +3,8 @@ class AppAssetsConst {
   //user profile empty logo
   static const String profileIcon = 'assets/images/profile.png';
   static const String googleLogo = 'assets/images/google.png';
+  static const String ai = 'assets/images/ai.png';
+
   static const String location = 'assets/images/location_lottie.json';
   static const String buildProfile = 'assets/gifs/profile_building.gif';
   static const String errorGif = 'assets/gifs/error.gif';
@@ -20,6 +22,7 @@ class AppAssetsConst {
   static const String delete = 'assets/svgs/delete.svg';
   static const String language = 'assets/svgs/language.svg';
   static const String edit = 'assets/svgs/edit_svg.svg';
+  static const String save = 'assets/svgs/save.svg';
 
   static const String userSecondaryProfile = 'assets/images/profile_icon.png';
 

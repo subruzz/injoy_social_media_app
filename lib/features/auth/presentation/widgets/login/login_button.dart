@@ -30,8 +30,7 @@ class LoginButton extends StatelessWidget {
           }
           if (state is LoginSuccess) {
             if (state.user.fullName != null) {
-              context.read<InitialSetupCubit>().startInitialSetup(
-                  uId: state.user.id, following: state.user.following);
+            
               Navigator.pushReplacementNamed(
                 context,
                 MyAppRouteConst.bottomNavRoute,

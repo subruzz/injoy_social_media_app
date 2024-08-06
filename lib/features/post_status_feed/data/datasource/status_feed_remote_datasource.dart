@@ -44,7 +44,6 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
           .map((doc) => SingleStatusEntity.fromJson(doc.data()))
           .toList());
     } catch (e) {
-      
       throw MainException(
           errorMsg: AppErrorMessages.myStatusFetchFailed,
           details: e.toString());
@@ -81,6 +80,9 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
   Stream<List<StatusModel>> getStatuses(String uid) async* {
     try {
       final cutoffTimestamp = cutOffTime;
+      if (_userCache.isNotEmpty) {
+        _userCache.clear();
+      }
 
       //fetching the current user details to get the following of the user
       final currentUserDoc = await firestore

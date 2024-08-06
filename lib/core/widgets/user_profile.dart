@@ -12,12 +12,15 @@ class CircularUserProfile extends StatelessWidget {
       this.profile,
       this.size = 35,
       this.fileImg,
+      this.customAsset,
+      this.wantCustomAsset = false,
       this.wantSecProfile = false});
   final String? profile;
   final double size;
   final File? fileImg;
+  final bool wantCustomAsset;
   final bool wantSecProfile;
-
+  final String? customAsset;
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
@@ -29,11 +32,13 @@ class CircularUserProfile extends StatelessWidget {
             : fileImg != null
                 ? FileImage(fileImg!)
                 : AssetImage(
-                    wantSecProfile
-                        ? AppAssetsConst.userSecondaryProfile
-                        : AppAssetsConst.profileIcon,
+                    wantCustomAsset
+                        ? customAsset!
+                        : wantSecProfile
+                            ? AppAssetsConst.userSecondaryProfile
+                            : AppAssetsConst.profileIcon,
                   ) as ImageProvider,
-        backgroundColor: wantSecProfile
+        backgroundColor: wantSecProfile||wantCustomAsset
             ? AppDarkColor().background
             : AppDarkColor().iconPrimaryColor);
   }

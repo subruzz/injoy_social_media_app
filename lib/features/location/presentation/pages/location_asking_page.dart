@@ -1,79 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/app_error_gif.dart';
+import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/const/app_info_dialog.dart';
-import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
-import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/location_enum.dart';
-import 'package:social_media_app/core/const/messenger.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/animated/app_lottie_animation.dart';
+import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
-import 'package:social_media_app/core/widgets/app_related/common_text.dart';
-import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
+import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/custom_divider.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
+import 'package:social_media_app/features/location/data/models/location_search_model.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/location/presentation/widgets/location_dialog.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
-import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
 
-import '../../../../core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
+import '../../../../core/widgets/app_related/common_text.dart';
+import '../../../../core/widgets/button/custom_elevated_button.dart';
 
-class LocationAskingPage extends StatelessWidget {
+class LocationAskingPage extends StatefulWidget {
   const LocationAskingPage({super.key, required this.isFirstTime});
   final bool isFirstTime;
-  void submitProfile(BuildContext context, UserLocation? location) {
-    context.read<ProfileBloc>().add(CompleteProfileSetup(userName: '',
-        location: location, uid: context.read<AppUserBloc>().appUser.id));
-  }
 
   @override
+  State<LocationAskingPage> createState() => _LocationAskingPageState();
+}
+
+class _LocationAskingPageState extends State<LocationAskingPage> {
+  void submitProfile(BuildContext context, UserLocation? location) {
+    context.read<ProfileBloc>().add(CompleteProfileSetup(
+        userName: '',
+        location: location,
+        uid: context.read<AppUserBloc>().appUser.id));
+  }
+
+  final _debouncer = Debouncer(delay: const Duration(milliseconds: 700));
+  @override
   Widget build(BuildContext context) {
+    final locationBloc = context.read<LocationBloc>();
     return MultiBlocListener(
       listeners: [
-        BlocListener<ProfileBloc, ProfileState>(
-          listener: (context, state) {
-            if (state is CompleteProfileSetupSuceess) {
-              final user = context.read<AppUserBloc>().appUser;
-              context
-                  .read<InitialSetupCubit>()
-                  .startInitialSetup(uId: user.id, following: user.following);
-              // context.read<FollowingPostFeedBloc>().add(
-              //     FollowingPostFeedGetEvent(
-              //         uId: user.id, following: user.following));
-              context
-                  .read<GetUserPostsBloc>()
-                  .add(GetUserPostsrequestedEvent(uid: user.id));
-              Navigator.pushNamed(context, MyAppRouteConst.bottomNavRoute);
-            }
-            if (state is CompleteProfileSetupFailure) {
-              Messenger.showSnackBar(message: state.errorMsg);
-            }
-          },
-        ),
         BlocListener<LocationBloc, LocationState>(
           listener: (context, state) {
-            if (state is LocationSuccess) {
-              isFirstTime
-                  ? AppInfoDialog.showInfoDialog(
-                      context: context,
-                      callBack: () {
-                        submitProfile(context, state.location);
-                      },
-                      title: 'Selected Location',
-                      subtitle: state.location.currentLocation ?? '',
-                      buttonText: 'Continue')
-                  : Navigator.pop(context, state.location);
-            }
+            if (state is LocationSuccess) {}
             if (state is LocationNotOnState) {
               showLocationDialog(
                   context: context,
@@ -88,89 +61,108 @@ class LocationAskingPage extends StatelessWidget {
           },
         ),
       ],
-      child: BlocBuilder<ProfileBloc, ProfileState>(
-        builder: (context, state) {
-          if (state is CompleteProfileSetupLoading) {
-            return const AppLoadingGif();
-          }
-          return Scaffold(
-            appBar: AppCustomAppbar(
-              showLeading: true,
-              actions: [
-                if (isFirstTime)
-                  TextButton(
-                    onPressed: () {
-                      AppInfoDialog.showInfoDialog(
-                          context: context,
-                          callBack: () {
-                            submitProfile(context, null);
-                          },
-                          title: 'Are You Sure?',
-                          subtitle: AppIngoMsg.locationSkip,
-                          buttonText: 'Skip');
-                    },
+      child: Scaffold(
+        appBar: AppCustomAppbar(
+          title: 'Select Location',
+          showLeading: true,
+        ),
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: CustomAppPadding(
+            child: Column(
+              children: [
+                AppSizedBox.sizedBox15H,
+                CustomTextField(
+                  onChanged: (value) {
+                    _debouncer.run(() {
+                      locationBloc.add(GetSuggestedLocation(query: value));
+                    });
+                  },
+                  hintText: 'Search manually..',
+                  // prefixIcon: Icons.search,
+                ),
+                AppSizedBox.sizedBox5H,
+                const CustomDivider(),
+                AppSizedBox.sizedBox5H,
+                CustomButton(
+                    radius: AppBorderRadius.small,
                     child: CustomText(
-                      'Skip',
-                      style:
-                          TextStyle(color: AppDarkColor().secondaryPrimaryText),
+                      'Use current location',
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
-                  )
+                    onClick: () {
+                      locationBloc.add(LocationCurrentEvent());
+                    }),
+                AppSizedBox.sizedBox10H,
+                BlocConsumer(
+                  bloc: locationBloc,
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    if (state is LocationFailure) {
+                      return const Center(child: AppErrorGif());
+                    }
+
+                    if (state is LocationSearchLoaded) {
+                      return Expanded(
+                        child: ListView.builder(
+                          padding: AppPadding.horizontalExtraSmall,
+                          itemCount: state.suggestions.length,
+                          itemBuilder: (context, index) {
+                            final loc = state.suggestions[index];
+
+                            return LocationCard(location: loc);
+                          },
+                        ),
+                      );
+                    }
+                    if (state is LocationLoading) {
+                      return Padding(
+                        padding: AppPadding.onlyTopLarge,
+                        child: const CircularLoading(),
+                      );
+                    }
+                    return const EmptyDisplay();
+                  },
+                )
               ],
             ),
-            resizeToAvoidBottomInset: false,
-            body: SafeArea(
-              child: CustomAppPadding(
-                child: Column(
-                  children: [
-                    AppSizedBox.sizedBox15H,
-                    const CustomTextField(
-                      hintText: 'Search manually..',
-                      // prefixIcon: Icons.search,
-                    ),
-                    if (isFirstTime)
-                      const AppLottieAnimation(
-                        lottie: AppAssetsConst.location,
-                      ),
-                    if (isFirstTime)
-                      const CustomText(
-                        textAlign: TextAlign.center,
-                        AppIngoMsg.locationinfo,
-                      ),
-                    isFirstTime
-                        ? const Spacer()
-                        : Column(
-                            children: [
-                              AppSizedBox.sizedBox5H,
-                              const CustomDivider(),
-                              AppSizedBox.sizedBox5H,
-                            ],
-                          ),
-                    BlocBuilder<LocationBloc, LocationState>(
-                      builder: (context, state) {
-                        if (state is LocationLoading) {
-                          return CustomAppPadding(
-                              padding: AppPadding.onlyBottomMedium,
-                              child: const CircularLoading());
-                        }
-                        return CustomButton(
-                            child: CustomText(
-                              'Use current location',
-                              style: Theme.of(context).textTheme.labelLarge,
-                            ),
-                            onClick: () {
-                              context
-                                  .read<LocationBloc>()
-                                  .add(LocationCurrentEvent());
-                            });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
+          ),
+        ),
       ),
+    );
+  }
+}
+
+class LocationCard extends StatelessWidget {
+  final SuggestedLocation location;
+
+  const LocationCard({super.key, required this.location});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: const Icon(
+        Icons.location_on,
+        color: Colors.blue,
+      ),
+      title: Text(
+        location.properties.name ?? 'Unknown Location',
+      ),
+      subtitle: Text(
+        style: Theme.of(context).textTheme.bodyMedium,
+        '${location.properties.state ?? ''} , ${location.properties.country ?? ''}',
+      ),
+      trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey[600]),
+      onTap: () {
+        Navigator.pop(
+            context,
+            UserLocation(
+                latitude: location.latitude,
+                longitude: location.longitude,
+                currentLocation:
+                    '${location.properties.name ?? 'Unknown Location'},${location.properties.state ?? ''} , ${location.properties.country ?? ''}'));
+      },
     );
   }
 }

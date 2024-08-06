@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
@@ -25,7 +26,6 @@ class GetAllStatusBloc extends Bloc<GetAllStatusEvent, GetAllStatusState> {
     try {
       final streamRes = _allStatusesUseCase.call(event.uId);
       await for (var value in streamRes) {
-     
         emit(GetAllStatusSuccess(allStatus: value));
       }
     } on SocketException {
@@ -33,5 +33,11 @@ class GetAllStatusBloc extends Bloc<GetAllStatusEvent, GetAllStatusState> {
     } catch (e) {
       emit(GetAllStatusFailure());
     }
+  }
+
+  @override
+  Future<void> close() {
+    log('clossed the cubit');
+    return super.close();
   }
 }

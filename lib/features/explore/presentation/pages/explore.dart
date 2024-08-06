@@ -5,16 +5,13 @@ import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
-import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_recommended_post/get_recommended_post_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore_all_posts.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/pages/welcome_card.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/sections/tab/explore_tab.dart';
-
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
   @override
@@ -96,7 +93,6 @@ class _ExplorePageState extends State<ExplorePage>
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(

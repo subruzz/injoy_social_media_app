@@ -1,18 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
 import 'package:social_media_app/core/utils/functions/date_picker.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_state.dart';
-import 'package:social_media_app/features/profile/presentation/pages/add_profile/date_of_birth_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile/username_check_page.dart';
-import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_profile_pic.dart';
+import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_profile_img.dart';
 
 import '../../../../../core/widgets/button/custom_elevated_button.dart';
 
@@ -23,7 +20,7 @@ class ProfileForm extends StatelessWidget {
   final TextEditingController occupationController;
   final TextEditingController aboutController;
   final TextEditingController dobController;
-  final PickSingleImageCubit selectImageCubit;
+  final ValueNotifier<File?> selectImage;
   final VoidCallback onPress;
   // final TextEditingController locationController;
   const ProfileForm({
@@ -35,7 +32,7 @@ class ProfileForm extends StatelessWidget {
     required this.aboutController,
     required this.onPress,
     required this.dobController,
-    required this.selectImageCubit,
+    required this.selectImage,
   });
   @override
   Widget build(BuildContext context) {
@@ -46,7 +43,7 @@ class ProfileForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppSizedBox.sizedBox40H,
-          UserProfilePicSelect(selectImageCuit: selectImageCubit),
+          Center(child: UserProfileImg(userProfile: selectImage)),
           AppSizedBox.sizedBox15H,
           CustomTextField(
             controller: nameController,

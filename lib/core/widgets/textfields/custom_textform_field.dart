@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_svg.dart';
@@ -19,6 +20,7 @@ class CustomTextField extends StatefulWidget {
   final Color? errorColor;
   final Color? backgroundColor;
   final bool autoValidate;
+  final BorderRadius? radius;
   final void Function(String)? onChanged;
   final void Function()? datePicker;
   const CustomTextField(
@@ -28,6 +30,7 @@ class CustomTextField extends StatefulWidget {
       this.controller,
       this.autoValidate = true,
       this.maxLine,
+      this.radius,
       this.errorColor,
       this.readOnly,
       this.showPrefixIcon = true,
@@ -62,6 +65,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
         controller: widget.controller,
         obscureText: isPassWordVisible,
         decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: widget.radius ?? AppBorderRadius.small,
+              borderSide: const BorderSide(color: Colors.transparent),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: widget.radius ?? AppBorderRadius.small,
+              borderSide: const BorderSide(color: Colors.transparent),
+            ),
             fillColor: AppDarkColor().secondaryBackground,
             errorStyle: TextStyle(color: widget.errorColor),
             errorText: widget.errorMsg,

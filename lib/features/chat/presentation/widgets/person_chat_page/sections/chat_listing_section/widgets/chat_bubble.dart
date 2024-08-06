@@ -108,7 +108,7 @@ class TimestampAndTickWidget extends StatelessWidget {
       children: [
         if (messageItem.createdAt != null)
           Text(
-            messageItem.createdAt!.toDate().timeAgoChatExtension(),
+            messageItem.createdAt!.toDate().to12HourFormat(),
             style: AppTextTheme.bodysmallPureWhiteVariations.bodySmall,
           ),
         AppSizedBox.sizedBox5W,

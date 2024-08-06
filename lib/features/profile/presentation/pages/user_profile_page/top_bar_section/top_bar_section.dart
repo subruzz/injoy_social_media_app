@@ -24,21 +24,26 @@ class ProfilePageTopBarSection extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: BlocBuilder<AppUserBloc, AppUserState>(
-        buildWhen: (previous, current) {
-          if (previous is AppUserLoggedIn && current is AppUserLoggedIn) {
-            return (previous.user.userName != current.user.userName);
-          }
-          return false;
-        },
-        builder: (context, state) {
-          log('build called');
-          return Text(
-            addAtSymbol(state.currentUser?.userName),
-            style: Theme.of(context).textTheme.displaySmall,
-          );
-        },
-      ),
+      title: userName != null
+          ? Text(
+              addAtSymbol(userName ?? ''),
+              style: Theme.of(context).textTheme.displaySmall,
+            )
+          : BlocBuilder<AppUserBloc, AppUserState>(
+              buildWhen: (previous, current) {
+                if (previous is AppUserLoggedIn && current is AppUserLoggedIn) {
+                  return (previous.user.userName != current.user.userName);
+                }
+                return false;
+              },
+              builder: (context, state) {
+                log('build called');
+                return Text(
+                  addAtSymbol(state.currentUser?.userName),
+                  style: Theme.of(context).textTheme.displaySmall,
+                );
+              },
+            ),
       actions: [
         AppSizedBox.sizedBox10W,
         if (isMe)

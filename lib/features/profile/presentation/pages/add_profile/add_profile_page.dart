@@ -1,10 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
-import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/shared_providers/cubits/pick_single_image/pick_image_cubit.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/common_text_button.dart';
@@ -24,17 +23,16 @@ class _AddProfilePageState extends State<AddProfilePage> {
   final _phoneNoController = TextEditingController();
   final _occupationController = TextEditingController();
   final _aboutController = TextEditingController();
-  final _selectImageCubit = GetIt.instance<PickSingleImageCubit>();
   final _dobController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final bool isValid = false;
+  final ValueNotifier<File?> _userProfile = ValueNotifier(null);
   @override
   void dispose() {
     _nameController.dispose();
     _phoneNoController.dispose();
     _occupationController.dispose();
     _aboutController.dispose();
-    _selectImageCubit.close();
     super.dispose();
   }
 
@@ -45,7 +43,7 @@ class _AddProfilePageState extends State<AddProfilePage> {
           phoneNumber: _phoneNoController.text.trim(),
           occupation: _occupationController.text.trim(),
           about: _aboutController.text.trim(),
-          profilePic: _selectImageCubit.img,
+          profilePic: _userProfile.value,
           dob: _dobController.text.trim(),
           uid: context.read<AppUserBloc>().appUser.id));
     }
@@ -79,7 +77,7 @@ class _AddProfilePageState extends State<AddProfilePage> {
             occupationController: _occupationController,
             aboutController: _aboutController,
             dobController: _dobController,
-            selectImageCubit: _selectImageCubit,
+            selectImage: _userProfile,
           ),
         ),
       ),

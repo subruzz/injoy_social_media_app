@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/custom_scrollable_ontent.dart';
+import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_choosing_text.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_form.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/google_auth.dart';
@@ -10,6 +12,9 @@ import 'package:social_media_app/features/auth/presentation/widgets/login/forgot
 import 'package:social_media_app/features/auth/presentation/widgets/login/login_button.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/shared/separating_divider.dart';
 import 'package:social_media_app/core/widgets/welcome_msg/welcome_msg.dart';
+
+import '../../../../init_dependecies.dart';
+import '../widgets/auth/google_auth_builder.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -31,12 +36,12 @@ class _LoginScreenState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: CustomAppPadding(
-          child: CustomScrollableContent(
-            child: Hero(
-              tag: 1,
+    return BlocProvider(
+      create: (context) => serviceLocator<LoginBloc>(),
+      child: Scaffold(
+        body: SafeArea(
+          child: CustomAppPadding(
+            child: CustomScrollableContent(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -59,7 +64,7 @@ class _LoginScreenState extends State<LoginPage> {
                   AppSizedBox.sizedBox10H,
                   const SeparatingDivider(),
                   AppSizedBox.sizedBox10H,
-                  const GoogleAuthButton(),
+                  const GoogleAuthBuilder(),
                   AppSizedBox.sizedBox5H,
                   const AuthChoosingText(
                     islogin: true,

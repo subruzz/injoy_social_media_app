@@ -46,8 +46,8 @@ class OtherUserFollowMessageSection extends StatelessWidget {
                     iconData: Icons.person_add_alt,
                     radius: AppBorderRadius.horizontalExtraLarge,
                     title: me.following.contains(currentVisitedUser.id)
-                        ? l10n!.follow
-                        : l10n!.following,
+                        ? l10n!.following
+                        : l10n!.follow,
                     onClick: () {
                       final amIFollowing =
                           me.following.contains(currentVisitedUser.id);
