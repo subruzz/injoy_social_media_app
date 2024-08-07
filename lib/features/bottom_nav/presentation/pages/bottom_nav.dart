@@ -158,11 +158,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
               ..getMynotifications(
                   myId: context.read<AppUserBloc>().appUser.id),
           ),
-          BlocProvider(
-            create: (context) => context.read<GetUserPostsBloc>()
-              ..add(GetUserPostsrequestedEvent(
-                  uid: context.read<AppUserBloc>().appUser.id)),
-          ),
+       
         ],
         child: BlocBuilder<BottomNavCubit, BottomNavState>(
             builder: (context, state) {

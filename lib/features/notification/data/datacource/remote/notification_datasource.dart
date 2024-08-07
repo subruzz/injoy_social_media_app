@@ -1,14 +1,19 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 
+import '../../../../settings/domain/entity/ui_entity/enums.dart';
+
 abstract interface class NotificationDatasource {
-  Future<void> createNotification({required CustomNotification notification});
+  Future<void> createNotification(
+      {required CustomNotification notification,
+      required NotificationPreferenceEnum notificationPreferenceType});
   Future<void> deleteNotification(
       {required NotificationCheck notificationCheck});
   Stream<List<CustomNotification>> getMyNotifications({required String myId});
@@ -23,12 +28,44 @@ class NotificationDatasourceImple implements NotificationDatasource {
       : _firebaseFirestore = firebaseFirestore;
   @override
   Future<void> createNotification(
-      {required CustomNotification notification}) async {
+      {required CustomNotification notification,
+      required NotificationPreferenceEnum notificationPreferenceType}) async {
     try {
       log('called');
       AppUserModel user = await getUserInfo(notification.receiverId);
       String token = user.token;
       log(token);
+      log(user.notificationPreferences.isNotificationPaused.toString());
+
+      if (user.notificationPreferences.isNotificationPaused) {
+        return;
+      }
+      switch (notificationPreferenceType) {
+        case NotificationPreferenceEnum.likes:
+          if (user.notificationPreferences.isLikeNotificationPaused) {
+            return; // Likes notifications are paused
+          }
+          break;
+        case NotificationPreferenceEnum.comments:
+          if (user.notificationPreferences.isCommentNotificationPaused) {
+            return; // Comments notifications are paused
+          }
+          break;
+        case NotificationPreferenceEnum.follow:
+          if (user.notificationPreferences.isFollowNotificationPaused) {
+            return; // Follow notifications are paused
+          }
+          break;
+        case NotificationPreferenceEnum.messages:
+          if (user.notificationPreferences.isMessageNotificationPaused) {
+            return; // Messages notifications are paused
+          }
+          break;
+        default:
+          // Handle other cases or default behavior
+          break;
+      }
+
       if (token.isNotEmpty) {
         await DeviceNotification.sendNotificationToUser(
             deviceToken: token, notification: notification);

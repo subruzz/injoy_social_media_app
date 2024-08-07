@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:social_media_app/core/const/location_enum.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
 class AppUser extends Equatable {
@@ -8,6 +9,7 @@ class AppUser extends Equatable {
   bool hasPremium;
   final String? fullName;
   String? userName;
+  final UserPremium? userPrem;
   final String? dob;
   final String? phoneNumber;
   final String? occupation;
@@ -42,6 +44,7 @@ class AppUser extends Equatable {
     required this.followersCount,
     required this.followingCount,
     this.phoneNumber,
+    this.userPrem,
     this.occupation,
     this.about,
     this.profilePic,
@@ -68,6 +71,7 @@ class AppUser extends Equatable {
         about,
         profilePic,
         location,
+        userPrem,
         lastSeen,
         notificationPreferences,
         visitedUserCount,
@@ -101,6 +105,7 @@ class AppUser extends Equatable {
     String? token,
     double? latitude,
     double? longitude,
+    UserPremium? userPrem,
     int? followersCount,
     int? followingCount,
     List<String>? following,
@@ -111,6 +116,7 @@ class AppUser extends Equatable {
   }) {
     return AppUser(
       id: id ?? this.id,
+      userPrem: userPrem ?? this.userPrem,
       email: email ?? this.email,
       hasPremium: hasPremium ?? this.hasPremium,
       fullName: fullName ?? this.fullName,
@@ -122,7 +128,8 @@ class AppUser extends Equatable {
       profilePic: profilePic ?? this.profilePic,
       location: location ?? this.location,
       lastSeen: lastSeen ?? this.lastSeen,
-      notificationPreferences: notificationPreferences ?? this.notificationPreferences,
+      notificationPreferences:
+          notificationPreferences ?? this.notificationPreferences,
       visitedUserCount: visitedUserCount ?? this.visitedUserCount,
       token: token ?? this.token,
       latitude: latitude ?? this.latitude,
@@ -136,4 +143,30 @@ class AppUser extends Equatable {
       viewedSetupIndex: viewedSetupIndex ?? this.viewedSetupIndex,
     );
   }
+}
+
+class UserPremium extends Equatable {
+  final PremiumSubType premType;
+  final Timestamp purchasedAt;
+
+  const UserPremium({required this.premType, required this.purchasedAt});
+
+  // Convert UserPremium to a Map (JSON-compatible)
+  Map<String, dynamic> toJson() {
+    return {
+      'premType': premType.toJson(),
+      'purchasedAt': purchasedAt,
+    };
+  }
+
+  // Create UserPremium from a Map (JSON-compatible)
+  factory UserPremium.fromJson(Map<String, dynamic> json) {
+    return UserPremium(
+      premType: PremiumSubType.fromJson(json['premType'] as String),
+      purchasedAt: json['purchasedAt'] as Timestamp,
+    );
+  }
+
+  @override
+  List<Object?> get props => [premType, purchasedAt];
 }

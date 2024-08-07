@@ -35,6 +35,32 @@ extension TimeFormat on DateTime {
   }
 }
 
+extension CustomDateFormat on DateTime {
+  String toCustomFormat() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(const Duration(days: 1));
+
+    final date = DateTime(year, month, day);
+
+    if (date == today) {
+      return to12HourFormat();
+    } else if (date == yesterday) {
+      return 'Yesterday';
+    } else {
+      return toShortDateString();
+    }
+  }
+
+  // Helper method to convert DateTime to a short date string (e.g., "MMM dd, yyyy")
+  String toShortDateString() {
+    final year = this.year.toString();
+    final month = this.month.toString().padLeft(2, '0');
+    final day = this.day.toString().padLeft(2, '0');
+    return '$month/$day/$year';
+  }
+}
+
 extension TimeAgoOnlineStatus on DateTime {
   String onlineStatus() {
     final now = DateTime.now();

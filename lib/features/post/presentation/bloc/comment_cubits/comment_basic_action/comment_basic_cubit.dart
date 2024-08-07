@@ -12,6 +12,8 @@ import 'package:social_media_app/features/post/domain/usecases/comment/create_co
 import 'package:social_media_app/features/post/domain/usecases/comment/delete_comment.dart';
 import 'package:social_media_app/features/post/domain/usecases/comment/update_comment.dart';
 
+import '../../../../../settings/domain/entity/ui_entity/enums.dart';
+
 part 'comment_basic_state.dart';
 
 class CommentBasicCubit extends Cubit<CommentBasicState> {
@@ -57,6 +59,7 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
         (success) {
       emit(CommentAddedSuccess());
       _notificationCubit.createNotification(
+        notificationPreferenceType: NotificationPreferenceEnum.comments,
         notification: CustomNotification(
           notificationId: IdGenerator.generateUniqueId(),
           text: "Commented on your post",

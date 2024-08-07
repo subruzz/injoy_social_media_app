@@ -176,6 +176,7 @@ import 'package:social_media_app/features/notification/presentation/pages/cubit/
 import 'package:equatable/equatable.dart';
 import 'package:social_media_app/features/profile/domain/usecases/follow_user.dart';
 import 'package:social_media_app/features/profile/domain/usecases/unfollow_user.dart';
+import 'package:social_media_app/features/settings/domain/entity/ui_entity/enums.dart';
 
 part 'followunfollow_state.dart';
 
@@ -204,7 +205,8 @@ class FollowunfollowCubit extends Cubit<FollowunfollowState> {
     emit(FollowUnfollowStarted());
 
     if (!_debouncers.containsKey(otherId)) {
-      _debouncers[otherId] = Debouncer(delay: const Duration(milliseconds: 700));
+      _debouncers[otherId] =
+          Debouncer(delay: const Duration(milliseconds: 700));
     }
     emit(FollowLoading());
     final debouncer = _debouncers[otherId]!;
@@ -262,6 +264,7 @@ class FollowunfollowCubit extends Cubit<FollowunfollowState> {
       });
 
       _notificationCubit.createNotification(
+        notificationPreferenceType: NotificationPreferenceEnum.follow,
         notification: CustomNotification(
           notificationId: IdGenerator.generateUniqueId(),
           text: "started following you.",

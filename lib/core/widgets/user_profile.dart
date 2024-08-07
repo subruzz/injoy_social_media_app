@@ -7,39 +7,47 @@ import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
 class CircularUserProfile extends StatelessWidget {
-  const CircularUserProfile(
-      {super.key,
-      this.profile,
-      this.size = 35,
-      this.fileImg,
-      this.customAsset,
-      this.wantCustomAsset = false,
-      this.wantSecProfile = false});
+  const CircularUserProfile({
+    super.key,
+    this.profile,
+    this.size = 35,
+    this.fileImg,
+    this.customAsset,
+    this.wantCustomAsset = false,
+    this.wantSecProfile = false,
+  });
+
   final String? profile;
   final double size;
   final File? fileImg;
   final bool wantCustomAsset;
   final bool wantSecProfile;
   final String? customAsset;
+
   @override
   Widget build(BuildContext context) {
+    ImageProvider? imageProvider;
+
+    if (profile != null && profile!.isNotEmpty) {
+      imageProvider = CachedNetworkImageProvider(profile!);
+    } else if (fileImg != null) {
+      imageProvider = FileImage(fileImg!);
+    } else {
+      imageProvider = AssetImage(
+        wantCustomAsset
+            ? customAsset ?? AppAssetsConst.profileIcon
+            : wantSecProfile
+                ? AppAssetsConst.userSecondaryProfile
+                : AppAssetsConst.profileIcon,
+      );
+    }
+
     return CircleAvatar(
-        radius: size.w,
-        backgroundImage: profile != null
-            ? CachedNetworkImageProvider(
-                profile!,
-              )
-            : fileImg != null
-                ? FileImage(fileImg!)
-                : AssetImage(
-                    wantCustomAsset
-                        ? customAsset!
-                        : wantSecProfile
-                            ? AppAssetsConst.userSecondaryProfile
-                            : AppAssetsConst.profileIcon,
-                  ) as ImageProvider,
-        backgroundColor: wantSecProfile||wantCustomAsset
-            ? AppDarkColor().background
-            : AppDarkColor().iconPrimaryColor);
+      radius: size.w,
+      backgroundImage: imageProvider,
+      backgroundColor: wantSecProfile || wantCustomAsset
+          ? AppDarkColor().background
+          : AppDarkColor().iconPrimaryColor,
+    );
   }
 }

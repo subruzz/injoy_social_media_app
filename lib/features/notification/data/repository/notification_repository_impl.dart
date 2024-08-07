@@ -7,6 +7,7 @@ import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 import 'package:social_media_app/features/notification/domain/repository/notification_repository.dart';
 
+import '../../../settings/domain/entity/ui_entity/enums.dart';
 import '../datacource/remote/notification_datasource.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
@@ -17,10 +18,12 @@ class NotificationRepositoryImpl implements NotificationRepository {
       : _notificationDatasource = notificationDatasource;
   @override
   Future<Either<Failure, Unit>> createNotification(
-      {required CustomNotification notification}) async {
+      {required CustomNotification notification,
+      required NotificationPreferenceEnum notificationPreferenceType}) async {
     try {
       await _notificationDatasource.createNotification(
-          notification: notification);
+          notification: notification,
+          notificationPreferenceType: notificationPreferenceType);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

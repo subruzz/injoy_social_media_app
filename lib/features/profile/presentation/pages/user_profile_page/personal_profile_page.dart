@@ -92,9 +92,11 @@ class CustomListTile extends StatelessWidget {
       leading: Icon(icon, color: AppDarkColor().iconSecondarycolor),
       title: Row(
         children: [
-          Text(
-            text,
-            style: TextStyle(color: color ?? AppDarkColor().secondaryText),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(color: color ?? AppDarkColor().secondaryText),
+            ),
           ),
           if (isPremium) AppSizedBox.sizedBox10W,
           if (isPremium) const PremiumBadge(),
@@ -193,18 +195,20 @@ class CustomBottomSheet {
                       buttonText: 'Get Premium');
                 },
               ),
-              CustomListTile(
-                icon: Icons.star,
-                text: 'Get Premium',
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PremiumSubscriptiBuilder(),
-                      ));
-                },
-              ),
+              if (!appuser.hasPremium)
+                CustomListTile(
+                  icon: Icons.star,
+                  text: 'Get Premium',
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const PremiumSubscriptiBuilder(),
+                        ));
+                  },
+                ),
               CustomListTile(
                 color: AppDarkColor().iconSecondarycolor,
                 icon: Icons.logout,
@@ -217,8 +221,7 @@ class CustomBottomSheet {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                const LoginPage(),
+                            builder: (context) => const LoginPage(),
                           ),
                           (route) => false,
                         );

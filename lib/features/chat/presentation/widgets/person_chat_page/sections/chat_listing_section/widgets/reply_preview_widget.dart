@@ -12,7 +12,6 @@ import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_b
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_side_bar.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';

@@ -20,8 +20,9 @@ class PremiumCardList extends StatelessWidget {
             price: '₹299/mo',
             features: [
               'See who visited your profile',
-              'Download posts from other users',
+              'Multi language support',
               'Edit posts after posting',
+              'Access to Inaya Ai'
             ],
           ),
           const SubscriptionCard(
@@ -30,8 +31,9 @@ class PremiumCardList extends StatelessWidget {
             price: '₹499/3mo',
             features: [
               'See who visited your profile',
-              'Download posts from other users',
+              'Multi language support',
               'Edit posts after posting',
+              'Access to Inaya Ai'
             ],
           ),
           const SubscriptionCard(
@@ -40,8 +42,9 @@ class PremiumCardList extends StatelessWidget {
             price: '₹1599/yr',
             features: [
               'See who visited your profile',
-              'Download posts from other users',
+              'Multi language support',
               'Edit posts after posting',
+              'Access to Inaya Ai'
             ],
           ),
           AppSizedBox.sizedBox45H,

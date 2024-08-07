@@ -15,16 +15,16 @@ class SettingsUiConst {
         accountSettingType: AccountSettingsType.changeUserName,
         leading: AppAssetsConst.person,
         trailing: righArrow),
-    SettingsTileEntity(
-        title: 'Change Email',
-        accountSettingType: AccountSettingsType.changeMail,
-        leading: AppAssetsConst.email,
-        trailing: righArrow),
-    SettingsTileEntity(
-        title: 'Change Password',
-        accountSettingType: AccountSettingsType.changePassword,
-        leading: AppAssetsConst.lock,
-        trailing: righArrow),
+    // SettingsTileEntity(
+    //     title: 'Change Email',
+    //     accountSettingType: AccountSettingsType.changeMail,
+    //     leading: AppAssetsConst.email,
+    //     trailing: righArrow),
+    // SettingsTileEntity(
+    //     title: 'Change Password',
+    //     accountSettingType: AccountSettingsType.changePassword,
+    //     leading: AppAssetsConst.lock,
+    //     trailing: righArrow),
     SettingsTileEntity(
         title: 'Delete Account',
         accountSettingType: AccountSettingsType.deleteAccount,

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/single_child_widget.dart';
 import 'package:social_media_app/core/shared_providers/cubit/app_language/app_language_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
@@ -31,7 +30,7 @@ import 'package:social_media_app/features/profile/presentation/bloc/user_profile
 
 import '../features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 
-List<SingleChildWidget> myProviders = [
+List<BlocProvider> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<DeleteStatusBloc>(),
   ),
@@ -72,11 +71,14 @@ List<SingleChildWidget> myProviders = [
     create: (context) => serviceLocator<AiChatCubit>(),
   ),
   BlocProvider(
-    create: (context) => serviceLocator<DeletePostBloc>(),
+    create: (context) => serviceLocator<GetUserPostsBloc>()
+      ..add(GetUserPostsrequestedEvent(
+          uid: context.read<AppUserBloc>().appUser.id)),
   ),
   BlocProvider(
-    create: (context) => serviceLocator<GetUserPostsBloc>(),
+    create: (context) => serviceLocator<DeletePostBloc>(),
   ),
+
   BlocProvider(
     create: (context) => serviceLocator<SearchHashtagBloc>(),
   ),

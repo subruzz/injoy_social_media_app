@@ -23,23 +23,30 @@ class PremiumBuyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.bottomCenter,
-        child: CustomButton(
-          child: BlocBuilder<PremiumSubscriptionBloc, PremiumSubscriptionState>(
-              buildWhen: (previous, current) =>
-                  current is PremiumOptionSelected,
-              builder: (context, premTypeState) {
-                return Text(
-                    'Continue with ${premTypeState is PremiumOptionSelected ? _getPriceText(premTypeState.premiumSubType) : ''}');
-              }),
-          onClick: () {
-            context.read<PremiumSubscriptionBloc>().add(
-                  CreatePremiumsubscriptionIntent(
-                    userid: context.read<AppUserBloc>().appUser.id,
-                  ),
-                );
-          },
-        ));
+    return BlocBuilder<PremiumSubscriptionBloc, PremiumSubscriptionState>(
+      buildWhen: (previous, current) => current is PremiumOptionSelected,
+      builder: (context, premTypeState) {
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: CustomButton(
+            child: Text(
+              'Continue with ${premTypeState is PremiumOptionSelected ? _getPriceText(premTypeState.premiumSubType) : ''}',
+            ),
+            onClick: () {
+              if (premTypeState is PremiumOptionSelected) {
+                context.read<PremiumSubscriptionBloc>().add(
+                      CreatePremiumsubscriptionIntent(
+                        premiumSubType: premTypeState.premiumSubType,
+                        userid: context.read<AppUserBloc>().appUser.id,
+                      ),
+                    );
+              } else {
+                // Handle case where premiumSubType is not selected, if necessary
+              }
+            },
+          ),
+        );
+      },
+    );
   }
 }

@@ -61,7 +61,6 @@ class ChatListingSectionSection extends StatelessWidget {
             );
           }
 
-          // Group messages by date
           final groupedMessages = _groupMessagesByDate(state.messages);
 
           return ListView.builder(
@@ -80,11 +79,13 @@ class ChatListingSectionSection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Text(
                         date,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: Colors.white),
                       ),
                     ),
                   ),
-                  // Display messages for this date
                   ...messages.map((message) {
                     return SwipeTo(
                       onRightSwipe: (details) {
@@ -124,7 +125,10 @@ class ChatListingSectionSection extends StatelessWidget {
                               context: context,
                               subtitle: AppIngoMsg.deleteMessage,
                               callBack: () {
-                                // context.read<MessageCubit>().deleteMessage(messageId: message.messageId);
+                                context.read<MessageCubit>().deleteMessage(
+                                    messageState:
+                                        context.read<GetMessageCubit>().state,
+                                    messageId: message.messageId);
                               },
                               buttonText: AppUiStringConst.delete,
                             );
@@ -132,7 +136,7 @@ class ChatListingSectionSection extends StatelessWidget {
                         },
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               );
             },

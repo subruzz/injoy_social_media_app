@@ -16,9 +16,11 @@ class PremiumSubsriptionRepoImpl implements PremiumSubscriptionRepository {
       {required PremiumSubscriptionDatasource premiumSubscriptionDatasource})
       : _premiumSubscriptionDatasource = premiumSubscriptionDatasource;
   @override
-  Future<Either<Failure, PaymentIntentBasic>> createPaymentIntent(PremiumSubType premType) async {
+  Future<Either<Failure, PaymentIntentBasic>> createPaymentIntent(
+      PremiumSubType premType) async {
     try {
-      final res = await _premiumSubscriptionDatasource.createPaymentIntent(premType);
+      final res =
+          await _premiumSubscriptionDatasource.createPaymentIntent(premType);
 
       return right(res);
     } on MainException catch (e) {
@@ -32,10 +34,11 @@ class PremiumSubsriptionRepoImpl implements PremiumSubscriptionRepository {
 
   @override
   Future<Either<Failure, Unit>> setUpStripeToCompletePayment(
-      {required PaymentIntentBasic paymentIntent}) async {
+      {required PaymentIntentBasic paymentIntent,
+      required PremiumSubType premType}) async {
     try {
       await _premiumSubscriptionDatasource.setUpStripeToCompletePayment(
-          paymentIntent: paymentIntent);
+          premType: premType, paymentIntent: paymentIntent);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -44,10 +47,12 @@ class PremiumSubsriptionRepoImpl implements PremiumSubscriptionRepository {
 
   @override
   Future<Either<Failure, Unit>> upateUserPremiumStatus(
-      {required bool hasPremium, required String userId}) async {
+      {required bool hasPremium,
+      required String userId,
+      required PremiumSubType premType}) async {
     try {
       await _premiumSubscriptionDatasource.updateUserPremiumStatus(
-          hasPremium: hasPremium, userId: userId);
+          hasPremium: hasPremium, userId: userId, premType: premType);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

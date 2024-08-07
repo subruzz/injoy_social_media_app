@@ -268,7 +268,7 @@ void _initAuth() {
     ..registerFactory(
       () => ForgotPasswordBloc(serviceLocator()),
     )
-    ..registerFactory(() => AuthBloc(serviceLocator(), serviceLocator()));
+    ..registerLazySingleton(() => AuthBloc(serviceLocator(), serviceLocator()));
 }
 
 void _initProfile() {

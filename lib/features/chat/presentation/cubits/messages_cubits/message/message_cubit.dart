@@ -49,7 +49,7 @@ class MessageCubit extends Cubit<MessageState> {
       String? caption}) {
     if (otherUserState.otherUser == null) return;
     emit(MessageReplyClicked(
-        userName:  _appUserBloc.appUser.userName ?? '',
+        userName: _appUserBloc.appUser.userName ?? '',
         repliedToMe: isMe,
         repliedMessageCreator: repliedMessagecreator,
         messageType: messageType,
@@ -142,14 +142,18 @@ class MessageCubit extends Cubit<MessageState> {
     initialState();
   }
 
-  // void deleteMessage({required String messageId}) async {
-  //   final res = await _deleteMessageUsecase(DeleteMessageUsecaseParams(
-  //       sendorId: _messageInfoStoreCubit.senderId,
-  //       recieverId: _messageInfoStoreCubit.receiverId,
-  //       messageId: messageId));
-  //   res.fold((failure) => emit(MessageFailure(errorMsg: failure.message)),
-  //       (success) {});
-  // }
+  void deleteMessage({
+    required String messageId,
+    required GetMessageState messageState,
+  }) async {
+    if (messageState.otherUser == null) return;
+    final res = await _deleteMessageUsecase(DeleteMessageUsecaseParams(
+        sendorId: _appUserBloc.appUser.id,
+        recieverId: messageState.otherUser!.id,
+        messageId: messageId));
+    res.fold((failure) => emit(MessageFailure(errorMsg: failure.message)),
+        (success) {});
+  }
 
   void voiceRecordingStarted() async {
     emit(VoiceMessageStarted());

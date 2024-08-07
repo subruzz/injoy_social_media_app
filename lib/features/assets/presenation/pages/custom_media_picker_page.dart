@@ -14,14 +14,17 @@ import 'package:social_media_app/features/assets/presenation/widgets/drop_down_a
 import 'package:social_media_app/features/assets/presenation/widgets/grid_asset_showing_section/grid_asset_section.dart';
 import 'package:social_media_app/features/assets/presenation/widgets/main_asset_section/main_asset_section.dart';
 import 'package:social_media_app/features/assets/presenation/widgets/selected_image_only_button.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_wallapaper_preview_page.dart';
 import 'package:social_media_app/init_dependecies.dart';
 
 import '../../../../core/widgets/overlay_loading_holder.dart';
 
 class CustomMediaPickerPage extends StatefulWidget {
-  const CustomMediaPickerPage({super.key, required this.pickerType});
+  const CustomMediaPickerPage(
+      {super.key, required this.pickerType, this.getMessageCubit});
   // final List<AssetEntity>? alreadySelected;
+  final GetMessageState? getMessageCubit;
   final MediaPickerType pickerType;
   @override
   State<CustomMediaPickerPage> createState() => _CustomMediaPickerPageState();

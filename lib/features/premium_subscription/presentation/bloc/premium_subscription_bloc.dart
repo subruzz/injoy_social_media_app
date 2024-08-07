@@ -43,6 +43,7 @@ class PremiumSubscriptionBloc
       final success = state as PremiumSubscriptionIntentSuccess;
       final stripeRes = await _setupStripeForPaymentUseCase(
           SetupStripeForPaymentUseCaseParams(
+            premType: event.premiumSubType,
               paymentIntent: success.paymentIntent));
       stripeRes.fold(
           (failure) => emit(PremiumSubscriptionFailure(failure.message)),

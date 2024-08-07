@@ -9,12 +9,16 @@ sealed class PremiumSubscriptionEvent extends Equatable {
 
 class CreatePremiumsubscriptionIntent extends PremiumSubscriptionEvent {
   final String userid;
+  final PremiumSubType premiumSubType;
 
-  const CreatePremiumsubscriptionIntent({required this.userid});
+  const CreatePremiumsubscriptionIntent({
+    required this.userid,
+    required this.premiumSubType,
+  });
 }
 
 class SelectPremiumOption extends PremiumSubscriptionEvent {
   final PremiumSubType premiumSubType;
 
- const  SelectPremiumOption({required this.premiumSubType});
+  const SelectPremiumOption({required this.premiumSubType});
 }

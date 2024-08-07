@@ -11,6 +11,8 @@ import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
+import '../../../../../core/const/location_enum.dart';
+
 abstract interface class AuthRemoteDataSource {
   Future<AppUserModel> login(String email, String password);
   Future<AppUserModel> signup(String email, String password);
@@ -240,12 +242,57 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       if (userSnapshot.exists) {
         final data = userSnapshot.data() as Map<String, dynamic>;
         final authUser = AppUserModel.fromJson(data);
-        return authUser;
+        return _checkAndUpdateSubscription(authUser);
       } else {
         throw Exception();
       }
     } catch (e) {
       throw MainException(errorMsg: e.toString());
+    }
+  }
+
+  Future<AppUserModel> _checkAndUpdateSubscription(AppUserModel user) async {
+    try {
+      if (user.userPrem == null) return user;
+      final purchasedAt = (user.userPrem?.purchasedAt as Timestamp).toDate();
+      final premiumSubType = user.userPrem?.premType ?? PremiumSubType.oneMonth;
+
+      final subscriptionEndDate =
+          _calculateSubscriptionEndDate(purchasedAt, premiumSubType);
+
+      if (DateTime.now().isAfter(subscriptionEndDate)) {
+        // Subscription has expired
+        final userRef = _firebaseStorage
+            .collection(FirebaseCollectionConst.users)
+            .doc(user.id);
+
+        await userRef.update({
+          'hasPremium': false,
+          'userPremium': FieldValue.delete(),
+        });
+        // Re-fetch the updated user data
+        final updatedUserSnapshot = await userRef.get();
+        final updatedData = updatedUserSnapshot.data() as Map<String, dynamic>;
+        return AppUserModel.fromJson(updatedData);
+      }
+      return user;
+    } catch (e) {
+      log('erro eudf ${e.toString()}');
+      throw const MainException();
+    }
+  }
+
+  DateTime _calculateSubscriptionEndDate(
+      DateTime purchasedAt, PremiumSubType subType) {
+    switch (subType) {
+      case PremiumSubType.oneMonth:
+        return purchasedAt.add(const Duration(days: 30));
+      case PremiumSubType.threeMonth:
+        return purchasedAt.add(const Duration(days: 90));
+      case PremiumSubType.oneYear:
+        return purchasedAt.add(const Duration(days: 365));
+      default:
+        return purchasedAt;
     }
   }
 
@@ -271,6 +318,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         if (isGoogleSignIn) {
           await GoogleSignIn().disconnect();
         }
+        _firebaseStorage.collection('users').doc(uid).update({'token': ''});
       }
     } catch (e) {
       throw const MainException();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/widgets/overlay_loading_holder.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/widgets/common/status_app_bar.dart';
@@ -15,9 +16,14 @@ import '../../../assets/presenation/pages/crop_image_page.dart';
 
 class CreateMutlipleStatusPage extends StatefulWidget {
   const CreateMutlipleStatusPage(
-      {super.key, required this.assets, this.isChat = false});
+      {super.key,
+      required this.assets,
+      this.isChat = false,
+      this.getMessageCubit});
   final List<SelectedByte> assets;
   final bool isChat;
+  final GetMessageCubit? getMessageCubit;
+
   @override
   State<CreateMutlipleStatusPage> createState() =>
       _CreateMutlipleStatusPageState();

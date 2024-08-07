@@ -4,8 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/message_type.dart';
-import 'package:social_media_app/core/extensions/datetime_to_string.dart';
-import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
@@ -61,7 +59,6 @@ class _PersonChatPageState extends State<PersonChatPage> {
 
   void _handleDateChange(String date) {
     log(date);
-    // You can navigate to another page or perform additional actions here
     log('Selected date: $date');
   }
 

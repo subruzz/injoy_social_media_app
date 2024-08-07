@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -13,19 +12,57 @@ class ChatAudioWidget extends StatefulWidget {
 class _ChatAudioWidgetState extends State<ChatAudioWidget> {
   bool isPlaying = false;
   final AudioPlayer audioPlayer = AudioPlayer();
+  Duration? duration;
+  Duration position = Duration.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    audioPlayer.durationStream.listen((d) {
+      setState(() {
+        duration = d;
+      });
+    });
+
+    audioPlayer.positionStream.listen((p) {
+      setState(() {
+        position = p;
+      });
+    });
+
+    audioPlayer.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed) {
+        setState(() {
+          isPlaying = false;
+          position = Duration.zero;
+        });
+        audioPlayer.stop();
+      }
+    });
+  }
+
   @override
   void dispose() {
     audioPlayer.dispose();
     super.dispose();
   }
 
+  String _formatDuration(Duration duration) {
+    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final totalDuration = duration ?? Duration.zero;
+    final maxDuration = totalDuration.inMilliseconds.toDouble();
+    final currentPosition = position.inMilliseconds.toDouble();
+
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         IconButton(
-          constraints: const BoxConstraints(minWidth: 50),
           onPressed: () async {
             if (isPlaying) {
               await audioPlayer.pause();
@@ -33,16 +70,11 @@ class _ChatAudioWidgetState extends State<ChatAudioWidget> {
                 isPlaying = false;
               });
             } else {
-              await audioPlayer.setUrl(widget.audioUrl!).then((value) async {
+              await audioPlayer.setUrl(widget.audioUrl!).then((_) async {
                 setState(() {
                   isPlaying = true;
                 });
-                await audioPlayer.play().then((value) async {
-                  setState(() {
-                    isPlaying = false;
-                  });
-                  await audioPlayer.stop();
-                });
+                await audioPlayer.play();
               });
             }
           },
@@ -52,49 +84,47 @@ class _ChatAudioWidgetState extends State<ChatAudioWidget> {
             color: Colors.white,
           ),
         ),
-        const SizedBox(
-          width: 15,
-        ),
-        isPlaying
-            ? StreamBuilder<Duration>(
-                stream: audioPlayer.positionStream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      width: 190,
-                      height: 2,
-                      child: LinearProgressIndicator(
-                        value: snapshot.data!.inMilliseconds.toDouble() /
-                            audioPlayer.duration!.inMilliseconds.toDouble(),
-                        valueColor:
-                            const AlwaysStoppedAnimation<Color>(Colors.white),
-                        backgroundColor: Colors.white,
-                      ),
-                    );
-                  } else {
-                    return Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      width: 190,
-                      height: 2,
-                      child: const LinearProgressIndicator(
-                        value: 0,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        backgroundColor: Colors.white,
-                      ),
-                    );
-                  }
-                })
-            : Container(
-                margin: const EdgeInsets.only(top: 20),
-                width: 190,
-                height: 2,
-                child: const LinearProgressIndicator(
-                  value: 0,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  backgroundColor: Colors.white,
+        const SizedBox(width: 15),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  trackHeight: 3,
+                  thumbShape:
+                      const RoundSliderThumbShape(enabledThumbRadius: 7),
+                ),
+                child: Slider(
+                  min: 0.0,
+                  max: maxDuration > 0 ? maxDuration : 1.0,
+                  value: currentPosition <= maxDuration
+                      ? currentPosition
+                      : maxDuration,
+                  activeColor: Colors.white,
+                  inactiveColor: Colors.grey,
+                  onChanged: (value) {
+                    audioPlayer.seek(Duration(milliseconds: value.toInt()));
+                  },
+                  // Reduced the slider height
+                  thumbColor: Colors.white,
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    isPlaying
+                        ? _formatDuration(position)
+                        : _formatDuration(totalDuration),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  // Removed the total duration text on the right side
+                ],
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

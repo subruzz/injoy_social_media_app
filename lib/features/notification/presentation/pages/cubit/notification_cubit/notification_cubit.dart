@@ -8,6 +8,8 @@ import 'package:social_media_app/features/notification/domain/usecases/delete_my
 import 'package:social_media_app/features/notification/domain/usecases/delete_notification.dart';
 import 'package:social_media_app/features/notification/domain/usecases/get_my_notification.dart';
 
+import '../../../../../settings/domain/entity/ui_entity/enums.dart';
+
 part 'notification_state.dart';
 
 class NotificationCubit extends Cubit<NotificationState> {
@@ -22,9 +24,12 @@ class NotificationCubit extends Cubit<NotificationState> {
       this._deleteMyNotificationUseCase)
       : super(NotificationInitial());
   Future<void> createNotification(
-      {required CustomNotification notification}) async {
+      {required CustomNotification notification,
+      required NotificationPreferenceEnum notificationPreferenceType}) async {
     final res = await _createNotificationUseCase(
-        CreateNotificationUseCaseParams(notification: notification));
+        CreateNotificationUseCaseParams(
+            notification: notification,
+            notificationPreferenceType: notificationPreferenceType));
     res.fold((failure) => emit(NotificationFailed(failure.message)),
         (success) => emit(const NotificationCreated(notificationUid: '')));
   }

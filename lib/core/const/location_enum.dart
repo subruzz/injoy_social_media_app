@@ -5,4 +5,13 @@ enum LocationStatus {
   locationPermissionAllowed,
 }
 
-enum PremiumSubType { oneMonth, threeMonth, oneYear }
+enum PremiumSubType {
+  oneMonth,
+  threeMonth,
+  oneYear;
+
+  String toJson() => name;
+  static PremiumSubType fromJson(String json) {
+    return values.byName(json);
+  }
+}

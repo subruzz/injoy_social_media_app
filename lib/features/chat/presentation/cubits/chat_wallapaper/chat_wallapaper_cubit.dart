@@ -15,9 +15,6 @@ class ChatWallapaperCubit extends Cubit<ChatWallapaperState> {
     emit(ChatWallapaperLoading());
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      await prefs.clear();
-      // Store the new wallpaper file path
       await prefs.setString(chatWallapaper, file.path);
       emit(ChatWallapaperStored());
       emit(ChatWallapaperSuccess(wallapaperPath: file.path));

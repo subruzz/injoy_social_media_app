@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/location_enum.dart';
 import 'package:social_media_app/core/errors/exception.dart';
@@ -15,9 +16,12 @@ import 'package:http/http.dart' as http;
 abstract interface class PremiumSubscriptionDatasource {
   Future<PaymentIntentBasic> createPaymentIntent(PremiumSubType premType);
   Future<void> setUpStripeToCompletePayment(
-      {required PaymentIntentBasic paymentIntent});
+      {required PaymentIntentBasic paymentIntent,
+      required PremiumSubType premType});
   Future<void> updateUserPremiumStatus(
-      {required bool hasPremium, required String userId});
+      {required bool hasPremium,
+      required String userId,
+      required PremiumSubType premType});
 }
 
 class PremiumSubscriptionDatasourceImpl
@@ -35,7 +39,6 @@ class PremiumSubscriptionDatasourceImpl
       final body = {
         'amount': amount,
         'currency': 'INR',
-       
       };
       final stripeSecretKey = dotenv.env['STRIPE_SECRET_KEY']!;
       final response = await http.post(url,
@@ -86,7 +89,8 @@ class PremiumSubscriptionDatasourceImpl
 
   @override
   Future<void> setUpStripeToCompletePayment(
-      {required PaymentIntentBasic paymentIntent}) async {
+      {required PaymentIntentBasic paymentIntent,
+      required PremiumSubType premType}) async {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) {
@@ -100,7 +104,8 @@ class PremiumSubscriptionDatasourceImpl
                   paymentIntent.paymentIntentClientSecret,
               merchantDisplayName: 'I N J O Y PREMIUM'));
       await Stripe.instance.presentPaymentSheet();
-      updateUserPremiumStatus(hasPremium: true, userId: userId);
+      updateUserPremiumStatus(
+          hasPremium: true, userId: userId, premType: premType);
     } catch (e) {
       log('stripe error ${e.toString()}');
       throw const MainException(errorMsg: 'Payment failed,Please try again!');
@@ -108,14 +113,22 @@ class PremiumSubscriptionDatasourceImpl
   }
 
   @override
-  Future<void> updateUserPremiumStatus(
-      {required bool hasPremium, required String userId}) async {
-    final userRef =
-        FirebaseFirestore.instance.collection(FirebaseCollectionConst.users);
+  Future<void> updateUserPremiumStatus({
+    required bool hasPremium,
+    required String userId,
+    required PremiumSubType premType,
+  }) async {
+    final userRef = FirebaseFirestore.instance.collection('users');
     try {
-      userRef.doc(userId).update({'hasPremium': hasPremium});
+      await userRef.doc(userId).update({
+        'hasPremium': hasPremium,
+        'userPremium': {
+          'premType': premType.toJson(),
+          'purchasedAt': FieldValue.serverTimestamp(),
+        },
+      });
     } catch (e) {
-      throw const MainException(errorMsg: 'Payment failed,Please try again!');
+      throw const MainException(errorMsg: 'Payment failed, Please try again!');
     }
   }
 }

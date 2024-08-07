@@ -70,16 +70,16 @@ class LanguageSelectionDialog extends StatefulWidget {
   final void Function(String) onLanguageSelected;
 
   const LanguageSelectionDialog({
-    Key? key,
+    super.key,
     required this.languages,
     required this.onLanguageSelected,
     this.title,
     this.closeText = 'Close',
     this.okText = 'Change ',
-  }) : super(key: key);
+  });
 
   @override
-  _LanguageSelectionDialogState createState() =>
+  State<LanguageSelectionDialog> createState() =>
       _LanguageSelectionDialogState();
 }
 

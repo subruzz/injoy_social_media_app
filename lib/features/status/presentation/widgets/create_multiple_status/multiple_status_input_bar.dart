@@ -5,8 +5,12 @@ import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_b
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/textfields/content_input_textfield.dart';
 import 'package:social_media_app/core/widgets/custom_round_button.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
+
+import '../../../../../core/const/message_type.dart';
+import '../../../../chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 
 class MultipleStatusInputBar extends StatelessWidget {
   const MultipleStatusInputBar(
@@ -15,12 +19,15 @@ class MultipleStatusInputBar extends StatelessWidget {
       required this.alreadySelected,
       required this.captions,
       this.onCaptionChanged,
-      required this.isChat});
+      required this.isChat,
+      this.getMessageCubit});
   final TextEditingController captionController;
   final List<SelectedByte> alreadySelected;
   final List<String> captions;
   final void Function(String)? onCaptionChanged;
   final bool isChat;
+  final GetMessageCubit? getMessageCubit;
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -44,11 +51,12 @@ class MultipleStatusInputBar extends StatelessWidget {
               onPressed: () {
                 final user = context.read<AppUserBloc>().appUser;
                 if (isChat) {
-                  // context.read<MessageCubit>().sendMessage(
-                  //     recentTextMessage: '',
-                  //     selectedAssets: alreadySelected,
-                  //     messageType: MessageTypeConst.photoMessage,
-                  //     captions: captions);
+                  context.read<MessageCubit>().sendMessage(
+                      messageState: getMessageCubit!.state,
+                      recentTextMessage: '',
+                      selectedAssets: alreadySelected,
+                      messageType: MessageTypeConst.photoMessage,
+                      captions: captions);
                 } else {
                   context.read<StatusBloc>().add(CreateMultipleStatusEvent(
                       userId: user.id,

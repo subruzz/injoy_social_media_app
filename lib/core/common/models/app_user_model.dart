@@ -24,6 +24,7 @@ class AppUserModel extends AppUser {
     required super.followingCount,
     // super.followers,
     super.following,
+    super.userPrem,
     super.posts,
     required super.notificationPreferences,
     super.interests,
@@ -98,6 +99,9 @@ class AppUserModel extends AppUser {
       following: List<String>.from(json['following'] ?? []),
       posts: List<String>.from(json['posts'] ?? []),
       interests: List<String>.from(json['interests'] ?? []),
+      userPrem: json['userPremium'] != null
+          ? UserPremium.fromJson(json['userPremium'])
+          : null,
     );
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
@@ -16,48 +18,49 @@ class WhoVisitedDataSourceImpl implements WhoVisitedDataSource {
   WhoVisitedDataSourceImpl({required FirebaseFirestore firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore;
   @override
-Future<void> addTheVisitedUser({
-  required String visitedUserId,
-  required String myId,
-}) async {
-  final userRef = _firebaseFirestore.collection(FirebaseCollectionConst.users);
-  final whoVisitedMeRef =
-      _firebaseFirestore.collection(FirebaseCollectionConst.whoVisitedMe);
-  try {
-    await _firebaseFirestore.runTransaction((transaction) async {
-      // Reference to the visited user's document
-      final visitedUserDocRef = userRef.doc(visitedUserId);
-      final visitedUserDoc = await transaction.get(visitedUserDocRef);
+  Future<void> addTheVisitedUser({
+    required String visitedUserId,
+    required String myId,
+  }) async {
+    final userRef =
+        _firebaseFirestore.collection(FirebaseCollectionConst.users);
+    final whoVisitedMeRef =
+        _firebaseFirestore.collection(FirebaseCollectionConst.whoVisitedMe);
+    try {
+      await _firebaseFirestore.runTransaction((transaction) async {
+        // Reference to the visited user's document
+        final visitedUserDocRef = userRef.doc(visitedUserId);
+        final visitedUserDoc = await transaction.get(visitedUserDocRef);
 
-      if (!visitedUserDoc.exists) {
-        return;
-      }
+        if (!visitedUserDoc.exists) {
+          return;
+        }
 
-      // Reference to the 'whoVisitedMe' collection for the visited user
-      final whoVisitedMeDocRef = whoVisitedMeRef
-          .doc(visitedUserId)
-          .collection(FirebaseCollectionConst.visitors)
-          .doc(myId);
+        // Reference to the 'whoVisitedMe' collection for the visited user
+        final whoVisitedMeDocRef = whoVisitedMeRef
+            .doc(visitedUserId)
+            .collection(FirebaseCollectionConst.visitors)
+            .doc(myId);
 
-      // Check if the visitor record already exists
-      final whoVisitedMeDoc = await transaction.get(whoVisitedMeDocRef);
+        // Check if the visitor record already exists
+        final whoVisitedMeDoc = await transaction.get(whoVisitedMeDocRef);
+        log('called this');
+        if (!whoVisitedMeDoc.exists) {
+          // Update the visit count in the visited user's document
+          transaction.update(
+              visitedUserDocRef, {'visitCount': FieldValue.increment(1)});
 
-      if (!whoVisitedMeDoc.exists) {
-        // Update the visit count in the visited user's document
-        transaction.update(visitedUserDocRef, {'visitCount': FieldValue.increment(1)});
-
-        // Add the visitor record to the 'whoVisitedMe' collection
-        transaction.set(whoVisitedMeDocRef, {
-          'visitorUserId': myId,
-          'timestamp': FieldValue.serverTimestamp(),
-        });
-      }
-    });
-  } catch (e) {
-    throw const MainException();
+          // Add the visitor record to the 'whoVisitedMe' collection
+          transaction.set(whoVisitedMeDocRef, {
+            'visitorUserId': myId,
+            'timestamp': FieldValue.serverTimestamp(),
+          });
+        }
+      });
+    } catch (e) {
+      throw const MainException();
+    }
   }
-}
-
 
   @override
   Future<List<UserVisit>> getProfileVisitedProfiles(
@@ -70,9 +73,8 @@ Future<void> addTheVisitedUser({
           .collection(FirebaseCollectionConst.visitors);
 
       // Fetch the list of visited user IDs and their timestamps, sorted by timestamp
-      final visitedUsersSnapshot = await whoVisitedMeRef
-          .orderBy('timestamp', descending: true)
-          .get();
+      final visitedUsersSnapshot =
+          await whoVisitedMeRef.orderBy('timestamp', descending: true).get();
 
       if (visitedUsersSnapshot.docs.isEmpty) {
         return []; // No visitors
@@ -124,7 +126,7 @@ Future<void> addTheVisitedUser({
             if (user != null) {
               return UserVisit(user: user, timestamp: timestamp);
             } else {
-              return null; 
+              return null;
             }
           })
           .whereType<UserVisit>()

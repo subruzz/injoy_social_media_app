@@ -8,8 +8,7 @@ import 'package:social_media_app/core/extensions/stop_watch.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message_attribute/message_attribute_bloc.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/message_info_store/message_info_store_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/reply_preview_widget.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
@@ -77,9 +76,10 @@ class ChatInputField extends StatelessWidget {
                     if (gif != null && context.mounted) {
                       final url =
                           'https://media.giphy.com/media/${gif.id}/giphy.gif';
-                      // context.read<MessageCubit>().sendMessage(
-                      //     recentTextMessage: url,
-                      //     messageType: MessageTypeConst.gifMessage);
+                      context.read<MessageCubit>().sendMessage(
+                          messageState: context.read<GetMessageCubit>().state,
+                          recentTextMessage: url,
+                          messageType: MessageTypeConst.gifMessage);
                     }
                   },
                   child: Icon(

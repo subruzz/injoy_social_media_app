@@ -2,10 +2,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/ai_chat/presentation/pages/ai_chat_page.dart';
+
+import '../../../../core/const/app_info_dialog.dart';
+import '../../../premium_subscription/presentation/pages/premium_subscripti_builder.dart';
 
 class FloatingButton extends StatelessWidget {
   const FloatingButton({super.key});
@@ -17,6 +22,23 @@ class FloatingButton extends StatelessWidget {
       children: [
         InkWell(
           onTap: () {
+            if (!context.read<AppUserBloc>().appUser.hasPremium) {
+              AppInfoDialog.showInfoDialog(
+                  title: 'Premium Feature',
+                  subtitle:
+                      'Unlock this feature with a premium subscription for an enhanced experience.',
+                  context: context,
+                  callBack: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const PremiumSubscriptiBuilder(),
+                        ));
+                  },
+                  buttonText: 'Get Premium');
+              return;
+            }
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => AiChatPage(),
             ));

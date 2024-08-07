@@ -3,7 +3,6 @@ import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/custom_divider.dart';
-import 'package:social_media_app/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile/username_check_page.dart';
 import 'package:social_media_app/features/settings/domain/entity/ui_entity/ui_consts.dart';
 import 'package:social_media_app/features/settings/presentation/pages/reset_password_page.dart';

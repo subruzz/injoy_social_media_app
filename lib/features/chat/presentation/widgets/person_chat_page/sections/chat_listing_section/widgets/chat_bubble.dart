@@ -143,12 +143,12 @@ class MessageContentWidget extends StatelessWidget {
               ?.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
         );
       case MessageTypeConst.photoMessage:
+        return ChatPhotoWidget(
+            caption: messageItem.message, url: messageItem.assetLink!);
+
       case MessageTypeConst.gifMessage:
         return ChatPhotoWidget(
-          caption: messageItem.message,
-          url: messageItem.messageType == MessageTypeConst.photoMessage
-              ? messageItem.assetLink!
-              : messageItem.message!,
+          url: messageItem.message!,
         );
       case MessageTypeConst.videoMessage:
         return Column(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/app_error_gif.dart';
@@ -18,10 +20,16 @@ class UserVisitedListingPage extends StatefulWidget {
 class _UserVisitedListingPageState extends State<UserVisitedListingPage> {
   @override
   void initState() {
+    log('called who visited');
     super.initState();
     context
         .read<WhoVisitedBloc>()
         .add(GetAllVisitedUser(myId: context.read<AppUserBloc>().appUser.id));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

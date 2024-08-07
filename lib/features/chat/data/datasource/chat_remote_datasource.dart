@@ -181,7 +181,6 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
         batch.delete(doc.reference);
       }
       await batch.commit();
-
     } catch (e) {
       throw const MainException();
     }
@@ -189,22 +188,37 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
 
   @override
   Future<void> deleteMessage(
-      String sendorId, String recieverId, String messageId) async {
-    log('chat called');
+      String senderId, String receiverId, String messageId) async {
+    log('Deleting message with ID: $messageId');
     try {
-      final combinedId = combineIds(sendorId, recieverId);
-      log(combinedId);
-      log(messageId);
-      final myMessageRef = _firestore
-          .collection(FirebaseCollectionConst.messages)
-          .doc(combinedId)
-          .collection('oneToOneMessages')
+      final myMessagesRef = _firestore
+          .collection('users')
+          .doc(senderId)
+          .collection('myChat')
+          .doc(receiverId)
+          .collection('messages')
           .doc(messageId);
-      final m = await myMessageRef.get();
-      log(m.exists.toString());
-      await myMessageRef.delete();
+
+      final otherMessagesRef = _firestore
+          .collection('users')
+          .doc(receiverId)
+          .collection('myChat')
+          .doc(senderId)
+          .collection('messages')
+          .doc(messageId);
+
+      // Perform the transaction
+      await _firestore.runTransaction((transaction) async {
+        // Delete the message from sender's chat
+        transaction.delete(myMessagesRef);
+
+        // Delete the message from receiver's chat
+        transaction.delete(otherMessagesRef);
+      });
+
+      log('Message deleted successfully');
     } catch (e) {
-      log(e.toString());
+      log('Error deleting message: $e');
       throw const MainException();
     }
   }

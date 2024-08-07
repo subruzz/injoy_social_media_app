@@ -12,6 +12,8 @@ import 'package:social_media_app/features/notification/presentation/pages/cubit/
 import 'package:social_media_app/features/post/domain/usecases/post/like_post.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/unlike_post.dart';
 
+import '../../../../../settings/domain/entity/ui_entity/enums.dart';
+
 part 'like_post_event.dart';
 part 'like_post_state.dart';
 
@@ -41,6 +43,7 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
       if (_debouncer.isRunning()) _debouncer.cancel();
       _debouncer.run(() {
         _notificationCubit.createNotification(
+          notificationPreferenceType: NotificationPreferenceEnum.likes,
           notification: CustomNotification(
             notificationId: IdGenerator.generateUniqueId(),
             text: "Liked your post",

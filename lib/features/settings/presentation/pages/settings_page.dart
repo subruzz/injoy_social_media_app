@@ -60,16 +60,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SettingsTile(icon: Icons.security, title: 'Security'),
           SettingsTile(icon: Icons.help, title: 'Help'),
           SettingsTile(icon: Icons.info, title: 'About'),
-          SwitchListTile(
-            title: Text('Dark Theme'),
-            secondary: Icon(Icons.brightness_6),
-            value: isDarkTheme,
-            onChanged: (value) {
-              setState(() {
-                isDarkTheme = value;
-              });
-            },
-          ),
+          // SwitchListTile(
+          //   title: Text('Dark Theme'),
+          //   secondary: Icon(Icons.brightness_6),
+          //   value: isDarkTheme,
+          //   onChanged: (value) {
+          //     setState(() {
+          //       isDarkTheme = value;
+          //     });
+          //   },
+          // ),
           const CustomDivider()
         ],
       ),

@@ -67,7 +67,7 @@ class ChatCallItem extends StatelessWidget {
                 ),
                 Text(
                   style: Theme.of(context).textTheme.bodySmall,
-                  chat!.createdAt.toDate().to12HourFormat(),
+                  chat!.createdAt.toDate().toCustomFormat(),
                 )
               ],
             ),
