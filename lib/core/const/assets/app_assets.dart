@@ -23,6 +23,8 @@ class AppAssetsConst {
   static const String language = 'assets/svgs/language.svg';
   static const String edit = 'assets/svgs/edit_svg.svg';
   static const String save = 'assets/svgs/save.svg';
+  static const String about = 'assets/svgs/about.svg';
+  static const String newI = 'assets/svgs/new.svg';
 
   static const String userSecondaryProfile = 'assets/images/profile_icon.png';
 

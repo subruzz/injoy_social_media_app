@@ -29,11 +29,13 @@ import 'package:social_media_app/features/status/presentation/bloc/status_bloc/s
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
 
 import '../features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
+import 'package:provider/single_child_widget.dart';
 
-List<BlocProvider> myProviders = [
+List<SingleChildWidget> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<DeleteStatusBloc>(),
   ),
+  BlocProvider(create: (context) => AppLanguageCubit()),
   BlocProvider(
     create: (context) => serviceLocator<ProfileBloc>(),
   ),
@@ -78,7 +80,6 @@ List<BlocProvider> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<DeletePostBloc>(),
   ),
-
   BlocProvider(
     create: (context) => serviceLocator<SearchHashtagBloc>(),
   ),
@@ -104,7 +105,6 @@ List<BlocProvider> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<SettingsCubit>(),
   ),
-  BlocProvider(create: (_) => AppLanguageCubit()),
   BlocProvider(create: (context) => AssetFileCubit()),
   BlocProvider(create: (context) => ChatWallapaperCubit()..getChatWallapaper()),
   BlocProvider(

@@ -72,31 +72,35 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return MultiBlocProvider(
           providers: myProviders,
-          child: BlocBuilder<AppLanguageCubit, AppLanguageState>(
-            builder: (context, state) {
-              return MaterialApp(
-                locale: state.locale,
-                localizationsDelegates: const [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                supportedLocales: const [
-                  Locale('en'),
-                  Locale('ml'),
-                ],
-                navigatorKey: navigatorKey,
-
-                debugShowCheckedModeBanner: false,
-                scaffoldMessengerKey: Messenger.scaffoldKey,
-                onGenerateRoute: MyAppRouter(isAuth: false).generateRoute,
-                initialRoute: '/',
-                title: 'First Method',
-                // You can use the library anywhere in the app even in theme
-                theme: AppDarkTheme.darkTheme,
+          child: Builder(
+            builder: (ctx) {
+              return BlocBuilder<AppLanguageCubit, AppLanguageState>(
+                builder: (ctx, state) {
+                  return MaterialApp(
+                    locale: state.locale,
+                    localizationsDelegates: const [
+                      AppLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: const [
+                      Locale('en'),
+                      Locale('ml'),
+                    ],
+                    navigatorKey: navigatorKey,
+              
+                    debugShowCheckedModeBanner: false,
+                    scaffoldMessengerKey: Messenger.scaffoldKey,
+                    onGenerateRoute: MyAppRouter(isAuth: false).generateRoute,
+                    initialRoute: '/',
+                    title: 'First Method',
+                    // You can use the library anywhere in the app even in theme
+                    theme: AppDarkTheme.darkTheme,
+                  );
+                },
               );
-            },
+            }
           ),
         );
       },
