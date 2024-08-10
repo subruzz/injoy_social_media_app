@@ -70,10 +70,11 @@ class _SplashScreenState extends State<SplashScreen>
             alignment: Alignment.center,
             children: [
               //logo needs to be changed
+             
               Image.asset(
                 'assets/images/app_logo.png',
-                height: 100,
-                width: 100,
+                height: 120,
+                width: 120,
               ),
               // Rotating Dots
               // for (int i = 0; i < 6; i++) _buildDot(i),

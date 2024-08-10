@@ -11,7 +11,8 @@ class ReadCommentUseCase {
   ReadCommentUseCase({required CommentRepository commentRepository})
       : _commentRepository = commentRepository;
 
-  Stream<Either<Failure, List<CommentEntity>>> call(String postId) {
-    return _commentRepository.readComments(postId);
+  Stream<Either<Failure, List<CommentEntity>>> call(
+      String postId, bool isReel) {
+    return _commentRepository.readComments(postId, isReel);
   }
 }

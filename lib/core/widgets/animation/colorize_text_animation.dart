@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/animation/animated_text.dart';
+import 'package:social_media_app/core/widgets/animation/animated_text.dart';
 
 /// Animated Text that shows text shimmering between [colors].
 ///

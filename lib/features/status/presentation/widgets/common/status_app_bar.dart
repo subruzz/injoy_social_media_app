@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/const/app_msg/app_success_msg.dart';
-import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/widgets/app_bar_common_icon.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
@@ -30,10 +30,12 @@ class StatusAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return AppBar(
       backgroundColor: colorCubit?.color,
       title: Text(
-        isChat ? 'Send Media' : 'Create Status',
+        isChat ? l10n!.sendMedia : l10n!.createStatus,
         style: Theme.of(context).textTheme.headlineMedium,
       ),
       leading: const AppBarCommonIcon(
@@ -45,8 +47,7 @@ class StatusAppBar extends StatelessWidget implements PreferredSizeWidget {
                 listener: (context, state) {
                   if (state is StatusCreateSuccess) {
                     Navigator.pop(context);
-                    Messenger.showSnackBar(
-                        message: AppSuccessMsg.statusCreatedSuccess);
+                    Messenger.showSnackBar(message: l10n.statusPostedSuccess);
                   }
                   if (state is StatusCreateFailure) {
                     Messenger.showSnackBar(message: state.errorMsg);

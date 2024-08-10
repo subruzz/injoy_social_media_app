@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
 class LoadingBar extends StatelessWidget {
@@ -7,6 +8,8 @@ class LoadingBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Center(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -15,7 +18,7 @@ class LoadingBar extends StatelessWidget {
           color: AppDarkColor().loadingColor,
           size: 50,
         ),
-        const Text('just a second!')
+        Text(l10n!.justASecond)
       ],
     ));
   }

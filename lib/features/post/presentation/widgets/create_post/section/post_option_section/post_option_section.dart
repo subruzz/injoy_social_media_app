@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/post_option_section/widgets/post_feeds_options.dart';
 
+import '../../../../../../../core/extensions/localization.dart';
+
 class PostOptionSection extends StatelessWidget {
   const PostOptionSection(
-      {super.key, required this.isCommentOff, this.onCommentToggle});
+      {super.key,
+      required this.isCommentOff,
+      this.onCommentToggle,
+      required this.l10n});
   final bool isCommentOff;
   final void Function(bool)? onCommentToggle;
+  final AppLocalizations l10n;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -19,7 +26,7 @@ class PostOptionSection extends StatelessWidget {
             commentToggle: onCommentToggle,
             isComment: isCommentOff,
             icon: Icons.comment,
-            text: 'Turn off Comment'),
+            text: l10n.turnOffComments),
       ],
     );
   }

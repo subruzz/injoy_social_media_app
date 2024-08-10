@@ -16,13 +16,13 @@ class GetPostCommentCubit extends Cubit<GetPostCommentState> {
       : super(GetPostCommentInitial());
 
   Future<void> getPostComments({
-    required String postId,
+    required String postId,required    bool isReel,
     required Function(num commentCount) oncommentAction,
   }) async {
     emit(GetPostCommentLoading());
 
     // Subscribe to the stream
-    _streamSubscription = _readCommentUseCase.call(postId).listen((value) {
+    _streamSubscription = _readCommentUseCase.call(postId,isReel).listen((value) {
       value.fold(
         (failure) => emit(GetPostCommentFailure(erroMsg: failure.message)),
         (success) {

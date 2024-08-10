@@ -22,7 +22,8 @@ class EachComment extends StatelessWidget {
       required this.commentBasicCubit,
       required this.myId,
       this.isCompleteView = false,
-      required this.creatorId});
+      required this.creatorId,
+      required this.isReel});
   final String postId;
   final String commentId;
   final VoidCallback editCall;
@@ -30,6 +31,7 @@ class EachComment extends StatelessWidget {
   final String creatorId;
   final CommentEntity comment;
   final bool isCompleteView;
+  final bool isReel;
   final CommentBasicCubit commentBasicCubit;
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,7 @@ class EachComment extends StatelessWidget {
                   child: const Text('Delete'),
                   onTap: () {
                     commentBasicCubit.deleteComment(
+                        isReel: isReel,
                         postId: postId,
                         commentId: commentId,
                         myId: myId,
@@ -120,7 +123,11 @@ class EachComment extends StatelessWidget {
                     ],
                   ),
                 ),
-                CommentLikeSection(comment: comment, myId: myId)
+                CommentLikeSection(
+                  comment: comment,
+                  myId: myId,
+                  isReel: isReel,
+                )
               ],
             ),
 

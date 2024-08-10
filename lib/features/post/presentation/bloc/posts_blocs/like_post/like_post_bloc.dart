@@ -36,7 +36,9 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
   FutureOr<void> _likePost(
       LikePostClickEvent event, Emitter<LikePostState> emit) async {
     final res = await _likePostsUseCase(LikePostsUseCaseParams(
-        postId: event.postId, currentUserId: event.user.id));
+        isReel: event.isReel,
+        postId: event.postId,
+        currentUserId: event.user.id));
     res.fold((failure) => emit(LikePostLoading()), (success) {
       emit(LikePostSuccess());
       if (event.otherUserId == event.user.id) return;
@@ -66,7 +68,7 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
   FutureOr<void> _unlikePost(
       UnlikePostClickEvent event, Emitter<LikePostState> emit) async {
     final res = await _unlikePostsUseCase(UnlikePostsUseCaseParams(
-        postId: event.postId, currentUserId: event.myId));
+        isReel: event.isReel, postId: event.postId, currentUserId: event.myId));
     res.fold((failure) => emit(LikePostLoading()), (success) {
       emit(LikePostSuccess());
       if (_debouncer.isRunning()) _debouncer.cancel();

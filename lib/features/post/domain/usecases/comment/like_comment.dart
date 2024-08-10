@@ -13,7 +13,10 @@ class LikeCommentUseCase implements UseCase<Unit, LikeCommentUseCaseParams> {
   @override
   Future<Either<Failure, Unit>> call(params) async {
     return await _commentRepository.likeComment(
-      params.postId,params.commentId,params.currentUserId,
+      params.postId,
+      params.commentId,
+      params.currentUserId,
+      params.isReel,
     );
   }
 }
@@ -22,9 +25,11 @@ class LikeCommentUseCaseParams {
   final String currentUserId;
   final String postId;
   final String commentId;
+  final bool isReel;
 
   LikeCommentUseCaseParams(
       {required this.currentUserId,
       required this.postId,
-      required this.commentId});
+      required this.commentId,
+      required this.isReel});
 }

@@ -11,7 +11,7 @@ import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
-import '../../../../../core/const/location_enum.dart';
+import '../../../../../core/const/enums/location_enum.dart';
 
 abstract interface class AuthRemoteDataSource {
   Future<AppUserModel> login(String email, String password);
@@ -103,6 +103,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       AppUserModel userModel = AppUserModel(
+        savedPosts: const [],
         notificationPreferences: NotificationPreferences(),
         visitedUserCount: 0,
         id: userCredential.user!.uid,
@@ -191,6 +192,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           .collection(FirebaseCollectionConst.users)
           .doc(user.uid);
       AppUserModel userModel = AppUserModel(
+        savedPosts: const [],
         notificationPreferences: NotificationPreferences(),
         visitedUserCount: 0,
         id: user.uid,

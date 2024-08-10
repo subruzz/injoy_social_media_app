@@ -5,12 +5,13 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/widgets/dialog/dialogs.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/utils/haptic_feedback.dart';
 import 'package:social_media_app/features/ai_chat/presentation/pages/ai_chat_page.dart';
 
-import '../../../../core/const/app_info_dialog.dart';
-import '../../../premium_subscription/presentation/pages/premium_subscripti_builder.dart';
+import '../../../../core/page_transitions.dart';
 
 class FloatingButton extends StatelessWidget {
   const FloatingButton({super.key});
@@ -20,28 +21,19 @@ class FloatingButton extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        InkWell(
+        GestureDetector(
           onTap: () {
+            HapticFeedbackHelper().heavyImpact();
             if (!context.read<AppUserBloc>().appUser.hasPremium) {
-              AppInfoDialog.showInfoDialog(
-                  title: 'Premium Feature',
-                  subtitle:
-                      'Unlock this feature with a premium subscription for an enhanced experience.',
-                  context: context,
-                  callBack: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const PremiumSubscriptiBuilder(),
-                        ));
-                  },
-                  buttonText: 'Get Premium');
+              AppDialogsCommon.noPremium(context);
               return;
             }
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AiChatPage(),
-            ));
+            Navigator.push(
+              context,
+              AppPageTransitions.fade(
+                const AiChatPage(),
+              ),
+            );
           },
           child: Container(
             width: 40,
@@ -75,7 +67,17 @@ class FloatingButton extends StatelessWidget {
           activeIcon: Icons.close,
           children: [
             SpeedDialChild(
-                child: const Icon(Icons.circle), label: 'Status', onTap: () {}),
+                child: const Icon(Icons.circle),
+                label: 'Status',
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    MyAppRouteConst.mediaPickerRoute,
+                    arguments: {
+                      'pickerType': MediaPickerType.reels,
+                    },
+                  );
+                }),
             SpeedDialChild(
                 onTap: () {
                   Navigator.pushNamed(

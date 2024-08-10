@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
@@ -15,6 +16,7 @@ import 'package:social_media_app/features/assets/presenation/widgets/grid_asset_
 import 'package:social_media_app/features/assets/presenation/widgets/main_asset_section/main_asset_section.dart';
 import 'package:social_media_app/features/assets/presenation/widgets/selected_image_only_button.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
+import 'package:social_media_app/features/post/presentation/pages/create_post_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_wallapaper_preview_page.dart';
 import 'package:social_media_app/init_dependecies.dart';
 
@@ -40,10 +42,6 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
   //   super.initState();
   // }
   void initState() {
-    context.read<AlbumBloc>().add(GetAlbumsEvent(
-        type: widget.pickerType == MediaPickerType.chat
-            ? RequestType.common
-            : RequestType.image));
     super.initState();
   }
 
@@ -54,15 +52,25 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => serviceLocator<AssetsBloc>()),
+          BlocProvider(
+              create: (context) => serviceLocator<AlbumBloc>()
+                ..add(GetAlbumsEvent(
+                    type: widget.pickerType == MediaPickerType.reels
+                        ? RequestType.video
+                        : widget.pickerType == MediaPickerType.chat
+                            ? RequestType.common
+                            : RequestType.image))),
         ],
         child: SafeArea(
           child: Scaffold(
             appBar: widget.pickerType == MediaPickerType.post
                 ? AppCustomAppbar(
-                    title: 'Select Image',
+                    title: l10n!.selectImage,
                     showLeading: true,
                     actions: [
                       if (widget.pickerType == MediaPickerType.post)
@@ -119,6 +127,12 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
                         builder: (context) => CropImagePage(
                             selectedImages: state.selectedImages,
                             pickerType: widget.pickerType)));
+                  } else if (widget.pickerType == MediaPickerType.reels) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CreatePostScreen(
+                            isReel: true,
+                            selectedImages:
+                                state.selectedImages.selectedFiles)));
                   } else {
                     Navigator.pushNamed(
                       context,

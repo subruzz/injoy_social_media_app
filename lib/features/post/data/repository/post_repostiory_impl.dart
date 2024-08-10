@@ -19,9 +19,9 @@ class PostRepostioryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, Unit>> createPost(
-      PostEntity post, List<SelectedByte> postImage) async {
+      PostEntity post, List<SelectedByte> postImage,bool isReel) async {
     try {
-      await _postRemoteDatasource.createPost(post, postImage);
+      await _postRemoteDatasource.createPost(post, postImage,isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg, e.details));
@@ -29,9 +29,9 @@ class PostRepostioryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> deletePost(String postId) async {
+  Future<Either<Failure, Unit>> deletePost(String postId,bool isReel) async {
     try {
-      await _postRemoteDatasource.deletePost(postId);
+      await _postRemoteDatasource.deletePost(postId,isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -69,9 +69,9 @@ class PostRepostioryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, Unit>> likePost(
-      String postId, String currentUserUid) async {
+      String postId, String currentUserUid,bool isReel) async {
     try {
-      await _postRemoteDatasource.likePost(postId, currentUserUid);
+      await _postRemoteDatasource.likePost(postId, currentUserUid,isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -80,9 +80,19 @@ class PostRepostioryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, Unit>> unLikePost(
-      String postId, String currentUserUid) async {
+      String postId, String currentUserUid,bool isReel) async {
     try {
-      await _postRemoteDatasource.unLikePost(postId, currentUserUid);
+      await _postRemoteDatasource.unLikePost(postId, currentUserUid,isReel);
+      return right(unit);
+    } on MainException catch (e) {
+      return left(Failure(e.errorMsg));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> savePosts(String postId) async {
+    try {
+      await _postRemoteDatasource.savePosts(postId);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

@@ -14,13 +14,16 @@ class CreateCommentUsecase
       : _commentRepository = commentRepository;
   @override
   Future<Either<Failure, Unit>> call(params) async {
-    return await _commentRepository.createComment(params.comment,);
+    return await _commentRepository.createComment(
+      params.comment,params.isReel
+    );
   }
 }
 
 class CreateCommentUsecaseParams {
   final CommentEntity comment;
-  CreateCommentUsecaseParams({
-    required this.comment,
-  });
+  final bool isReel;
+
+  CreateCommentUsecaseParams({required this.comment, required this.isReel});
+ 
 }

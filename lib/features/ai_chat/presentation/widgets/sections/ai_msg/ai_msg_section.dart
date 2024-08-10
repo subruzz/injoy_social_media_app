@@ -5,7 +5,7 @@ import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_c
 import 'package:social_media_app/features/ai_chat/presentation/widgets/sections/ai_msg/widgets/ai_chat_bubble.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/sections/ai_msg/widgets/ai_generating_shimmer.dart';
 
-import '../../../../../../core/const/messenger.dart';
+import '../../../../../../core/widgets/messenger/messenger.dart';
 import '../../../../../../core/widgets/app_related/empty_display.dart';
 import '../ai_welcome/ai_welcome.dart';
 

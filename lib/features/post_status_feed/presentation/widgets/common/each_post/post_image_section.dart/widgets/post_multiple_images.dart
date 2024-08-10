@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/widgets/cached_image.dart';
 import 'package:social_media_app/features/post/presentation/widgets/edit_post/edit_screen_feed_option.dart';
 
+import '../../../../../../../../core/widgets/common/view_media.dart';
+
 class PostMultipleImages extends StatelessWidget {
   const PostMultipleImages(
       {super.key,
@@ -25,22 +27,30 @@ class PostMultipleImages extends StatelessWidget {
               return Stack(
                 fit: StackFit.expand,
                 children: [
-                  CachedImage(img: postImageUrls[index]),
-                  Positioned(
-                      top: 2,
-                      left: 2,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                              style: const TextStyle(fontSize: 8),
-                              '${index + 1}/${postImageUrls.length}'),
-                        ),
-                      )),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ViewMedia(
+                              assets: postImageUrls, initialIndex: index),
+                        ));
+                      },
+                      child: CachedImage(img: postImageUrls[index])),
+                  if (postImageUrls.length > 1)
+                    Positioned(
+                        top: 2,
+                        left: 2,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                style: const TextStyle(fontSize: 8),
+                                '${index + 1}/${postImageUrls.length}'),
+                          ),
+                        )),
                 ],
               );
             },

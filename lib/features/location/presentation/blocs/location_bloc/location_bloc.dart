@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/const/location_enum.dart';
+import 'package:social_media_app/core/const/enums/location_enum.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/location/data/models/location_search_model.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';

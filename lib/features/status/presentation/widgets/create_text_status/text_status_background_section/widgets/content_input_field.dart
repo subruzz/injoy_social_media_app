@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/animation/animated_text.dart';
-import 'package:social_media_app/core/animation/text_wavy_animation.dart';
+import 'package:social_media_app/core/const/languages/app_languages.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
+import 'package:social_media_app/core/widgets/animation/animated_text.dart';
+import 'package:social_media_app/core/widgets/animation/text_wavy_animation.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
 class TextStatusInputField extends StatefulWidget {
-  const TextStatusInputField(
-      {super.key, required this.controller, required this.hintText});
+  const TextStatusInputField({
+    super.key,
+    required this.controller,
+  });
   final TextEditingController controller;
-  final String hintText;
 
   @override
   State<TextStatusInputField> createState() => _TextStatusInputFieldState();
@@ -34,15 +37,17 @@ class _TextStatusInputFieldState extends State<TextStatusInputField> {
     });
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _focus.removeListener(_onFocusChange);
-  //   _focus.dispose();
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+    focusNode.removeListener(_onFocusChange);
+    focusNode.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return TextField(
       focusNode: focusNode,
       controller: widget.controller,
@@ -54,17 +59,17 @@ class _TextStatusInputFieldState extends State<TextStatusInputField> {
             fontWeight: FontWeight.bold, color: AppDarkColor().primaryText),
         focusedErrorBorder: InputBorder.none,
         filled: false,
-        hintText: 'Write your thoughts\nwith others',
-        label: showLabel
+        hintText: l10n!.writeYourThought,
+        label: showLabel && !AppLanguages.isMalayalamLocale(context)
             ? Center(
                 child: AnimatedTextKit(
                     onFinished: removeLabel,
                     totalRepeatCount: 1,
                     repeatForever: false,
                     animatedTexts: [
-                    WavyAnimatedText('Write your thought ',
+                    WavyAnimatedText(l10n.writeYourThoughtPart1,
                         textStyle: Theme.of(context).textTheme.displayMedium),
-                    WavyAnimatedText('with others',
+                    WavyAnimatedText(l10n.writeYourThoughtPart2,
                         textStyle: Theme.of(context).textTheme.displayMedium)
                   ]))
             : null,

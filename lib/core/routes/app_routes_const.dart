@@ -25,4 +25,4 @@ class MyAppRouteConst {
 
 }
 
-enum MediaPickerType { chat, post, status, wallapaper }
+enum MediaPickerType { chat, post, status, wallapaper,reels }

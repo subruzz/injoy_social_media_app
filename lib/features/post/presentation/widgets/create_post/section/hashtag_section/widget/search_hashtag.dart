@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/utils/debouncer.dart';
-import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/search_hashtag/search_hashtag_bloc.dart';
 
 // class CreatePostImage extends StatelessWidget {

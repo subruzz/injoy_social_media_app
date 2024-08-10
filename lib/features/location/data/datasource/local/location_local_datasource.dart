@@ -2,7 +2,7 @@
 
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:social_media_app/core/const/location_enum.dart';
+import 'package:social_media_app/core/const/enums/location_enum.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/extensions/placemark.dart';
 

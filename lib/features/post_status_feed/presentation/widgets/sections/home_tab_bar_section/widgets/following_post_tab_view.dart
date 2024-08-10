@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/app_error_gif.dart';
+import 'package:social_media_app/core/widgets/common/view_media.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/welcome_card.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/each_post.dart';
 import 'package:social_media_app/core/widgets/shimmer.dart';

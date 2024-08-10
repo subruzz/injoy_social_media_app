@@ -12,9 +12,13 @@ import 'package:social_media_app/init_dependecies.dart';
 
 class CommentScreen extends StatefulWidget {
   const CommentScreen(
-      {super.key, required this.post, required this.onCommentAction});
+      {super.key,
+      this.isReel = false,
+      required this.post,
+      required this.onCommentAction});
   final PostEntity post;
   final void Function(num) onCommentAction;
+  final bool isReel;
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
@@ -25,7 +29,9 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   void initState() {
     _readComment.getPostComments(
-        postId: widget.post.postId, oncommentAction: widget.onCommentAction);
+        isReel: widget.isReel,
+        postId: widget.post.postId,
+        oncommentAction: widget.onCommentAction);
     super.initState();
   }
 
@@ -86,6 +92,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                 itemBuilder: (context, index) {
                                   final comment = state.postComments[index];
                                   return EachComment(
+                                      isReel: widget.isReel,
                                       commentBasicCubit: _commentBasic,
                                       creatorId: widget.post.creatorUid,
                                       postId: widget.post.postId,
@@ -108,6 +115,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               ),
                       ),
                       CommentBottomInputSection(
+                          isReel: widget.isReel,
                           commentBasicCubit: _commentBasic,
                           creatorId: widget.post.creatorUid,
                           commentController: _commentController,

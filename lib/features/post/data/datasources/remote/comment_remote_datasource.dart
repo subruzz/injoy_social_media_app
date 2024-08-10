@@ -7,14 +7,15 @@ import 'package:social_media_app/features/post/data/models/comment_model.dart';
 import 'package:social_media_app/features/post/domain/enitities/comment_entity.dart';
 
 abstract interface class CommentRemoteDatasource {
-  Future<void> createComment(CommentModel comment);
-  Stream<List<CommentEntity>> readComments(String postId);
-  Future<void> updateComment(String postId, String commentId, String comment);
-  Future<void> deleteComment(String postId, String commentId);
+  Future<void> createComment(CommentModel comment, bool isReel);
+  Stream<List<CommentEntity>> readComments(String postId, bool isReel);
+  Future<void> updateComment(
+      String postId, String commentId, String comment, bool isReel);
+  Future<void> deleteComment(String postId, String commentId, bool isReel);
   Future<void> likeComment(
-      String postId, String commentId, String currentUserId);
+      String postId, String commentId, String currentUserId, bool isReel);
   Future<void> removeLikeComment(
-      String postId, String commentId, String currentUserId);
+      String postId, String commentId, String currentUserId, bool isReel);
 }
 
 class CommentRemoteDatasourceImpl implements CommentRemoteDatasource {
@@ -23,9 +24,10 @@ class CommentRemoteDatasourceImpl implements CommentRemoteDatasource {
   CommentRemoteDatasourceImpl({required FirebaseFirestore firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore;
   @override
-  Future<void> createComment(CommentModel comment) async {
+  Future<void> createComment(CommentModel comment, bool isReel) async {
+    log(';lsjf;ljsf$isReel kdhkfs${comment.postId}');
     final commentCollection = _firebaseFirestore
-        .collection(FirebaseCollectionConst.posts)
+        .collection(isReel ? 'reels' : FirebaseCollectionConst.posts)
         .doc(comment.postId)
         .collection(FirebaseCollectionConst.comments);
 
@@ -38,7 +40,7 @@ class CommentRemoteDatasourceImpl implements CommentRemoteDatasource {
             .set(comment.toJson())
             .then((value) {
           final postCollection = _firebaseFirestore
-              .collection(FirebaseCollectionConst.posts)
+              .collection(isReel ? 'reels' : FirebaseCollectionConst.posts)
               .doc(comment.postId);
           postCollection.get().then((value) {
             if (value.exists) {
@@ -57,16 +59,17 @@ class CommentRemoteDatasourceImpl implements CommentRemoteDatasource {
   }
 
   @override
-  Future<void> deleteComment(String postId, String commentId) async {
+  Future<void> deleteComment(
+      String postId, String commentId, bool isReel) async {
     final commentCollection = _firebaseFirestore
-        .collection(FirebaseCollectionConst.posts)
+        .collection(isReel ? 'reels' : FirebaseCollectionConst.posts)
         .doc(postId)
         .collection(FirebaseCollectionConst.comments);
 
     try {
       await commentCollection.doc(commentId).delete().then((value) {
         final postCollection = _firebaseFirestore
-            .collection(FirebaseCollectionConst.posts)
+            .collection(isReel ? 'reels' : FirebaseCollectionConst.posts)
             .doc(postId);
         postCollection.get().then((value) {
           if (value.exists) {
@@ -82,9 +85,9 @@ class CommentRemoteDatasourceImpl implements CommentRemoteDatasource {
   }
 
   @override
-  Stream<List<CommentEntity>> readComments(String postId) {
+  Stream<List<CommentEntity>> readComments(String postId, bool isReel) {
     final commentCollection = _firebaseFirestore
-        .collection(FirebaseCollectionConst.posts)
+        .collection(isReel ? 'reels' : FirebaseCollectionConst.posts)
         .doc(postId)
         .collection(FirebaseCollectionConst.comments)
         .orderBy('createdAt', descending: true);
@@ -95,9 +98,9 @@ class CommentRemoteDatasourceImpl implements CommentRemoteDatasource {
 
   @override
   Future<void> updateComment(
-      String postId, String commentId, String comment) async {
+      String postId, String commentId, String comment, bool isReel) async {
     final commentCollection = _firebaseFirestore
-        .collection(FirebaseCollectionConst.posts)
+        .collection(isReel ? 'reels' : FirebaseCollectionConst.posts)
         .doc(postId)
         .collection(FirebaseCollectionConst.comments);
     try {
@@ -110,11 +113,11 @@ class CommentRemoteDatasourceImpl implements CommentRemoteDatasource {
   }
 
   @override
-  Future<void> removeLikeComment(
-      String postId, String commentId, String currentUserId) async {
+  Future<void> removeLikeComment(String postId, String commentId,
+      String currentUserId, bool isReel) async {
     try {
       final commentCollection = _firebaseFirestore
-          .collection(FirebaseCollectionConst.posts)
+          .collection(isReel ? 'reels' : FirebaseCollectionConst.posts)
           .doc(postId)
           .collection(FirebaseCollectionConst.comments);
       await commentCollection.doc(commentId).update({
@@ -127,11 +130,11 @@ class CommentRemoteDatasourceImpl implements CommentRemoteDatasource {
   }
 
   @override
-  Future<void> likeComment(
-      String postId, String commentId, String currentUserId) async {
+  Future<void> likeComment(String postId, String commentId,
+      String currentUserId, bool isReel) async {
     try {
       final commentCollection = _firebaseFirestore
-          .collection(FirebaseCollectionConst.posts)
+          .collection(isReel ? 'reels' : FirebaseCollectionConst.posts)
           .doc(postId)
           .collection(FirebaseCollectionConst.comments);
       await commentCollection.doc(commentId).update({

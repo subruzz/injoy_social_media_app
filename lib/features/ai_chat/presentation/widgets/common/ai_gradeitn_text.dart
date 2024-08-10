@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../core/animation/animations.dart';
+import '../../../../../core/widgets/animation/animations.dart';
 import '../../../../../core/theme/color/const_colors.dart';
 
 class AiGradientText extends StatelessWidget {

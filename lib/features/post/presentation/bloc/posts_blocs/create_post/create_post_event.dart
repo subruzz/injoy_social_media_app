@@ -20,6 +20,7 @@ final class CreatePostClickEvent extends CreatePostEvent {
   final String? location;
   final List<SelectedByte> postPics;
   final bool isCommentOff;
+  final bool isReel;
 
   const CreatePostClickEvent(
       {required this.postPics,
@@ -29,6 +30,7 @@ final class CreatePostClickEvent extends CreatePostEvent {
       required this.isCommentOff,
       required this.description,
       required this.userProfileUrl,
+      required this.isReel,
       required this.hashtags,
       required this.latitude,
       required this.longitude,

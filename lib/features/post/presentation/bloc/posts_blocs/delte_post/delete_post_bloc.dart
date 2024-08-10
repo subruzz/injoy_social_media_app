@@ -19,7 +19,7 @@ class DeletePostBloc extends Bloc<DeletePostEvent, DeletePostState> {
   FutureOr<void> _deletePost(
       DeletePost event, Emitter<DeletePostState> emit) async {
     final res = await _deletePostsUseCase(
-        DeletePostsUseCaseParams(postId: event.postId));
+        DeletePostsUseCaseParams(postId: event.postId, isReel: event.isReel));
     res.fold((failure) => emit(DeletePostFailure(errorMsg: failure.message)),
         (suceess) => emit(DeletePostSuccess()));
   }

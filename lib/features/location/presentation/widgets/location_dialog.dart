@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:social_media_app/core/const/app_info_dialog.dart';
-import 'package:social_media_app/core/const/location_enum.dart';
+import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
+import 'package:social_media_app/core/const/enums/location_enum.dart';
 
 void showLocationDialog({
   required BuildContext context,

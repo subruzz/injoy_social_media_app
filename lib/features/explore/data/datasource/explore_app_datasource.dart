@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/hashtag_model.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
@@ -426,12 +427,62 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       throw const MainException();
     }
   }
-
+  
   @override
-  Future<List<PostModel>> getSuggestedPostBasedOnaPost(PostEntity post) async {
+  Future<List<PostModel>> getSuggestedPostBasedOnaPost(PostEntity post) {
     // TODO: implement getSuggestedPostBasedOnaPost
     throw UnimplementedError();
   }
+
+//   @override
+//   Future<List<PostModel>> getSuggestedPostBasedOnaPost(PostEntity post) async {
+//     final myId = FirebaseAuth.instance.currentUser?.uid;
+//     if (myId == null) {
+//       throw const MainException();
+//     }
+//     double latRange = 0;
+//     double lonRange = 0;
+//     final Future<QuerySnapshot<Map<String, dynamic>>> postHashTagsQuery;
+//     if (post.latitude != null) {
+//       latRange = 50 / 111;
+//       lonRange = 50 / (111 * cos(post.latitude! * (pi / 180)));
+//       postHashTagsQuery = _firebaseFirestore
+//           .collection(FirebaseCollectionConst.posts)
+//           .where('creatorUid', isNotEqualTo: myId)
+//           .where('hashtags', arrayContainsAny: post.hashtags)
+//           .get();
+//     }
+
+//     final locationQuery = _firebaseFirestore
+//         .collection(FirebaseCollectionConst.users)
+//         .where('creatorUid', isNotEqualTo: myId)
+//         .where('latitude', isGreaterThanOrEqualTo: post.latitude! - latRange)
+//         .where('latitude', isLessThanOrEqualTo: post.latitude! + latRange)
+//         .where('longitude', isGreaterThanOrEqualTo: post.longitude! - lonRange)
+//         .where('longitude', isLessThanOrEqualTo: post.longitude! + lonRange)
+//         .get();
+//     final List<QuerySnapshot> queryResults =
+//         await Future.wait([postHashTagsQuery, locationQuery]);
+//     final List<QueryDocumentSnapshot> docs =
+//         queryResults.expand((qs) => qs.docs).toList();
+//   }
+
+//   // final Set<String> userIds = {};
+//   // final List<PartialUser> combinedUsers = [];
+
+//   // for (var doc in docs) {
+//   //   final data = doc.data() as Map<String, dynamic>?;
+
+//   //   if (data == null) continue;
+//   //   print('fwolling is $following');
+//   //   final id = data['id'];
+//   //   if (id == null || following.contains(id)) continue;
+
+//   //   final PartialUser user = PartialUser.fromJson(data);
+//   //   if (userIds.add(user.id)) {
+//   //     combinedUsers.add(user);
+//   //   }
+//   // }
 }
  // Define latitude and longitude ranges for proximity search
       // double latRange = 50 / 111; // Roughly 50km in latitude degrees

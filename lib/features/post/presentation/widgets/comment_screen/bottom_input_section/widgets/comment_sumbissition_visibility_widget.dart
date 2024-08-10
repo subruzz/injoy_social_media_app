@@ -16,7 +16,8 @@ class CommentSumbissitionVisibilityWidget extends StatelessWidget {
       required this.creatorId,
       required this.commentId,
       required this.commentController,
-      required this.commentBasicCubit});
+      required this.commentBasicCubit,
+      required this.isReel});
   final ValueNotifier<({bool isComment, bool isEdit, bool isTextEmpty})>
       commentSubmitSelection;
   final CommentBasicCubit commentBasicCubit;
@@ -24,6 +25,7 @@ class CommentSumbissitionVisibilityWidget extends StatelessWidget {
   final String postId;
   final String creatorId;
   final String commentId;
+  final bool isReel;
   final TextEditingController commentController;
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,8 @@ class CommentSumbissitionVisibilityWidget extends StatelessWidget {
                   log('comment id is $commentId');
                   final user = context.read<AppUserBloc>().appUser;
                   commentSubmitSelection.value.isComment
-                      ?commentBasicCubit.addComment(
+                      ? commentBasicCubit.addComment(
+                          isReel: isReel,
                           user: user,
                           comment: sanitizeComment(commentController.text),
                           userName: user.userName ?? '',
@@ -45,11 +48,11 @@ class CommentSumbissitionVisibilityWidget extends StatelessWidget {
                           creatorId: creatorId)
                       : commentId.isNotEmpty
                           ? commentBasicCubit.updateComment(
-                                postId: postId,
-                                commentId: commentId,
-                                comment:
-                                    sanitizeComment(commentController.text),
-                              )
+                                 isReel: isReel,
+                              postId: postId,
+                              commentId: commentId,
+                              comment: sanitizeComment(commentController.text),
+                            )
                           : null;
                   // inputNode?.unfocus();
                   commentSubmitSelection.value =

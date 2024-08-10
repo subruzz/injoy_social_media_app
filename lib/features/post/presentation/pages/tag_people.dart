@@ -14,7 +14,6 @@ class TagPeoplePage extends StatelessWidget {
         Expanded(
             child: CustomPageView(
           pageController: pageController,
-          selectedStatusAssets: selectedAssets,
         ))
       ],
     ));

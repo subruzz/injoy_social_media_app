@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:photo_manager/photo_manager.dart';
-import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
+import 'package:social_media_app/core/widgets/cached_image.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:video_player/video_player.dart';
 
@@ -11,33 +10,30 @@ class CustomPageView extends StatelessWidget {
     super.key,
     required this.pageController,
     this.images,
-    this.selectedStatusAssets,
+    this.netImages,
     this.onPagechanged,
+    this.fit,
   });
   final PageController pageController;
   final List<SelectedByte>? images;
-  final List<AssetEntity>? selectedStatusAssets;
+  final List<String>? netImages;
   final Function(int)? onPagechanged;
+  final BoxFit? fit;
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
       onPageChanged: onPagechanged,
       controller: pageController,
-      itemCount: selectedStatusAssets != null
-          ? selectedStatusAssets!.length
-          : images!.length,
+      itemCount: netImages != null ? netImages!.length : images!.length,
       scrollDirection: Axis.horizontal,
       itemBuilder: (context, index) {
         return images != null
             ? images![index].mediaType == MediaType.photo
                 ? Image.file(images![index].selectedFile!)
                 : VideoWidget(videoFile: images![index].selectedFile!)
-            : AssetEntityImage(
-                height: 600,
-                width: double.infinity,
-                selectedStatusAssets![index],
-                isOriginal: false,
-                thumbnailSize: const ThumbnailSize.square(500),
+            : CachedImage(
+                img: netImages![index],
+                fit: fit,
               );
         // : CreatePostImage(
         //     onTap: () {

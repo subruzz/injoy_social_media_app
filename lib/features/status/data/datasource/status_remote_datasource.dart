@@ -32,6 +32,7 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
     final statusCollection =
         firestore.collection(FirebaseCollectionConst.statuses);
     try {
+
       //creating the statuses in the status collection
       await statusCollection
           .doc(singleStatus.statusId)
@@ -60,9 +61,7 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
       //   }
       // });
     } catch (e) {
-      throw MainException(
-          errorMsg: AppErrorMessages.statusCreationFailed,
-          details: e.toString());
+      throw MainException(details: e.toString());
     }
   }
 
@@ -104,9 +103,7 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
       // Commit the batch
       await batch.commit();
     } catch (e) {
-      throw MainException(
-          errorMsg: AppErrorMessages.statusCreationFailed,
-          details: e.toString());
+      throw MainException(details: e.toString());
     }
   }
 

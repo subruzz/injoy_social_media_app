@@ -32,12 +32,12 @@ class PostUserDetailsSection extends StatelessWidget {
         if (isEdit)
           PostOptionButton(
             isEdit: true,
-            onDelete: () {
-              context
-                  .read<DeletePostBloc>()
-                  .add(DeletePost(postId: post.postId));
+            // onDelete: () {
+            //   context
+            //       .read<DeletePostBloc>()
+            //       .add(DeletePost(postId: post.postId));
                   
-            },
+            // },
             onEdit: () {
               Navigator.push(
                   context,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/pages/widgets/premium_card.dart';
 
-import '../../../../../core/const/location_enum.dart';
+import '../../../../../core/const/enums/location_enum.dart';
 
 class PremiumCardList extends StatelessWidget {
   const PremiumCardList({super.key});

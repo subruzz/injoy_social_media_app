@@ -14,25 +14,33 @@ import 'button/custom_elevated_button.dart';
 
 class FollowUnfollowHelper extends StatelessWidget {
   const FollowUnfollowHelper(
-      {super.key, required this.user, this.isFromCard = false});
+      {super.key,
+      required this.user,
+      this.wantWhiteBorder = false,
+      this.isFromCard = false,
+      this.noRad = false,
+      this.color});
   final PartialUser user;
   final bool isFromCard;
+  final bool noRad;
+  final Color? color;
+  final bool wantWhiteBorder;
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
     return CustomButton(
+        borderColor: wantWhiteBorder ? Colors.white : null,
+        color: color,
         width: isFromCard ? 120 : null,
         height: isFromCard ? 40 : 35,
-        radius: isFromCard ? AppBorderRadius.small : null,
+        radius: noRad ? AppBorderRadius.small : null,
         child: BlocBuilder<FollowunfollowCubit, FollowunfollowState>(
           builder: (context, state) {
             final me = context.read<AppUserBloc>().appUser;
 
             return CustomText(
-             me.following.contains(user.id)
-                        ? l10n!.following
-                        : l10n!.follow,
+                me.following.contains(user.id) ? l10n!.following : l10n!.follow,
                 style: AppTextTheme.bodyMeidumwhiteVariant.bodyMedium
                     ?.copyWith(fontSize: 12));
           },

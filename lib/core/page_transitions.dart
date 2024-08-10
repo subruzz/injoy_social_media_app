@@ -216,5 +216,131 @@ class AppPageTransitions {
       maintainState: true,
       fullscreenDialog: true,
     );
+  } // Slide and Fade Transition (Combination)
+
+  static Route slideAndFade(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: animation.drive(
+                Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                    .chain(CurveTween(curve: Curves.easeInOut))),
+            child: child,
+          ),
+        );
+      },
+      transitionDuration: duration,
+    );
+  } // Slide and Scale Transition (Combination)
+
+  static Route slideAndScale(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return ScaleTransition(
+          scale: animation.drive(Tween(begin: 0.9, end: 1.0)
+              .chain(CurveTween(curve: Curves.easeInOut))),
+          child: SlideTransition(
+            position: animation.drive(
+                Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                    .chain(CurveTween(curve: Curves.easeInOut))),
+            child: child,
+          ),
+        );
+      },
+      transitionDuration: duration,
+    );
+  } // Slide and Rotation Transition (Combination)
+
+  static Route slideAndRotate(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return RotationTransition(
+          turns: animation.drive(Tween(begin: 0.0, end: 1.0)
+              .chain(CurveTween(curve: Curves.easeInOut))),
+          child: SlideTransition(
+            position: animation.drive(
+                Tween(begin: const Offset(1.0, 0.0), end: Offset.zero)
+                    .chain(CurveTween(curve: Curves.easeInOut))),
+            child: child,
+          ),
+        );
+      },
+      transitionDuration: duration,
+    );
+  } // Flip and Scale Transition (Combination)
+
+  static Route flipAndScale(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return ScaleTransition(
+          scale: animation.drive(Tween(begin: 0.8, end: 1.0)
+              .chain(CurveTween(curve: Curves.easeInOut))),
+          child: RotationTransition(
+            turns: animation.drive(Tween(begin: 0.0, end: 1.0)
+                .chain(CurveTween(curve: Curves.easeInOut))),
+            child: child,
+          ),
+        );
+      },
+      transitionDuration: duration,
+    );
+  } // Draggable Transition
+
+  static Route draggable(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+      transitionDuration: duration,
+    );
+  } // Page Curl Transition
+
+  static Route pageCurl(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeInOut,
+        );
+
+        return AnimatedBuilder(
+          animation: curvedAnimation,
+          builder: (context, child) {
+            final double value = curvedAnimation.value;
+            return Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationX(value * 3.14),
+              child: child,
+            );
+          },
+          child: child,
+        );
+      },
+      transitionDuration: duration,
+    );
   }
 }

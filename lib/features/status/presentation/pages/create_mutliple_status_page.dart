@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/overlay_loading_holder.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
@@ -8,10 +9,7 @@ import 'package:social_media_app/features/status/presentation/widgets/common/sta
 import 'package:social_media_app/features/status/presentation/widgets/create_multiple_status/multiple_status_input_bar.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets_indicator.dart';
-
-import '../../../../core/const/app_msg/app_error_msg.dart';
-import '../../../../core/const/app_msg/app_success_msg.dart';
-import '../../../../core/const/messenger.dart';
+import '../../../../core/widgets/messenger/messenger.dart';
 import '../../../assets/presenation/pages/crop_image_page.dart';
 
 class CreateMutlipleStatusPage extends StatefulWidget {
@@ -66,6 +64,8 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       appBar: StatusAppBar(
         isChat: widget.isChat,
@@ -91,11 +91,10 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
         },
         listener: (context, state) {
           if (state is StatusCreateFailure) {
-            Messenger.showSnackBar(
-                message: AppErrorMessages.statusCreationFailed);
+            Messenger.showSnackBar(message: l10n!.statusHiccupError);
           }
           if (state is StatusCreateSuccess) {
-            Messenger.showSnackBar(message: AppSuccessMsg.statusCreatedSuccess);
+            Messenger.showSnackBar(message:l10n!.statusPostedSuccess);
             Navigator.popUntil(
               context,
               (route) => route.isFirst,
@@ -116,6 +115,7 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
                   selectedAssets: _selectedAssets.value),
               //input bar for adding caption
               MultipleStatusInputBar(
+                l10n: l10n!,
                 isChat: widget.isChat,
                 captionController: _captionController,
                 alreadySelected: _selectedAssets.value,

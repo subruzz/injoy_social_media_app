@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:social_media_app/core/const/location_enum.dart';
+import 'package:social_media_app/core/const/enums/location_enum.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
 class AppUser extends Equatable {
@@ -29,12 +29,13 @@ class AppUser extends Equatable {
   final bool onlineStatus;
   final List<String> posts;
   final int viewedSetupIndex;
-
+  final List<String> savedPosts;
   AppUser({
     required this.id,
     this.viewedSetupIndex = 0,
     required this.notificationPreferences,
     required this.email,
+    required this.savedPosts,
     this.lastSeen,
     required this.hasPremium,
     required this.fullName,
@@ -82,6 +83,7 @@ class AppUser extends Equatable {
         followingCount,
         onlineStatus,
         viewedSetupIndex,
+        ...savedPosts,
         ...following,
         ...interests,
         ...posts,
@@ -112,9 +114,11 @@ class AppUser extends Equatable {
     List<String>? interests,
     bool? onlineStatus,
     List<String>? posts,
+    List<String>? savedPosts,
     int? viewedSetupIndex,
   }) {
     return AppUser(
+      savedPosts: savedPosts ?? this.savedPosts,
       id: id ?? this.id,
       userPrem: userPrem ?? this.userPrem,
       email: email ?? this.email,

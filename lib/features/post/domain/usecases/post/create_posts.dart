@@ -14,15 +14,16 @@ class CreatePostsUseCase implements UseCase<Unit, CreatePostsUseCaseParams> {
       : _postRepository = postRepository;
   @override
   Future<Either<Failure, Unit>> call(params) async {
-    return await _postRepository.createPost(params.post, params.image);
+    return await _postRepository.createPost(
+        params.post, params.image, params.isReel);
   }
 }
 
 class CreatePostsUseCaseParams {
+  final bool isReel;
   final PostEntity post;
   final List<SelectedByte> image;
-  CreatePostsUseCaseParams({
-    required this.post,
-    required this.image,
-  });
+
+  CreatePostsUseCaseParams(
+      {required this.isReel, required this.post, required this.image});
 }

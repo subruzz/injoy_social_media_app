@@ -9,7 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/providers.dart';
 import 'package:social_media_app/core/routes/app_routes_config.dart';
 import 'package:social_media_app/core/shared_providers/cubit/app_language/app_language_cubit.dart';
@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
     return ScreenUtilInit(
-      designSize: const Size(360, 690),
+      designSize: const Size(360, 784),
       minTextAdapt: true,
       splitScreenMode: true,
       // Use builder only if you need to use library outside ScreenUtilInit context

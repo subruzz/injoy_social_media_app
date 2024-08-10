@@ -2,7 +2,7 @@
 
 import 'package:fpdart/fpdart.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:social_media_app/core/const/location_enum.dart';
+import 'package:social_media_app/core/const/enums/location_enum.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/location/data/datasource/local/location_local_datasource.dart';

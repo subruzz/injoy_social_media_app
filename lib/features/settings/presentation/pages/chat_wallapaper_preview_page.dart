@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'dart:io';
 
 import 'package:social_media_app/core/theme/color/app_colors.dart';

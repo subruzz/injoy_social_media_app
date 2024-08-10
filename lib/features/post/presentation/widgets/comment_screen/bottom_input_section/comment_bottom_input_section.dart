@@ -19,7 +19,8 @@ class CommentBottomInputSection extends StatelessWidget {
       required this.creatorId,
       required this.commentBasicCubit,
       required this.postId,
-      required this.commentId});
+      required this.commentId,
+      required this.isReel});
   final TextEditingController commentController;
   final ValueNotifier<({bool isComment, bool isEdit, bool isTextEmpty})>
       commentSubmitSelection;
@@ -29,6 +30,7 @@ class CommentBottomInputSection extends StatelessWidget {
   final String postId;
   final String commentId;
   final CommentBasicCubit commentBasicCubit;
+  final bool isReel;
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -36,7 +38,7 @@ class CommentBottomInputSection extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: Container(
-        height: 70.h,
+        height: 90.h,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         color: AppDarkColor().secondaryBackground,
         child: Column(
@@ -71,6 +73,7 @@ class CommentBottomInputSection extends StatelessWidget {
                     commentController: commentController),
                 AppSizedBox.sizedBox10H,
                 CommentSumbissitionVisibilityWidget(
+                    isReel: isReel,
                     creatorId: creatorId,
                     commentSubmitSelection: commentSubmitSelection,
                     myId: myId,

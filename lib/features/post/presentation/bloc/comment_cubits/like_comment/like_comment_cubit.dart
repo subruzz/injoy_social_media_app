@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/features/post/domain/usecases/comment/like_comment.dart';
 import 'package:social_media_app/features/post/domain/usecases/comment/remove_like_comment.dart';
 
@@ -14,10 +14,14 @@ class LikeCommentCubit extends Cubit<LikeCommentState> {
   Future<void> likeComment(
       {required String postId,
       required String commentId,
+      required bool isReel,
       required String currentUserId}) async {
     emit(CubitCommentLikesLoading());
     final res = await _likeCommentUseCase(LikeCommentUseCaseParams(
-        currentUserId: currentUserId, postId: postId, commentId: commentId));
+        isReel: isReel,
+        currentUserId: currentUserId,
+        postId: postId,
+        commentId: commentId));
     res.fold((failure) => emit(CubitCommentLikesFailed(failure.message)),
         (success) => emit(CubitCommentLikesLoaded()));
   }
@@ -25,10 +29,14 @@ class LikeCommentCubit extends Cubit<LikeCommentState> {
   Future<void> removeLikecomment(
       {required String postId,
       required String commentId,
+      required bool isReel,
       required String currentUserId}) async {
     emit(CubitCommentLikesLoading());
     final res = await _removeLikeCommentUseCase(RemoveLikeCommentUseCaseParams(
-        currentUserId: currentUserId, postId: postId, commentId: commentId));
+        isReel: isReel,
+        currentUserId: currentUserId,
+        postId: postId,
+        commentId: commentId));
     res.fold((failure) => emit(CubitCommentLikesFailed(failure.message)),
         (success) => emit(CubitCommentLikesLoaded()));
   }

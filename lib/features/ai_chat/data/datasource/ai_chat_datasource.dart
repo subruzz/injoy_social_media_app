@@ -42,10 +42,7 @@ class AiChatDatasourceImpl implements AiChatDatasource {
           }));
       log(res.body);
       if (res.statusCode == 200 || res.statusCode == 201) {
-        // Parse the response body as JSON
         final responseJson = jsonDecode(res.body) as Map<String, dynamic>;
-
-        // Extract the content from the response
         final candidates = responseJson['candidates'] as List<dynamic>? ?? [];
         final content = candidates.isNotEmpty
             ? (candidates.first as Map<String, dynamic>)['content']

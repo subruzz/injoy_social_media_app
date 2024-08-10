@@ -1,4 +1,4 @@
-import 'package:social_media_app/core/const/location_enum.dart';
+import 'package:social_media_app/core/const/enums/location_enum.dart';
 
 class UserLocation {
   final double? latitude;

@@ -5,9 +5,10 @@ import 'package:get_it/get_it.dart';
 
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/utils/debouncer.dart';
-import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_multiple_images.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_single_image.dart';
@@ -53,6 +54,8 @@ class _EditPostPageState extends State<EditPostPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -157,6 +160,7 @@ class _EditPostPageState extends State<EditPostPage> {
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: DescriptionTextfield(
+                  l10n: l10n!,
                   onChanged: (value) {},
                   descriptionController: _descriptionController),
             ),

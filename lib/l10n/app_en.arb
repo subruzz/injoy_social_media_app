@@ -29,6 +29,34 @@
   "noPostsYet": "No Posts Found!",
   "followFriendsDiscoverStories": "Follow friends and discover amazing stories.",
   "somethingWentWrong": "Oops, Something went wrong, please refresh.",
-  "noResultFound": "No result found for {query}."
+  "noResultFound": "No result found for {query}.",
+  "writeYourThought": "Write your thought\nwith others.",
+  "writeYourThoughtPart1": "Write your thought",
+  "writeYourThoughtPart2": "with others",
+  "sendMedia": "Send Media",
+  "createStatus": "Create Status",
+  "addCaption": "Add a caption...",
+  "statusHiccupError": "Sorry, there was a hiccup. Give it another try, and your status will be up in no time!",
+  "statusPostedSuccess": "Status successfully posted! Your update is now visible to your followers.",
+  "selectImage": "Select image",
+  "newPost": "New post",
+  "writeCaptionAndHashtag": "Write a caption and hashtag",
+  "hashtags": "Hashtags",
+  "location": "Location",
+  "turnOffComments": "Turn off comments",
+  "newPost": "New post",
+  "writeCaptionAndHashtag": "Write a caption and hashtag",
+  "hashtags": "Hashtags",
+  "location": "Location",
+  "turnOffComments": "Turn off comments",
+  "postAddedSuccess": "Your post has been added successfully!",
+  "postAddError": "There was an error adding your post. Please try again.",
+  "justASecond": "Just a second!",
+  "failedToLoadImage": "Failed to load Image",
+  "viewMedia": "View Media"
+
+
 
 }
+
+

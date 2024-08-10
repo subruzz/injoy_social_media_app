@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
-import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
@@ -27,7 +27,7 @@ class SignupButton extends StatelessWidget {
           if (state is SignupFailure) {
             Messenger.showSnackBar(
                 message: '${state.errorMsg}\n${state.details}',
-                color: AppDarkColor().buttonBackground);
+              );
           }
           if (state is SignupSuccess) {
             Navigator.pushReplacementNamed(

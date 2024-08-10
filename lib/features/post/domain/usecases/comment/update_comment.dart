@@ -14,8 +14,7 @@ class UpdateCommentUseCase
   @override
   Future<Either<Failure, Unit>> call(params) async {
     return await _commentRepository.updateComment(
-      params.postId,params.commentId,params.comment
-    );
+        params.postId, params.commentId, params.comment, params.isReel);
   }
 }
 
@@ -23,7 +22,11 @@ class UpdateCommentUseCaseParams {
   final String postId;
   final String commentId;
   final String comment;
+  final bool isReel;
 
   UpdateCommentUseCaseParams(
-      {required this.postId, required this.commentId, required this.comment});
+      {required this.postId,
+      required this.commentId,
+      required this.comment,
+      required this.isReel});
 }

@@ -4,7 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/firebase_helper.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/shared_providers/blocs/initial_setup/initial_setup_cubit.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/ai_chat/data/datasource/ai_chat_datasource.dart';
 import 'package:social_media_app/features/ai_chat/data/repostiory/ai_chat_repo_impl.dart';
@@ -92,6 +91,7 @@ import 'package:social_media_app/features/post/domain/usecases/post/delete_post.
 import 'package:social_media_app/features/assets/domain/usecase/get_albums.dart';
 import 'package:social_media_app/features/assets/domain/usecase/get_assets.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/like_post.dart';
+import 'package:social_media_app/features/post/domain/usecases/post/save_post.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/searh_hashtag.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/unlike_post.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/update_post.dart';
@@ -103,6 +103,7 @@ import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/like_post/like_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/save_post/save_post_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/search_hashtag/search_hashtag_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/select_tags_cubit/select_tags_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/update_post/update_post_bloc.dart';
@@ -136,6 +137,11 @@ import 'package:social_media_app/features/profile/presentation/bloc/get_other_us
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_liked_posts/get_user_liked_posts_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_profile/other_profile_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_name_cubit/user_name_cubit.dart';
+import 'package:social_media_app/features/reels/data/datasource/reels_data_source.dart';
+import 'package:social_media_app/features/reels/data/repostiroy/reels_repo_impl.dart';
+import 'package:social_media_app/features/reels/domain/repository/reels_repository.dart';
+import 'package:social_media_app/features/reels/domain/usecases/get_reels.dart';
+import 'package:social_media_app/features/reels/presentation/reels/reels_cubit.dart';
 import 'package:social_media_app/features/settings/data/datasource/settings_datasource.dart';
 import 'package:social_media_app/features/settings/data/repository/setting_repo_impl.dart';
 import 'package:social_media_app/features/settings/domain/repository/settings_repository.dart';
@@ -206,6 +212,7 @@ Future<void> initDependencies() async {
   _premiumsubscription();
   _chat();
   _aiChat();
+  _reels();
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(),
   );
@@ -318,7 +325,8 @@ void _initLocation() {
   serviceLocator
     ..registerFactory<LocationLocalDataSource>(
         () => LocationLocalDataSourceImpl())
-        ..registerFactory<SearchLocationDataSource>(()=>SearchLocationDataSourceImpl())
+    ..registerFactory<SearchLocationDataSource>(
+        () => SearchLocationDataSourceImpl())
     ..registerFactory(
         () => SearchLocationUseCase(locationRepository: serviceLocator()))
     ..registerFactory<LocationRepository>(() => LocationRepositoryImpl(
@@ -363,7 +371,9 @@ void _post() {
         () => UnlikePostsUseCase(postRepository: serviceLocator()))
     ..registerFactory(() =>
         LikePostBloc(serviceLocator(), serviceLocator(), serviceLocator()))
-    ..registerFactory(() => SelectTagsCubit());
+    ..registerFactory(() => SelectTagsCubit())
+    ..registerFactory(() => SavePostUseCase(postRepository: serviceLocator()))
+    ..registerFactory(() => SavePostCubit(serviceLocator()));
 }
 
 void _getUserPosts() {
@@ -623,4 +633,14 @@ void _aiChat() {
     ..registerFactory(
         () => GenerateAiMessageUseCase(aiChatRepository: serviceLocator()))
     ..registerFactory(() => AiChatCubit(serviceLocator()));
+}
+
+void _reels() {
+  serviceLocator
+    ..registerFactory<ReelsDataSource>(
+        () => ReelsDataSourceImpl(firestore: FirebaseFirestore.instance))
+    ..registerFactory<ReelsRepository>(
+        () => ReelsRepoImpl(reelsDataSource: serviceLocator()))
+    ..registerFactory(() => GetReelsUseCase(reelsRepository: serviceLocator()))
+    ..registerFactory(() => ReelsCubit(serviceLocator()));
 }

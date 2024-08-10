@@ -9,7 +9,8 @@ import 'package:social_media_app/features/chat/presentation/cubits/messages_cubi
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 
-import '../../../../../core/const/message_type.dart';
+import '../../../../../core/const/enums/message_type.dart';
+import '../../../../../core/extensions/localization.dart';
 import '../../../../chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 
 class MultipleStatusInputBar extends StatelessWidget {
@@ -20,14 +21,15 @@ class MultipleStatusInputBar extends StatelessWidget {
       required this.captions,
       this.onCaptionChanged,
       required this.isChat,
-      this.getMessageCubit});
+      this.getMessageCubit,
+      required this.l10n});
   final TextEditingController captionController;
   final List<SelectedByte> alreadySelected;
   final List<String> captions;
   final void Function(String)? onCaptionChanged;
   final bool isChat;
   final GetMessageCubit? getMessageCubit;
-
+  final AppLocalizations l10n;
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -41,7 +43,7 @@ class MultipleStatusInputBar extends StatelessWidget {
             Expanded(
               child: ContentInputTextfield(
                 controller: captionController,
-                hintText: 'Add a caption...',
+                hintText: l10n.addCaption,
                 onChanged: onCaptionChanged,
               ),
             ),

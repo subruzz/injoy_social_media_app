@@ -39,6 +39,7 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
       String? userProfile,
       required AppUser user,
       required String postId,
+      required bool isReel,
       required String creatorId}) async {
     emit(CommentLoading());
     final commentId = IdGenerator.generateUniqueId();
@@ -54,7 +55,7 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
         createdAt: Timestamp.now(),
         likes: const []);
     final res = await _createCommentUsecase(
-        CreateCommentUsecaseParams(comment: newComment));
+        CreateCommentUsecaseParams(comment: newComment, isReel: isReel));
     res.fold((failure) => emit(CommentError(error: failure.message)),
         (success) {
       emit(CommentAddedSuccess());
@@ -83,11 +84,12 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
       {required String postId,
       required String commentId,
       required String myId,
+      required bool isReel,
       required String otherId}) async {
     emit(CommentLoading());
 
-    final res = await _deleteCommentUseCase(
-        DeleteCommentUseCaseParams(postId: postId, commentId: commentId));
+    final res = await _deleteCommentUseCase(DeleteCommentUseCaseParams(
+        postId: postId, commentId: commentId, isReel:isReel));
     res.fold((failure) => emit(CommentError(error: failure.message)),
         (success) {
       emit(CommentDeletedSuccess());
@@ -109,11 +111,15 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
   void updateComment(
       {required String postId,
       required String commentId,
+      required bool isReel,
       required String comment}) async {
     emit(CommentLoading());
 
     final res = await _updateCommentUseCase(UpdateCommentUseCaseParams(
-        postId: postId, commentId: commentId, comment: comment));
+        isReel: isReel,
+        postId: postId,
+        commentId: commentId,
+        comment: comment));
     res.fold((failure) => emit(CommentError(error: failure.message)),
         (success) => emit(CommentSuccess()));
   }

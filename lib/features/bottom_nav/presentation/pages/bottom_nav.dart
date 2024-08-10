@@ -11,6 +11,8 @@ import 'package:social_media_app/features/profile/presentation/pages/user_profil
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/core/utils/rive/model.dart';
 import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
+import 'package:social_media_app/features/reels/presentation/pages/reels_page.dart';
+import 'package:social_media_app/features/reels/presentation/reels/reels_cubit.dart';
 import 'package:social_media_app/init_dependecies.dart';
 
 import '../../../chat/presentation/cubits/chat/chat_cubit.dart';
@@ -77,6 +79,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
     const ExplorePageBuilder(),
     ChatMainTabPage(),
     const NotificationPage(),
+    const ReelsPage(),
     const PersonalProfilePage()
   ];
 
@@ -120,6 +123,10 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
         stateMachineName: "BELL_Interactivity"),
     RiveModel(
         src: "assets/animated-icons.riv",
+        artboard: "TIMER",
+        stateMachineName: "TIMER_Interactivity"),
+    RiveModel(
+        src: "assets/animated-icons.riv",
         artboard: "USER",
         stateMachineName: "USER_Interactivity"),
   ];
@@ -136,6 +143,10 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
                   lastDoc: null,
                   following: user.following,
                   uId: user.id));
+          }),
+          BlocProvider(create: (context) {
+            final user = context.read<AppUserBloc>().appUser;
+            return serviceLocator<ReelsCubit>()..getReels(user.id);
           }),
           BlocProvider(
             create: (context) => serviceLocator<GetMyStatusBloc>()
@@ -158,7 +169,6 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
               ..getMynotifications(
                   myId: context.read<AppUserBloc>().appUser.id),
           ),
-       
         ],
         child: BlocBuilder<BottomNavCubit, BottomNavState>(
             builder: (context, state) {

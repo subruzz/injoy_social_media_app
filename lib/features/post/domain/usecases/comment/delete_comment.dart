@@ -14,14 +14,15 @@ class DeleteCommentUseCase
   @override
   Future<Either<Failure, Unit>> call(params) async {
     return await _commentRepository.deleteComment(
-      params.postId,params.commentId
-    );
+        params.postId, params.commentId, params.isReel);
   }
 }
 
 class DeleteCommentUseCaseParams {
   final String postId;
   final String commentId;
+  final bool isReel;
 
-  DeleteCommentUseCaseParams({required this.postId, required this.commentId});
+  DeleteCommentUseCaseParams(
+      {required this.postId, required this.commentId, required this.isReel});
 }

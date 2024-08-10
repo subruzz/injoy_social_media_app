@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
+import 'package:social_media_app/core/extensions/localization.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_svg.dart';
@@ -25,9 +27,11 @@ import '../widgets/create_post/section/create_post_input_section/post_input_sect
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({
     super.key,
+    this.isReel = false,
     required this.selectedImages,
   });
   final List<SelectedByte> selectedImages;
+  final bool isReel;
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();
 }
@@ -50,6 +54,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -59,6 +64,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 final selectedHashtags = _selectTagsCubit.state;
                 final appUser = context.read<AppUserBloc>().appUser;
                 context.read<CreatePostBloc>().add(CreatePostClickEvent(
+                      isReel: widget.isReel,
                       isCommentOff: _isCommentOff,
                       userFullName: appUser.fullName ?? '',
                       postPics: widget.selectedImages,
@@ -81,13 +87,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 color: AppDarkColor().iconSoftColor,
               )),
         ],
-        title: const Text('New Post'),
+        title: Text(l10n!.newPost),
       ),
       body: CustomAppPadding(
         child: BlocConsumer<CreatePostBloc, CreatePostState>(
           listener: (context, state) {
             if (state is CreatePostFailure) {
-              Messenger.showSnackBar(message: state.errorMsg);
+              Messenger.showSnackBar(message: l10n.postAddError);
             }
             if (state is CreatePostSuccess) {
               context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
@@ -97,7 +103,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 (route) => route.isFirst,
               );
 
-              Messenger.showSnackBar(message: 'Post Created');
+              Messenger.showSnackBar(message: l10n.postAddedSuccess);
             }
           },
           builder: (context, state) {
@@ -118,6 +124,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     // ),
                     //input for creating post
                     PostInputSection(
+                      l10n: l10n,
                       descriptionController: _descriptionController,
                       assetEntity: widget.selectedImages[0],
                     ),
@@ -128,6 +135,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         selectTagsCubit: _selectTagsCubit),
                     AppSizedBox.sizedBox10H,
                     PostLocation(
+                      l10n: l10n,
                       setLocation: (location) {
                         _location = location;
                       },
@@ -144,6 +152,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     //       ));
                     //     }),
                     PostOptionSection(
+                      l10n: l10n,
                       isCommentOff: _isCommentOff,
                       onCommentToggle: (value) {
                         _isCommentOff = value;

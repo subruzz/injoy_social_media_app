@@ -15,10 +15,10 @@ class CommentRepositoryImpl implements CommentRepository {
       {required CommentRemoteDatasource commentRemoteDatasource})
       : _commentRemoteDatasource = commentRemoteDatasource;
   @override
-  Future<Either<Failure, Unit>> createComment(CommentEntity comment) async {
+  Future<Either<Failure, Unit>> createComment(CommentEntity comment, bool isReel) async {
     try {
       await _commentRemoteDatasource
-          .createComment(CommentModel.fromEntity(comment));
+          .createComment(CommentModel.fromEntity(comment),isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -27,9 +27,9 @@ class CommentRepositoryImpl implements CommentRepository {
 
   @override
   Future<Either<Failure, Unit>> updateComment(
-      String postId, String commentId, String comment) async {
+      String postId, String commentId, String comment, bool isReel) async {
     try {
-      await _commentRemoteDatasource.updateComment(postId, commentId, comment);
+      await _commentRemoteDatasource.updateComment(postId, commentId, comment,isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -38,9 +38,9 @@ class CommentRepositoryImpl implements CommentRepository {
 
   @override
   Future<Either<Failure, Unit>> deleteComment(
-      String postId, String commentId) async {
+      String postId, String commentId, bool isReel) async {
     try {
-      await _commentRemoteDatasource.deleteComment(postId, commentId);
+      await _commentRemoteDatasource.deleteComment(postId, commentId,isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -49,10 +49,10 @@ class CommentRepositoryImpl implements CommentRepository {
 
   @override
   Stream<Either<Failure, List<CommentEntity>>> readComments(
-      String postId) async* {
+      String postId, bool isReel) async* {
     try {
       await for (final comments
-          in _commentRemoteDatasource.readComments(postId)) {
+          in _commentRemoteDatasource.readComments(postId,isReel)) {
         yield Right(comments);
       }
     } on SocketException catch (e) {
@@ -64,10 +64,10 @@ class CommentRepositoryImpl implements CommentRepository {
 
   @override
   Future<Either<Failure, Unit>> likeComment(
-      String postId, String commentId, String currentUserId) async {
+      String postId, String commentId, String currentUserId, bool isReel) async {
     try {
       await _commentRemoteDatasource.likeComment(
-          postId, commentId, currentUserId);
+          postId, commentId, currentUserId,isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -76,10 +76,10 @@ class CommentRepositoryImpl implements CommentRepository {
 
   @override
   Future<Either<Failure, Unit>> removeLikeComment(
-      String postId, String commentId, String currentUserId) async {
+      String postId, String commentId, String currentUserId, bool isReel) async {
     try {
       await _commentRemoteDatasource.removeLikeComment(
-          postId, commentId, currentUserId);
+          postId, commentId, currentUserId,isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

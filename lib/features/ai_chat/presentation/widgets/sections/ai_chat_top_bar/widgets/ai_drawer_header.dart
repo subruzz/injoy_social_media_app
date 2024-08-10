@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/common/ai_profile.dart';
 
-import '../../../../../../../core/animation/animations.dart';
+import '../../../../../../../core/widgets/animation/animations.dart';
 import '../../../../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../common/ai_gradeitn_text.dart';
 

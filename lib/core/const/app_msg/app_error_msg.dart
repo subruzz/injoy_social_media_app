@@ -53,8 +53,7 @@ class AppErrorMessages {
   // Status-Specific Errors
   static const String statusEmptyContent =
       'Your status seems a bit empty. Add a photo or some text to share!';
-  static const String statusCreationFailed =
-      'Sorry, there was a hiccup. Give it another try, and your status will be up in no time!';
+
   static const String statusUpdateFailed =
       'Failed to update status. Please try again.';
   static const String statusDeleteFailed =

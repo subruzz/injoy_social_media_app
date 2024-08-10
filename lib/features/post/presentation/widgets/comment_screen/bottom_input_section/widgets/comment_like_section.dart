@@ -9,10 +9,13 @@ import '../../../../bloc/comment_cubits/like_comment/like_comment_cubit.dart';
 
 class CommentLikeSection extends StatefulWidget {
   const CommentLikeSection(
-      {super.key, required this.comment, required this.myId});
+      {super.key,
+      required this.comment,
+      required this.myId,
+      required this.isReel});
   final CommentEntity comment;
   final String myId;
-
+  final bool isReel;
   @override
   State<CommentLikeSection> createState() => _CommentLikeSectionState();
 }
@@ -29,12 +32,14 @@ class _CommentLikeSectionState extends State<CommentLikeSection> {
               if (widget.comment.likes.contains(widget.myId)) {
                 widget.comment.likes.remove(widget.myId);
                 context.read<LikeCommentCubit>().removeLikecomment(
+                    isReel: widget.isReel,
                     postId: widget.comment.postId,
                     commentId: widget.comment.commentId,
                     currentUserId: widget.myId);
               } else {
                 widget.comment.likes.add(widget.myId);
                 context.read<LikeCommentCubit>().likeComment(
+                    isReel: widget.isReel,
                     postId: widget.comment.postId,
                     commentId: widget.comment.commentId,
                     currentUserId: widget.myId);

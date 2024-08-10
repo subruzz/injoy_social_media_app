@@ -20,7 +20,7 @@ class CreateTextStatusBackground extends StatelessWidget {
             child: Center(
                 child: TextStatusInputField(
                     controller: captionController,
-                    hintText: 'Write your thought\n with others')),
+                  )),
           ),
            EachColorRow(colorCubit: colorCubit,),
         ],

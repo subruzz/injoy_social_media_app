@@ -42,7 +42,7 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
           userProfileUrl: event.userProfileUrl,
           postImageUrl: const []);
       final res = await _createPostsUseCase(
-          CreatePostsUseCaseParams(post: newPost, image: event.postPics));
+          CreatePostsUseCaseParams(post: newPost, image: event.postPics,isReel: event.isReel));
       res.fold((failure) => emit(CreatePostFailure(errorMsg: failure.details)),
           (success) => emit(CreatePostSuccess()));
     });

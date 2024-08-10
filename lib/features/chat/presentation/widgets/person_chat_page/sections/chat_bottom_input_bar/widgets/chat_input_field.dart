@@ -13,7 +13,7 @@ import 'package:social_media_app/features/chat/presentation/cubits/messages_cubi
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/reply_preview_widget.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 
-import '../../../../../../../../core/const/message_type.dart';
+import '../../../../../../../../core/const/enums/message_type.dart';
 
 class ChatInputField extends StatelessWidget {
   const ChatInputField({

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/animation/animations.dart';
+import 'package:social_media_app/core/widgets/animation/animations.dart';
 
 import '../../../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../../../core/const/assets/app_assets.dart';

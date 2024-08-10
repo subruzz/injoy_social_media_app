@@ -1,20 +1,24 @@
-
 import 'package:flutter/material.dart';
+
+import '../../../../../../../../core/extensions/localization.dart';
 
 class DescriptionTextfield extends StatelessWidget {
   const DescriptionTextfield(
       {super.key,
       required this.descriptionController,
-      required this.onChanged});
+      required this.onChanged,
+      required this.l10n});
   final TextEditingController descriptionController;
-  final  Function(String value) onChanged;
+  final Function(String value) onChanged;
+  final AppLocalizations l10n;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: descriptionController,
-      decoration: const InputDecoration(
+      decoration:  InputDecoration(
         focusedBorder: InputBorder.none,
-        hintText: 'Write a caption and add hashtags...',
+        hintText: l10n.writeCaptionAndHashtag,
         border: InputBorder.none,
         filled: false,
       ),

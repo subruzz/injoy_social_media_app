@@ -9,6 +9,7 @@ sealed class DeletePostEvent extends Equatable {
 
 final class DeletePost extends DeletePostEvent {
   final String postId;
+  final bool isReel;
 
-  const DeletePost({required this.postId});
+  const DeletePost({required this.postId, required this.isReel});
 }

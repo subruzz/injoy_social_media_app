@@ -8,6 +8,7 @@ import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapap
 import 'package:social_media_app/features/explore/presentation/blocs/follow_hashtag/follow_hashtag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_hash_tag_posts_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/like_comment/like_comment_cubit.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/save_post/save_post_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/settings/presentation/cubit/settings/settings_cubit.dart';
@@ -38,6 +39,9 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(create: (context) => AppLanguageCubit()),
   BlocProvider(
     create: (context) => serviceLocator<ProfileBloc>(),
+  ),
+  BlocProvider(
+    create: (context) => serviceLocator<SavePostCubit>(),
   ),
   BlocProvider(
     create: (context) => serviceLocator<AppUserBloc>(),
@@ -99,9 +103,7 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<WhoVisitedBloc>(),
   ),
-  BlocProvider(
-    create: (context) => serviceLocator<AlbumBloc>(),
-  ),
+  
   BlocProvider(
     create: (context) => serviceLocator<SettingsCubit>(),
   ),

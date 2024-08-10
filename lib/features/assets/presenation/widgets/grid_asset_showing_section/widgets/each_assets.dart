@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/core/const/messenger.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/utils/haptic_feedback.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/cubit/asset_file_cubit.dart';
@@ -38,7 +38,8 @@ class _AssetItemsState extends State<AssetItems> {
   }
 
   void onselect() {
-    if (widget.mediaPickerType == MediaPickerType.wallapaper) return;
+    if (widget.mediaPickerType == MediaPickerType.wallapaper ||
+        widget.mediaPickerType == MediaPickerType.reels) return;
     setState(() {
       if (isSelected) {
         widget.mainAsset!.value = widget.assetEntity;
@@ -67,7 +68,8 @@ class _AssetItemsState extends State<AssetItems> {
     return GestureDetector(
       onLongPress: onselect,
       onTap: () {
-        if (widget.mediaPickerType == MediaPickerType.wallapaper) {
+        if (widget.mediaPickerType == MediaPickerType.wallapaper ||
+            widget.mediaPickerType == MediaPickerType.reels) {
           context
               .read<AssetFileCubit>()
               .assetToFile(selctedAssets: [widget.assetEntity]);

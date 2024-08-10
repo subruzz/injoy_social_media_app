@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/localization.dart';
@@ -15,7 +14,7 @@ import 'package:social_media_app/features/profile/presentation/pages/user_profil
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/user_social_action_details_section/user_social_action_details_section.dart';
 import 'package:social_media_app/features/settings/presentation/pages/settings_page.dart';
 
-import '../../../../../core/const/app_info_dialog.dart';
+import '../../../../../core/widgets/dialog/app_info_dialog.dart';
 import '../../../../../core/routes/app_routes_const.dart';
 import '../../../../../core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../../../core/widgets/premium_badge.dart';
