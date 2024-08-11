@@ -7,7 +7,7 @@ import '../../../../core/common/models/partial_user_model.dart';
 import '../../../../core/common/models/post_model.dart';
 
 abstract interface class ReelsDataSource {
-  Future<List<PostEntity>> getRandomReels(String myId);
+  Future<List<PostEntity>> getRandomReels(String myId, DocumentSnapshot? lastDocument);
 }
 
 class ReelsDataSourceImpl implements ReelsDataSource {
@@ -16,45 +16,36 @@ class ReelsDataSourceImpl implements ReelsDataSource {
   ReelsDataSourceImpl({required this.firestore});
 
   @override
-  Future<List<PostEntity>> getRandomReels(String myId) async {
+  Future<List<PostEntity>> getRandomReels(String myId, DocumentSnapshot? lastDocument) async {
     List<PostEntity> reels = [];
 
     try {
-      // Fetch a batch of reels
-      final QuerySnapshot<Map<String, dynamic>> reelsQuerySnapshot =
-          await firestore
-              .collection('reels')
-              .orderBy('createAt',
-                  descending: true) // Assuming you have a createdAt field
-              .limit(10) // Adjust the limit as needed
-              .get();
+      Query<Map<String, dynamic>> query = firestore
+          .collection('reels')
+          .orderBy('createAt', descending: true) // Assuming you have a createdAt field
+          .limit(10); // Adjust the limit as needed
 
-      // Iterate through each reel and fetch associated user details
+      if (lastDocument != null) {
+        query = query.startAfterDocument(lastDocument);
+      }
+
+      final QuerySnapshot<Map<String, dynamic>> reelsQuerySnapshot = await query.get();
+
       for (var reelDoc in reelsQuerySnapshot.docs) {
         final String creatorUid = reelDoc['creatorUid'];
 
-        // Fetch the user document associated with the reel
-        final DocumentSnapshot<Map<String, dynamic>> userDoc =
-            await firestore.collection('users').doc(creatorUid).get();
+        final DocumentSnapshot<Map<String, dynamic>> userDoc = await firestore.collection('users').doc(creatorUid).get();
 
         if (userDoc.exists) {
-          // Convert user document to PartialUser entity
           final PartialUser user = PartialUser.fromJson(userDoc.data()!);
-
-          // Convert reel document to PostEntity (or PostModel) including user details
           final PostEntity reel = PostModel.fromJson(reelDoc.data(), user);
-
-          // Add the reel to the list
           reels.add(reel);
         }
       }
 
-      // Shuffle the reels to randomize the order
       reels.shuffle(Random());
-
       return reels;
     } catch (e) {
-      // Handle errors
       throw const MainException();
     }
   }

@@ -194,7 +194,6 @@ class MessageCubit extends Cubit<MessageState> {
         totalUnReadMessages: 0,
         createdAt: Timestamp.now());
     final file = File(audioPath);
-    final fileData = await File(audioPath).readAsBytes();
 
     final newMessage = MessageEntity(
       isDeleted: false,
@@ -203,7 +202,6 @@ class MessageCubit extends Cubit<MessageState> {
       isEdited: false,
       assetPath: SelectedByte(
         mediaType: MediaType.audio,
-        selectedByte: fileData,
         selectedFile: file,
       ),
       deletedAt: null,

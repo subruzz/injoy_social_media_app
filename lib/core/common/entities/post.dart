@@ -19,11 +19,12 @@ class PostEntity extends Equatable {
   final double? latitude;
   final double? longitude;
   final String? location;
-
+  final String? extra;
   PostEntity(
       {required this.postId,
       required this.isEdited,
       required this.likesCount,
+      this.extra,
       required this.isCommentOff,
       required this.creatorUid,
       required this.userFullName,
@@ -54,6 +55,7 @@ class PostEntity extends Equatable {
         latitude,
         location,
         longitude,
-        isCommentOff,isEdited
+        isCommentOff,
+        isEdited
       ];
 }

@@ -15,7 +15,7 @@ class ReelsRepoImpl implements ReelsRepository {
   @override
   Future<Either<Failure, List<PostEntity>>> getRandomReels(String myId) async {
     try {
-      final res = await _reelsDataSource.getRandomReels(myId);
+      final res = await _reelsDataSource.getRandomReels(myId,null);
       return right(res);
     } on MainException catch (e) {
       return left(Failure());

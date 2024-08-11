@@ -25,7 +25,6 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
   @override
   Future<PostsResult> fetchFollowedPosts(String userId, List<String> following,
       {int limit = 4, DocumentSnapshot? lastDoc}) async {
-    log('user id is $userId');
     if (following.isEmpty) {
       return PostsResult(posts: [], hasMore: false, lastDoc: null);
     }
@@ -68,14 +67,11 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
         lastDoc: allPosts.docs.isNotEmpty ? allPosts.docs.last : null,
       );
     } catch (e) {
-      log("Invalid argument error: ${e.toString()}"); // Log the specific error message
-      // Optionally: You could refetch the last document or handle the error differently
 
       throw const MainException(errorMsg: AppErrorMessages.postFetchError);
     }
   }
 
-// Function to calculate distance between two GeoPoints (in kilometers)
   double calculateDistance(
       double? lat1, double? lon1, double? lat2, double? lon2) {
     if (lat1 == null || lon1 == null || lat2 == null || lon2 == null) {
@@ -173,7 +169,6 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
         final data = doc.data() as Map<String, dynamic>?;
 
         if (data == null) continue;
-        print('following is $following');
         final id = data['id'];
         if (id == null || following.contains(id)) continue;
 

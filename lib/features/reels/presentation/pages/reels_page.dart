@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,12 +15,13 @@ import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_comment_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_like_button.dart';
-import 'package:social_media_app/features/reels/presentation/reels/reels_cubit.dart';
+import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cubit.dart';
 import 'package:video_player/video_player.dart';
 
 class ReelsPage extends StatefulWidget {
-  const ReelsPage({super.key});
-
+  const ReelsPage({super.key, this.initialIndex = 0, this.availableReels});
+  final int initialIndex;
+  final List<PostEntity>? availableReels;
   @override
   State<ReelsPage> createState() => _ReelsPageState();
 }
@@ -29,34 +29,49 @@ class ReelsPage extends StatefulWidget {
 class _ReelsPageState extends State<ReelsPage> {
   @override
   Widget build(BuildContext context) {
-    log(MediaQuery.of(context).size.height.toString());
     return Scaffold(
-      backgroundColor: Colors.black,
+      extendBody: true,
       body: SafeArea(
-        child: BlocBuilder<ReelsCubit, ReelsState>(
-          builder: (context, state) {
-            if (state is ReelsFailure) {
-              return const AppErrorGif();
-            }
-            if (state is ReelsSuccess) {
-              return PageView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: state.reels.length,
-                itemBuilder: (context, index) {
-                  return Stack(
-                    children: [
-                      SizedBox(
-                          height: double.infinity,
-                          child: ReelsItem(reel: state.reels[index])),
-                    ],
-                  );
+        child: widget.availableReels != null
+            ? ReelsPageView(
+                reels: widget.availableReels!,
+                initialIndex: widget.initialIndex)
+            : BlocBuilder<ReelsCubit, ReelsState>(
+                builder: (context, state) {
+                  if (state is ReelsFailure) {
+                    return const AppErrorGif();
+                  }
+                  if (state is ReelsSuccess) {
+                    return ReelsPageView(
+                        reels: state.reels, initialIndex: widget.initialIndex);
+                  }
+                  return loadingWidget();
                 },
-              );
-            }
-            return loadingWidget();
-          },
-        ),
+              ),
       ),
+    );
+  }
+}
+
+class ReelsPageView extends StatelessWidget {
+  const ReelsPageView(
+      {super.key, required this.reels, required this.initialIndex});
+  final List<PostEntity> reels;
+  final int initialIndex;
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      controller: PageController(initialPage: initialIndex),
+      scrollDirection: Axis.vertical,
+      itemCount: reels.length,
+      itemBuilder: (context, index) {
+        return Stack(
+          children: [
+            SizedBox(
+                height: double.infinity, child: ReelsItem(reel: reels[index])),
+          ],
+        );
+      },
     );
   }
 }
@@ -82,11 +97,9 @@ class _ReelsItemState extends State<ReelsItem> {
         Uri.parse(widget.reel.postImageUrl.first))
       ..initialize().then((_) {
         if (mounted) {
-          setState(() {
-            _videoPlayerController.setLooping(true);
-            _videoPlayerController.setVolume(1);
-            _videoPlayerController.play();
-          });
+          _videoPlayerController.setLooping(true);
+          _videoPlayerController.setVolume(1);
+          _videoPlayerController.play();
         }
       });
     _initializeVideoPlayerFuture = _videoPlayerController.initialize();
@@ -94,9 +107,7 @@ class _ReelsItemState extends State<ReelsItem> {
 
   @override
   void dispose() {
-    if (_videoPlayerController.value.isInitialized) {
-      _videoPlayerController.dispose();
-    }
+    _videoPlayerController.dispose();
     super.dispose();
   }
 

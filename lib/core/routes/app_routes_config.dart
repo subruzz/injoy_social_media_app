@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/features/assets/presenation/pages/custom_media_picker_page.dart';
@@ -66,8 +67,7 @@ class MyAppRouter {
             builder: (_) => const BottonNavWithAnimatedIcons());
 
       case MyAppRouteConst.addProfilePage:
-        return MaterialPageRoute(
-            builder: (_) => AddProfilePage());
+        return MaterialPageRoute(builder: (_) => AddProfilePage());
 
       case MyAppRouteConst.interestSelectRoute:
         final List<String>? interest = settings.arguments as List<String>?;
@@ -118,11 +118,10 @@ class MyAppRouter {
       case MyAppRouteConst.otherUserProfile:
         final Map<String, dynamic> params =
             settings.arguments as Map<String, dynamic>;
-        final String userName = params['userName'];
-        final String otherUserId = params['otherUserId'];
+        final PartialUser user = params['user'];
+
         return MaterialPageRoute(
-          builder: (_) => OtherUserProfilePage(
-              userName: userName, otherUserId: otherUserId),
+          builder: (_) => OtherUserProfilePage(user: user),
         );
 
       case MyAppRouteConst.hashtagPostsRoute:

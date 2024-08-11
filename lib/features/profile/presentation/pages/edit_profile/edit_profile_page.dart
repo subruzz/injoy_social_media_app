@@ -18,7 +18,7 @@ import 'package:social_media_app/features/profile/presentation/bloc/user_profile
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/edit_profile.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_profile_img.dart';
 
-import '../../../../../core/services/image_picker.dart';
+import '../../../../../core/services/assets/image_picker.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({

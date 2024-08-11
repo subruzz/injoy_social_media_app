@@ -10,16 +10,14 @@ import 'package:social_media_app/features/explore/presentation/pages/explore_pag
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/personal_profile_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/core/utils/rive/model.dart';
-import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:social_media_app/features/reels/presentation/pages/reels_page.dart';
-import 'package:social_media_app/features/reels/presentation/reels/reels_cubit.dart';
+import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
+import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cubit.dart';
 import 'package:social_media_app/init_dependecies.dart';
 
 import '../../../chat/presentation/cubits/chat/chat_cubit.dart';
 import '../../../explore/presentation/blocs/explore_user/explore_user_cubit.dart';
-import '../../../notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import '../../../post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
-import '../../../profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 import '../../../status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
 import '../../../status/presentation/bloc/get_my_status/get_my_status_bloc.dart';
 
@@ -77,9 +75,8 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
   List<Widget> pages = [
     const HomePage(),
     const ExplorePageBuilder(),
-    ChatMainTabPage(),
-    const NotificationPage(),
-    const ReelsPage(),
+    const VideoReelPage(),
+    const ChatMainTabPage(),
     const PersonalProfilePage()
   ];
 
@@ -115,16 +112,12 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
         stateMachineName: "SEARCH_Interactivity"),
     RiveModel(
         src: "assets/animated-icons.riv",
-        artboard: "CHAT",
-        stateMachineName: "CHAT_Interactivity"),
-    RiveModel(
-        src: "assets/animated-icons.riv",
-        artboard: "BELL",
-        stateMachineName: "BELL_Interactivity"),
-    RiveModel(
-        src: "assets/animated-icons.riv",
         artboard: "TIMER",
         stateMachineName: "TIMER_Interactivity"),
+    RiveModel(
+        src: "assets/animated-icons.riv",
+        artboard: "CHAT",
+        stateMachineName: "CHAT_Interactivity"),
     RiveModel(
         src: "assets/animated-icons.riv",
         artboard: "USER",
@@ -164,11 +157,6 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
           BlocProvider(
               create: (context) => serviceLocator<ChatCubit>()
                 ..getMyChats(myId: context.read<AppUserBloc>().appUser.id)),
-          BlocProvider(
-            create: (context) => serviceLocator<NotificationCubit>()
-              ..getMynotifications(
-                  myId: context.read<AppUserBloc>().appUser.id),
-          ),
         ],
         child: BlocBuilder<BottomNavCubit, BottomNavState>(
             builder: (context, state) {

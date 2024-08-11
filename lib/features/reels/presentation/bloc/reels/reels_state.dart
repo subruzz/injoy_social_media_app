@@ -15,6 +15,7 @@ final class ReelsFailure extends ReelsState {}
 
 final class ReelsSuccess extends ReelsState {
   final List<PostEntity> reels;
+  final DocumentSnapshot? lastDocument;
 
- const ReelsSuccess({required this.reels});
+ const ReelsSuccess({required this.reels,this.lastDocument});
 }

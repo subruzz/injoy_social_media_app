@@ -6,7 +6,7 @@ import 'package:social_media_app/core/const/fireabase_const/firebase_collection.
 import 'package:social_media_app/core/const/fireabase_const/firebase_field_const.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
 import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/utils/compress_image.dart';
+import 'package:social_media_app/core/services/assets/compress_image.dart';
 import 'package:social_media_app/core/utils/id_generator.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
@@ -156,24 +156,24 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
           .child(FirebaseFirestoreConst.statusImages)
           .child(uId);
 
-      for (var image in postImages) {
-        //get the  file from the AssetEntity
+      // for (var image in postImages) {
+      //   //get the  file from the AssetEntity
 
-        // Compress the image; resulting type will be Uint8List
-        final data = await testComporessList(image.selectedByte);
-        //generating unique id
-        String imageId = IdGenerator.generateUniqueId();
-        // Upload the compressed image data to Firebase Storage
-        UploadTask task = ref.child(imageId).putData(data);
-        TaskSnapshot snapshot = await task;
+      //   // Compress the image; resulting type will be Uint8List
+      //   final data = await testComporessList(image.selectedByte);
+      //   //generating unique id
+      //   String imageId = IdGenerator.generateUniqueId();
+      //   // Upload the compressed image data to Firebase Storage
+      //   UploadTask task = ref.child(imageId).putData(data);
+      //   TaskSnapshot snapshot = await task;
 
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        //add the  image id with its download url to list
-        postImageUrls.add({
-          'imageId': imageId,
-          'downloadUrl': downloadUrl,
-        });
-      }
+      //   String downloadUrl = await snapshot.ref.getDownloadURL();
+      //   //add the  image id with its download url to list
+      //   postImageUrls.add({
+      //     'imageId': imageId,
+      //     'downloadUrl': downloadUrl,
+      //   });
+      // }
 
       return postImageUrls;
     } catch (e) {

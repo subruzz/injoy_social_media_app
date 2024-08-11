@@ -2,40 +2,41 @@ import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 
 class PostModel extends PostEntity {
-  PostModel({
-    required super.postId,
-    required super.creatorUid,
-    required super.username,
-    super.description,
-    required super.likesCount,
-    required super.postImageUrl,
-    required super.userFullName,
-    required super.likes,
-    required super.totalComments,
-    required super.createAt,
-    super.userProfileUrl,
-    required super.hashtags,
-    super.latitude,
-    super.location,
-    super.longitude,
-    required super.isCommentOff,
-    required super.isEdited,
-  });
+  PostModel(
+      {required super.postId,
+      required super.creatorUid,
+      required super.username,
+      super.description,
+      required super.likesCount,
+      required super.postImageUrl,
+      required super.userFullName,
+      required super.likes,
+      required super.totalComments,
+      required super.createAt,
+      super.userProfileUrl,
+      required super.hashtags,
+      super.latitude,
+      super.location,
+      super.longitude,
+      required super.isCommentOff,
+      required super.isEdited,
+      super.extra});
 
   // 1. From JSON (Firestore)
   factory PostModel.fromJson(
       Map<String, dynamic> json, PartialUser partialUser) {
     return PostModel(
+      extra: json['extra'],
       isEdited: json['isEdited'],
       likesCount: json['likesCount'],
       isCommentOff: json['isCommentOff'],
-      userFullName: partialUser.fullName??'',
+      userFullName: partialUser.fullName ?? '',
       latitude: json['latitude'],
       longitude: json['longitude'],
       location: json['location'],
       postId: json['postId'],
       creatorUid: json['creatorUid'],
-      username:  partialUser.userName??'',
+      username: partialUser.userName ?? '',
       description: json['description'],
       postImageUrl: List<String>.from(json['postImageUrl'] ?? []),
       likes: List<String>.from(json['likes'] ?? []),
@@ -49,6 +50,7 @@ class PostModel extends PostEntity {
   // 2. To JSON (Firestore)
   Map<String, dynamic> toJson() {
     return {
+      'extra': extra,
       'isEdited': isEdited,
       'likesCount': likesCount,
       'isCommentOff': isCommentOff,

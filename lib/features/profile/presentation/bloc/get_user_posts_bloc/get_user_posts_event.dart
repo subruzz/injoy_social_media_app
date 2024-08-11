@@ -8,9 +8,9 @@ sealed class GetUserPostsEvent extends Equatable {
 }
 
 final class GetUserPostsrequestedEvent extends GetUserPostsEvent {
-  final String uid;
+  final PartialUser user;
 
-  const GetUserPostsrequestedEvent({required this.uid});
+  const GetUserPostsrequestedEvent({required this.user});
 }
 
 final class GetUserPostsAterPostUpdate extends GetUserPostsEvent {

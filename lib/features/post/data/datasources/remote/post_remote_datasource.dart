@@ -3,18 +3,19 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/hashtag_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
-import 'package:social_media_app/core/utils/compress_image.dart';
-import 'package:social_media_app/core/utils/id_generator.dart';
+import 'package:social_media_app/core/services/firebase/firebase_storage.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/explore/data/model/explore_seearch_location_model.dart';
 import 'package:social_media_app/features/post/data/models/update_post_model.dart';
 import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/post/domain/enitities/update_post.dart';
+import 'package:social_media_app/init_dependecies.dart';
 
 abstract interface class PostRemoteDatasource {
   Future<void> createPost(
@@ -29,8 +30,6 @@ abstract interface class PostRemoteDatasource {
   Future<void> savePosts(String postId);
 
   Future<List<HashTag>> searchHashTags(String query);
-  Future<List<String>> uploadPostImages(
-      List<SelectedByte> postImages, String pId, bool isReel);
 }
 
 class PostRemoteDataSourceImpl implements PostRemoteDatasource {
@@ -43,17 +42,33 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   @override
   Future<void> createPost(
       PostEntity post, List<SelectedByte> postImage, bool isReel) async {
-    final postCollection =
-        FirebaseFirestore.instance.collection(isReel ? 'reels' : 'posts');
-    final hashtagCollection = FirebaseFirestore.instance.collection('hashtags');
-    final locationCollection =
-        FirebaseFirestore.instance.collection('locations');
+    if (postImage.isEmpty) return;
+    final postCollection = FirebaseFirestore.instance.collection(
+        isReel ? FirebaseCollectionConst.reels : FirebaseCollectionConst.posts);
+    final hashtagCollection =
+        FirebaseFirestore.instance.collection(FirebaseCollectionConst.hashTags);
+    final locationCollection = FirebaseFirestore.instance
+        .collection(FirebaseCollectionConst.locations);
 
     try {
-      final postUrls = await uploadPostImages(postImage, post.postId, isReel);
+      final refToAsset = !isReel
+          ? '${FirebaseFirestoreConst.postPath}/${post.creatorUid}/${FirebaseFirestoreConst.postPath}'
+          : '${FirebaseFirestoreConst.reelPath}/${post.creatorUid}/${FirebaseFirestoreConst.reelPath}';
+      final assetItem = await serviceLocator<FirebaseStorageService>()
+          .uploadListOfAssets(
+              assets: postImage,
+              reference: refToAsset,
+              isPhoto: !isReel,
+              needThumbnail: isReel);
+      if ((isReel && assetItem.url == null) ||
+          !isReel && assetItem.urls.isEmpty) {
+        log('here');
+        throw const MainException();
+      }
       final newPost = PostModel(
           isEdited: false,
           likesCount: 0,
+          extra: assetItem.extra,
           isCommentOff: post.isCommentOff,
           userFullName: post.userFullName,
           postId: post.postId,
@@ -68,7 +83,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
           location: post.location,
           hashtags: post.hashtags,
           userProfileUrl: post.userProfileUrl,
-          postImageUrl: postUrls);
+          postImageUrl: isReel ? [assetItem.url!] : assetItem.urls);
 
       final hashtags = post.hashtags;
       // Update the hashtags collection
@@ -253,52 +268,6 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
       return hashTags;
     } catch (e) {
       throw MainException(details: e.toString());
-    }
-  }
-
-  @override
-  Future<List<String>> uploadPostImages(
-      List<SelectedByte> postImages, String uId, bool isReel) async {
-    try {
-      //if not status images is picked return empty list
-      if (postImages.isEmpty) {
-        return [];
-      }
-
-      Reference ref = firebaseStorage
-          .ref()
-          .child(FirebaseFirestoreConst.postImages)
-          .child(uId);
-      List<String> postImageUrls = [];
-      String imageId = IdGenerator.generateUniqueId();
-
-      if (isReel) {
-        UploadTask task =
-            ref.child(imageId).putFile(postImages.first.selectedFile!);
-        TaskSnapshot snapshot = await task;
-
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        postImageUrls.add(downloadUrl);
-        return postImageUrls;
-      }
-      for (var image in postImages) {
-        //get the  file from the AssetEntity
-        // Compress the image; resulting type will be Uint8List
-        final data = await testComporessList(image.selectedByte);
-        //generating unique id
-        // Upload the compressed image data to Firebase Storage
-        UploadTask task = ref.child(imageId).putData(data);
-        TaskSnapshot snapshot = await task;
-
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        postImageUrls.add(downloadUrl);
-      }
-
-      return postImageUrls;
-    } catch (e) {
-      log('error iffs ${e.toString()}');
-
-      throw Exception();
     }
   }
 

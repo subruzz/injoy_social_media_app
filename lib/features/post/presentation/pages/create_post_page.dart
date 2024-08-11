@@ -54,6 +54,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log(' we hvae this muchh ${widget.selectedImages}');
     final l10n = context.l10n;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -96,8 +97,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               Messenger.showSnackBar(message: l10n.postAddError);
             }
             if (state is CreatePostSuccess) {
-              context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
-                  uid: context.read<AppUserBloc>().appUser.id));
+              // context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
+              //     uid: context.read<AppUserBloc>().appUser.id));
               Navigator.popUntil(
                 context,
                 (route) => route.isFirst,

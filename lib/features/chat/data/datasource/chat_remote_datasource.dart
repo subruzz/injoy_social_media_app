@@ -267,7 +267,7 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
 
       Reference ref = _firebaseStorage.ref().child('chatImages').child(path);
 
-      UploadTask task = ref.child(id).putData(assetPath.selectedByte);
+      UploadTask task = ref.child(id).putFile(assetPath.selectedFile!);
       TaskSnapshot snapshot = await task;
 
       String downloadUrl = await snapshot.ref.getDownloadURL();

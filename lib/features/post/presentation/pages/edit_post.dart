@@ -74,11 +74,11 @@ class _EditPostPageState extends State<EditPostPage> {
                 Messenger.showSnackBar(message: state.errorMsg);
               }
               if (state is UpdatePostSuccess) {
-                context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
-                    uid: context
-                        .read<AppUserBloc>()
-                        .appUser
-                        .id)); // context.read<GetUserPostsBloc>().add(GetUserPostsAterPostUpdate(
+                // context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
+                //     uid: context
+                //         .read<AppUserBloc>()
+                //         .appUser
+                //         .id)); // context.read<GetUserPostsBloc>().add(GetUserPostsAterPostUpdate(
                 //     userAllPostImages: widget.userAllPostImages,
                 //     updatedPost: state.updatePost,
                 //     index: widget.index,

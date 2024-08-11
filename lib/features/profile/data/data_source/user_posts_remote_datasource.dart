@@ -7,18 +7,19 @@ import 'package:social_media_app/core/common/models/post_model.dart';
 
 abstract class UserPostsRemoteDataSource {
   Future<({List<PostModel> userPosts, List<String> userPostImages})>
-      getAllPostsByUser(String userId);
+      getAllPostsByUser(PartialUser user);
   Future<List<PostModel>> getMyLikedPosts(String myId);
+  Future<List<PostModel>> getShorts(PartialUser user);
 }
 
 class UserPostsRemoteDatasourceImpl implements UserPostsRemoteDataSource {
   @override
   Future<({List<PostModel> userPosts, List<String> userPostImages})>
-      getAllPostsByUser(String userId) async {
+      getAllPostsByUser(PartialUser user) async {
     try {
       final userDoc = await FirebaseFirestore.instance
           .collection('users')
-          .doc(userId)
+          .doc(user.id)
           .get();
       if (!userDoc.exists) {
         throw const MainException();
@@ -27,7 +28,7 @@ class UserPostsRemoteDatasourceImpl implements UserPostsRemoteDataSource {
 
       final posts = await FirebaseFirestore.instance
           .collection('posts')
-          .where("creatorUid", isEqualTo: userId)
+          .where("creatorUid", isEqualTo: user.id)
           .orderBy('createAt', descending: true)
           .get();
       List<String> postImages = [];
@@ -81,6 +82,40 @@ class UserPostsRemoteDatasourceImpl implements UserPostsRemoteDataSource {
       // return posts.where((post) => post != null).cast<PostModel>().toList();
     } catch (e) {
       throw const MainException();
+    }
+  }
+
+  @override
+  Future<List<PostModel>> getShorts(PartialUser user) async {
+    try {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.id)
+          .get();
+
+      if (!userDoc.exists) {
+        throw const MainException();
+      }
+      final postsSnapshot = await FirebaseFirestore.instance
+          .collection('reels')
+          .where("creatorUid", isEqualTo: user.id)
+          .orderBy('createAt', descending: true)
+          .get();
+
+      return postsSnapshot.docs.map((doc) {
+        return PostModel.fromJson(
+          doc.data(),
+          PartialUser(
+            id: user.id,
+            userName: user.userName ?? '',
+            profilePic: user.profilePic,
+            fullName: user.fullName,
+          ),
+        );
+      }).toList();
+    } catch (e) {
+      log('erris is ${e.toString()}');
+      throw const MainException(errorMsg: 'Error while loading the posts!');
     }
   }
 }

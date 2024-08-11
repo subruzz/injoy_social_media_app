@@ -18,13 +18,11 @@ class SelectedImagesDetails {
 
 class SelectedByte {
   File? selectedFile; // File may be null for web
-  Uint8List selectedByte;
   MediaType mediaType;
 
   SelectedByte({
     required this.mediaType,
     this.selectedFile, // Optional for web
-    required this.selectedByte,
   });
 }
 

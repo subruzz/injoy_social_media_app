@@ -128,9 +128,9 @@ class PostOptionsBottomShett {
               BlocListener<DeletePostBloc, DeletePostState>(
                 listener: (context, state) {
                   if (state is DeletePostSuccess) {
-                    context.read<GetUserPostsBloc>().add(
-                        GetUserPostsrequestedEvent(
-                            uid: context.read<AppUserBloc>().appUser.id));
+                    // context.read<GetUserPostsBloc>().add(
+                    //     GetUserPostsrequestedEvent(
+                    //         uid: context.read<AppUserBloc>().appUser.id));
                     Navigator.pop(context);
                   }
                 },

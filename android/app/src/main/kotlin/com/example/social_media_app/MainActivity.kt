@@ -1,5 +1,21 @@
+
 package com.example.social_media_app
 
+import android.os.Bundle
 import io.flutter.embedding.android.FlutterFragmentActivity
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
 
-class MainActivity: FlutterFragmentActivity()
+class MainActivity : FlutterFragmentActivity() {
+    private val CHANNEL_VIDEO_THUMBNAIL = "plugins.justsoft.xyz/video_thumbnail"
+
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        super.configureFlutterEngine(flutterEngine)
+
+        // Initialize the video thumbnail channel
+        val videoThumbnailChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL_VIDEO_THUMBNAIL)
+        VideoThumbnailChannel(this, videoThumbnailChannel)
+
+        // You can initialize more MethodChannels here if needed...
+    }
+}

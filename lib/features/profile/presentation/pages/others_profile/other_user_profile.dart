@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/app_error_gif.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/extensions/localization.dart';
@@ -18,10 +19,11 @@ import 'package:social_media_app/features/who_visited_premium_feature/presentati
 import 'package:social_media_app/init_dependecies.dart';
 
 class OtherUserProfilePage extends StatefulWidget {
-  const OtherUserProfilePage(
-      {super.key, required this.userName, required this.otherUserId});
-  final String userName;
-  final String otherUserId;
+  const OtherUserProfilePage({
+    super.key,
+    required this.user,
+  });
+  final PartialUser user;
 
   @override
   State<OtherUserProfilePage> createState() => _OtherUserProfilePageState();
@@ -33,7 +35,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
     super.initState();
     context.read<WhoVisitedBloc>().add(AddUserToVisited(
         myId: context.read<AppUserBloc>().appUser.id,
-        visitedUserId: widget.otherUserId));
+        visitedUserId: widget.user.id));
   }
 
   @override
@@ -44,16 +46,16 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
       providers: [
         BlocProvider(
           create: (context) => serviceLocator<OtherProfileCubit>()
-            ..getOtherProfile(widget.otherUserId),
+            ..getOtherProfile(widget.user.id),
         ),
         BlocProvider(
           create: (context) => serviceLocator<GetOtherUserPostsCubit>()
-            ..getOtherUserPosts(widget.otherUserId),
+            ..getOtherUserPosts(widget.user),
         ),
       ],
       child: Scaffold(
         appBar: ProfilePageTopBarSection(
-          userName: widget.userName,
+          userName: widget.user.userName,
           isMe: false,
         ),
         body: BlocConsumer<OtherProfileCubit, OtherProfileState>(
@@ -88,7 +90,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
                   ),
                   // TabBarView for displaying content of each tab
                   OtherUserPosts(
-                    userName: widget.userName,
+                    userName: widget.user.userName ?? '',
                   )
                 ],
               );

@@ -52,8 +52,8 @@ class DeleteConfirmationPopup extends StatelessWidget {
             listener: (context, state) {
               if (state is DeletePostSuccess) {
                 Navigator.pop(context);
-                context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
-                    uid: context.read<AppUserBloc>().appUser!.id));
+                // context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
+                //     uid: context.read<AppUserBloc>().appUser!.id));
                 Messenger.showSnackBar(message: 'Post Deleted');
               }
               if (state is DeletePostFailure) {

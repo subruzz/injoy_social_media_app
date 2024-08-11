@@ -18,7 +18,6 @@ Future<SelectedByte> convertAssetToSelectedByte(AssetEntity asset) async {
       return SelectedByte(
         mediaType: isImage ? MediaType.photo : MediaType.video,
         selectedFile: null, // No File support on web
-        selectedByte: fileData,
       );
     } else {
       // For mobile, use both File and Uint8List
@@ -31,7 +30,6 @@ Future<SelectedByte> convertAssetToSelectedByte(AssetEntity asset) async {
       return SelectedByte(
         mediaType: isImage ? MediaType.photo : MediaType.video,
         selectedFile: tempFile,
-        selectedByte: fileData,
       );
     }
   } catch (e) {

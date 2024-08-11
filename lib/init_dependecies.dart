@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/firebase_helper.dart';
+import 'package:social_media_app/core/services/firebase/firebase_storage.dart';
 import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/ai_chat/data/datasource/ai_chat_datasource.dart';
@@ -129,10 +130,12 @@ import 'package:social_media_app/features/profile/domain/usecases/follow_user.da
 import 'package:social_media_app/features/profile/domain/usecases/get_followers_list.dart';
 import 'package:social_media_app/features/profile/domain/usecases/get_following_list.dart';
 import 'package:social_media_app/features/profile/domain/usecases/get_other_user_details.dart';
+import 'package:social_media_app/features/profile/domain/usecases/get_user_shorts.dart';
 import 'package:social_media_app/features/profile/domain/usecases/unfollow_user.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_followers_list/get_followers_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_following_list/get_following_list_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/get_my_reels/get_my_reels_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_other_user_posts/get_other_user_posts_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_liked_posts/get_user_liked_posts_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_profile/other_profile_cubit.dart';
@@ -141,7 +144,7 @@ import 'package:social_media_app/features/reels/data/datasource/reels_data_sourc
 import 'package:social_media_app/features/reels/data/repostiroy/reels_repo_impl.dart';
 import 'package:social_media_app/features/reels/domain/repository/reels_repository.dart';
 import 'package:social_media_app/features/reels/domain/usecases/get_reels.dart';
-import 'package:social_media_app/features/reels/presentation/reels/reels_cubit.dart';
+import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cubit.dart';
 import 'package:social_media_app/features/settings/data/datasource/settings_datasource.dart';
 import 'package:social_media_app/features/settings/data/repository/setting_repo_impl.dart';
 import 'package:social_media_app/features/settings/domain/repository/settings_repository.dart';
@@ -213,9 +216,11 @@ Future<void> initDependencies() async {
   _chat();
   _aiChat();
   _reels();
+  _serviceClasses();
   serviceLocator.registerLazySingleton(
     () => AppUserBloc(),
   );
+
   serviceLocator.registerFactory(
       () => FirebaseHelper(firestore: FirebaseFirestore.instance));
   serviceLocator.registerFactory(() => FollowingCubit());
@@ -225,6 +230,11 @@ Future<void> initDependencies() async {
   //     followingCubit: serviceLocator(),
   //     followingPostFeedBloc: serviceLocator(),
   //     getUserPostsBloc: serviceLocator()));
+}
+
+void _serviceClasses() {
+  serviceLocator.registerLazySingleton(
+      () => FirebaseStorageService(firebaseStorage: FirebaseStorage.instance));
 }
 
 void _initAuth() {
@@ -389,7 +399,10 @@ void _getUserPosts() {
     ..registerFactory(() => GetUserPostsBloc(serviceLocator()))
     ..registerFactory(
         () => GetMyLikedPostsUseCase(userPostRepository: serviceLocator()))
-    ..registerFactory(() => GetUserLikedPostsCubit(serviceLocator()));
+    ..registerFactory(() => GetUserLikedPostsCubit(serviceLocator()))
+    ..registerFactory(
+        () => GetUserShortsUseCase(userPostRepository: serviceLocator()))
+    ..registerFactory(() => GetMyReelsCubit(serviceLocator()));
 }
 
 void _postFeed() {
