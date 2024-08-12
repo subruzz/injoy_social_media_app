@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/common_text_button.dart';

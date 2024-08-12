@@ -12,6 +12,7 @@ import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
 import '../../../../../core/const/enums/location_enum.dart';
+import '../../../../../core/const/enums/premium_type.dart';
 
 abstract interface class AuthRemoteDataSource {
   Future<AppUserModel> login(String email, String password);

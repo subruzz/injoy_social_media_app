@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_event.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_event.dart';
 import 'package:social_media_app/core/utils/haptic_feedback.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';

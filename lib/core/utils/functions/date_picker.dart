@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/extensions/datetime_to_string.dart';
+import 'package:social_media_app/core/const/extensions/datetime_to_string.dart';
 
 Future<String?> pickDate(BuildContext context) async {
   final DateTime? pickedDate = await showDatePicker(

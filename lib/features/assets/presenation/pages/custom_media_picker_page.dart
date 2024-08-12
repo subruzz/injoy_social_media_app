@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/extensions/localization.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';

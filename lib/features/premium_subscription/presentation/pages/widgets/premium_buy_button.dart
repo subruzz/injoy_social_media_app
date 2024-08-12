@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 
 import '../../../../../core/const/enums/location_enum.dart';
+import '../../../../../core/const/enums/premium_type.dart';
 import '../../../../../core/widgets/button/custom_elevated_button.dart';
 import '../../bloc/premium_subscription_bloc.dart';
 

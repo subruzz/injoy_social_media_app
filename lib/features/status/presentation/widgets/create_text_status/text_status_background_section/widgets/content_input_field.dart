@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/languages/app_languages.dart';
-import 'package:social_media_app/core/extensions/localization.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/animation/animated_text.dart';
 import 'package:social_media_app/core/widgets/animation/text_wavy_animation.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';

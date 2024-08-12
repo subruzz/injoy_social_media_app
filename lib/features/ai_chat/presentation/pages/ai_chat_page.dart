@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/sections/ai_chat_input/ai_chat_input.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/sections/ai_chat_top_bar/ai_chat_top_bar.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/sections/ai_chat_top_bar/widgets/ai_chat_drawer.dart';

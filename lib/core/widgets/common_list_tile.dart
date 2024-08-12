@@ -7,17 +7,20 @@ class CommonListTile extends StatelessWidget {
       {super.key,
       this.trailing,
       this.onTap,
+      this.iconSize = 20,
       this.noPadding = false,
+      this.extraColor,
       required this.text,
       this.subtitle,
       this.leading});
+  final double iconSize;
   final Widget? trailing;
   final String? subtitle;
   final String text;
   final bool noPadding;
   final String? leading;
   final VoidCallback? onTap;
-
+  final Color? extraColor;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -25,8 +28,9 @@ class CommonListTile extends StatelessWidget {
         leading: leading != null
             ? CustomSvgIcon(
                 assetPath: leading!,
-                height: 20,
-                width: 20,
+                height: iconSize,
+                width: iconSize,
+                color: extraColor,
               )
             : null,
         subtitle: subtitle != null
@@ -35,11 +39,14 @@ class CommonListTile extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
-                    ?.copyWith(fontSize: 10.sp),
+                    ?.copyWith(fontSize: 10.sp, color: extraColor),
               )
             : null,
         contentPadding: noPadding ? EdgeInsets.zero : null,
-        title: Text(text),
+        title: Text(
+          text,
+          style: TextStyle(color: extraColor),
+        ),
         trailing: trailing);
   }
 }

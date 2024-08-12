@@ -1,23 +1,16 @@
-/// The Flutter plugin for creating thumbnail from video
-///
-/// To use, import `package:video_thumbnail/video_thumbnail.dart`.
-///
-/// See also:
-///
-///  * [video_thumbnail](https://pub.dev/packages/video_thumbnail)
-///
+//This is from video thumbnail package
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
-
-/// Support most popular image formats.
-/// Uses libwebp to encode WebP image on iOS platform.
+//! This method channel is not necessary for this project 
+//! since we are already using PhotoManager. 
+//! Included here for learning purposes only.
+// ignore: constant_identifier_names
 enum ImageFormat { JPEG, PNG, WEBP }
 
 class VideoThumbnail {
   static const MethodChannel _channel =
-      const MethodChannel('plugins.justsoft.xyz/video_thumbnail');
+       MethodChannel('plugins.justsoft.xyz/video_thumbnail');
 
   /// Generates a thumbnail file under specified thumbnail folder or given full path and name which matches expected ext.
   /// The video can be a local video file, or an URL repreents iOS or Android native supported video format.

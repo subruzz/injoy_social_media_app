@@ -33,6 +33,7 @@ class _PostCommentButtonState extends State<PostCommentButton> {
                     onUpdate: (commentNum) {
                       setState(() {
                         commentCount = commentNum;
+                        widget.post.totalComments = commentNum;
                       });
                     },
                     post: widget.post,
@@ -48,6 +49,8 @@ class _PostCommentButtonState extends State<PostCommentButton> {
                 PostComment(
                     onUpdate: (commentNum) {
                       setState(() {
+                        widget.post.totalComments = commentNum;
+
                         commentCount = commentNum;
                       });
                     },

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/services/assets/asset_services.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/post_action_section.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_content_section/post_content_section.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/post_image_section.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_top_section/post_top_details.dart';
-
 
 class EachPost extends StatefulWidget {
   const EachPost({
@@ -39,6 +39,7 @@ class EachPost extends StatefulWidget {
 }
 
 class _EachPostState extends State<EachPost> {
+  final _postPageController = PageController();
   bool _isAnimating = false;
   @override
   Widget build(BuildContext context) {
@@ -47,7 +48,7 @@ class _EachPostState extends State<EachPost> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PostTopDetails(post: widget.currentPost),
+          PostTopDetails(post: widget.currentPost,pagecontroller: _postPageController,),
           AppSizedBox.sizedBox5W,
           GestureDetector(
             onTap: () {
@@ -79,7 +80,10 @@ class _EachPostState extends State<EachPost> {
                   postDesc: widget.currentPost.description,
                 ),
                 AppSizedBox.sizedBox5H,
-                PostImageSection(postImages: widget.currentPost.postImageUrl),
+                PostImageSection(
+                  postImages: widget.currentPost.postImageUrl,
+                  pagecontroller: _postPageController,
+                ),
                 AppSizedBox.sizedBox10H,
                 Align(
                     alignment: Alignment.centerRight,

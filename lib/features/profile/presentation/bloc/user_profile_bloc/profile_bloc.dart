@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_event.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_event.dart';
 import 'package:social_media_app/features/profile/domain/entities/user_profile.dart';
 import 'package:social_media_app/features/profile/domain/usecases/add_interest.dart';
 import 'package:social_media_app/features/profile/domain/usecases/check_username_exist.dart';

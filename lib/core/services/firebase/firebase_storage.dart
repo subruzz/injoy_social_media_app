@@ -1,10 +1,9 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:social_media_app/core/services/assets/compress_image.dart';
+import 'package:social_media_app/core/services/assets/asset_services.dart';
 import '../../../features/chat/presentation/widgets/person_chat_page/utils.dart';
-import '../../../video_thumbnail.dart';
+import '../method_channel.dart/video_thumbnail.dart';
 import '../../utils/id_generator.dart';
 
 class FirebaseStorageService {
@@ -72,7 +71,7 @@ class FirebaseStorageService {
       if (isPhoto) {
         String targetPath = '${directory.path}/compressed_$imageId.jpg';
 
-        compressedFile = await compressImage(asset, targetPath);
+        compressedFile = await AssetServices.compressImage(asset, targetPath);
       }
 
       // Create a unique reference for the file

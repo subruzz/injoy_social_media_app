@@ -6,9 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
-import 'package:social_media_app/core/extensions/localization.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/shared_providers/cubit/app_language/app_language_cubit.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/button/custom_button_with_icon.dart';
 

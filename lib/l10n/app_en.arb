@@ -53,7 +53,16 @@
   "postAddError": "There was an error adding your post. Please try again.",
   "justASecond": "Just a second!",
   "failedToLoadImage": "Failed to load Image",
-  "viewMedia": "View Media"
+  "viewMedia": "View Media",
+  "share": "Share",
+  "downloadMedia": "Download Media",
+  "addToFavorite": "Add to favorite",
+  "aboutThisAccount": "About this account",
+  "report": "Report",
+  "edit": "Edit",
+  "delete": "Delete",
+  "turnOffCommenting": "Turn off commenting",
+  "dontShowPostFromUser": "Don't show post from this user"
 
 
 

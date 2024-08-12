@@ -9,6 +9,8 @@ import 'package:social_media_app/features/premium_subscription/domain/entities/p
 import 'package:social_media_app/features/premium_subscription/domain/usecases/create_payment_intent.dart';
 import 'package:social_media_app/features/premium_subscription/domain/usecases/setup_stripe_for_payment.dart';
 
+import '../../../../core/const/enums/premium_type.dart';
+
 part 'premium_subscription_event.dart';
 part 'premium_subscription_state.dart';
 

@@ -5,7 +5,7 @@ import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/common/ai_gradeitn_text.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/common/ai_profile.dart';
 
-import '../../../../../../core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import '../../../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 
 class AiWelcome extends StatelessWidget {
   final String imagePath;

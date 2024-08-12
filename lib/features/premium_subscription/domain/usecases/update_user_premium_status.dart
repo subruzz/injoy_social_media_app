@@ -4,6 +4,7 @@ import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/premium_subscription/domain/repositories/premium_subscription_repository.dart';
 
 import '../../../../core/const/enums/location_enum.dart';
+import '../../../../core/const/enums/premium_type.dart';
 
 class UpdateUserPremiumStatusUseCase
     implements UseCase<Unit, UpdateUserPremiumStatusUseCaseParams> {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_my_reels/get_my_reels_cubit.dart';

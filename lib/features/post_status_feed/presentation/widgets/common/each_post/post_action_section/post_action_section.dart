@@ -5,7 +5,7 @@ import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_svg.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/save_post/save_post_cubit.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_comment_button.dart';
@@ -17,7 +17,7 @@ class SocialActions extends StatelessWidget {
       {super.key,
       this.isCommentOff = true,
       required this.post,
-      required this.likeAnim});
+      required this.likeAnim, });
   final PostEntity post;
   final VoidCallback likeAnim;
   final bool isCommentOff;

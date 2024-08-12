@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/post_option_section/widgets/post_feeds_options.dart';
 
-import '../../../../../../../core/extensions/localization.dart';
+import '../../../../../../../core/const/extensions/localization.dart';
 
 class PostOptionSection extends StatelessWidget {
   const PostOptionSection(

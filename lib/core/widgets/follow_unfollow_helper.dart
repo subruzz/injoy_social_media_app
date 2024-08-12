@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
-import 'package:social_media_app/core/extensions/localization.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 
 import '../../features/profile/presentation/bloc/follow_unfollow/followunfollow_cubit.dart';

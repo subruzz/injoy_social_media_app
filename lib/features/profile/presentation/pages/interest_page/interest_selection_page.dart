@@ -7,7 +7,7 @@ import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
 import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
 import 'package:social_media_app/core/const/interest_list.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/welcome_msg/welcome_msg.dart';

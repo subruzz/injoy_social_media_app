@@ -5,6 +5,7 @@ import 'package:social_media_app/features/premium_subscription/domain/entities/p
 import 'package:social_media_app/features/premium_subscription/domain/repositories/premium_subscription_repository.dart';
 
 import '../../../../core/const/enums/location_enum.dart';
+import '../../../../core/const/enums/premium_type.dart';
 
 class SetupStripeForPaymentUseCase
     implements UseCase<Unit, SetupStripeForPaymentUseCaseParams> {

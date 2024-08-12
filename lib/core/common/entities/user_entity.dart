@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:social_media_app/core/const/enums/location_enum.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
+
+import '../../const/enums/premium_type.dart';
 
 class AppUser extends Equatable {
   final String id;

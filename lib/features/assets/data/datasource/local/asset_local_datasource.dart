@@ -14,8 +14,8 @@ class AssetLocalSourceImpl implements AssetLocalSource {
   @override
   Future<List<AssetEntity>> loadAssets(AssetPathEntity selectedAlbum) async {
     try {
-      List<AssetEntity> assetList = await selectedAlbum.getAssetListRange(
-          start: 0, end: await selectedAlbum.assetCountAsync);
+      List<AssetEntity> assetList =
+          await selectedAlbum.getAssetListPaged(page: 0, size: 30);
       return assetList;
     } catch (e) {
       throw MainException(errorMsg: e.toString());
@@ -26,12 +26,32 @@ class AssetLocalSourceImpl implements AssetLocalSource {
   Future<(List<AssetPathEntity>, bool hasPermission)> fetchAlbums(
       RequestType type) async {
     List<AssetPathEntity> albums = [];
+
     try {
       final isEnabled = await grantPermissions();
       if (!isEnabled) {
         return (albums, false);
       }
-      albums = await PhotoManager.getAssetPathList(type: type);
+      final FilterOptionGroup filterOption = FilterOptionGroup(
+        imageOption: const FilterOption(
+          sizeConstraint: SizeConstraint(
+            maxWidth: 10000,
+            maxHeight: 10000,
+            minWidth: 100,
+            minHeight: 100,
+            ignoreSize: false,
+          ),
+        ),
+        videoOption: const FilterOption(
+          durationConstraint: DurationConstraint(
+            min: Duration(seconds: 1),
+            max: Duration(seconds: 60),
+            allowNullable: false,
+          ),
+        ),
+      );
+      albums = await PhotoManager.getAssetPathList(
+       type: type, filterOption: filterOption);
       return (albums, true);
     } catch (e) {
       throw const MainException(

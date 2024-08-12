@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_multiple_images.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_single_image.dart';
 
-import '../../../../../../../core/widgets/common/view_media.dart';
 
 class PostImageSection extends StatelessWidget {
-  const PostImageSection({super.key, required this.postImages});
+  const PostImageSection(
+      {super.key, required this.postImages, required this.pagecontroller});
   final List<String> postImages;
+  final PageController pagecontroller;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -20,7 +20,10 @@ class PostImageSection extends StatelessWidget {
       child: Column(
         children: [
           if (postImages.isNotEmpty)
-            PostMultipleImages(postImageUrls: postImages),
+            PostMultipleImages(
+              postImageUrls: postImages,
+              pageController: pagecontroller,
+            ),
         ],
       ),
     );

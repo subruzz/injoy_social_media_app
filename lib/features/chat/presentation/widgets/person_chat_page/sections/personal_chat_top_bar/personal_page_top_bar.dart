@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
-import 'package:social_media_app/core/extensions/time_ago.dart';
+import 'package:social_media_app/core/const/extensions/time_ago.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';

@@ -6,12 +6,12 @@ import 'package:social_media_app/core/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/extensions/localization.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_svg.dart';
 import 'package:social_media_app/features/profile/presentation/pages/user_profile_page/personal_profile_page.dart';
 
-import '../../../../../../core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import '../../../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../edit_profile/edit_profile_page.dart';
 
 class ProfilePageTopBarSection extends StatelessWidget

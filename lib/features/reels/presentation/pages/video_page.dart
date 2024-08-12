@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,8 +13,8 @@ import '../../../../core/add_at_symbol.dart';
 import '../../../../core/app_error_gif.dart';
 import '../../../../core/common/models/partial_user_model.dart';
 import '../../../../core/const/app_config/app_sizedbox.dart';
-import '../../../../core/services/cache_manager.dart';
-import '../../../../core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import '../../../../core/services/app_cache/cache_manager.dart';
+import '../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../../core/widgets/expandable_text.dart';
 import '../../../../core/widgets/follow_unfollow_helper.dart';
 import '../../../../core/widgets/user_profile.dart';
@@ -65,6 +67,12 @@ class _VideoReelPageState extends State<VideoReelPage> {
                       controller: _pageController,
                       reels: state.reels,
                       onChaged: (index) {
+                        if (index == state.reels.length - 1 &&
+                            state.lastDocument != null) {
+                          context
+                              .read<ReelsCubit>()
+                              .getReels('i', isInitialLoad: false);
+                        }
                         currentPage = index;
                       });
                 }
@@ -214,6 +222,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
     }
   }
 
+
   @override
   void dispose() {
     if (mounted) {
@@ -253,17 +262,17 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                 !_videoInitialized
                     // when the video is not initialized you can set a thumbnail.
                     // to make it simple, I use CircularProgressIndicator
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.amber,
-                        ),
+                    ? Image.network(
+                        widget.reel.extra!,
+                        width: double.infinity,
+                        height: 1.h,
                       )
                     : VideoPlayer(_controller),
                 !_videoInitialized
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.amber,
-                        ),
+                    ? Image.network(
+                        widget.reel.extra!,
+                        width: double.infinity,
+                        height: 1.h,
                       )
                     : const SizedBox(),
                 if (!_isPlaying)
@@ -347,8 +356,6 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
               ],
             ),
           ),
-          // here you can add title, user Info,
-          // description, views count etc.
         ],
       ),
     );

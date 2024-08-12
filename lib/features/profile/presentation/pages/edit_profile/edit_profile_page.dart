@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
@@ -18,7 +18,7 @@ import 'package:social_media_app/features/profile/presentation/bloc/user_profile
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/edit_profile.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_profile_img.dart';
 
-import '../../../../../core/services/assets/image_picker.dart';
+import '../../../../../core/services/assets/asset_services.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({

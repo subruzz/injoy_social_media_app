@@ -5,6 +5,7 @@ import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/bloc/premium_subscription_bloc.dart';
 
 import '../../../../../core/const/enums/location_enum.dart';
+import '../../../../../core/const/enums/premium_type.dart';
 import '../../../../../core/theme/color/app_colors.dart';
 
 class SubscriptionCard extends StatelessWidget {

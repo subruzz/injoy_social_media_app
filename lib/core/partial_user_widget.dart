@@ -6,7 +6,7 @@ import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/widgets/follow_unfollow_helper.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';

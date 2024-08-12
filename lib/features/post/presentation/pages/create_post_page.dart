@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/extensions/localization.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
@@ -22,6 +22,7 @@ import 'package:social_media_app/features/post/presentation/widgets/create_post/
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/post_option_section/widgets/post_location.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
 
+import '../../../../core/services/method_channel.dart/video_trimmer.dart';
 import '../widgets/create_post/section/create_post_input_section/post_input_section.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -50,6 +51,25 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     _selectTagsCubit.close();
     _pageController.dispose();
     super.dispose();
+  }
+
+  final VideoService _videoService = VideoService();
+
+  Future<void> _trimVideo(String videoPath) async {
+    final trimmedVideoPath = await _videoService.trimVideo(videoPath);
+    if (trimmedVideoPath != null) {
+      // Handle the trimmed video path (e.g., show it in a video player or save it)
+      log("Trimmed video path: $trimmedVideoPath");
+    } else {
+      // Handle error case
+      log("Failed to trim video.");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _trimVideo(widget.selectedImages.first.selectedFile!.path);
   }
 
   @override

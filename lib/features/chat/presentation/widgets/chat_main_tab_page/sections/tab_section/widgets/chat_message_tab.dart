@@ -29,7 +29,7 @@ class ChatMessageTabView extends StatelessWidget {
           if (state.chatItems.isEmpty) {
             return const Center(
               child: CommonEmptyHolder(
-                asset: AppAssetsConst.nochatHolder,
+                asset: AppAssetsConst.noChatHolder,
                 message: 'No chats found',
               ),
             );

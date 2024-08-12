@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/extensions/time_ago.dart';
+import 'package:social_media_app/core/const/extensions/time_ago.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
 import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';

@@ -1,4 +1,3 @@
-
 package com.example.social_media_app
 
 import android.os.Bundle
@@ -8,6 +7,7 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterFragmentActivity() {
     private val CHANNEL_VIDEO_THUMBNAIL = "plugins.justsoft.xyz/video_thumbnail"
+    private val CHANNEL_TOAST = "com.example.social_media_app/toast"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -15,7 +15,9 @@ class MainActivity : FlutterFragmentActivity() {
         // Initialize the video thumbnail channel
         val videoThumbnailChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL_VIDEO_THUMBNAIL)
         VideoThumbnailChannel(this, videoThumbnailChannel)
+        // Initialize the toast channel
+        val toastChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL_TOAST)
+        ToastHandler(this, toastChannel)
 
-        // You can initialize more MethodChannels here if needed...
     }
 }

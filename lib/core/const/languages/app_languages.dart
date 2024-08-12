@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../shared_providers/cubit/app_language/app_language_cubit.dart';
+import '../../common/shared_providers/cubit/app_language/app_language_cubit.dart';
 
 class AppLanguages {
   static const ml = Locale('ml');

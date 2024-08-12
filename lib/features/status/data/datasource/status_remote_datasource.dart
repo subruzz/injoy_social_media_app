@@ -6,8 +6,6 @@ import 'package:social_media_app/core/const/fireabase_const/firebase_collection.
 import 'package:social_media_app/core/const/fireabase_const/firebase_field_const.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
 import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/services/assets/compress_image.dart';
-import 'package:social_media_app/core/utils/id_generator.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 

@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:social_media_app/core/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/extensions/time_ago.dart';
+import 'package:social_media_app/core/const/extensions/time_ago.dart';
 import 'package:social_media_app/core/widgets/expandable_text.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/features/post/domain/enitities/comment_entity.dart';

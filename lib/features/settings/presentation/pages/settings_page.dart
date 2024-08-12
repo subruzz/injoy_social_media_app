@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/custom_divider.dart';
 import 'package:social_media_app/features/settings/presentation/pages/account_settings/account_settings_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_settings_page.dart';

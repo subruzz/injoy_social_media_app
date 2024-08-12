@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/extensions/localization.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
 
 import '../../../../../../core/const/app_config/app_sizedbox.dart';
 

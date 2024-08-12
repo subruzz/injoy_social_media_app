@@ -3,13 +3,17 @@ import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_top_section/widgets/post_option_button.dart';
 
 class PostTopDetails extends StatelessWidget {
   const PostTopDetails({
     super.key,
     required this.post,
+    required this.pagecontroller,
   });
   final PostEntity post;
+  final PageController pagecontroller;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -59,7 +63,10 @@ class PostTopDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppSizedBox.sizedBox10W,
-            // const PostOptionButton(),
+            PostOptionButton(
+              pagecontroller: pagecontroller,
+              post: post,
+            ),
           ],
         ),
       ],

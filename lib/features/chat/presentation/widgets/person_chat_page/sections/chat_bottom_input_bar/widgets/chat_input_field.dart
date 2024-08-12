@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giphy_picker/giphy_picker.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
-import 'package:social_media_app/core/extensions/stop_watch.dart';
+import 'package:social_media_app/core/const/extensions/stop_watch.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';

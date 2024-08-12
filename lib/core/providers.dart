@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
-import 'package:social_media_app/core/shared_providers/cubit/app_language/app_language_cubit.dart';
-import 'package:social_media_app/core/shared_providers/cubit/following_cubit.dart';
+import 'package:social_media_app/core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
+import 'package:social_media_app/core/common/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/cubit/asset_file_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
@@ -19,7 +19,7 @@ import 'package:social_media_app/features/who_visited_premium_feature/presentati
 import 'package:social_media_app/init_dependecies.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/album_bloc/album_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/animation/border_widget.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';

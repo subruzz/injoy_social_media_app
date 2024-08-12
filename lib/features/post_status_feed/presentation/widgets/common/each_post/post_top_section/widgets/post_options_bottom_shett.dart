@@ -1,116 +1,89 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/core/const/assets/app_assets.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/services/assets/asset_services.dart';
 
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/widgets/common_list_tile.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
+
+import '../../../../../../../../core/services/method_channel.dart/app_toast.dart';
 
 class PostOptionsBottomShett {
-  // static Future<void> downloadImage(String imageUrl) async {
-  //   // Request storage permission
-  //   PermissionStatus permissionStatus =
-  //       await Permission.storage.request();
-  //   if (!permissionStatus.isGranted) {
-  //     print('Storage permission not granted');
-  //     return;
-  //   }
-
-  //   try {
-  //     // Get the directory to save the image (Public Pictures Directory)
-  //     Directory? directory = await getExternalStorageDirectory();
-  //     if (directory == null) {
-  //       print('Unable to get external storage directory');
-  //       return;
-  //     }
-
-  //     // Create a public directory if it doesn't exist
-  //     final publicPicturesDir = Directory('/storage/emulated/0/Pictures');
-  //     if (!await publicPicturesDir.exists()) {
-  //       await publicPicturesDir.create(recursive: true);
-  //     }
-
-  //     String filePath =
-  //         '${publicPicturesDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-  //     // Download the image
-  //     final response = await http.get(Uri.parse(
-  //         'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg'));
-  //     if (response.statusCode == 200) {
-  //       File file = File(filePath);
-  //       await file.writeAsBytes(response.bodyBytes);
-
-  //       print('Image saved to $filePath');
-  //     } else {
-  //       print('Failed to download image');
-  //     }
-  //   } catch (e) {
-  //     print('Error downloading image: $e');
-  //   }
-  // }
-
-  static showPostOptionBottomSheet(
-    BuildContext context, {
-    bool isEdit = false,
-    VoidCallback? onShare,
-    VoidCallback? onSave,
-    VoidCallback? onHideUser,
-    VoidCallback? onAddToFavorite,
-    VoidCallback? onTurnOffCommenting,
-    VoidCallback? onEdit,
-    VoidCallback? onDelete,
-    VoidCallback? onAboutAccount,
-  }) {
+  static showPostOptionBottomSheet(BuildContext context,
+      {bool isEdit = false,
+      required PostEntity post,
+      VoidCallback? onShare,
+      VoidCallback? onSave,
+      VoidCallback? onHideUser,
+      VoidCallback? onAddToFavorite,
+      VoidCallback? onTurnOffCommenting,
+      VoidCallback? onEdit,
+      VoidCallback? onDelete,
+      VoidCallback? onAboutAccount,
+      required int postIndex}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       builder: (context) {
+        final l10n = context.l10n;
+
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.send, color: AppDarkColor().iconPrimaryColor),
-              title: const Text('Share'),
-              onTap: () {
-                Navigator.pop(context);
-                onShare?.call();
-              },
+            CommonListTile(
+              leading: AppAssetsConst.share,
+              text: l10n!.share,
+              onTap: () {},
+              iconSize: 23,
             ),
             if (!isEdit) ...[
-              ListTile(
-                leading: Icon(Icons.download_for_offline_outlined,
-                    color: AppDarkColor().iconPrimaryColor),
-                title: const Text('download Image'),
+              CommonListTile(
+                leading: AppAssetsConst.download,
+                text: l10n.downloadMedia,
                 onTap: () {
-                  Navigator.pop(context);
-
-                 
+                  AssetServices.saveImageWithPath(
+                      imageUrl: post.postImageUrl[postIndex]);
                 },
+                iconSize: 23,
               ),
-              ListTile(
-                leading: Icon(Icons.hide_source_outlined,
-                    color: AppDarkColor().iconPrimaryColor),
-                title: const Text('Don\'t show post from this user'),
+              CommonListTile(
+                leading: AppAssetsConst.lovefull,
+                text: l10n.addToFavorite,
                 onTap: () {
-                  Navigator.pop(context);
-                  onHideUser?.call();
+                  ToastService.showToast('Hello from Flutter!');
                 },
+                iconSize: 25,
               ),
-              ListTile(
-                leading: Icon(Icons.favorite,
-                    color: AppDarkColor().iconPrimaryColor),
-                title: const Text('Add to favorite'),
-                onTap: () {
-                  Navigator.pop(context);
-                  onAddToFavorite?.call();
-                },
-              ),
+              // ListTile(
+              //   leading: Icon(Icons.hide_source_outlined,
+              //       color: AppDarkColor().iconPrimaryColor),
+              //   title: const Text('Don\'t show post from this user'),
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     onHideUser?.call();
+              //   },
+              // ),
+              // ListTile(
+              //   leading: Icon(Icons.favorite,
+              //       color: AppDarkColor().iconPrimaryColor),
+              //   title: const Text('Add to favorite'),
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     onAddToFavorite?.call();
+              //   },
+              // ),
             ],
             if (isEdit) ...[
               ListTile(
                 leading: Icon(Icons.hide_source_rounded,
                     color: AppDarkColor().iconPrimaryColor),
-                title: const Text('Turn off commenting'),
+                title: Text(l10n.turnOffCommenting),
                 onTap: () {
                   Navigator.pop(context);
                   onTurnOffCommenting?.call();
@@ -119,7 +92,7 @@ class PostOptionsBottomShett {
               ListTile(
                 leading: Icon(Icons.edit_outlined,
                     color: AppDarkColor().iconPrimaryColor),
-                title: const Text('Edit'),
+                title: Text(l10n.edit),
                 onTap: () {
                   Navigator.pop(context);
                   onEdit?.call();
@@ -137,7 +110,7 @@ class PostOptionsBottomShett {
                 child: ListTile(
                   leading: Icon(Icons.delete_outlined,
                       color: AppDarkColor().iconSecondarycolor),
-                  title: Text('Delete',
+                  title: Text(l10n.delete,
                       style: Theme.of(context).textTheme.labelLarge),
                   onTap: () {
                     Navigator.pop(context);
@@ -147,14 +120,19 @@ class PostOptionsBottomShett {
               ),
             ],
             if (!isEdit)
-              ListTile(
-                leading: Icon(Icons.person_pin,
-                    color: AppDarkColor().iconPrimaryColor),
-                title: const Text('About this account'),
-                onTap: () {
-                  Navigator.pop(context);
-                  onAboutAccount?.call();
-                },
+              CommonListTile(
+                text: l10n.aboutThisAccount,
+                leading: AppAssetsConst.user,
+                onTap: () {},
+                iconSize: 22,
+              ),
+            if (!isEdit)
+              CommonListTile(
+                text: l10n.report,
+                iconSize: 22,
+                extraColor: AppDarkColor().secondaryPrimaryText,
+                leading: AppAssetsConst.report,
+                onTap: () {},
               ),
           ],
         );

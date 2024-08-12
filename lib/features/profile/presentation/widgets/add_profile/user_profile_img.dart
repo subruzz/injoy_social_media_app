@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/edit_profile.dart';
 
-import '../../../../../core/services/assets/image_picker.dart';
+import '../../../../../core/services/assets/asset_services.dart';
 import '../../../../../core/widgets/user_profile.dart';
 
 class UserProfileImg extends StatelessWidget {
@@ -40,7 +40,7 @@ class UserProfileImg extends StatelessWidget {
           bottom: 0,
           child: GestureDetector(
               onTap: () async {
-                final img = await ImagePickerService.pickOneImage();
+                final img = await AssetServices.pickOneImage();
                 if (img == null) return;
                 userProfile.value = img;
               },

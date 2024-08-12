@@ -5,7 +5,7 @@ import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/enums/location_enum.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/utils/debouncer.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';

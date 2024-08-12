@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/errors/exception.dart';
@@ -13,9 +14,10 @@ class ReelsRepoImpl implements ReelsRepository {
   ReelsRepoImpl({required ReelsDataSource reelsDataSource})
       : _reelsDataSource = reelsDataSource;
   @override
-  Future<Either<Failure, List<PostEntity>>> getRandomReels(String myId) async {
+  Future<Either<Failure, GetReelsResponse>> getRandomReels(
+      String myId, DocumentSnapshot? lastDocument) async {
     try {
-      final res = await _reelsDataSource.getRandomReels(myId,null);
+      final res = await _reelsDataSource.getRandomReels(myId, lastDocument);
       return right(res);
     } on MainException catch (e) {
       return left(Failure());

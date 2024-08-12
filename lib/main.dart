@@ -12,7 +12,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/providers.dart';
 import 'package:social_media_app/core/routes/app_routes_config.dart';
-import 'package:social_media_app/core/shared_providers/cubit/app_language/app_language_cubit.dart';
+import 'package:social_media_app/core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
 import 'package:social_media_app/core/theme/app_theme.dart';
 import 'package:social_media_app/features/notification/data/datacource/local/locatl_notification.dart';
 import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';

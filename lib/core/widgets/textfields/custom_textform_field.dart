@@ -94,7 +94,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         width: 20,
                         assetPath: widget.obsecureText
                             ? isPassWordVisible
-                                ? AppAssetsConst.visibilityoff
+                                ? AppAssetsConst.visibilityOff
                                 : AppAssetsConst.visibility
                             : AppAssetsConst.calendar))
                 : null,

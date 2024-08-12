@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/extensions/time_ago.dart';
+import 'package:social_media_app/core/const/extensions/time_ago.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 

@@ -7,7 +7,7 @@ import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 
-import '../../../../../../core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import '../../../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../../../../core/widgets/app_related/empty_display.dart';
 
 class UserBasicDetailSection extends StatelessWidget {

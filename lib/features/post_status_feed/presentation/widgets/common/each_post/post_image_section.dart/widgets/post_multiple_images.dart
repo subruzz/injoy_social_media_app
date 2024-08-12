@@ -10,10 +10,11 @@ class PostMultipleImages extends StatelessWidget {
       {super.key,
       required this.postImageUrls,
       this.size = .4,
-      this.isEdit = false});
+      this.isEdit = false, required this.pageController});
   final bool isEdit;
   final List<String> postImageUrls;
   final double size;
+  final PageController pageController;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -22,6 +23,7 @@ class PostMultipleImages extends StatelessWidget {
       child: Stack(
         children: [
           PageView.builder(
+            controller: pageController,
             itemCount: postImageUrls.length,
             itemBuilder: (context, index) {
               return Stack(

@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:intl/intl.dart';
-import 'package:social_media_app/core/extensions/email_val.dart';
-import 'package:social_media_app/core/extensions/number_only_string.dart';
+import 'package:social_media_app/core/const/extensions/email_val.dart';
+import 'package:social_media_app/core/const/extensions/number_only_string.dart';
 
 class Validation {
   static String? validateEmail(String? val) {

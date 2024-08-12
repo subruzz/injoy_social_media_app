@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/core/extensions/localization.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/features/reels/presentation/pages/reels_page.dart';
 
 class ChatTopBarSection extends StatelessWidget implements PreferredSizeWidget {

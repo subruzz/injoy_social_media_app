@@ -7,7 +7,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/widgets/dialog/dialogs.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
-import 'package:social_media_app/core/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/utils/haptic_feedback.dart';
 import 'package:social_media_app/features/ai_chat/presentation/pages/ai_chat_page.dart';
 

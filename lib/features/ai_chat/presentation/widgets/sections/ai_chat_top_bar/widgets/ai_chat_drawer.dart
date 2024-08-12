@@ -16,7 +16,7 @@ class AiChatDrawer extends StatelessWidget {
         children: <Widget>[
           const AiDrawerHeader(),
           DrawerItem(
-              title: 'New Chat', asset: AppAssetsConst.newI, onTap: () {}),
+              title: 'New Chat', asset: AppAssetsConst.newIcon, onTap: () {}),
           DrawerItem(
               title: 'Chat History', asset: AppAssetsConst.chat, onTap: () {}),
           // DrawerItem(

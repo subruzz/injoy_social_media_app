@@ -8,7 +8,7 @@ import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
-import 'package:social_media_app/core/extensions/datetime_to_string.dart';
+import 'package:social_media_app/core/const/extensions/datetime_to_string.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
@@ -56,7 +56,7 @@ class ChatListingSectionSection extends StatelessWidget {
           }
           if (state.messages.isEmpty) {
             return const CommonEmptyHolder(
-              asset: AppAssetsConst.nochatHolder,
+              asset: AppAssetsConst.noChatHolder,
               message: AppUiStringConst.noPersonalChatFound,
             );
           }
