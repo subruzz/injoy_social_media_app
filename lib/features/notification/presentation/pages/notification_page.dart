@@ -13,6 +13,7 @@ import 'package:social_media_app/core/const/extensions/time_ago.dart';
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
@@ -27,12 +28,10 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-            "Notifications",
-            style: Theme.of(context).textTheme.displaySmall,
-          ),
+        appBar: AppCustomAppbar(
+     
+           title:  "Notifications",
+        
         ),
         body: BlocBuilder<NotificationCubit, NotificationState>(
           builder: (context, state) {

@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/services/assets/asset_services.dart';
 
 import 'package:social_media_app/core/theme/color/app_colors.dart';
@@ -47,19 +49,14 @@ class PostOptionsBottomShett {
                 leading: AppAssetsConst.download,
                 text: l10n.downloadMedia,
                 onTap: () {
+                  Navigator.pop(context);
+
                   AssetServices.saveImageWithPath(
                       imageUrl: post.postImageUrl[postIndex]);
                 },
                 iconSize: 23,
               ),
-              CommonListTile(
-                leading: AppAssetsConst.lovefull,
-                text: l10n.addToFavorite,
-                onTap: () {
-                  ToastService.showToast('Hello from Flutter!');
-                },
-                iconSize: 25,
-              ),
+
               // ListTile(
               //   leading: Icon(Icons.hide_source_outlined,
               //       color: AppDarkColor().iconPrimaryColor),
@@ -123,7 +120,17 @@ class PostOptionsBottomShett {
               CommonListTile(
                 text: l10n.aboutThisAccount,
                 leading: AppAssetsConst.user,
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, MyAppRouteConst.otherUserProfile,
+                      arguments: {
+                        'user': PartialUser(
+                            id: post.creatorUid,
+                            userName: post.userFullName,
+                            fullName: post.userFullName,
+                            profilePic: post.userProfileUrl)
+                      });
+                },
                 iconSize: 22,
               ),
             if (!isEdit)

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/core/routes/app_routes_const.dart';
 
 import '../../../../../../../core/const/app_config/app_padding.dart';
 import '../../../../../../../core/const/assets/app_assets.dart';
@@ -21,17 +23,16 @@ class HomeTopNotification extends StatelessWidget {
             children: [
               CustomSvgIcon(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const NotificationPage(),
-                  ));
+                  Navigator.pushNamed(
+                      context, MyAppRouteConst.notificationPage);
                 },
                 assetPath: AppAssetsConst.noti,
                 height: 35,
                 width: 35,
               ),
-              if (state is NotificationLoaded)
+              if (state is NotificationLoaded && state.notifications.isNotEmpty)
                 Positioned(
-                  right: 0,
+                  right: 5.w,
                   top: 0,
                   child: Container(
                     padding: const EdgeInsets.all(4.0),
@@ -39,14 +40,6 @@ class HomeTopNotification extends StatelessWidget {
                       color: AppDarkColor().buttonBackground,
                       shape: BoxShape.circle,
                     ),
-                    child: Text(
-                        state.notifications.length > 10
-                            ? '10+'
-                            : state.notifications.length.toString(),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontSize: state.notifications.length > 10 ? 11 : 13,
-                            color: AppDarkColor().primaryText,
-                            fontWeight: FontWeight.w600)),
                   ),
                 ),
             ],

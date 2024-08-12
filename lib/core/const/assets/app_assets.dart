@@ -7,6 +7,9 @@ class AppAssetsConst {
   static const String lovefull = 'assets/svgs/love_full.svg';
   static const String report = 'assets/svgs/report.svg';
   static const String user = 'assets/svgs/user.svg';
+  static const String shorts = 'assets/svgs/shorts.svg';
+  static const String post = 'assets/svgs/post.svg';
+  static const String story = 'assets/svgs/story.svg';
 
   static const String chat = 'assets/svgs/chat.svg';
   static const String add = 'assets/svgs/add_circle.svg';

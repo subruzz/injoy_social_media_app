@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   AppCustomAppbar({
     super.key,
-    this.showLeading = false,
+    this.showLeading = true,
     this.centerTitle = false,
     this.title,
     this.actions,

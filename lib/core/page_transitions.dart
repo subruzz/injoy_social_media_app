@@ -3,6 +3,23 @@
 import 'package:flutter/material.dart';
 
 class AppPageTransitions {
+  // Subtle Scale Transition
+  static Route subtleScale(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return ScaleTransition(
+          scale: Tween<double>(begin: 1.05, end: 1.0)
+              .chain(CurveTween(curve: Curves.easeInOut))
+              .animate(animation),
+          child: child,
+        );
+      },
+      transitionDuration: duration,
+    );
+  }
+
   // Right-to-Left Transition
   static Route rightToLeft(Widget screen,
       {Duration duration = const Duration(milliseconds: 350)}) {
@@ -338,6 +355,148 @@ class AppPageTransitions {
             );
           },
           child: child,
+        );
+      },
+      transitionDuration: duration,
+    );
+  } // Enhanced Top-to-Bottom Transition with Scale and Fade
+
+  static Route enhancedTopToBottom(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, -1.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var scaleTween =
+            Tween(begin: 0.8, end: 1.0).chain(CurveTween(curve: curve));
+        var opacityTween =
+            Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
+
+        var offsetAnimation = animation.drive(tween);
+        var scaleAnimation = animation.drive(scaleTween);
+        var opacityAnimation = animation.drive(opacityTween);
+
+        return FadeTransition(
+          opacity: opacityAnimation,
+          child: ScaleTransition(
+            scale: scaleAnimation,
+            child: SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            ),
+          ),
+        );
+      },
+      transitionDuration: duration,
+    );
+  }
+
+// Enhanced Bottom-to-Top Transition with Rotation and Fade
+  static Route enhancedBottomToTop(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var rotationTween =
+            Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
+        var opacityTween =
+            Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
+
+        var offsetAnimation = animation.drive(tween);
+        var rotationAnimation = animation.drive(rotationTween);
+        var opacityAnimation = animation.drive(opacityTween);
+
+        return FadeTransition(
+          opacity: opacityAnimation,
+          child: RotationTransition(
+            turns: rotationAnimation,
+            child: SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            ),
+          ),
+        );
+      },
+      transitionDuration: duration,
+    );
+  }
+
+// Enhanced Left-to-Right Transition with Scale and Fade
+  // Enhanced Left-to-Right Transition with Subtle Scaling and Fade
+  static Route enhancedLeftToRight(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(-1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var slideTween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var scaleTween =
+            Tween(begin: 0.8, end: 1.0).chain(CurveTween(curve: curve));
+        var opacityTween =
+            Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
+
+        var slideAnimation = animation.drive(slideTween);
+        var scaleAnimation = animation.drive(scaleTween);
+        var opacityAnimation = animation.drive(opacityTween);
+
+        return FadeTransition(
+          opacity: opacityAnimation,
+          child: ScaleTransition(
+            scale: scaleAnimation,
+            child: SlideTransition(
+              position: slideAnimation,
+              child: child,
+            ),
+          ),
+        );
+      },
+      transitionDuration: duration,
+    );
+  }
+
+// Enhanced Right-to-Left Transition with Subtle Scaling and Fade
+  static Route enhancedRightToLeft(Widget screen,
+      {Duration duration = const Duration(milliseconds: 350)}) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var slideTween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var scaleTween =
+            Tween(begin: 0.9, end: 1.0).chain(CurveTween(curve: curve));
+        var opacityTween =
+            Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
+
+        var slideAnimation = animation.drive(slideTween);
+        var scaleAnimation = animation.drive(scaleTween);
+        var opacityAnimation = animation.drive(opacityTween);
+
+        return FadeTransition(
+          opacity: opacityAnimation,
+          child: ScaleTransition(
+            scale: scaleAnimation,
+            child: SlideTransition(
+              position: slideAnimation,
+              child: child,
+            ),
+          ),
         );
       },
       transitionDuration: duration,

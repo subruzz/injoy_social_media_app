@@ -8,7 +8,6 @@ import 'package:social_media_app/core/widgets/animation/border_widget.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_status_section/widgets/create_status_button.dart';
 import 'package:social_media_app/features/status/presentation/bloc/get_my_status/get_my_status_bloc.dart';
-import 'package:social_media_app/features/status/presentation/pages/create_status_page.dart';
 import '../../../../../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../../../../../core/widgets/user_profile.dart';
 import '../../../../../../../core/routes/app_routes_const.dart';
@@ -78,10 +77,8 @@ class MyStatusViewState extends State<MyStatusView> {
                                     'myStatuses': state.myStatus
                                   });
                             } else {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    const StatusCreationPage(),
-                              ));
+                              Navigator.pushNamed(
+                                  context, MyAppRouteConst.statusCreationRoute);
                             }
                           },
                           child: Hero(

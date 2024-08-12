@@ -62,7 +62,10 @@
   "edit": "Edit",
   "delete": "Delete",
   "turnOffCommenting": "Turn off commenting",
-  "dontShowPostFromUser": "Don't show post from this user"
+  "dontShowPostFromUser": "Don't show post from this user",
+  "shorts": "Shorts",
+  "status": "Status",
+  "post": "Post"
 
 
 

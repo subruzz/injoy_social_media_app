@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
+import 'package:social_media_app/core/page_transitions.dart';
 
 import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/features/assets/presenation/pages/custom_media_picker_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
-import 'package:social_media_app/features/chat/presentation/pages/personal_chat_builder.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/peronal_chat_builder.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/explore/presentation/pages/view_hash_tag_posts.dart';
 import 'package:social_media_app/features/location/presentation/pages/location_asking_page_builder.dart';
+import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:social_media_app/features/post/presentation/pages/create_post_page.dart';
-import 'package:social_media_app/features/post/presentation/pages/view_post.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile/add_profile_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile/date_of_birth_page.dart';
-import 'package:social_media_app/features/profile/presentation/pages/add_profile/username_check_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/interest_page/interest_selection_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/others_profile/other_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
@@ -120,9 +118,12 @@ class MyAppRouter {
             settings.arguments as Map<String, dynamic>;
         final PartialUser user = params['user'];
 
-        return MaterialPageRoute(
-          builder: (_) => OtherUserProfilePage(user: user),
+        return AppPageTransitions.leftToRight(
+          OtherUserProfilePage(user: user),
         );
+
+      case MyAppRouteConst.notificationPage:
+        return AppPageTransitions.rightToLeft(const NotificationPage());
 
       case MyAppRouteConst.hashtagPostsRoute:
         final Map<String, dynamic> params =
@@ -140,8 +141,8 @@ class MyAppRouter {
         return MaterialPageRoute(
             builder: (_) => const UserVisitedListingPage());
       case MyAppRouteConst.statusCreationRoute:
-        return MaterialPageRoute(
-          builder: (_) => const StatusCreationPage(),
+        return AppPageTransitions.topToBottom(
+          const StatusCreationPage(),
         );
       case MyAppRouteConst.viewStatusRoute:
         final Map<String, dynamic> params =

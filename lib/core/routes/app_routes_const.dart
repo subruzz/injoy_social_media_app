@@ -21,8 +21,7 @@ class MyAppRouteConst {
   static const String statusCreationRoute = 'statusCreationPage';
   static const String viewStatusRoute = 'viewStatusPage';
   static const String dobPageRoute = 'dobPageRoute';
-
-
+  static const String notificationPage = 'notificationPage';
 }
 
-enum MediaPickerType { chat, post, status, wallapaper,reels }
+enum MediaPickerType { chat, post, status, wallapaper, reels }

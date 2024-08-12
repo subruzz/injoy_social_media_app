@@ -5,6 +5,8 @@ import 'package:social_media_app/core/routes/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/user_profile.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_top_section/widgets/post_option_button.dart';
 
+import '../../../../../../../core/common/models/partial_user_model.dart';
+
 class PostTopDetails extends StatelessWidget {
   const PostTopDetails({
     super.key,
@@ -25,8 +27,11 @@ class PostTopDetails extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(context, MyAppRouteConst.otherUserProfile,
                     arguments: {
-                      'userName': post.username,
-                      'otherUserId': post.creatorUid,
+                      'user': PartialUser(
+                          id: post.creatorUid,
+                          userName: post.userFullName,
+                          fullName: post.userFullName,
+                          profilePic: post.userProfileUrl)
                     });
               },
               child: CircularUserProfile(
