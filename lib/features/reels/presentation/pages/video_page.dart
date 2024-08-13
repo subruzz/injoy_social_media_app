@@ -21,11 +21,11 @@ import '../../../../core/widgets/common/user_profile.dart';
 import '../bloc/reels/reels_cubit.dart';
 
 class VideoReelPage extends StatefulWidget {
-  const VideoReelPage({super.key, this.reels, this.index = 0});
+  const VideoReelPage({super.key, this.reels, this.index = 0, this.shorts});
   final List<PostEntity>? reels;
 
   final int index;
-
+  final PostEntity? shorts;
   @override
   State<VideoReelPage> createState() => _VideoReelPageState();
 }
@@ -59,28 +59,33 @@ class _VideoReelPageState extends State<VideoReelPage> {
               onChaged: (index) {
                 currentPage = index;
               })
-          : BlocBuilder<ReelsCubit, ReelsState>(
-              builder: (context, state) {
-                if (state is ReelsFailure) {
-                  return const AppErrorGif();
-                }
-                if (state is ReelsSuccess) {
-                  return ReelsPageView(
-                      controller: _pageController,
-                      reels: state.reels,
-                      onChaged: (index) {
-                        if (index == state.reels.length - 1 &&
-                            state.lastDocument != null) {
-                          context
-                              .read<ReelsCubit>()
-                              .getReels('i', isInitialLoad: false);
-                        }
-                        currentPage = index;
-                      });
-                }
-                return loadingWidget();
-              },
-            ),
+          : widget.shorts != null
+              ? VideoPlayerWidget(
+                  reel: widget.shorts!,
+                  key: Key(widget.shorts!.postImageUrl.first),
+                )
+              : BlocBuilder<ReelsCubit, ReelsState>(
+                  builder: (context, state) {
+                    if (state is ReelsFailure) {
+                      return const AppErrorGif();
+                    }
+                    if (state is ReelsSuccess) {
+                      return ReelsPageView(
+                          controller: _pageController,
+                          reels: state.reels,
+                          onChaged: (index) {
+                            if (index == state.reels.length - 1 &&
+                                state.lastDocument != null) {
+                              context
+                                  .read<ReelsCubit>()
+                                  .getReels('i', isInitialLoad: false);
+                            }
+                            currentPage = index;
+                          });
+                    }
+                    return loadingWidget();
+                  },
+                ),
     );
   }
 }

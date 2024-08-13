@@ -16,6 +16,7 @@ class PostModel extends PostEntity {
       super.userProfileUrl,
       required super.hashtags,
       super.latitude,
+      required super.isThatvdo,
       super.location,
       super.longitude,
       required super.isCommentOff,
@@ -27,6 +28,7 @@ class PostModel extends PostEntity {
       Map<String, dynamic> json, PartialUser partialUser) {
     return PostModel(
       extra: json['extra'],
+      isThatvdo: json['isThatvdo'] ?? false,
       isEdited: json['isEdited'],
       likesCount: json['likesCount'],
       isCommentOff: json['isCommentOff'],
@@ -50,6 +52,7 @@ class PostModel extends PostEntity {
   // 2. To JSON (Firestore)
   Map<String, dynamic> toJson() {
     return {
+      'isThatvdo': isThatvdo,
       'extra': extra,
       'isEdited': isEdited,
       'likesCount': likesCount,

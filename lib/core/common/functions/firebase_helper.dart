@@ -56,9 +56,9 @@ class FirebaseHelper {
   Future<List<PostModel>> getAllPostsOrReelsOfuser(PartialUser user,
       {bool isShorts = false}) async {
     final posts = await FirebaseFirestore.instance
-        .collection(isShorts?'reels':'posts')
+        .collection('posts')
         .where("creatorUid", isEqualTo: user.id)
-        .orderBy('createAt', descending: true)
+        .orderBy('createAt', descending: true).where('isThatvdo',isEqualTo: isShorts)
         .get();
 
     // Map the Firestore documents to PostModel objects

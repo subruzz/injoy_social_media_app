@@ -13,6 +13,7 @@ class PostEntity extends Equatable {
   final int likesCount;
   num totalComments;
   final Timestamp createAt;
+  final bool isThatvdo;
   final bool isEdited;
   final String? userProfileUrl;
   final List<String> hashtags;
@@ -22,6 +23,7 @@ class PostEntity extends Equatable {
   final String? extra;
   PostEntity(
       {required this.postId,
+      this.isThatvdo = false,
       required this.isEdited,
       required this.likesCount,
       this.extra,
@@ -49,6 +51,7 @@ class PostEntity extends Equatable {
         postImageUrl,
         likes,
         totalComments,
+        isThatvdo,
         createAt,
         userProfileUrl,
         hashtags,

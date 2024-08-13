@@ -12,11 +12,12 @@ class FollowingPostFeedGetEvent extends FollowingPostFeedEvent {
   final bool isLoadMore;
   final DocumentSnapshot? lastDoc;
   final List<String> following;
-
+  final bool isFirst;
   const FollowingPostFeedGetEvent(
       {required this.uId,
-       this.isLoadMore=false,
-       this.lastDoc,
+      this.isLoadMore = false,
+      this.isFirst = false,
+      this.lastDoc,
       required this.following});
 }
 

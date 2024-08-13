@@ -14,9 +14,7 @@ part 'following_post_feed_state.dart';
 
 class FollowingPostFeedBloc
     extends Bloc<FollowingPostFeedEvent, FollowingPostFeedState> {
-  DocumentSnapshot? lastDoc;
-  bool hasMore = true;
-
+  int limit = 3;
   final GetFollowingPostsUseCase _followingPostsUseCase;
   final GetAllUsersUseCase _allUsersUseCase;
   FollowingPostFeedBloc(this._followingPostsUseCase, this._allUsersUseCase)
@@ -30,36 +28,52 @@ class FollowingPostFeedBloc
 
   FutureOr<void> _postFeedGetEvent(FollowingPostFeedGetEvent event,
       Emitter<FollowingPostFeedState> emit) async {
-    emit(FollowingPostFeedLoading());
+    if (event.isFirst) {
+      limit = 3;
+      emit(FollowingPostFeedLoading());
+    }
     final res = await _followingPostsUseCase(GetFollowingPostsUseCaseParams(
         uId: event.uId,
         following: event.following,
         lastDoc: event.lastDoc,
-        limit: 3));
+        limit: limit));
     res.fold(
         (failure) => emit(FollowingPostFeedError(errorMsg: failure.message)),
         (success) {
+      if (event.isFirst) {
+        limit = limit + 3;
+
+        if (success.posts.isEmpty) {
+          log('post is empty');
+          return add(GetAllUsers(id: event.uId, following: event.following));
+        } else {
+          return emit(FollowingPostFeedSuccess(
+              followingPosts: success.posts,
+              hasMore: success.hasMore,
+              lastDoc: success.lastDoc));
+        }
+      }
+      limit = limit + 3;
+
       final currentState = state;
       log('current state is $currentState');
-      // if (currentState is FollowingPostFeedSuccess && event.isLoadMore) {
-      //   log('in the bloc currently we have ${currentState.followingPosts.length} and new is ${success.posts.length}');
-      //   final allPosts = currentState.followingPosts + success.posts;
-      //   log('all posts is ${allPosts.length}');
-      if (success.posts.isEmpty) {
-        log('post is empty');
-        return add(GetAllUsers(id: event.uId, following: event.following));
+      if (currentState is FollowingPostFeedSuccess && event.isLoadMore) {
+        log('in the bloc currently we have ${currentState.followingPosts.length} and new is ${success.posts.length}');
+        final allPosts = currentState.followingPosts + success.posts;
+        log('all posts is ${success.posts.length}');
+
+        emit(FollowingPostFeedSuccess(
+            followingPosts: success.posts,
+            hasMore: success.hasMore,
+            lastDoc: success.lastDoc));
+        //  else {
+        //   log('else case');
+        //   emit(FollowingPostFeedSuccess(
+        //       followingPosts: success.posts,
+        //       hasMore: success.hasMore,
+        //       lastDoc: success.lastDoc));
+        // }
       }
-      emit(FollowingPostFeedSuccess(
-          followingPosts: success.posts,
-          hasMore: success.hasMore,
-          lastDoc: success.lastDoc));
-      //  else {
-      //   log('else case');
-      //   emit(FollowingPostFeedSuccess(
-      //       followingPosts: success.posts,
-      //       hasMore: success.hasMore,
-      //       lastDoc: success.lastDoc));
-      // }
     });
   }
 

@@ -43,8 +43,8 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   Future<void> createPost(
       PostEntity post, List<SelectedByte> postImage, bool isReel) async {
     if (postImage.isEmpty) return;
-    final postCollection = FirebaseFirestore.instance.collection(
-        isReel ? FirebaseCollectionConst.reels : FirebaseCollectionConst.posts);
+    final postCollection =
+        FirebaseFirestore.instance.collection(FirebaseCollectionConst.posts);
     final hashtagCollection =
         FirebaseFirestore.instance.collection(FirebaseCollectionConst.hashTags);
     final locationCollection = FirebaseFirestore.instance
@@ -66,6 +66,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
         throw const MainException();
       }
       final newPost = PostModel(
+          isThatvdo: isReel,
           isEdited: false,
           likesCount: 0,
           extra: assetItem.extra,
@@ -177,8 +178,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   Future<void> unLikePost(
       String postId, String currentUserUid, bool isReel) async {
     final postCollection =
-        FirebaseFirestore.instance.collection(isReel ? 'reels' : 'posts');
-
+        FirebaseFirestore.instance.collection(FirebaseCollectionConst.posts);
     final userCollection = FirebaseFirestore.instance.collection('users');
 
     try {
@@ -214,7 +214,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   Future<void> likePost(
       String postId, String currentUserUid, bool isReel) async {
     final postCollection =
-        FirebaseFirestore.instance.collection(isReel ? 'reels' : 'posts');
+        FirebaseFirestore.instance.collection(FirebaseCollectionConst.posts);
 
     final userCollection = FirebaseFirestore.instance.collection('users');
 

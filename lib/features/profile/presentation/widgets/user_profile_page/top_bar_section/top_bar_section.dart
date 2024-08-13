@@ -11,6 +11,7 @@ import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 import '../../../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../pages/edit_profile_page.dart';
+import '../../../pages/profile_page_wrapper.dart';
 
 class ProfilePageTopBarSection extends StatelessWidget
     implements PreferredSizeWidget {
@@ -53,14 +54,14 @@ class ProfilePageTopBarSection extends StatelessWidget
                   builder: (context) => const EditProfilePage(),
                 ));
               },
-              assetPath: 'assets/svgs/edit.svg'),
+              assetPath: AppAssetsConst.edit),
         AppSizedBox.sizedBox20W,
         if (isMe)
           CustomAppPadding(
             padding: AppPadding.onlyRightMedium,
             child: GestureDetector(
                 onTap: () {
-                  // CustomBottomSheet.showOptions(context, localization!);
+                  CustomBottomSheet.showOptions(context, localization!);
                 },
                 child: const CustomSvgIcon(assetPath: AppAssetsConst.moreIcon)),
           ),

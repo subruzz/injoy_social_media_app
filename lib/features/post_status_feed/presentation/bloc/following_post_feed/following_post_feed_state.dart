@@ -4,7 +4,7 @@ sealed class FollowingPostFeedState extends Equatable {
   const FollowingPostFeedState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 final class FollowingPostFeedInitial extends FollowingPostFeedState {}
@@ -28,6 +28,8 @@ final class FollowingPostFeedSuccess extends FollowingPostFeedState {
       {required this.followingPosts,
       required this.hasMore,
       required this.lastDoc});
+  @override
+  List<Object?> get props => [lastDoc,hasMore,followingPosts];
 }
 
 final class AllUsersLoading extends FollowingPostFeedState {}

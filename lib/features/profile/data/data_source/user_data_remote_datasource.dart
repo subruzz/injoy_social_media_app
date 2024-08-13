@@ -22,6 +22,7 @@ class UserDataDatasourceImpl implements UserDataDatasource {
       return await serviceLocator<FirebaseHelper>()
           .getAllPostsOrReelsOfuser(user);
     } catch (e) {
+      log(e.toString());
       throw const MainException();
     }
   }

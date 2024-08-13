@@ -20,17 +20,38 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
-    log('HomeScreen is built ');
+    _scrollController = ScrollController()..addListener(_onScroll);
   }
 
   @override
   void dispose() {
-    log('HomeScreen is disposed ');
-
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      final bloc = BlocProvider.of<FollowingPostFeedBloc>(context);
+      final state = bloc.state;
+      final user = context.read<AppUserBloc>().appUser;
+      if (state is FollowingPostFeedSuccess && state.hasMore) {
+        log('came here');
+
+        bloc.add(FollowingPostFeedGetEvent(
+          uId: user.id,
+          following: user.following,
+          isLoadMore: true,
+          lastDoc: state.lastDoc,
+        ));
+      }
+    }
   }
 
   @override
@@ -45,14 +66,16 @@ class _HomePageState extends State<HomePage> {
       body: RefreshIndicator(
         onRefresh: () async {
           if (context.mounted) {
-            context.read<FollowingPostFeedBloc>().add(
-                FollowingPostFeedGetEvent(following: me.following, uId: me.id));
+            context.read<FollowingPostFeedBloc>().add(FollowingPostFeedGetEvent(
+              
+                following: me.following, uId: me.id, isFirst: true));
             context
                 .read<GetAllStatusBloc>()
                 .add(GetAllstatusesEvent(uId: me.id));
           }
         },
         child: CustomScrollView(
+          controller: _scrollController,
           slivers: [
             HomeTopBar(
               isPremium: me.hasPremium,

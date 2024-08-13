@@ -23,7 +23,7 @@ class AppAssetsConst {
   static const String calendar = 'assets/svgs/calendar.svg';
   static const String delete = 'assets/svgs/delete.svg';
   static const String language = 'assets/svgs/language.svg';
-  static const String edit = 'assets/svgs/edit_svg.svg';
+  static const String edit = 'assets/svgs/edit.svg';
   static const String save = 'assets/svgs/save.svg';
   static const String saved = 'assets/svgs/saved.svg';
   static const String noti = 'assets/svgs/noti.svg';
@@ -37,6 +37,7 @@ class AppAssetsConst {
   static const String commentIcon = 'assets/svgs/comment.svg';
   static const String explore = 'assets/svgs/explore.svg';
   static const String send2 = 'assets/svgs/send2.svg';
+  static const String photos = 'assets/svgs/photos.svg';
 
   // PNGs
   static const String profileIcon = 'assets/images/profile.png';

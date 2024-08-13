@@ -30,10 +30,19 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
     }
     final postcollection = _firestore.collection(FirebaseCollectionConst.posts);
     try {
+      // This pagination approach is not the most efficient because
+      // we are increasing the limit incrementally (e.g., 10 -> 20 -> 30).
+      // Each time, the query fetches from the beginning with the increased limit,
+      // leading to redundant data being fetched on every load.
+      // This method was implemented as a workaround because `startAfterDocument`
+      // was not working with `where` queries in this specific context.
+
       Query<Map<String, dynamic>> postsQuery = postcollection
           .where('creatorUid', isNotEqualTo: userId)
           .where('creatorUid', whereIn: following)
-          .orderBy('createAt', descending: true);
+          .where('isThatvdo', isEqualTo: false)
+          .orderBy('createAt', descending: true)
+          .limit(limit);
 
       if (lastDoc != null) {
         // postsQuery = postsQuery.startAfterDocument(lastDoc);
@@ -67,7 +76,6 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
         lastDoc: allPosts.docs.isNotEmpty ? allPosts.docs.last : null,
       );
     } catch (e) {
-
       throw const MainException(errorMsg: AppErrorMessages.postFetchError);
     }
   }

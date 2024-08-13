@@ -26,9 +26,10 @@ class ReelsDataSourceImpl implements ReelsDataSource {
     try {
       QuerySnapshot<Map<String, dynamic>> reelsQuerySnapshot;
       reelsQuerySnapshot = await firestore
-          .collection('reels')
+          .collection('posts')
           // .where('creatorUid', isEqualTo: myId)
           .orderBy('createAt', descending: true)
+          .where('isThatvdo', isEqualTo: true)
           .limit(2)
           .get();
 
