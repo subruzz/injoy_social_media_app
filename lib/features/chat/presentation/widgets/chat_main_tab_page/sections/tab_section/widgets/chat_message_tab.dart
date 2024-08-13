@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/app_error_gif.dart';
+import 'package:social_media_app/core/widgets/common/app_error_gif.dart';
 import 'package:social_media_app/core/common_empty_holder.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';

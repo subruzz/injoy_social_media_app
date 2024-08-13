@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:social_media_app/core/app_error_gif.dart';
+import 'package:social_media_app/core/widgets/common/app_error_gif.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/welcome_card.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/each_post.dart';
-import 'package:social_media_app/core/widgets/shimmer.dart';
+import 'package:social_media_app/core/widgets/common/shimmer.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 
 class FollowingPostTabView extends StatefulWidget {

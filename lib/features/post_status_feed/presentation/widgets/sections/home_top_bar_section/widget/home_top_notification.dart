@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 
 import '../../../../../../../core/const/app_config/app_padding.dart';
 import '../../../../../../../core/const/assets/app_assets.dart';
 import '../../../../../../../core/theme/color/app_colors.dart';
-import '../../../../../../../core/widgets/app_svg.dart';
+import '../../../../../../../core/widgets/app_related/app_svg.dart';
 import '../../../../../../notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import '../../../../../../notification/presentation/pages/notification_page.dart';
 

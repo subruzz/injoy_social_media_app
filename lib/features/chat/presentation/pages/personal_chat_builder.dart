@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';
-import 'package:social_media_app/init_dependecies.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 class PersonalChatBuilder extends StatelessWidget {
   const PersonalChatBuilder({super.key, required this.otherUserId});
   final String otherUserId;

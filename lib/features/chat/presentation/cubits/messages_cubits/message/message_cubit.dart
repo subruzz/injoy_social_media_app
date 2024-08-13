@@ -10,7 +10,7 @@ import 'package:record/record.dart';
 import 'package:social_media_app/core/services/app_interal/app_internal_service.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/utils/id_generator.dart';
+import 'package:social_media_app/core/utils/other/id_generator.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/domain/usecases/delete_message_usecase.dart';

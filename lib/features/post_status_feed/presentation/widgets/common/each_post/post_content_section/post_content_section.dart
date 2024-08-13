@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_content_section/widgets/post_hashtag.dart';
 
-import '../../../../../../../core/widgets/expandable_text.dart';
+import '../../../../../../../core/widgets/common/expandable_text.dart';
 
 class PostContentSection extends StatelessWidget {
   const PostContentSection({super.key, this.postDesc, required this.hashtags});

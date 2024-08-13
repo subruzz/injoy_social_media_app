@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/widgets/user_profile.dart';
+import 'package:social_media_app/core/widgets/common/user_profile.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/widgets/comment_sumbissition_visibility_widget.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/widgets/comment_text_field.dart';

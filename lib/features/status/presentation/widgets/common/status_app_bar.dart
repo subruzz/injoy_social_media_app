@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
-import 'package:social_media_app/core/widgets/app_bar_common_icon.dart';
+import 'package:social_media_app/core/widgets/app_related/app_bar_common_icon.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 

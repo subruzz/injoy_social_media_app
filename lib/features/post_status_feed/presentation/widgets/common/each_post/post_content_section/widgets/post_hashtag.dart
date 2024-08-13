@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 
 class PostHashtag extends StatelessWidget {
   const PostHashtag({

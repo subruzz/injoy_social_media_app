@@ -7,9 +7,9 @@ import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 
 import 'package:social_media_app/core/partial_user_widget.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/get_followers_list/get_followers_cubit.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/get_following_list/get_following_list_cubit.dart';
-import 'package:social_media_app/init_dependecies.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_followers_list/get_followers_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_following_list/get_following_list_cubit.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 
 class SeeFollowersFollowingPage extends StatelessWidget {
   const SeeFollowersFollowingPage({super.key, required this.initialIndex});

@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:social_media_app/core/services/assets/asset_services.dart';
 import '../../../features/chat/presentation/widgets/person_chat_page/utils.dart';
 import '../method_channel.dart/video_thumbnail.dart';
-import '../../utils/id_generator.dart';
+import '../../utils/other/id_generator.dart';
 
 class FirebaseStorageService {
   final FirebaseStorage firebaseStorage;

@@ -13,7 +13,7 @@ import 'package:social_media_app/features/auth/presentation/widgets/login/login_
 import 'package:social_media_app/features/auth/presentation/widgets/shared/separating_divider.dart';
 import 'package:social_media_app/core/widgets/welcome_msg/welcome_msg.dart';
 
-import '../../../../init_dependecies.dart';
+import '../../../../core/utils/di/init_dependecies.dart';
 import '../widgets/auth/google_auth_builder.dart';
 
 class LoginPage extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/app_svg.dart';
+import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;

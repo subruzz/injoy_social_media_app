@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:intl/intl.dart';
 import 'package:social_media_app/core/const/extensions/email_val.dart';
 import 'package:social_media_app/core/const/extensions/number_only_string.dart';
 

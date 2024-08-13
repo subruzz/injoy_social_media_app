@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/core/mulitple_post_indicator.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/widgets/common/mulitple_post_indicator.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/features/explore/presentation/pages/all_post_view.dart';
 
 class PostStaggeredView extends StatelessWidget {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
@@ -10,8 +12,26 @@ import 'package:social_media_app/features/post_status_feed/presentation/widgets/
 import '../../../status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
 import '../widgets/sections/home_tab_bar_section/widgets/following_post_tab_view.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    log('HomeScreen is built ');
+  }
+
+  @override
+  void dispose() {
+    log('HomeScreen is disposed ');
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

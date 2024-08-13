@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/google_auth.dart';
 
-import '../../../../../init_dependecies.dart';
+import '../../../../../core/utils/di/init_dependecies.dart';
 import '../../bloc/google_auth/google_auth_bloc.dart';
 
 class GoogleAuthBuilder extends StatelessWidget {

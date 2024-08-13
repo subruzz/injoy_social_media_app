@@ -4,9 +4,9 @@ import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/animation/border_widget.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
-import 'package:social_media_app/core/widgets/user_profile.dart';
+import 'package:social_media_app/core/widgets/common/user_profile.dart';
 import 'package:social_media_app/features/status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
-import '../../../../../../../core/routes/app_routes_const.dart';
+import '../../../../../../../core/utils/routes/tranistions/app_routes_const.dart';
 
 class FollowingUserStatus extends StatelessWidget {
   const FollowingUserStatus({super.key});

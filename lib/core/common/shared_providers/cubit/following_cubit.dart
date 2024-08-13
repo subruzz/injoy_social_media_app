@@ -26,4 +26,5 @@ class FollowingCubit extends Cubit<FollowingState> {
       emit(FollowingError('Failed to load following list: $error'));
     });
   }
+// }
 }

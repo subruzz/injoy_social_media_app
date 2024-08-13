@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/core/widgets/page_view.dart';
+import 'package:social_media_app/core/widgets/common/page_view.dart';
 
 class TagPeoplePage extends StatelessWidget {
   TagPeoplePage({super.key, required this.selectedAssets});

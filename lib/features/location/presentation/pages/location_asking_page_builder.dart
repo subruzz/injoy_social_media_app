@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/location/presentation/pages/location_asking_page.dart';
-import 'package:social_media_app/init_dependecies.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 
 class LocationAskingPageBuilder extends StatelessWidget {
   const LocationAskingPageBuilder({super.key, this.isFirstTime = false});

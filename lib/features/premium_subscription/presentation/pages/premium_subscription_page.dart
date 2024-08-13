@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
-import 'package:social_media_app/core/widgets/overlay_loading_holder.dart';
+import 'package:social_media_app/core/widgets/common/overlay_loading_holder.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/bloc/premium_subscription_bloc.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/pages/widgets/premium_buy_button.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/pages/widgets/premium_card_list.dart';

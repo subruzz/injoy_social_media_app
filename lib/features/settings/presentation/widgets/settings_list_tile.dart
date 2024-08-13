@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/widgets/app_svg.dart';
+import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 
 class SettingsListTile extends StatelessWidget {
   const SettingsListTile(

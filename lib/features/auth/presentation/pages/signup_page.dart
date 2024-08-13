@@ -5,7 +5,7 @@ import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/custom_scrollable_ontent.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/google_auth_builder.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/signup/signup_button.dart';
-import 'package:social_media_app/init_dependecies.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import '../../../../core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_choosing_text.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_form.dart';

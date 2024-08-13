@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/core/widgets/follow_unfollow_helper.dart';
+import 'package:social_media_app/core/widgets/helper/follow_unfollow_helper.dart';
 import '../../../../../../core/common/models/partial_user_model.dart';
 import '../../../../../../core/const/app_config/app_border_radius.dart';
 import '../../../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../../../core/theme/color/app_colors.dart';
-import '../../../../../../core/widgets/user_profile.dart';
+import '../../../../../../core/widgets/common/user_profile.dart';
 
 class WelcomeUserCard extends StatelessWidget {
   final PartialUser user;

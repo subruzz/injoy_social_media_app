@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 //! This method channel is not necessary for this project 
-//! since we are already using PhotoManager. 
+//! since we are already using PhotoManager package. 
 //! Included here for learning purposes only.
 // ignore: constant_identifier_names
 enum ImageFormat { JPEG, PNG, WEBP }

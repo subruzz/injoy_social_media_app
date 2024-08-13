@@ -9,15 +9,15 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_comment_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_like_button.dart';
 import 'package:video_player/video_player.dart';
-import '../../../../core/add_at_symbol.dart';
-import '../../../../core/app_error_gif.dart';
+import '../../../../core/widgets/common/add_at_symbol.dart';
+import '../../../../core/widgets/common/app_error_gif.dart';
 import '../../../../core/common/models/partial_user_model.dart';
 import '../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../core/services/app_cache/cache_manager.dart';
 import '../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import '../../../../core/widgets/expandable_text.dart';
-import '../../../../core/widgets/follow_unfollow_helper.dart';
-import '../../../../core/widgets/user_profile.dart';
+import '../../../../core/widgets/common/expandable_text.dart';
+import '../../../../core/widgets/helper/follow_unfollow_helper.dart';
+import '../../../../core/widgets/common/user_profile.dart';
 import '../bloc/reels/reels_cubit.dart';
 
 class VideoReelPage extends StatefulWidget {
@@ -36,12 +36,14 @@ class _VideoReelPageState extends State<VideoReelPage> {
 
   @override
   void initState() {
+    log('video widget build');
     super.initState();
     _pageController = PageController(initialPage: widget.index);
   }
 
   @override
   void dispose() {
+    log('video widget dispose');
     _pageController.dispose();
     super.dispose();
   }
@@ -221,7 +223,6 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
       _controller.dispose();
     }
   }
-
 
   @override
   void dispose() {

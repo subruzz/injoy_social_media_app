@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/utils/debouncer.dart';
+import 'package:social_media_app/core/utils/other/debouncer.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_recommended_post/get_recommended_post_cubit.dart';
@@ -12,6 +12,7 @@ import 'package:social_media_app/features/explore/presentation/blocs/search_loca
 import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore_all_posts.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/sections/tab/explore_tab.dart';
+
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
   @override
@@ -26,6 +27,7 @@ class _ExplorePageState extends State<ExplorePage>
   final ValueNotifier<bool> _isTextEntered = ValueNotifier(false);
   final Debouncer _debouncer =
       Debouncer(delay: const Duration(milliseconds: 500));
+  final ValueNotifier<int> _currentTab = ValueNotifier(0);
 
   @override
   void initState() {
@@ -39,8 +41,6 @@ class _ExplorePageState extends State<ExplorePage>
       }
     });
   }
-
-  final ValueNotifier<int> _currentTab = ValueNotifier(0);
 
   void _performSearch() {
     final query = _searchController.text.trim();

@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:image_cropper/image_cropper.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_floating_button.dart';
-import 'package:social_media_app/core/widgets/page_view.dart';
-import 'package:social_media_app/core/widgets/page_view_indicator.dart';
+import 'package:social_media_app/core/widgets/common/page_view.dart';
+import 'package:social_media_app/core/widgets/common/page_view_indicator.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 
 class CropImagePage extends StatefulWidget {

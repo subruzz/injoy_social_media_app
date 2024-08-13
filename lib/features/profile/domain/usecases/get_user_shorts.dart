@@ -3,15 +3,15 @@ import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/features/profile/domain/repository/user_posts_repository.dart';
+import 'package:social_media_app/features/profile/domain/repository/user_dat_repository.dart';
 
 import '../../../../core/common/models/partial_user_model.dart';
 
 class GetUserShortsUseCase
     implements UseCase<List<PostEntity>, GetUserShortsUseCaseParams> {
-  final UserPostsRepository _userPostRepository;
+  final UserDatRepository _userPostRepository;
 
-  GetUserShortsUseCase({required UserPostsRepository userPostRepository})
+  GetUserShortsUseCase({required UserDatRepository userPostRepository})
       : _userPostRepository = userPostRepository;
   @override
   Future<Either<Failure, List<PostEntity>>> call(

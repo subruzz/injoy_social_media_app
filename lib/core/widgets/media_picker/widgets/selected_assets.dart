@@ -1,6 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
-import 'package:social_media_app/core/widgets/page_view.dart';
+import 'package:social_media_app/core/widgets/common/page_view.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 
 class SelectedAssetsSection extends StatelessWidget {

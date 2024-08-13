@@ -6,11 +6,11 @@ import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/services/assets/asset_services.dart';
 
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/common_list_tile.dart';
+import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
 
 import '../../../../../../../../core/services/method_channel.dart/app_toast.dart';

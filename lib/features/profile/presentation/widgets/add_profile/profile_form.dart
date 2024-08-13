@@ -7,8 +7,8 @@ import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app
 import 'package:social_media_app/core/utils/functions/date_picker.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
-import 'package:social_media_app/features/profile/presentation/pages/add_profile/username_check_page.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/index.dart';
+import 'package:social_media_app/features/profile/presentation/pages/username_check_page.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/user_profile_img.dart';
 
 import '../../../../../core/widgets/button/custom_elevated_button.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:social_media_app/core/widgets/cached_image.dart';
+import 'package:social_media_app/core/widgets/common/cached_image.dart';
 import 'package:social_media_app/features/post/presentation/widgets/edit_post/edit_screen_feed_option.dart';
 
 import '../../../../../../../../core/widgets/common/view_media.dart';

@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/features/assets/presenation/bloc/album_bloc/album_bloc.dart';
@@ -18,9 +18,9 @@ import 'package:social_media_app/features/assets/presenation/widgets/selected_im
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/post/presentation/pages/create_post_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_wallapaper_preview_page.dart';
-import 'package:social_media_app/init_dependecies.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 
-import '../../../../core/widgets/overlay_loading_holder.dart';
+import '../../../../core/widgets/common/overlay_loading_holder.dart';
 
 class CustomMediaPickerPage extends StatefulWidget {
   const CustomMediaPickerPage(

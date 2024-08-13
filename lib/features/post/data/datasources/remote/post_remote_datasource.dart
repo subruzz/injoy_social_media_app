@@ -15,7 +15,7 @@ import 'package:social_media_app/features/post/data/models/update_post_model.dar
 import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/post/domain/enitities/update_post.dart';
-import 'package:social_media_app/init_dependecies.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 
 abstract interface class PostRemoteDatasource {
   Future<void> createPost(

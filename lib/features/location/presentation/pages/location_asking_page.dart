@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/app_error_gif.dart';
+import 'package:social_media_app/core/widgets/common/app_error_gif.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/enums/location_enum.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/utils/debouncer.dart';
+import 'package:social_media_app/core/utils/other/debouncer.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
-import 'package:social_media_app/core/widgets/custom_divider.dart';
+import 'package:social_media_app/core/widgets/common/custom_divider.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
 import 'package:social_media_app/features/location/data/models/location_search_model.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/location/presentation/widgets/location_dialog.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/index.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/index.dart';
 
 import '../../../../core/widgets/app_related/common_text.dart';
 import '../../../../core/widgets/button/custom_elevated_button.dart';

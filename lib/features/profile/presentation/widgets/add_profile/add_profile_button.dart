@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:social_media_app/core/routes/app_routes_const.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/profile_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/next_button.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/next_icon.dart';
 
-import '../../bloc/user_profile_bloc/profile_state.dart';
+import '../../bloc/user_profile/user_profile_bloc/profile_state.dart';
 
 class AddProfileButton extends StatefulWidget {
   const AddProfileButton(

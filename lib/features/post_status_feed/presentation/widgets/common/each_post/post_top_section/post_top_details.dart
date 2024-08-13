@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
-import 'package:social_media_app/core/widgets/user_profile.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
+import 'package:social_media_app/core/widgets/common/user_profile.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_top_section/widgets/post_option_button.dart';
 
 import '../../../../../../../core/common/models/partial_user_model.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/app_svg.dart';
+import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/sections/ai_chat_top_bar/widgets/ai_drawer_header.dart';
 
 class AiChatDrawer extends StatelessWidget {

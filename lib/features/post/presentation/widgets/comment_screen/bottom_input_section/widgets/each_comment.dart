@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:social_media_app/core/add_at_symbol.dart';
+import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/extensions/time_ago.dart';
-import 'package:social_media_app/core/widgets/expandable_text.dart';
-import 'package:social_media_app/core/widgets/user_profile.dart';
+import 'package:social_media_app/core/widgets/common/expandable_text.dart';
+import 'package:social_media_app/core/widgets/common/user_profile.dart';
 import 'package:social_media_app/features/post/domain/enitities/comment_entity.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/widgets/comment_like_section.dart';

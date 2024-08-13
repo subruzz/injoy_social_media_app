@@ -5,14 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
-import 'package:social_media_app/core/widgets/app_svg.dart';
-import 'package:social_media_app/core/widgets/overlay_loading_holder.dart';
+import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
+import 'package:social_media_app/core/widgets/common/overlay_loading_holder.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
@@ -20,7 +20,7 @@ import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/sel
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/hashtag_section/hash_tag_section.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/post_option_section/post_option_section.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/post_option_section/widgets/post_location.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/get_user_posts_bloc/get_user_posts_bloc.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
 
 import '../../../../core/services/method_channel.dart/video_trimmer.dart';
 import '../widgets/create_post/section/create_post_input_section/post_input_section.dart';

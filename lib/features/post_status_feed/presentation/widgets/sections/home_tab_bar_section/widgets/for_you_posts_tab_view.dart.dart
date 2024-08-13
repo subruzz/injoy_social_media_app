@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/app_error_gif.dart';
+import 'package:social_media_app/core/widgets/common/app_error_gif.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/each_post.dart';
-import 'package:social_media_app/core/widgets/shimmer.dart';
+import 'package:social_media_app/core/widgets/common/shimmer.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/for_you_posts/for_you_post_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/no_post_holder.dart';
 

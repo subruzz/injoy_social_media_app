@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/add_at_symbol.dart';
+import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/common/ai_gradeitn_text.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/common/ai_profile.dart';

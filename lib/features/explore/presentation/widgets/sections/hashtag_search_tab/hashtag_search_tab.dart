@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/add_at_symbol.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/explore_search_loading.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/search_empty_error_text.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/tag_location_item.dart';

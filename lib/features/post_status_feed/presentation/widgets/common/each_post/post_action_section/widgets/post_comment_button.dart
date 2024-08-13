@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/widgets/app_svg.dart';
+import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 import 'package:social_media_app/features/post/presentation/pages/comment_screen.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/social_action_text.dart';
 

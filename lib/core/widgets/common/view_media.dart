@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
-import 'package:social_media_app/core/widgets/cached_image.dart';
+import 'package:social_media_app/core/widgets/common/cached_image.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
-import 'package:social_media_app/core/widgets/page_view.dart';
-import 'package:social_media_app/core/widgets/page_view_indicator.dart';
+import 'package:social_media_app/core/widgets/common/page_view.dart';
+import 'package:social_media_app/core/widgets/common/page_view_indicator.dart';
 
 class ViewMedia extends StatefulWidget {
   const ViewMedia({

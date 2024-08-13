@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/utils/debouncer.dart';
+import 'package:social_media_app/core/utils/other/debouncer.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_name_cubit/user_name_cubit.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_bloc.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile_bloc/profile_event.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_name_cubit/user_name_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/profile_bloc.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/profile_event.dart';
 
 class UserNameCheckField extends StatelessWidget {
   const UserNameCheckField(

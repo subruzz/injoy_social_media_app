@@ -8,14 +8,14 @@ import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/app_svg.dart';
+import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 import 'package:social_media_app/core/widgets/dialog/dialogs.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/utils/haptic_feedback.dart';
+import 'package:social_media_app/core/services/app_interal/haptic_feedback.dart';
 import 'package:social_media_app/features/ai_chat/presentation/pages/ai_chat_page.dart';
 
-import '../../../../core/page_transitions.dart';
+import '../../../../core/utils/routes/page_transitions.dart';
 
 class FloatingButton extends StatelessWidget {
   const FloatingButton({super.key, required this.l10n});

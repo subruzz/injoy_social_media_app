@@ -3,7 +3,7 @@ import 'package:social_media_app/core/widgets/animation/animations.dart';
 
 import '../../../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../../../core/const/assets/app_assets.dart';
-import '../../../../../../core/widgets/user_profile.dart';
+import '../../../../../../core/widgets/common/user_profile.dart';
 
 class AiChatTopBar extends StatelessWidget {
   const AiChatTopBar({super.key});

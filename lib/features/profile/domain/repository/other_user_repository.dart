@@ -1,7 +1,5 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
-import 'package:social_media_app/core/common/models/partial_user_model.dart';
-import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 
 abstract class OtherUserRepository {
@@ -14,11 +12,5 @@ abstract class OtherUserRepository {
     String currentUid,
     String otherUid,
   );
-  Future<
-          Either<Failure,
-              ({List<PostModel> userPosts, List<String> userPostImages})>>
-      getAllPostsByOtherUser(String userId);
-  Future<Either<Failure, List<PartialUser>>> getMyFollowingList(
-      List<String> following, String myId);
-  Future<Either<Failure, List<PartialUser>>> getMyFollowersList(String myId);
+
 }

@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/routes/app_routes_const.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
-import 'package:social_media_app/features/profile/presentation/pages/add_profile/username_check_page.dart';
+import 'package:social_media_app/features/profile/presentation/pages/username_check_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({
