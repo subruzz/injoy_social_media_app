@@ -5,9 +5,9 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/services/app_interal/haptic_feedback.dart';
-import 'package:social_media_app/features/assets/presenation/bloc/cubit/asset_file_cubit.dart';
-import 'package:social_media_app/features/assets/presenation/widgets/grid_asset_showing_section/widgets/asset_selectingh_check.dart';
-import 'package:social_media_app/features/assets/presenation/widgets/grid_asset_showing_section/widgets/single_asset.dart';
+import 'package:social_media_app/features/media_picker/presenation/bloc/cubit/asset_file_cubit.dart';
+import 'package:social_media_app/features/media_picker/presenation/widgets/grid_asset_showing_section/widgets/asset_selectingh_check.dart';
+import 'package:social_media_app/features/media_picker/presenation/widgets/grid_asset_showing_section/widgets/single_asset.dart';
 
 class AssetItems extends StatefulWidget {
   const AssetItems(

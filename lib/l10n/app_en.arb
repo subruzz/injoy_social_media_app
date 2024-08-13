@@ -65,9 +65,18 @@
   "dontShowPostFromUser": "Don't show post from this user",
   "shorts": "Shorts",
   "status": "Status",
-  "post": "Post"
-
-
+  "post": "Post",
+  "helloUser": "Hello  @{userName}!",
+  "chatAssistant": "I am Inaya, your chat assistant!",
+  "newChat": "New Chat",
+  "chatHistory": "Chat History",
+  "aboutInaya": "About Inaya",
+  "hi": "Hi",
+  "iAmInaya": "I am Inaya",
+  "errorGeneratingResponse": "An error occurred while generating the response.",
+  "typeSomething": "Type something...",
+  "aboutInayaSubtitle": "I’m here to help you with any questions or tasks you might have. Whether you need information, assistance with your tasks, or just a chat, I’m here to make your experience better. Feel free to ask me anything!",
+  "ok": "OK"
 
 }
 

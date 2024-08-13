@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
 
 import '../../../../../../core/const/app_config/app_border_radius.dart';
 import '../../../../../../core/const/app_config/app_sizedbox.dart';
@@ -7,20 +8,25 @@ import '../../../../../../core/widgets/textfields/custom_textform_field.dart';
 import '../../../cubits/cubit/ai_chat_cubit.dart';
 
 class AiChatInput extends StatefulWidget {
-  const AiChatInput({super.key});
-
+  const AiChatInput({super.key, required this.l10n});
+  final AppLocalizations l10n;
   @override
   State<AiChatInput> createState() => _AiChatInputState();
 }
 
 class _AiChatInputState extends State<AiChatInput> {
   final _aiChatController = TextEditingController();
-
+  final _focusNode = FocusNode();
   @override
   void dispose() {
     _aiChatController.dispose();
     super.dispose();
   }
+
+  // void _toggleDrawer(BuildContext context) {
+  //   FocusScope.of(context).unfocus(); // Dismisses the keyboard
+  //   Scaffold.of(context).openDrawer(); // Opens the drawer
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +38,9 @@ class _AiChatInputState extends State<AiChatInput> {
           children: [
             Expanded(
               child: CustomTextField(
+                focusNode: _focusNode,
                 radius: AppBorderRadius.large,
-                hintText: 'Type something...',
+                hintText: widget.l10n.typeSomething,
                 controller: _aiChatController,
               ),
             ),

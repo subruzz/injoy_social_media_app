@@ -12,7 +12,7 @@ class CommonListTile extends StatelessWidget {
       this.extraColor,
       required this.text,
       this.subtitle,
-      this.leading});
+      this.leading, this.titileStyle});
   final double iconSize;
   final Widget? trailing;
   final String? subtitle;
@@ -21,6 +21,7 @@ class CommonListTile extends StatelessWidget {
   final String? leading;
   final VoidCallback? onTap;
   final Color? extraColor;
+  final TextStyle? titileStyle;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -45,7 +46,7 @@ class CommonListTile extends StatelessWidget {
         contentPadding: noPadding ? EdgeInsets.zero : null,
         title: Text(
           text,
-          style: TextStyle(color: extraColor),
+          style:titileStyle?? TextStyle(color: extraColor),
         ),
         trailing: trailing);
   }

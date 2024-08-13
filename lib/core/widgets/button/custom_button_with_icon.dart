@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:animate_do/animate_do.dart'; // Ensure this import is present
 
 class CustomButtonWithIcon extends StatelessWidget {
   final VoidCallback onClick;
@@ -39,10 +38,7 @@ class CustomButtonWithIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FadeInUp(
-      delay: const Duration(milliseconds: 0),
-      duration: const Duration(milliseconds: 0),
-      child: SizedBox(
+    return  SizedBox(
         width: width,
         height: 37.w,
         child: ElevatedButton.icon(
@@ -65,7 +61,7 @@ class CustomButtonWithIcon extends StatelessWidget {
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                   color: textColor,fontSize: fontSize?.sp)), // Display child widget as label
         ),
-      ),
+      
     );
   }
 }

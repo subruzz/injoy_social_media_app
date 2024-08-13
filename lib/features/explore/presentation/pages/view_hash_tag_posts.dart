@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_hash_tag_posts_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/blocs/get_recent_hashtag_posts/get_recent_hashtag_posts_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/get_shorts_of_tag/get_shorts_hashtag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/view_hashtag_posts/sections/hashtag_posts_tab_bar_section.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/view_hashtag_posts/sections/hashtag_posts_top_widget_section.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
@@ -24,7 +24,7 @@ class ViewHashTagPostsScreen extends StatelessWidget {
             ..getTopHashTagPosts(hashTagName),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<GetRecentHashtagPostsCubit>()
+          create: (context) => serviceLocator<GetShortsHashtagCubit>()
             ..getRecentHashTagPosts(hashTagName),
         ),
       ],

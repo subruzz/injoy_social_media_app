@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
@@ -32,39 +31,34 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FadeInUp(
-      delay: const Duration(milliseconds: 0),
-      duration: const Duration(milliseconds: 0),
-      child: SizedBox(
-        width: width?.w,
-        height: height?.h,
-        child: ElevatedButton(
-            style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-                backgroundColor: WidgetStatePropertyAll(color),
-                shape: WidgetStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: radius ?? AppBorderRadius.large,
-                    side: BorderSide(
-                        color:
-                            borderColor ?? AppDarkColor().secondaryBackground,
-                        width: 1.0),
-                  ),
-                )),
-            onPressed: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-              onClick();
-            },
-            child: buttonIcon != null
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (buttonIcon != null) buttonIcon!,
-                      if (buttonIcon != null) AppSizedBox.sizedBox10W,
-                      child
-                    ],
-                  )
-                : child),
-      ),
+    return SizedBox(
+      width: width?.w,
+      height: height?.h,
+      child: ElevatedButton(
+          style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+              backgroundColor: WidgetStatePropertyAll(color),
+              shape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: radius ?? AppBorderRadius.small,
+                  side: BorderSide(
+                      color: borderColor ?? AppDarkColor().secondaryBackground,
+                      width: 1.0),
+                ),
+              )),
+          onPressed: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+            onClick();
+          },
+          child: buttonIcon != null
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (buttonIcon != null) buttonIcon!,
+                    if (buttonIcon != null) AppSizedBox.sizedBox10W,
+                    child
+                  ],
+                )
+              : child),
     );
   }
 }

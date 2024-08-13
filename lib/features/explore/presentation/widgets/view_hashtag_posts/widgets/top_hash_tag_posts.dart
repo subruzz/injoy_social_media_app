@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_hash_tag_posts_cubit.dart';
@@ -23,6 +25,7 @@ class TopHashTagPosts extends StatelessWidget {
           return PostStaggeredView(allPosts: state.hashTagTopPosts);
         }
         if (state is GetHashTagTopPostFailure) {
+          log(state.erroMsg);
           return const Center(
             child: ExploreFieldMessages(
               isError: true,

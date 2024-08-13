@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
@@ -45,6 +47,7 @@ class HashtagSearchTab extends StatelessWidget {
           );
         }
         if (state is SearchHashTagFailure) {
+      
           return const ExploreFieldMessages(
             isError: true,
           );

@@ -10,7 +10,7 @@ import 'package:social_media_app/features/status/presentation/widgets/create_mul
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets_indicator.dart';
 import '../../../../core/widgets/messenger/messenger.dart';
-import '../../../assets/presenation/pages/crop_image_page.dart';
+import '../../../media_picker/presenation/pages/crop_image_page.dart';
 
 class CreateMutlipleStatusPage extends StatefulWidget {
   const CreateMutlipleStatusPage(

@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
@@ -19,7 +19,7 @@ abstract interface class ExploreAppDatasource {
   Future<List<PostModel>> getTopPostsOfLocation(String location);
   Future<List<PostModel>> searchRecentPostsOfLocation(String location);
   Future<List<PostModel>> getTopPostsOfHashTags(String tag);
-  Future<List<PostModel>> searchRecentPostsOfHashTags(String tag);
+  Future<List<PostModel>> getShortsOfTag(String tag);
   Future<List<PostModel>> getAllPosts(String id);
   Future<List<PartialUser>> getSuggestedOrNearbyUsers(
     List<String> interests,
@@ -192,6 +192,47 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
   }
 
   @override
+  Future<List<PostModel>> searchRecentPostsOfLocation(String location) async {
+    try {
+      final locationRef = _firebaseFirestore
+          .collection('locations')
+          .doc(location)
+          .collection('postIds');
+      final querySnapshot = await locationRef.get();
+
+      final List<String> postIds =
+          querySnapshot.docs.map((doc) => doc.id).toList();
+
+      final allPosts = await _firebaseFirestore
+          .collection('posts')
+          .where(FieldPath.documentId, whereIn: postIds)
+          .orderBy('createAt', descending: true)
+          .orderBy('totalComments', descending: true)
+          .get();
+      List<PostModel> posts = [];
+      final userRef =
+          _firebaseFirestore.collection(FirebaseCollectionConst.users);
+
+      for (var post in allPosts.docs) {
+        final userDoc = await userRef.doc(post['creatorUid']).get();
+        if (!userDoc.exists) continue;
+        final PartialUser user =
+            PartialUser.fromJson(userDoc as Map<String, dynamic>);
+        final currentPost = PostModel.fromJson(post.data(), user);
+        posts.add(currentPost);
+      }
+      // final List<PostModel> posts = postsQuery.docs.map((doc) {
+      //   final data = doc.data();
+      //   return PostModel.fromJson(data, null);
+      // }).toList();
+
+      return posts;
+    } catch (e) {
+      throw const MainException();
+    }
+  }
+
+  @override
   Future<List<PostModel>> getTopPostsOfLocation(String location) async {
     try {
       final locationRef = _firebaseFirestore
@@ -235,47 +276,6 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
   }
 
   @override
-  Future<List<PostModel>> searchRecentPostsOfLocation(String location) async {
-    try {
-      final locationRef = _firebaseFirestore
-          .collection('locations')
-          .doc(location)
-          .collection('postIds');
-      final querySnapshot = await locationRef.get();
-
-      final List<String> postIds =
-          querySnapshot.docs.map((doc) => doc.id).toList();
-
-      final allPosts = await _firebaseFirestore
-          .collection('posts')
-          .where(FieldPath.documentId, whereIn: postIds)
-          .orderBy('createAt', descending: true)
-          .orderBy('totalComments', descending: true)
-          .get();
-      List<PostModel> posts = [];
-      final userRef =
-          _firebaseFirestore.collection(FirebaseCollectionConst.users);
-
-      for (var post in allPosts.docs) {
-        final userDoc = await userRef.doc(post['creatorUid']).get();
-        if (!userDoc.exists) continue;
-        final PartialUser user =
-            PartialUser.fromJson(userDoc as Map<String, dynamic>);
-        final currentPost = PostModel.fromJson(post.data(), user);
-        posts.add(currentPost);
-      }
-      // final List<PostModel> posts = postsQuery.docs.map((doc) {
-      //   final data = doc.data();
-      //   return PostModel.fromJson(data, null);
-      // }).toList();
-
-      return posts;
-    } catch (e) {
-      throw const MainException();
-    }
-  }
-
-  @override
   Future<List<PostModel>> getTopPostsOfHashTags(String tag) async {
     try {
       final allPosts = await _firebaseFirestore
@@ -290,7 +290,7 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
         final userDoc = await userRef.doc(post['creatorUid']).get();
         if (!userDoc.exists) continue;
         final PartialUser user =
-            PartialUser.fromJson(userDoc as Map<String, dynamic>);
+            PartialUser.fromJson(userDoc.data() as Map<String, dynamic>);
         final currentPost = PostModel.fromJson(post.data(), user);
         posts.add(currentPost);
       }
@@ -301,22 +301,18 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
 
       return posts;
     } catch (e) {
+      log('error getting posts ${e.toString()}');
+
       throw const MainException();
     }
   }
 
   @override
-  Future<List<PostModel>> searchRecentPostsOfHashTags(String tag) async {
+  Future<List<PostModel>> getShortsOfTag(String tag) async {
     try {
-      // Calculate the timestamp for 24 hours ago
-      final DateTime twentyFourHoursAgo =
-          DateTime.now().subtract(const Duration(hours: 24));
-
       final allPosts = await _firebaseFirestore
-          .collection('posts')
+          .collection('reels')
           .where('hashtags', arrayContains: tag)
-          .where('createAt', isGreaterThanOrEqualTo: twentyFourHoursAgo)
-          .orderBy('createAt', descending: true)
           .get();
       List<PostModel> posts = [];
       final userRef =
@@ -326,7 +322,7 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
         final userDoc = await userRef.doc(post['creatorUid']).get();
         if (!userDoc.exists) continue;
         final PartialUser user =
-            PartialUser.fromJson(userDoc as Map<String, dynamic>);
+            PartialUser.fromJson(userDoc.data() as Map<String, dynamic>);
         final currentPost = PostModel.fromJson(post.data(), user);
         posts.add(currentPost);
       }
@@ -337,6 +333,8 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
 
       return posts;
     } catch (e) {
+      log('error getting posts ${e.toString()}');
+
       throw const MainException();
     }
   }
@@ -426,7 +424,7 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       throw const MainException();
     }
   }
-  
+
   @override
   Future<List<PostModel>> getSuggestedPostBasedOnaPost(PostEntity post) {
     // TODO: implement getSuggestedPostBasedOnaPost

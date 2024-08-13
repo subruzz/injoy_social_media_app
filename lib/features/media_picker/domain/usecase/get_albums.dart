@@ -4,7 +4,7 @@ import 'package:photo_manager/photo_manager.dart';
 
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
-import 'package:social_media_app/features/assets/domain/repository/asset_repository.dart';
+import 'package:social_media_app/features/media_picker/domain/repository/asset_repository.dart';
 
 class LoadAlbumsUseCase
     implements UseCase<(List<AssetPathEntity>, bool hasPermission), LoadAlbumsUseCaseParams> {

@@ -89,10 +89,10 @@ class ExploreAppRepoImpl implements ExploreAppRepository {
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> searchRecentPostsOfHashTags(
+  Future<Either<Failure, List<PostEntity>>> getShortsOfTag(
       String tag) async {
     try {
-      final res = await _exploreAppDatasource.searchRecentPostsOfHashTags(tag);
+      final res = await _exploreAppDatasource.getShortsOfTag(tag);
       return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

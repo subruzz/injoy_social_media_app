@@ -3,7 +3,7 @@ import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/utils/routes/page_transitions.dart';
 
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
-import 'package:social_media_app/features/assets/presenation/pages/custom_media_picker_page.dart';
+import 'package:social_media_app/features/media_picker/presenation/pages/custom_media_picker_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';

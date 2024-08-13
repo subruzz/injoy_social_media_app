@@ -7,8 +7,8 @@ import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
-import 'package:social_media_app/features/assets/presenation/bloc/assets_bloc/assets_bloc.dart';
-import 'package:social_media_app/features/assets/presenation/widgets/grid_asset_showing_section/widgets/each_assets.dart';
+import 'package:social_media_app/features/media_picker/presenation/bloc/assets_bloc/assets_bloc.dart';
+import 'package:social_media_app/features/media_picker/presenation/widgets/grid_asset_showing_section/widgets/each_assets.dart';
 
 class GridAssetSection extends StatelessWidget {
   const GridAssetSection(

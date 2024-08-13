@@ -29,6 +29,6 @@ abstract interface class ExploreAppRepository {
       String location);
   //posts based on tags
   Future<Either<Failure, List<PostEntity>>> getTopPostsOfHashTags(String tag);
-  Future<Either<Failure, List<PostEntity>>> searchRecentPostsOfHashTags(
+  Future<Either<Failure, List<PostEntity>>> getShortsOfTag(
       String tag);
 }

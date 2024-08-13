@@ -11,9 +11,9 @@ import 'package:social_media_app/features/ai_chat/data/repostiory/ai_chat_repo_i
 import 'package:social_media_app/features/ai_chat/domain/repository/ai_chat_repository.dart';
 import 'package:social_media_app/features/ai_chat/domain/usecases/generate_ai_message.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
-import 'package:social_media_app/features/assets/data/repository/asset_repository_impl.dart';
-import 'package:social_media_app/features/assets/domain/repository/asset_repository.dart';
-import 'package:social_media_app/features/assets/data/datasource/local/asset_local_datasource.dart';
+import 'package:social_media_app/features/media_picker/data/repository/asset_repository_impl.dart';
+import 'package:social_media_app/features/media_picker/domain/repository/asset_repository.dart';
+import 'package:social_media_app/features/media_picker/data/datasource/local/asset_local_datasource.dart';
 import 'package:social_media_app/features/auth/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:social_media_app/features/auth/data/repositories/auth_repo_impl.dart';
 import 'package:social_media_app/features/auth/domain/repostiories/auth_repository.dart';
@@ -53,14 +53,14 @@ import 'package:social_media_app/features/explore/domain/repositories/explore_ap
 import 'package:social_media_app/features/explore/domain/usecases/get_all_posts.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_hashtag_top_posts.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_nearyby_users.dart';
-import 'package:social_media_app/features/explore/domain/usecases/get_recent_posts_hashtag.dart';
+import 'package:social_media_app/features/explore/domain/usecases/get_shorts_of_tag.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_recommended_post.dart';
 import 'package:social_media_app/features/explore/domain/usecases/search_hash_tags.dart';
 import 'package:social_media_app/features/explore/domain/usecases/search_locations_explore.dart';
 import 'package:social_media_app/features/explore/domain/usecases/search_user.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/explore_user/explore_user_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_hash_tag_posts_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/blocs/get_recent_hashtag_posts/get_recent_hashtag_posts_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/get_shorts_of_tag/get_shorts_hashtag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_recommended_post/get_recommended_post_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
@@ -89,15 +89,15 @@ import 'package:social_media_app/features/post/domain/usecases/comment/remove_li
 import 'package:social_media_app/features/post/domain/usecases/comment/update_comment.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/create_posts.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/delete_post.dart';
-import 'package:social_media_app/features/assets/domain/usecase/get_albums.dart';
-import 'package:social_media_app/features/assets/domain/usecase/get_assets.dart';
+import 'package:social_media_app/features/media_picker/domain/usecase/get_albums.dart';
+import 'package:social_media_app/features/media_picker/domain/usecase/get_assets.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/like_post.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/save_post.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/searh_hashtag.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/unlike_post.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/update_post.dart';
-import 'package:social_media_app/features/assets/presenation/bloc/album_bloc/album_bloc.dart';
-import 'package:social_media_app/features/assets/presenation/bloc/assets_bloc/assets_bloc.dart';
+import 'package:social_media_app/features/media_picker/presenation/bloc/album_bloc/album_bloc.dart';
+import 'package:social_media_app/features/media_picker/presenation/bloc/assets_bloc/assets_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/get_post_comment/get_post_comment_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/like_comment/like_comment_cubit.dart';
@@ -508,7 +508,7 @@ void _exploreApp() {
         SearchLocationsExploreUseCase(exploreAppRepository: serviceLocator()))
     ..registerFactory(() => SearchLocationExploreCubit(serviceLocator()))
     ..registerFactory(() =>
-        GetRecentPostsHashtagUseCase(exploreAppRepository: serviceLocator()))
+        GetShortsOfTagUseCase(exploreAppRepository: serviceLocator()))
     ..registerFactory(
         () => GetHashtagTopPostsUseCase(exploreAppRepository: serviceLocator()))
     ..registerFactory(() => GetHashTagPostsCubit(
@@ -516,7 +516,7 @@ void _exploreApp() {
         ))
     ..registerFactory(
         () => GetAllPostsUseCase(exploreAppRepository: serviceLocator()))
-    ..registerFactory(() => GetRecentHashtagPostsCubit(serviceLocator()))
+    ..registerFactory(() => GetShortsHashtagCubit(serviceLocator()))
     ..registerFactory(() => ExploreAllPostsCubit(
           serviceLocator(),
         ))

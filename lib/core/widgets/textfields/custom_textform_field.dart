@@ -21,6 +21,7 @@ class CustomTextField extends StatefulWidget {
   final Color? backgroundColor;
   final bool autoValidate;
   final BorderRadius? radius;
+  final bool autoFocus;
   final void Function(String)? onChanged;
   final void Function()? datePicker;
   const CustomTextField(
@@ -37,6 +38,7 @@ class CustomTextField extends StatefulWidget {
       this.showSuffixIcon = false,
       required this.hintText,
       this.keyboardType,
+      this.autoFocus = false,
       this.obsecureText = false,
       this.prefixIcon,
       this.validation,
@@ -59,6 +61,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+        autofocus: widget.autoFocus,
         onChanged: widget.onChanged,
         readOnly: widget.readOnly ?? false,
         maxLines: widget.maxLine ?? 1,

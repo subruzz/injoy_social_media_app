@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/features/assets/presenation/bloc/album_bloc/album_bloc.dart';
-import 'package:social_media_app/features/assets/presenation/bloc/assets_bloc/assets_bloc.dart';
+import 'package:social_media_app/features/media_picker/presenation/bloc/album_bloc/album_bloc.dart';
+import 'package:social_media_app/features/media_picker/presenation/bloc/assets_bloc/assets_bloc.dart';
 
 class AlbumSelectSection extends StatelessWidget {
   const AlbumSelectSection(

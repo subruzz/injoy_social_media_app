@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/features/assets/domain/usecase/get_albums.dart';
+import 'package:social_media_app/features/media_picker/domain/usecase/get_albums.dart';
 
 part 'album_event.dart';
 part 'album_state.dart';

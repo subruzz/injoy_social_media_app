@@ -6,12 +6,19 @@ import 'package:social_media_app/features/ai_chat/domain/enitity/ai_chat_entity.
 import 'package:social_media_app/features/ai_chat/domain/usecases/generate_ai_message.dart';
 
 part 'ai_chat_state.dart';
-// ai_chat_cubit.dart
 
 class AiChatCubit extends Cubit<AiChatState> {
   final GenerateAiMessageUseCase _aiMessageUseCase;
 
   AiChatCubit(this._aiMessageUseCase) : super(const AiChatState());
+  void clearChat() {
+    if (state.chatMessages.isEmpty || state.isLoading) {
+      return;
+    }
+    state.chatMessages.clear();
+    log(state.chatMessages.toString());
+    emit(state.copyWith(chatMessages: state.chatMessages));
+  }
 
   void chatGenerateNewTextMessage(String chatMsg) async {
     // Add the new user message
@@ -58,4 +65,3 @@ class AiChatCubit extends Cubit<AiChatState> {
     );
   }
 }
-

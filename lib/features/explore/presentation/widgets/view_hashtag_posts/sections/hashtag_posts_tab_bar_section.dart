@@ -17,11 +17,11 @@ class HashtagPostsTabBarSection extends StatelessWidget {
           indicatorWeight: 3,
           tabs: [
             Text(
-              'Top',
+              'Posts',
               style: Theme.of(context).textTheme.labelMedium,
             ),
             Text(
-              'Recent',
+              'Shorts',
               style: Theme.of(context).textTheme.labelMedium,
             ),
           ],
@@ -32,7 +32,7 @@ class HashtagPostsTabBarSection extends StatelessWidget {
               TopHashTagPosts(
                 hashtagName: hashtagName,
               ),
-              RecentHashtagPosts(hashtagName: hashtagName),
+              ShortsOfLocationORTag(name: hashtagName),
             ],
           ),
         ),

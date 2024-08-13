@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/features/explore/presentation/blocs/get_recent_hashtag_posts/get_recent_hashtag_posts_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/get_shorts_of_tag/get_shorts_hashtag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/explore_search_loading.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/search_empty_error_text.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/sections/recommened_posts_tab/widgets/post_staggered_view.dart';
 
-class RecentHashtagPosts extends StatelessWidget {
-  const RecentHashtagPosts({super.key, required this.hashtagName});
-  final String hashtagName;
+class ShortsOfLocationORTag extends StatelessWidget {
+  const ShortsOfLocationORTag({super.key, required this.name});
+  final String name;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetRecentHashtagPostsCubit, GetRecentHashtagPostsState>(
+    return BlocBuilder<GetShortsHashtagCubit, GetShortsHashtagState>(
       builder: (context, state) {
         if (state is GetHashTagRecentPostSucess) {
           if (state.hashTagRecentPosts.isEmpty) {
             return Center(
               child: ExploreFieldMessages(
-                query: hashtagName,
+                query: name,
               ),
             );
           }
