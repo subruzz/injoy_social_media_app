@@ -4,9 +4,9 @@ import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
 import 'package:social_media_app/core/common/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/suggestion_from_post/suggestion_from_post_cubit.dart';
 import 'package:social_media_app/features/media_picker/presenation/bloc/cubit/asset_file_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/blocs/follow_hashtag/follow_hashtag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_hash_tag_posts_cubit.dart';
 import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/like_comment/like_comment_cubit.dart';
@@ -21,7 +21,6 @@ import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/forgot_password/forgot_password_bloc.dart';
-import 'package:social_media_app/features/media_picker/presenation/bloc/album_bloc/album_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/like_post/like_post_bloc.dart';
@@ -134,8 +133,5 @@ List<SingleChildWidget> myProviders = [
   ),
   BlocProvider(create: (context) => AssetFileCubit()),
   BlocProvider(create: (context) => ChatWallapaperCubit()..getChatWallapaper()),
-  BlocProvider(
-    create: (context) => FollowHashtagCubit(
-        FirebaseFirestore.instance, context.read<AppUserBloc>().appUser.id),
-  ),
+  BlocProvider(create: (context) => serviceLocator<SuggestionFromPostCubit>()),
 ];

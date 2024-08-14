@@ -11,6 +11,8 @@ import 'package:social_media_app/features/ai_chat/data/repostiory/ai_chat_repo_i
 import 'package:social_media_app/features/ai_chat/domain/repository/ai_chat_repository.dart';
 import 'package:social_media_app/features/ai_chat/domain/usecases/generate_ai_message.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/reels_explore/reels_explore_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/suggestion_from_post/suggestion_from_post_cubit.dart';
 import 'package:social_media_app/features/media_picker/data/repository/asset_repository_impl.dart';
 import 'package:social_media_app/features/media_picker/domain/repository/asset_repository.dart';
 import 'package:social_media_app/features/media_picker/data/datasource/local/asset_local_datasource.dart';
@@ -52,7 +54,7 @@ import 'package:social_media_app/features/explore/data/repository/explore_app_re
 import 'package:social_media_app/features/explore/domain/repositories/explore_app_repository.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_all_posts.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_hashtag_top_posts.dart';
-import 'package:social_media_app/features/explore/domain/usecases/get_nearyby_users.dart';
+import 'package:social_media_app/features/explore/domain/usecases/get_suggested_posts_from_post.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_shorts_of_tag.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_recommended_post.dart';
 import 'package:social_media_app/features/explore/domain/usecases/search_hash_tags.dart';
@@ -507,8 +509,8 @@ void _exploreApp() {
     ..registerFactory(() =>
         SearchLocationsExploreUseCase(exploreAppRepository: serviceLocator()))
     ..registerFactory(() => SearchLocationExploreCubit(serviceLocator()))
-    ..registerFactory(() =>
-        GetShortsOfTagUseCase(exploreAppRepository: serviceLocator()))
+    ..registerFactory(
+        () => GetShortsOfTagUseCase(exploreAppRepository: serviceLocator()))
     ..registerFactory(
         () => GetHashtagTopPostsUseCase(exploreAppRepository: serviceLocator()))
     ..registerFactory(() => GetHashTagPostsCubit(
@@ -520,8 +522,12 @@ void _exploreApp() {
     ..registerFactory(() => ExploreAllPostsCubit(
           serviceLocator(),
         ))
+    ..registerFactory(() => ReelsExploreCubit(
+          serviceLocator(),
+        ))
+
     ..registerFactory(
-        () => GetNearybyUsersUseCase(exploreAppRepository: serviceLocator()));
+        () => GetSuggestedPostsFromPostUseCase(exploreAppRepository: serviceLocator()));
 }
 
 void _chat() {

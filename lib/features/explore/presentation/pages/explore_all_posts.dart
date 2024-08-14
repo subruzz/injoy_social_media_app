@@ -25,7 +25,7 @@ class ExploreAllPosts extends StatelessWidget {
               return const AppErrorGif();
             }
             if (state is ExploreAllPostsLoaded) {
-              return PostStaggeredView(allPosts: state.allPosts);
+              return PostStaggeredView(allPosts: state.allPosts,);
             }
             return const Center(
               child: CircularLoadingGrey(),

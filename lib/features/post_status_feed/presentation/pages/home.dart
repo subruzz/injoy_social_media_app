@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
@@ -42,7 +40,6 @@ class _HomePageState extends State<HomePage> {
       final state = bloc.state;
       final user = context.read<AppUserBloc>().appUser;
       if (state is FollowingPostFeedSuccess && state.hasMore) {
-        log('came here');
 
         bloc.add(FollowingPostFeedGetEvent(
           uId: user.id,

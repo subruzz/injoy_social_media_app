@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
@@ -58,7 +59,8 @@ class FirebaseHelper {
     final posts = await FirebaseFirestore.instance
         .collection('posts')
         .where("creatorUid", isEqualTo: user.id)
-        .orderBy('createAt', descending: true).where('isThatvdo',isEqualTo: isShorts)
+        .orderBy('createAt', descending: true)
+        .where('isThatvdo', isEqualTo: isShorts)
         .get();
 
     // Map the Firestore documents to PostModel objects
@@ -67,5 +69,44 @@ class FirebaseHelper {
     }).toList();
 
     return userAllPosts;
+  }
+
+  Future<List<PostModel>> getAllPostsOrShorts({
+    String? excludeId,
+    required String uId,
+    bool isShorts = false,
+  }) async {
+    List<PostModel> reels = [];
+
+    Query<Map<String, dynamic>> shortsRef = _firestore
+        .collection('posts')
+        .where('creatorUid', isNotEqualTo: uId)
+        .orderBy('createAt', descending: true)
+        .where('isThatvdo', isEqualTo: isShorts);
+
+    // Fetch the posts
+    final reelsQuerySnapshot = await shortsRef.get();
+
+    // Iterate through the fetched posts
+    for (var reelDoc in reelsQuerySnapshot.docs) {
+      // If excludeId is provided, skip the document with matching postId
+      if (excludeId != null && reelDoc['postId'] == excludeId) {
+        continue; // Skip this iteration
+      }
+
+      final String creatorUid = reelDoc['creatorUid'];
+
+      // Fetch the user associated with the post
+      final DocumentSnapshot<Map<String, dynamic>> userDoc =
+          await _firestore.collection('users').doc(creatorUid).get();
+
+      if (userDoc.exists) {
+        final PartialUser user = PartialUser.fromJson(userDoc.data()!);
+        final PostModel reel = PostModel.fromJson(reelDoc.data(), user);
+        reels.add(reel);
+      }
+    }
+
+    return reels;
   }
 }

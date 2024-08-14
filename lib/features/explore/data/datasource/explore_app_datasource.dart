@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
@@ -21,14 +22,12 @@ abstract interface class ExploreAppDatasource {
   Future<List<PostModel>> getTopPostsOfHashTags(String tag);
   Future<List<PostModel>> getShortsOfTag(String tag);
   Future<List<PostModel>> getAllPosts(String id);
-  Future<List<PartialUser>> getSuggestedOrNearbyUsers(
-    List<String> interests,
-    List<String> following,
-    double latitude,
-    double longitude,
+  Future<List<PostModel>> getPostSuggestionFromPost(
+    PostEntity post,
     String myId,
   );
   Future<List<PostModel>> getSuggestedPostBasedOnaPost(PostEntity post);
+  Future<List<PostModel>> getShortsInExplore(PostEntity post);
 }
 
 class ExploreAppDatasourceImpl implements ExploreAppDatasource {
@@ -301,8 +300,6 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
 
       return posts;
     } catch (e) {
-      log('error getting posts ${e.toString()}');
-
       throw const MainException();
     }
   }
@@ -333,8 +330,6 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
 
       return posts;
     } catch (e) {
-      log('error getting posts ${e.toString()}');
-
       throw const MainException();
     }
   }
@@ -384,42 +379,89 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
   //   }
   // }
   @override
-  Future<List<PartialUser>> getSuggestedOrNearbyUsers(
-    List<String> interests,
-    List<String> following,
-    double latitude,
-    double longitude,
+  Future<List<PostModel>> getPostSuggestionFromPost(
+    PostEntity post,
     String myId,
   ) async {
     try {
-      final allUsersQuery = _firebaseFirestore
-          .collection(FirebaseCollectionConst.users)
-          .where('id', isNotEqualTo: myId)
-          .get();
+      Future<QuerySnapshot>? nearbyPostsQuery;
+      Future<QuerySnapshot>? interestsQuery;
 
-// Wait for the query to complete
-      final queryResults = await allUsersQuery;
-      final List<QueryDocumentSnapshot> docs = queryResults.docs;
+      if (post.latitude != null && post.longitude != null) {
+        double latRange = 50 / 111;
+        double lonRange = 50 / (111 * cos(post.latitude! * (pi / 180)));
 
-// Create a set to track unique users and prevent duplicates
-      final Set<String> userIds = {};
-      final List<PartialUser> allUsers = [];
+        nearbyPostsQuery = _firebaseFirestore
+            .collection(FirebaseCollectionConst.posts)
+            .where('isThatvdo', isEqualTo: false)
+            .where('creatorUid', isNotEqualTo: myId)
+            .where('latitude',
+                isGreaterThanOrEqualTo: post.latitude! - latRange)
+            .where('latitude', isLessThanOrEqualTo: post.latitude! + latRange)
+            .where('longitude',
+                isGreaterThanOrEqualTo: post.longitude! - lonRange)
+            .where('longitude', isLessThanOrEqualTo: post.longitude! + lonRange)
+            .get();
+      }
 
-      for (var doc in docs) {
-        final data = doc.data() as Map<String, dynamic>?;
+      if (post.hashtags.isNotEmpty) {
+        print('came hee${post.hashtags}');
 
-        if (data == null) continue;
-        print('following is $following');
-        final id = data['id'];
-        if (id == null || following.contains(id)) continue;
+        // Query for posts containing specific hashtags (interests)
+        interestsQuery = _firebaseFirestore
+            .collection(FirebaseCollectionConst.posts)
+            .where('isThatvdo', isEqualTo: false)
+            .where('hashtags', arrayContainsAny: post.hashtags)
+            .where('creatorUid', isNotEqualTo: myId)
+            .get();
+      }
 
-        final PartialUser user = PartialUser.fromJson(data);
-        if (userIds.add(user.id)) {
-          allUsers.add(user);
+      // Wait for both queries to complete
+      final results = await Future.wait([
+        if (interestsQuery != null) interestsQuery,
+        if (nearbyPostsQuery != null) nearbyPostsQuery,
+      ]);
+
+      final List<QueryDocumentSnapshot> interestDocs =
+          interestsQuery != null ? results[0].docs : [];
+      final List<QueryDocumentSnapshot> nearbyDocs = nearbyPostsQuery != null
+          ? (interestsQuery != null ? results[1].docs : results[0].docs)
+          : [];
+      // Create a set to track unique post IDs and prevent duplicates
+      final Set<String> postIds = {};
+      final List<PostModel> allPosts = [];
+
+      // Reference to the users collection
+      final userRef =
+          _firebaseFirestore.collection(FirebaseCollectionConst.users);
+
+      // Helper function to process documents and add unique posts
+      Future<void> processDocs(List<QueryDocumentSnapshot> docs) async {
+        for (var doc in docs) {
+          final data = doc.data() as Map<String, dynamic>?;
+          if (data == null) continue;
+          final id = data['postId'];
+          if (id == post.postId || id == null || !postIds.add(id)) continue;
+
+          // Fetch the user document for this post
+          final userDoc = await userRef.doc(data['creatorUid']).get();
+          if (!userDoc.exists) continue;
+
+          // Create the PartialUser object
+          final PartialUser user =
+              PartialUser.fromJson(userDoc.data() as Map<String, dynamic>);
+
+          // Create the PostModel with the user data
+          final PostModel currentPost = PostModel.fromJson(data, user);
+          allPosts.add(currentPost);
         }
       }
 
-      return allUsers;
+      // Process documents from both queries
+      await processDocs(interestDocs);
+      await processDocs(nearbyDocs);
+
+      return allPosts;
     } catch (e) {
       throw const MainException();
     }
@@ -428,6 +470,12 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
   @override
   Future<List<PostModel>> getSuggestedPostBasedOnaPost(PostEntity post) {
     // TODO: implement getSuggestedPostBasedOnaPost
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<PostModel>> getShortsInExplore(PostEntity post) {
+    // TODO: implement getShortsInExplore
     throw UnimplementedError();
   }
 

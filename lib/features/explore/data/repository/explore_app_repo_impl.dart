@@ -89,8 +89,7 @@ class ExploreAppRepoImpl implements ExploreAppRepository {
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> getShortsOfTag(
-      String tag) async {
+  Future<Either<Failure, List<PostEntity>>> getShortsOfTag(String tag) async {
     try {
       final res = await _exploreAppDatasource.getShortsOfTag(tag);
       return right(res);
@@ -100,15 +99,13 @@ class ExploreAppRepoImpl implements ExploreAppRepository {
   }
 
   @override
-  Future<Either<Failure, List<PartialUser>>> getSuggestedOrNearbyUsers(
-      List<String> interests,
-      List<String> following,
-      double latitude,
-      double longitude,
-      String myId) async {
+  Future<Either<Failure, List<PostEntity>>> getPostSuggestionFromPost(
+    PostEntity post,
+    String myId,
+  ) async {
     try {
-      final res = await _exploreAppDatasource.getSuggestedOrNearbyUsers(
-          interests, following, latitude, longitude, myId);
+      final res =
+          await _exploreAppDatasource.getPostSuggestionFromPost(post, myId);
       return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

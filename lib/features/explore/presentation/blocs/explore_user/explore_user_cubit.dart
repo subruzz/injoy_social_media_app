@@ -21,24 +21,4 @@ class ExploreAllPostsCubit extends Cubit<ExploreAllPostsState> {
         (success) => emit(ExploreAllPostsLoaded(allPosts: success)));
   }
 
-  // Future<void> getNearAndInteretsMatchingUsers(
-  //     {required String myId,
-  //     required double? latitude,
-  //     required List<String> interests,
-  //     required List<String> following,
-  //     required double? longitude}) async {
-  //   if (longitude == null || latitude == null) {
-  //     return;
-  //   }
-  //   emit(ExploreUsersLoading());
-  //   final res = await _getNearybyUsersUseCase(GetNearybyUsersUseCaseParams(
-  //       interests: interests,
-  //       following: following,
-  //       myId: myId,
-  //       latitude: latitude,
-  //       longitude: longitude));
-
-  //   res.fold((failure) => emit(ExploreUsersError(failure.message)),
-  //       (success) => emit(ExploreUsersLoaded(suggestedUsers: success)));
-  // }
 }

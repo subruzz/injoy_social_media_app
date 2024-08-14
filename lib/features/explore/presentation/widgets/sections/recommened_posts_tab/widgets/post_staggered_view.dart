@@ -29,14 +29,17 @@ class PostStaggeredView extends StatelessWidget {
               if (allPosts[index].isThatvdo) {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => VideoReelPage(
-                    shorts: allPosts[index],
+                    short: allPosts[index],
                   ),
                 ));
                 return;
               }
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) {
-                  return AllPostView(initialIndex: index, posts: allPosts);
+                  return AllPostView(
+                      initialIndex: index,
+                      post: allPosts[index],
+                      posts: allPosts);
                 },
               ));
             },

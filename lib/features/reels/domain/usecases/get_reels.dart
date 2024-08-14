@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
-import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/reels/domain/repository/reels_repository.dart';
 
 import '../../data/datasource/reels_data_source.dart';
@@ -18,15 +17,18 @@ class GetReelsUseCase
 
   @override
   Future<Either<Failure, GetReelsResponse>> call(params) async {
-    return await _reelsRepository.getRandomReels(params.myId, params.lastDoc);
+    return await _reelsRepository.getRandomReels(
+        params.excludedId, params.myId, params.lastDoc);
   }
 }
 
 class GetReelsUseCaseParams {
   final String myId;
   final DocumentSnapshot? lastDoc;
+  final String? excludedId;
   GetReelsUseCaseParams({
+    this.excludedId,
     required this.myId,
-    required this.lastDoc,
+     this.lastDoc,
   });
 }

@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/reels_explore/reels_explore_cubit.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_comment_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_like_button.dart';
 import 'package:video_player/video_player.dart';
@@ -21,11 +23,11 @@ import '../../../../core/widgets/common/user_profile.dart';
 import '../bloc/reels/reels_cubit.dart';
 
 class VideoReelPage extends StatefulWidget {
-  const VideoReelPage({super.key, this.reels, this.index = 0, this.shorts});
+  const VideoReelPage({super.key, this.reels, this.index = 0, this.short});
   final List<PostEntity>? reels;
 
   final int index;
-  final PostEntity? shorts;
+  final PostEntity? short;
   @override
   State<VideoReelPage> createState() => _VideoReelPageState();
 }
@@ -33,12 +35,19 @@ class VideoReelPage extends StatefulWidget {
 class _VideoReelPageState extends State<VideoReelPage> {
   late PageController _pageController;
   int currentPage = 0;
-
+  ReelsExploreCubit? _reelsExploreCubit;
   @override
   void initState() {
     log('video widget build');
     super.initState();
     _pageController = PageController(initialPage: widget.index);
+
+    if (widget.short != null) {
+      _reelsExploreCubit = serviceLocator<ReelsExploreCubit>();
+      _reelsExploreCubit!.init(widget.short!);
+      _reelsExploreCubit!.getReels(
+          context.read<AppUserBloc>().appUser.id, widget.short!.postId);
+    }
   }
 
   @override
@@ -59,10 +68,23 @@ class _VideoReelPageState extends State<VideoReelPage> {
               onChaged: (index) {
                 currentPage = index;
               })
-          : widget.shorts != null
-              ? VideoPlayerWidget(
-                  reel: widget.shorts!,
-                  key: Key(widget.shorts!.postImageUrl.first),
+          : widget.short != null
+              ? BlocBuilder(
+                  bloc: _reelsExploreCubit,
+                  builder: (context, state) {
+                    if (state is ReelsExploreFailure) {
+                      return const AppErrorGif();
+                    }
+                    if (state is ReelsExploreSuccess) {
+                      return ReelsPageView(
+                          controller: _pageController,
+                          reels: state.reels,
+                          onChaged: (index) {
+                            currentPage = index;
+                          });
+                    }
+                    return loadingWidget();
+                  },
                 )
               : BlocBuilder<ReelsCubit, ReelsState>(
                   builder: (context, state) {
@@ -168,14 +190,13 @@ class VideoPlayerWidget extends StatefulWidget {
   State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
 }
 
-class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
-    with WidgetsBindingObserver {
+class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
     initializeController();
   }
 
@@ -192,18 +213,21 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
     if (mounted) {
       _controller = VideoPlayerController.file(fileInfo!.file)
         ..initialize().then((_) {
-          setState(() {
-            _controller.setLooping(true); // Set video to loop
-            _controller.play();
-            _videoInitialized = true;
-          });
+          if (mounted) {
+            setState(() {
+              _controller.setLooping(true); // Set video to loop
+              _controller.play();
+              _videoInitialized = true;
+            });
+          }
         });
       _controller.addListener(() {
         if (_controller.value.isPlaying && !_isPlaying) {
-          // Video has started playing
-          setState(() {
-            _isPlaying = true;
-          });
+          if (mounted) {
+            setState(() {
+              _isPlaying = true;
+            });
+          }
         }
       });
     }
@@ -212,29 +236,27 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
   bool _isPlaying = false;
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-      // App is in the foreground
-      _controller.play();
-    } else if (state == AppLifecycleState.inactive) {
-      // App is partially obscured
-      _controller.pause();
-    } else if (state == AppLifecycleState.paused) {
-      // App is in the background
-      _controller.pause();
-    } else if (state == AppLifecycleState.detached) {
-      // App is terminated
-      _controller.dispose();
-    }
-  }
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   if (state == AppLifecycleState.resumed) {
+  //     // App is in the foreground
+  //     _controller.play();
+  //   } else if (state == AppLifecycleState.inactive) {
+  //     // App is partially obscured
+  //     _controller.pause();
+  //   } else if (state == AppLifecycleState.paused) {
+  //     // App is in the background
+  //     _controller.pause();
+  //   } else if (state == AppLifecycleState.detached) {
+  //     // App is terminated
+  //     _controller.dispose();
+  //   }
+  // }
 
   @override
   void dispose() {
-    if (mounted) {
-      _controller.dispose();
-    } // Dispose of the controller when done
-    WidgetsBinding.instance.removeObserver(this);
+    log('this called to dispose');
+    _controller.dispose();
     super.dispose();
   }
 
@@ -242,127 +264,135 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
   Widget build(BuildContext context) {
     final me = context.read<AppUserBloc>().appUser;
 
-    return SafeArea(
-      top: false,
-      left: false,
-      right: false,
-      child: Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
-              if (_videoInitialized) {
-                setState(() {
-                  if (_controller.value.isPlaying) {
-                    _controller.pause();
-                    _isPlaying = false;
-                  } else {
-                    _controller.play();
-                    _isPlaying = true;
-                  }
-                });
-              }
-            },
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
-              children: [
-                !_videoInitialized
-                    // when the video is not initialized you can set a thumbnail.
-                    // to make it simple, I use CircularProgressIndicator
-                    ? Image.network(
-                        widget.reel.extra!,
-                        width: double.infinity,
-                        height: 1.h,
-                      )
-                    : VideoPlayer(_controller),
-                !_videoInitialized
-                    ? Image.network(
-                        widget.reel.extra!,
-                        width: double.infinity,
-                        height: 1.h,
-                      )
-                    : const SizedBox(),
-                if (!_isPlaying)
-                  const Center(
-                    child: Icon(
-                      Icons.play_arrow,
-                      size: 50.0,
-                      color: Colors.white,
+    return PopScope(
+      onPopInvoked: (didPop) {
+        if (mounted) {
+          _controller.pause();
+        }
+      },
+      child: SafeArea(
+        top: false,
+        left: false,
+        right: false,
+        child: Stack(
+          children: [
+            GestureDetector(
+              onTap: () {
+                if (mounted && _videoInitialized) {
+                  setState(() {
+                    if (_controller.value.isPlaying) {
+                      _controller.pause();
+                      _isPlaying = false;
+                    } else {
+                      _controller.play();
+                      _isPlaying = true;
+                    }
+                  });
+                }
+              },
+              child: Stack(
+                alignment: AlignmentDirectional.bottomEnd,
+                children: [
+                  !_videoInitialized
+                      // when the video is not initialized you can set a thumbnail.
+                      // to make it simple, I use CircularProgressIndicator
+                      ? Image.network(
+                          widget.reel.extra!,
+                          width: double.infinity,
+                          height: 1.h,
+                        )
+                      : VideoPlayer(_controller),
+                  !_videoInitialized
+                      ? Image.network(
+                          widget.reel.extra!,
+                          width: double.infinity,
+                          height: 1.h,
+                        )
+                      : const SizedBox(),
+                  if (!_isPlaying)
+                    const Center(
+                      child: Icon(
+                        Icons.play_arrow,
+                        size: 50.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  !_videoInitialized
+                      ? const SizedBox()
+                      : VideoProgressIndicator(
+                          _controller,
+                          allowScrubbing: true,
+                          colors: VideoProgressColors(
+                            playedColor: AppDarkColor().buttonBackground,
+                            bufferedColor: Colors.grey,
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+                  Positioned(
+                    bottom: 20,
+                    left: 10,
+                    right: 60,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CircularUserProfile(
+                                size: 22, profile: widget.reel.userProfileUrl),
+                            AppSizedBox.sizedBox10W,
+                            Text(
+                              addAtSymbol(widget.reel.username),
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                            AppSizedBox.sizedBox10W,
+                            if (widget.reel.creatorUid != me.id)
+                              FollowUnfollowHelper(
+                                  wantWhiteBorder: true,
+                                  color: Colors.transparent,
+                                  noRad: true,
+                                  user: PartialUser(id: widget.reel.creatorUid))
+                          ],
+                        ),
+                        AppSizedBox.sizedBox10H,
+                        Column(
+                          children: [
+                            ExpandableText(
+                                text: widget.reel.description ?? '',
+                                trimLines: 2)
+                          ],
+                        )
+                      ],
                     ),
                   ),
-                !_videoInitialized
-                    ? const SizedBox()
-                    : VideoProgressIndicator(
-                        _controller,
-                        allowScrubbing: true,
-                        colors: VideoProgressColors(
-                          playedColor: AppDarkColor().buttonBackground,
-                          bufferedColor: Colors.grey,
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                Positioned(
-                  bottom: 20,
-                  left: 10,
-                  right: 60,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          CircularUserProfile(
-                              size: 22, profile: widget.reel.userProfileUrl),
-                          AppSizedBox.sizedBox10W,
-                          Text(
-                            addAtSymbol(widget.reel.username),
-                            style: Theme.of(context).textTheme.labelMedium,
-                          ),
-                          AppSizedBox.sizedBox10W,
-                          if (widget.reel.creatorUid != me.id)
-                            FollowUnfollowHelper(
-                                wantWhiteBorder: true,
-                                color: Colors.transparent,
-                                noRad: true,
-                                user: PartialUser(id: widget.reel.creatorUid))
-                        ],
-                      ),
-                      AppSizedBox.sizedBox10H,
-                      Column(
-                        children: [
-                          ExpandableText(
-                              text: widget.reel.description ?? '', trimLines: 2)
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                // Positioned(
+                  // Positioned(
 
-                // Action Buttons positioned at the bottom right
-                Positioned(
-                  right: 10,
-                  bottom: 200.h,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Like Button
-                      PostLikeButton(
-                        me: me,
-                        post: widget.reel,
-                        isReel: true,
-                      ),
-                      AppSizedBox.sizedBox20H,
-                      PostCommentButton(
-                        post: widget.reel,
-                        isReel: true,
-                      ),
-                      // Share Button
-                    ],
+                  // Action Buttons positioned at the bottom right
+                  Positioned(
+                    right: 10,
+                    bottom: 200.h,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Like Button
+                        PostLikeButton(
+                          me: me,
+                          post: widget.reel,
+                          isReel: true,
+                        ),
+                        AppSizedBox.sizedBox20H,
+                        PostCommentButton(
+                          post: widget.reel,
+                          isReel: true,
+                        ),
+                        // Share Button
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
