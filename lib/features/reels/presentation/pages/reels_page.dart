@@ -13,8 +13,8 @@ import 'package:social_media_app/core/widgets/common/expandable_text.dart';
 import 'package:social_media_app/core/widgets/helper/follow_unfollow_helper.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/common/user_profile.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_comment_button.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_like_button.dart';
+import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_comment_button.dart';
+import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_like_button.dart';
 import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cubit.dart';
 import 'package:video_player/video_player.dart';
 

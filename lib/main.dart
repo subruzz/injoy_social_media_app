@@ -1,13 +1,16 @@
-
+import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:social_media_app/core/common/shared_providers/cubit/connectivity_cubit.dart';
+import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/providers.dart';
 import 'package:social_media_app/core/utils/routes/app_routes_config.dart';
@@ -26,11 +29,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
-  await Stripe.instance.applySettings();
-  await LocatlNotification.initLocalNotification();
-  DeviceNotification.deviceNotificationInit();
-  FirebaseMessaging.onBackgroundMessage(firebaseBackgroundNotification);
+  if (!kIsWeb) {
+    Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
+    await Stripe.instance.applySettings();
+    await LocatlNotification.initLocalNotification();
+    DeviceNotification.deviceNotificationInit();
+    FirebaseMessaging.onBackgroundMessage(firebaseBackgroundNotification);
+  }
   // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
   //   if (message.notification != null) {
   //     String payload = jsonEncode(message.data);
@@ -71,36 +76,34 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return MultiBlocProvider(
           providers: myProviders,
-          child: Builder(
-            builder: (ctx) {
-              return BlocBuilder<AppLanguageCubit, AppLanguageState>(
-                builder: (ctx, state) {
-                  return MaterialApp(
-                    locale: state.locale,
-                    localizationsDelegates: const [
-                      AppLocalizations.delegate,
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                    ],
-                    supportedLocales: const [
-                      Locale('en'),
-                      Locale('ml'),
-                    ],
-                    navigatorKey: navigatorKey,
-              
-                    debugShowCheckedModeBanner: false,
-                    scaffoldMessengerKey: Messenger.scaffoldKey,
-                    onGenerateRoute: MyAppRouter(isAuth: false).generateRoute,
-                    initialRoute: '/',
-                    title: 'First Method',
-                    // You can use the library anywhere in the app even in theme
-                    theme: AppDarkTheme.darkTheme,
-                  );
-                },
-              );
-            }
-          ),
+          child: Builder(builder: (ctx) {
+            return BlocBuilder<AppLanguageCubit, AppLanguageState>(
+              builder: (ctx, state) {
+                return MaterialApp(
+                  locale: state.locale,
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: const [
+                    Locale('en'),
+                    Locale('ml'),
+                  ],
+                  navigatorKey: navigatorKey,
+                
+                  debugShowCheckedModeBanner: false,
+                  scaffoldMessengerKey: Messenger.scaffoldKey,
+                  onGenerateRoute: MyAppRouter(isAuth: false).generateRoute,
+                  initialRoute: '/',
+                  title: 'First Method',
+                  // You can use the library anywhere in the app even in theme
+                  theme: AppDarkTheme.darkTheme,
+                );
+              },
+            );
+          }),
         );
       },
     );

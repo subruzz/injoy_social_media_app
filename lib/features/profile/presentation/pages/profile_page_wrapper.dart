@@ -150,19 +150,7 @@ class CustomBottomSheet {
                 icon: Icons.language,
                 text: localization.changeAppLanguage,
                 onTap: () {
-                  if (appuser.hasPremium) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => LanguageSelectionDialog(
-                          languages: ['English', 'Malayalam', 'Hindi'],
-                          onLanguageSelected: (language) {
-                            context
-                                .read<AppLanguageCubit>()
-                                .changeLanguage(Locale('en'));
-                          }),
-                    );
-                    return;
-                  }
+                  
 
                   AppInfoDialog.showInfoDialog(
                       title: 'Premium Feature',

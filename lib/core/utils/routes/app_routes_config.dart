@@ -3,6 +3,7 @@ import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/utils/routes/page_transitions.dart';
 
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
+import 'package:social_media_app/features/ai_chat/presentation/pages/ai_chat_page.dart';
 import 'package:social_media_app/features/media_picker/presenation/pages/custom_media_picker_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
@@ -20,6 +21,7 @@ import 'package:social_media_app/features/profile/presentation/pages/other_user_
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
 import 'package:social_media_app/features/settings/presentation/pages/account_settings/account_settings_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_settings_page.dart';
+import 'package:social_media_app/features/settings/presentation/pages/liked_or_saved_post_builder.dart';
 import 'package:social_media_app/features/settings/presentation/pages/notification_preference_screen.dart';
 import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';
 import 'package:social_media_app/features/status/presentation/pages/create_mutliple_status_page.dart';
@@ -132,8 +134,18 @@ class MyAppRouter {
 
       case MyAppRouteConst.notificationPage:
         return AppPageTransitions.rightToLeft(const NotificationPage());
+      case MyAppRouteConst.likedOrSavedPostsPage:
+        final Map<String, dynamic>? params =
+            settings.arguments as Map<String, dynamic>?;
+        final bool isLiked = params?['isLiked'] ?? true;
+        return AppPageTransitions.rightToLeft(
+          LikedOrSavedPostBuilder(isLiked: isLiked),
+        );
+
       case MyAppRouteConst.settingAndActivityPage:
         return AppPageTransitions.rightToLeft(const SettingsAndActivityPage());
+      case MyAppRouteConst.aiChatPage:
+        return AppPageTransitions.fade(const AiChatPage());
       case MyAppRouteConst.accountSettingsPage:
         final Map<String, dynamic> params =
             settings.arguments as Map<String, dynamic>;

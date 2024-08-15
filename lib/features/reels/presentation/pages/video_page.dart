@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,8 +9,8 @@ import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/reels_explore/reels_explore_cubit.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_comment_button.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_like_button.dart';
+import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_comment_button.dart';
+import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_like_button.dart';
 import 'package:social_media_app/features/reels/domain/usecases/get_reels.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../core/widgets/common/add_at_symbol.dart';
@@ -24,9 +25,14 @@ import '../../../../core/widgets/common/user_profile.dart';
 import '../bloc/reels/reels_cubit.dart';
 
 class VideoReelPage extends StatefulWidget {
-  const VideoReelPage({super.key, this.reels, this.index = 0, this.short});
+  const VideoReelPage(
+      {super.key,
+      this.reels,
+      this.showOne = false,
+      this.index = 0,
+      this.short});
   final List<PostEntity>? reels;
-
+  final bool showOne;
   final int index;
   final PostEntity? short;
   @override
@@ -54,56 +60,58 @@ class _VideoReelPageState extends State<VideoReelPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: widget.reels != null
-          ? ReelsPageView(
-              controller: _pageController,
-              reels: widget.reels!,
-              onChaged: (index) {
-                currentPage = index;
-              })
-          : widget.short != null
-              ? BlocProvider(
-                  create: (context) => ReelsExploreCubit(
-                      serviceLocator<GetReelsUseCase>(), widget.short!)
-                    ..getReels(context.read<AppUserBloc>().appUser.id,
-                        widget.short!.postId),
-                  child: BlocBuilder<ReelsExploreCubit, ReelsExploreState>(
-                    builder: (context, state) {
-                      if (state.reels.isNotEmpty) {
-                        return ReelsPageView(
-                            controller: _pageController,
-                            reels: state.reels,
-                            onChaged: (index) {
-                              currentPage = index;
-                            });
-                      }
+      body: widget.short != null && widget.showOne
+          ? VideoPlayerWidget(reel: widget.short!)
+          : widget.reels != null
+              ? ReelsPageView(
+                  controller: _pageController,
+                  reels: widget.reels!,
+                  onChaged: (index) {
+                    currentPage = index;
+                  })
+              : widget.short != null
+                  ? BlocProvider(
+                      create: (context) => ReelsExploreCubit(
+                          serviceLocator<GetReelsUseCase>(), widget.short!)
+                        ..getReels(context.read<AppUserBloc>().appUser.id,
+                            widget.short!.postId),
+                      child: BlocBuilder<ReelsExploreCubit, ReelsExploreState>(
+                        builder: (context, state) {
+                          if (state.reels.isNotEmpty) {
+                            return ReelsPageView(
+                                controller: _pageController,
+                                reels: state.reels,
+                                onChaged: (index) {
+                                  currentPage = index;
+                                });
+                          }
 
-                      return loadingWidget();
-                    },
-                  ),
-                )
-              : BlocBuilder<ReelsCubit, ReelsState>(
-                  builder: (context, state) {
-                    if (state is ReelsFailure) {
-                      return const AppErrorGif();
-                    }
-                    if (state is ReelsSuccess) {
-                      return ReelsPageView(
-                          controller: _pageController,
-                          reels: state.reels,
-                          onChaged: (index) {
-                            if (index == state.reels.length - 1 &&
-                                state.lastDocument != null) {
-                              context
-                                  .read<ReelsCubit>()
-                                  .getReels('i', isInitialLoad: false);
-                            }
-                            currentPage = index;
-                          });
-                    }
-                    return loadingWidget();
-                  },
-                ),
+                          return loadingWidget();
+                        },
+                      ),
+                    )
+                  : BlocBuilder<ReelsCubit, ReelsState>(
+                      builder: (context, state) {
+                        if (state is ReelsFailure) {
+                          return const AppErrorGif();
+                        }
+                        if (state is ReelsSuccess) {
+                          return ReelsPageView(
+                              controller: _pageController,
+                              reels: state.reels,
+                              onChaged: (index) {
+                                if (index == state.reels.length - 1 &&
+                                    state.lastDocument != null) {
+                                  context
+                                      .read<ReelsCubit>()
+                                      .getReels('i', isInitialLoad: false);
+                                }
+                                currentPage = index;
+                              });
+                        }
+                        return loadingWidget();
+                      },
+                    ),
     );
   }
 }
@@ -188,45 +196,58 @@ class VideoPlayerWidget extends StatefulWidget {
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
     with WidgetsBindingObserver {
-  late VideoPlayerController  _controller;
+  late VideoPlayerController _controller;
 
   @override
   void initState() {
-    super.initState();    initializeController();
+    super.initState();
+    initializeController();
 
     WidgetsBinding.instance.addObserver(this);
   }
 
   bool _videoInitialized = false;
 
-  initializeController() async {
-    var fileInfo =
-        await kCacheManager.getFileFromCache(widget.reel.postImageUrl.first);
-    if (fileInfo == null) {
-      await kCacheManager.downloadFile(widget.reel.postImageUrl.first);
-      fileInfo =
+  Future<void> initializeController() async {
+    try {
+      var fileInfo =
           await kCacheManager.getFileFromCache(widget.reel.postImageUrl.first);
-    }
-    if (mounted) {
-      _controller = VideoPlayerController.file(fileInfo!.file)
-        ..initialize().then((_) {
-          if (mounted) {
-            setState(() {
-              _controller.setLooping(true); // Set video to loop
-              _controller.play();
-              _videoInitialized = true;
-            });
+      if (fileInfo == null) {
+        await kCacheManager.downloadFile(widget.reel.postImageUrl.first);
+        fileInfo = await kCacheManager
+            .getFileFromCache(widget.reel.postImageUrl.first);
+      }
+      if (mounted) {
+        _controller = VideoPlayerController.file(fileInfo!.file)
+          ..initialize().then((_) {
+            if (mounted) {
+              setState(() {
+                _controller.setLooping(true);
+                _controller.play();
+                _videoInitialized = true;
+              });
+            }
+          }).catchError((error) {
+            log('Error initializing video controller: $error');
+          });
+        _controller.addListener(() {
+          if (_controller.value.isPlaying && !_isPlaying) {
+            if (mounted) {
+              setState(() {
+                _isPlaying = true;
+              });
+            }
           }
         });
-      _controller.addListener(() {
-        if (_controller.value.isPlaying && !_isPlaying) {
-          if (mounted) {
-            setState(() {
-              _isPlaying = true;
-            });
-          }
-        }
-      });
+      }
+    } on SocketException catch (e) {
+      // Handle network errors specifically
+      log('Network error: $e');
+      // Show an error message to the user or handle it as needed
+    } on Exception catch (e) {
+      // Handle other types of exceptions
+      log('Error handling video file: $e');
+      // Show an error message to the user or handle it as needed
     }
   }
 

@@ -19,6 +19,11 @@ class SettingsCubit extends Cubit<SettingsState> {
     switch (notificationPreferenceType) {
       case NotificationPreferenceEnum.pauseAll:
         notificatonPreferernce.isNotificationPaused = value;
+        notificatonPreferernce.isMessageNotificationPaused = value;
+        notificatonPreferernce.isLikeNotificationPaused = value;
+        notificatonPreferernce.isCommentNotificationPaused = value;
+        notificatonPreferernce.isFollowNotificationPaused = value;
+
         break;
       case NotificationPreferenceEnum.likes:
         notificatonPreferernce.isLikeNotificationPaused = value;

@@ -10,6 +10,7 @@ abstract interface class AppColor {
   final Color iconSoftColor;
   final Color iconPrimaryColor;
   final Color iconSecondarycolor;
+  final Color bottomBarColor;
   final Color loadingColor;
   final Color background; // Background color.
   final Color softBackground; // Soft background color.
@@ -45,12 +46,14 @@ abstract interface class AppColor {
   final Color chatSideBar;
   final Color chatCommon;
   final Color replyMessageContainerColor;
+  final Color bottomBarLowShade;
 
   /// Constructs an [AppColor] instance with specified colors.
   const AppColor({
     required this.chatCommon,
     required this.replyMessageContainerColor,
     required this.chatSideBar,
+    required this.bottomBarLowShade,
     required this.iconSoftColor,
     required this.statusborder,
     required this.buttonWhitishBackground,
@@ -71,6 +74,7 @@ abstract interface class AppColor {
     required this.primaryText,
     required this.primaryTextSoft,
     required this.primaryTextBlur,
+    required this.bottomBarColor,
     required this.secondaryText,
     required this.buttonBackground,
     required this.buttonForground,

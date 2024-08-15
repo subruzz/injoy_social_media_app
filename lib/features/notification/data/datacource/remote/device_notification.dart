@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart ' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
-import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/features/notification/data/datacource/local/locatl_notification.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 import 'package:social_media_app/features/notification/domain/entities/push_notification.dart';

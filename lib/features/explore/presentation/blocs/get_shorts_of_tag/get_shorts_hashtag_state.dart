@@ -7,18 +7,18 @@ sealed class GetShortsHashtagState extends Equatable {
   List<Object> get props => [];
 }
 
-final class GetRecentHashtagPostsInitial extends GetShortsHashtagState {}
+final class GetShortsHashtagPostsInitial extends GetShortsHashtagState {}
 
-final class GetHashTagRecentPostLoading extends GetShortsHashtagState {}
+final class GetHashTagShortsPostLoading extends GetShortsHashtagState {}
 
-final class GetHashTagRecentPostFailure extends GetShortsHashtagState {
+final class GetHashTagShortsPostFailure extends GetShortsHashtagState {
   final String erroMsg;
 
-  const GetHashTagRecentPostFailure({required this.erroMsg});
+  const GetHashTagShortsPostFailure({required this.erroMsg});
 }
 
-final class GetHashTagRecentPostSucess extends GetShortsHashtagState {
-  final List<PostEntity> hashTagRecentPosts;
+final class GetHashTagShortsPostSucess extends GetShortsHashtagState {
+  final List<PostEntity> hashTagShortsPosts;
 
-  const GetHashTagRecentPostSucess({required this.hashTagRecentPosts});
+  const GetHashTagShortsPostSucess({required this.hashTagShortsPosts});
 }

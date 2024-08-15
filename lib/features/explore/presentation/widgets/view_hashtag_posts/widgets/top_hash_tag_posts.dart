@@ -22,7 +22,10 @@ class TopHashTagPosts extends StatelessWidget {
               ),
             );
           }
-          return PostStaggeredView(allPosts: state.hashTagTopPosts);
+          return PostStaggeredView(
+            allPosts: state.hashTagTopPosts,
+            showTheList: true,
+          );
         }
         if (state is GetHashTagTopPostFailure) {
           log(state.erroMsg);

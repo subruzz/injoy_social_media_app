@@ -283,7 +283,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
     if (myId == null) {
       throw const MainException(errorMsg: "User not authenticated.");
     }
-
+    log('this called');
     final userCollection = FirebaseFirestore.instance.collection('users');
     final userDoc = userCollection.doc(myId);
 

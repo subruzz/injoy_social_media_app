@@ -10,7 +10,7 @@ import 'package:social_media_app/features/explore/presentation/blocs/get_recomme
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/pages/explore_all_posts.dart';
+import 'package:social_media_app/core/widgets/explore_all_posts.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/sections/tab/explore_tab.dart';
 
 class ExplorePage extends StatefulWidget {

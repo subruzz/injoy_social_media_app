@@ -25,7 +25,7 @@ class ViewHashTagPostsScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => serviceLocator<GetShortsHashtagCubit>()
-            ..getRecentHashTagPosts(hashTagName),
+            ..getShortsHashTagPosts(hashTagName),
         ),
       ],
       child: Scaffold(

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/const/languages/app_languages.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import '../../common/shared_providers/cubit/app_language/app_language_cubit.dart';
 
 class AppInfoDialog {
   static void showInfoDialog(
@@ -12,11 +15,13 @@ class AppInfoDialog {
       Color? backgroundColor,
       RoundedRectangleBorder? shape,
       String? title,
+      bool dismissable = false,
       String? subtitle,
       String closeText = 'Back',
       Widget? buttonChild,
-       String? buttonText}) {
+      String? buttonText}) {
     showDialog(
+      barrierDismissible: dismissable,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -65,7 +70,6 @@ class AppInfoDialog {
 }
 
 class LanguageSelectionDialog extends StatefulWidget {
-  final List<String> languages; // List of language names or codes
   final String? title;
   final String closeText;
   final String okText;
@@ -73,7 +77,6 @@ class LanguageSelectionDialog extends StatefulWidget {
 
   const LanguageSelectionDialog({
     super.key,
-    required this.languages,
     required this.onLanguageSelected,
     this.title,
     this.closeText = 'Close',
@@ -87,6 +90,13 @@ class LanguageSelectionDialog extends StatefulWidget {
 
 class _LanguageSelectionDialogState extends State<LanguageSelectionDialog> {
   String _selectedLanguage = '';
+  final List<String> languages = ['English', 'Malayalam', 'Hindi'];
+  @override
+  void initState() {
+    _selectedLanguage =
+        AppLanguages.isMalayalamLocale(context) ? 'Malayalam' : 'English';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,13 +111,13 @@ class _LanguageSelectionDialogState extends State<LanguageSelectionDialog> {
           : null,
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: widget.languages.map((language) {
+        children: languages.map((language) {
           final isSelected = _selectedLanguage == language;
           return ListTile(
             leading: CircleAvatar(
               backgroundColor: isSelected
-                  ? AppDarkColor().buttonBackground // Selected color
-                  : AppDarkColor().secondaryBackground, // Default color
+                  ? AppDarkColor().buttonBackground
+                  : AppDarkColor().secondaryBackground,
               radius: 12.0,
               child: isSelected
                   ? Icon(Icons.check,
@@ -119,7 +129,6 @@ class _LanguageSelectionDialogState extends State<LanguageSelectionDialog> {
               setState(() {
                 _selectedLanguage = language;
               });
-              widget.onLanguageSelected(language);
             },
           );
         }).toList(),
@@ -136,6 +145,9 @@ class _LanguageSelectionDialogState extends State<LanguageSelectionDialog> {
         ),
         ElevatedButton(
           onPressed: () {
+            context.read<AppLanguageCubit>().changeLanguage(
+                Locale(_selectedLanguage == 'Malayalam' ? 'ml' : 'en'));
+
             Navigator.of(context).pop();
           },
           child: Text(widget.okText),

@@ -7,7 +7,7 @@ import 'package:social_media_app/features/post_status_feed/presentation/bloc/fol
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/floating_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_top_bar_section/home_top_bar.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_status_section/user_status.dart';
-import '../../../status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
+import '../bloc/get_all_statsus/get_all_status_bloc.dart';
 import '../widgets/sections/home_tab_bar_section/widgets/following_post_tab_view.dart';
 
 class HomePage extends StatefulWidget {
@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage> {
         onRefresh: () async {
           if (context.mounted) {
             context.read<FollowingPostFeedBloc>().add(FollowingPostFeedGetEvent(
-              
                 following: me.following, uId: me.id, isFirst: true));
             context
                 .read<GetAllStatusBloc>()

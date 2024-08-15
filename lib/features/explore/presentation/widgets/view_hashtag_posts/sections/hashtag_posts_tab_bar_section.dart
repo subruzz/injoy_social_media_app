@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/view_hashtag_posts/widgets/recent_hashtag_posts.dart';
+import 'package:social_media_app/features/explore/presentation/widgets/view_hashtag_posts/widgets/shorts_of_tag.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/view_hashtag_posts/widgets/top_hash_tag_posts.dart';
 
 class HashtagPostsTabBarSection extends StatelessWidget {

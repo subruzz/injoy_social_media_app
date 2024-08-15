@@ -14,7 +14,7 @@ class AppLanguageCubit extends Cubit<AppLanguageState> {
 
   Future<void> _loadLanguage() async {
     final prefs = await SharedPreferences.getInstance();
-    final languageCode = prefs.getString(_languageCodeKey) ?? 'en'; //
+    final languageCode = prefs.getString(_languageCodeKey) ?? 'en';
     final locale = Locale(languageCode);
     emit(state.copyWith(locale: locale));
   }

@@ -97,7 +97,14 @@
   "help": "Help",
   "about": "About",
   "change_username_delete_account": "change username,delete account",
-  "chat": "Chat"
+  "chat": "Chat",
+  "liked_posts": "Liked posts",
+  "saved_posts": "Saved posts",
+  "no_posts_found": "No Posts found \nFollow more users to see their posts here!",
+  "no_posts_found_dynamic": "No {postType} posts found"
+
+
+
 
 
 

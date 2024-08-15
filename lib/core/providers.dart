@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
+import 'package:social_media_app/core/common/shared_providers/cubit/connectivity_cubit.dart';
 import 'package:social_media_app/core/common/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/suggestion_from_post/suggestion_from_post_cubit.dart';
@@ -18,7 +18,6 @@ import 'package:social_media_app/features/settings/presentation/cubit/settings/s
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
-import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_nav_cubit.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
@@ -41,6 +40,9 @@ List<SingleChildWidget> myProviders = [
     create: (context) => serviceLocator<ProfileBloc>(),
   ),
   BlocProvider(
+    create: (context) => ConnectivityCubit()..listenToInternetConnectivity(),
+  ),
+  BlocProvider(
     create: (context) => serviceLocator<SavePostCubit>(),
   ),
   BlocProvider(
@@ -56,9 +58,6 @@ List<SingleChildWidget> myProviders = [
   ),
   BlocProvider(
     create: (context) => serviceLocator<ForgotPasswordBloc>(),
-  ),
-  BlocProvider(
-    create: (context) => BottomNavCubit(),
   ),
   BlocProvider(
     create: (context) => serviceLocator<SearchHashtagBloc>(),
@@ -78,7 +77,6 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<AuthBloc>()..add(AuthCurrentUser()),
   ),
-
   BlocProvider(
     create: (context) => serviceLocator<AiChatCubit>(),
   ),
@@ -102,7 +100,6 @@ List<SingleChildWidget> myProviders = [
               fullName: context.read<AppUserBloc>().appUser.fullName,
               profilePic: context.read<AppUserBloc>().appUser.profilePic))),
   ),
- 
   BlocProvider(
     create: (context) => serviceLocator<SearchHashtagBloc>(),
   ),

@@ -7,12 +7,9 @@ import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/common/custom_divider.dart';
-import 'package:social_media_app/features/settings/presentation/pages/account_settings/account_settings_page.dart';
-import 'package:social_media_app/features/settings/presentation/pages/chat_settings_page.dart';
-import 'package:social_media_app/features/settings/presentation/pages/notification_preference_screen.dart';
-import 'package:social_media_app/features/settings/presentation/pages/settings_page.dart';
 
 import '../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import '../../../../core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
 import '../../../../core/const/languages/app_languages.dart';
 import '../../../../core/widgets/dialog/app_info_dialog.dart';
 import '../../../../core/widgets/dialog/dialogs.dart';
@@ -48,12 +45,19 @@ class SettingsAndActivityPage extends StatelessWidget {
           ),
           SettingsItemHeading(text: l10n.your_library),
           SettingsListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(
+                  context, MyAppRouteConst.likedOrSavedPostsPage,
+                  arguments: {'isLiked': false});
+            },
             text: l10n.saved,
             asset: AppAssetsConst.saved,
           ),
           SettingsListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(
+                  context, MyAppRouteConst.likedOrSavedPostsPage);
+            },
             text: l10n.liked,
             asset: AppAssetsConst.lovefull,
           ),
@@ -76,7 +80,18 @@ class SettingsAndActivityPage extends StatelessWidget {
           ),
           SettingsListTile(
             text: l10n.changeAppLanguage,
-            onTap: () {},
+            onTap: () {
+              if (appuser.hasPremium) {
+                showDialog(
+                  context: context,
+                  builder: (context) => LanguageSelectionDialog(
+                      onLanguageSelected: (language) {
+                      
+                      }),
+                );
+                return;
+              }
+            },
             asset: AppAssetsConst.language,
           ),
           const CustomDivider(

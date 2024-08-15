@@ -280,6 +280,7 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       final allPosts = await _firebaseFirestore
           .collection('posts')
           .where('hashtags', arrayContains: tag)
+          .where('isThatvdo', isEqualTo: false)
           .get();
       List<PostModel> posts = [];
       final userRef =
@@ -308,8 +309,9 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
   Future<List<PostModel>> getShortsOfTag(String tag) async {
     try {
       final allPosts = await _firebaseFirestore
-          .collection('reels')
+          .collection('posts')
           .where('hashtags', arrayContains: tag)
+          .where('isThatvdo', isEqualTo: true)
           .get();
       List<PostModel> posts = [];
       final userRef =
@@ -405,7 +407,6 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       }
 
       if (post.hashtags.isNotEmpty) {
-
         // Query for posts containing specific hashtags (interests)
         interestsQuery = _firebaseFirestore
             .collection(FirebaseCollectionConst.posts)

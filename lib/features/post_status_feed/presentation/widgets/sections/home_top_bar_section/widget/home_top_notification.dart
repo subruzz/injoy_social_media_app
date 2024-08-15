@@ -8,7 +8,6 @@ import '../../../../../../../core/const/assets/app_assets.dart';
 import '../../../../../../../core/theme/color/app_colors.dart';
 import '../../../../../../../core/widgets/app_related/app_svg.dart';
 import '../../../../../../notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
-import '../../../../../../notification/presentation/pages/notification_page.dart';
 
 class HomeTopNotification extends StatelessWidget {
   const HomeTopNotification({super.key});

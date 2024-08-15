@@ -145,10 +145,16 @@ import 'package:social_media_app/features/reels/data/repostiroy/reels_repo_impl.
 import 'package:social_media_app/features/reels/domain/repository/reels_repository.dart';
 import 'package:social_media_app/features/reels/domain/usecases/get_reels.dart';
 import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cubit.dart';
+import 'package:social_media_app/features/settings/data/datasource/library_data_source.dart';
 import 'package:social_media_app/features/settings/data/datasource/settings_datasource.dart';
+import 'package:social_media_app/features/settings/data/repository/library_repo_impl.dart';
 import 'package:social_media_app/features/settings/data/repository/setting_repo_impl.dart';
+import 'package:social_media_app/features/settings/domain/repository/library_repostory.dart';
 import 'package:social_media_app/features/settings/domain/repository/settings_repository.dart';
 import 'package:social_media_app/features/settings/domain/usecases/edit_notification_preference.dart';
+import 'package:social_media_app/features/settings/domain/usecases/get_liked_posts.dart';
+import 'package:social_media_app/features/settings/domain/usecases/get_saved_posts.dart';
+import 'package:social_media_app/features/settings/presentation/cubit/cubit/liked_or_saved_posts_cubit.dart';
 import 'package:social_media_app/features/settings/presentation/cubit/settings/settings_cubit.dart';
 import 'package:social_media_app/features/status/data/datasource/status_remote_datasource.dart';
 import 'package:social_media_app/features/status/data/repository/create_status_repository_impl.dart';
@@ -161,8 +167,8 @@ import 'package:social_media_app/features/post_status_feed/domain/usecases/get_m
 import 'package:social_media_app/features/status/domain/usecases/seeen_status_update.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
 import 'package:social_media_app/features/status/presentation/bloc/delete_status/delete_status_bloc.dart';
-import 'package:social_media_app/features/status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
-import 'package:social_media_app/features/status/presentation/bloc/get_my_status/get_my_status_bloc.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/bloc/for_you_posts/get_my_status/get_my_status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/location/data/datasource/local/location_local_datasource.dart';
 import 'package:social_media_app/features/location/data/repositories/location_repository_impl.dart';
@@ -208,7 +214,7 @@ Future<void> initDependencies() async {
   _getUserPosts();
   _postFeed();
   _statusCreation();
-  _settings();
+  _settingsAndActivity();
   _comment();
   _exploreApp();
   _whoVisitedPremiumFeature();
@@ -626,7 +632,7 @@ void _whoVisitedPremiumFeature() {
     ..registerFactory(() => WhoVisitedBloc(serviceLocator(), serviceLocator()));
 }
 
-void _settings() {
+void _settingsAndActivity() {
   serviceLocator
     ..registerFactory<SettingsDatasource>(() =>
         SettingsDatasourceImpl(firebaseFirestore: FirebaseFirestore.instance))
@@ -634,7 +640,17 @@ void _settings() {
         () => SettingRepoImpl(settingsDatasource: serviceLocator()))
     ..registerFactory(() =>
         EditNotificationPreferenceUseCase(settingsRepository: serviceLocator()))
-    ..registerFactory(() => SettingsCubit(serviceLocator()));
+    ..registerFactory(() => SettingsCubit(serviceLocator()))
+    ..registerFactory<LibraryDataSource>(() =>
+        LibraryDataSourceImpl(firebaseFirestore: FirebaseFirestore.instance))
+    ..registerFactory<LibraryRepostory>(
+        () => LibraryRepoImpl(libraryDataSource: serviceLocator()))
+    ..registerFactory(
+        () => GetLikedPostsUseCase(libraryRepostory: serviceLocator()))
+    ..registerFactory(
+        () => GetSavedPostsUseCase(libraryRepostory: serviceLocator()))
+    ..registerFactory(
+        () => LikedOrSavedPostsCubit(serviceLocator(), serviceLocator()));
 }
 
 void _aiChat() {

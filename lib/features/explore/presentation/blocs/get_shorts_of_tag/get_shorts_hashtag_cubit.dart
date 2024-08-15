@@ -6,20 +6,20 @@ import 'package:social_media_app/features/explore/domain/usecases/get_shorts_of_
 part 'get_shorts_hashtag_state.dart';
 
 class GetShortsHashtagCubit extends Cubit<GetShortsHashtagState> {
-  GetShortsHashtagCubit(this._getRecentPostsHashtagUseCase)
-      : super(GetRecentHashtagPostsInitial());
-  final GetShortsOfTagUseCase _getRecentPostsHashtagUseCase;
+  GetShortsHashtagCubit(this._getShortsOfTags)
+      : super(GetShortsHashtagPostsInitial());
+  final GetShortsOfTagUseCase _getShortsOfTags;
 
-  void getRecentHashTagPosts(String hashtag) async {
-    emit(GetHashTagRecentPostLoading());
+  void getShortsHashTagPosts(String hashtag) async {
+    emit(GetHashTagShortsPostLoading());
 
-    final res = await _getRecentPostsHashtagUseCase(
-        GetShortsOfTagUseCaseParams(tag: hashtag));
+    final res =
+        await _getShortsOfTags(GetShortsOfTagUseCaseParams(tag: hashtag));
     res.fold(
         (failure) =>
-            emit(GetHashTagRecentPostFailure(erroMsg: failure.message)),
+            emit(GetHashTagShortsPostFailure(erroMsg: failure.message)),
         (success) {
-      emit(GetHashTagRecentPostSucess(hashTagRecentPosts: success));
+      emit(GetHashTagShortsPostSucess(hashTagShortsPosts: success));
     });
   }
 }

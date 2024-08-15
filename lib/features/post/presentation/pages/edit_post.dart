@@ -12,7 +12,7 @@ import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
-import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/widgets/post_multiple_images.dart';
+import 'package:social_media_app/core/widgets/each_post/post_image_section.dart/widgets/post_multiple_images.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/select_tags_cubit/select_tags_cubit.dart';
 import 'package:social_media_app/features/post/presentation/widgets/edit_post/edit_screen_feed_option.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/hashtag_section/widget/select_hashtag.dart';

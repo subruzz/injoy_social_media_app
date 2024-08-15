@@ -44,7 +44,6 @@ class AssetLocalSourceImpl implements AssetLocalSource {
         ),
         videoOption: const FilterOption(
           durationConstraint: DurationConstraint(
-            min: Duration(seconds: 1),
             max: Duration(seconds: 60),
             allowNullable: false,
           ),

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
@@ -43,7 +44,7 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
       return statuses.snapshots().map((status) => status.docs
           .map((doc) => SingleStatusEntity.fromJson(doc.data()))
           .toList());
-    } catch (e) {
+    }  catch (e) {
       throw MainException(
           errorMsg: AppErrorMessages.myStatusFetchFailed,
           details: e.toString());

@@ -26,4 +26,6 @@ class MyAppRouteConst {
   static const String accountSettingsPage = 'accountSettingsPage';
   static const String chatSettingPage = 'chatSettingPage';
   static const String notificationSettingsPage = 'notificationSettingsPage';
+  static const String likedOrSavedPostsPage = 'likedOrSavedPostsPage';
+  static const String aiChatPage = 'aiChatPage';
 }

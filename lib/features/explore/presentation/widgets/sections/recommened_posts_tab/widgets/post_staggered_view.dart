@@ -4,13 +4,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/widgets/common/cached_image.dart';
 import 'package:social_media_app/core/widgets/common/mulitple_post_indicator.dart';
-import 'package:social_media_app/features/explore/presentation/pages/all_post_view.dart';
+import 'package:social_media_app/features/explore/presentation/widgets/all_post_view.dart';
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 
 class PostStaggeredView extends StatelessWidget {
-  const PostStaggeredView({super.key, required this.allPosts});
+  const PostStaggeredView(
+      {super.key, this.showTheList = false, required this.allPosts});
   final List<PostEntity> allPosts;
-
+  final bool showTheList;
   @override
   Widget build(BuildContext context) {
     return MasonryGridView.builder(
@@ -29,8 +30,8 @@ class PostStaggeredView extends StatelessWidget {
               if (allPosts[index].isThatvdo) {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => VideoReelPage(
-                    short: allPosts[index],
-                  ),
+                      short: !showTheList ? allPosts[index] : null,
+                      reels: showTheList ? allPosts : null),
                 ));
                 return;
               }
@@ -38,7 +39,7 @@ class PostStaggeredView extends StatelessWidget {
                 builder: (context) {
                   return AllPostView(
                       initialIndex: index,
-                      post: allPosts[index],
+                      post: !showTheList ? allPosts[index] : null,
                       posts: allPosts);
                 },
               ));
