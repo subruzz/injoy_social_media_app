@@ -23,4 +23,6 @@ final class GetUserPostsSuccess extends GetUserPostsState {
   const GetUserPostsSuccess({
     required this.userPosts,
   });
+  @override
+  List<Object> get props => [userPosts];
 }

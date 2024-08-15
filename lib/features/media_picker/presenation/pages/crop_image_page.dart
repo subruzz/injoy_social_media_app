@@ -9,6 +9,8 @@ import 'package:social_media_app/core/widgets/common/page_view.dart';
 import 'package:social_media_app/core/widgets/common/page_view_indicator.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 
+import '../../../../core/const/enums/media_picker_type.dart';
+
 class CropImagePage extends StatefulWidget {
   const CropImagePage(
       {super.key, required this.selectedImages, required this.pickerType});

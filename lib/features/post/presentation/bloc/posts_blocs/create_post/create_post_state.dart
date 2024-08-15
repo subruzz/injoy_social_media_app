@@ -18,3 +18,19 @@ final class CreatePostFailure extends CreatePostState {
 }
 
 final class CreatePostLoading extends CreatePostState {}
+
+class PostDeletionLoading extends CreatePostState {}
+
+class PostDeletionSuccess extends CreatePostState {}
+
+class PostDeletionFailure extends CreatePostState {}
+
+final class UpdatePostLoading extends CreatePostState {}
+
+final class UpdatePostSuccess extends CreatePostState {
+  final PostEntity updatedPost;
+
+ const  UpdatePostSuccess({required this.updatedPost});
+}
+
+final class UpdatePostsError extends CreatePostState {}

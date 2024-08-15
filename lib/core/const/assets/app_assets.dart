@@ -10,6 +10,9 @@ class AppAssetsConst {
   static const String shorts = 'assets/svgs/shorts.svg';
   static const String post = 'assets/svgs/post.svg';
   static const String story = 'assets/svgs/story.svg';
+  static const String accountsettings = 'assets/svgs/account_settings.svg';
+  static const String noti2 = 'assets/svgs/noti_2.svg';
+  static const String menu = 'assets/svgs/menu.svg';
 
   static const String chat = 'assets/svgs/chat.svg';
   static const String add = 'assets/svgs/add_circle.svg';

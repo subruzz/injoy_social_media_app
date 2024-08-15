@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
@@ -11,16 +12,23 @@ import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_suggested_posts_from_post.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/suggestion_from_post/suggestion_from_post_cubit.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/each_post.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/no_post_holder.dart';
 
 import '../../../../core/common/entities/post.dart';
 import '../../../../core/widgets/loading/circular_loading.dart';
+import '../../../profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
 
 class AllPostView extends StatelessWidget {
   const AllPostView(
-      {super.key, required this.initialIndex, this.post, required this.posts});
+      {super.key,
+      required this.initialIndex,
+      this.isMyposts = false,
+      this.post,
+      required this.posts});
   final int initialIndex;
   final List<PostEntity> posts;
   final PostEntity? post;
+  final bool isMyposts;
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -28,7 +36,7 @@ class AllPostView extends StatelessWidget {
     final me = context.read<AppUserBloc>().appUser;
     return Scaffold(
         appBar: AppCustomAppbar(
-          title: 'Explore',
+          title: isMyposts ? l10n!.my_posts : l10n!.explore,
         ),
         body: post != null
             ? PostSuggestionFromPost(
@@ -36,18 +44,45 @@ class AllPostView extends StatelessWidget {
                 userId: me.id,
                 l10n: l10n!,
               )
-            : ListView.builder(
-                controller: ScrollController(
-                  initialScrollOffset:
-                      initialIndex == 0 ? 0 : initialIndex * 450.0,
-                ),
-                itemCount: posts.length,
-                itemBuilder: (context, index) {
-                  return posts[index].isThatvdo
-                      ? const EmptyDisplay()
-                      : EachPost(currentPost: posts[index]);
-                },
-              ));
+            : isMyposts
+                ? BlocConsumer<GetUserPostsBloc, GetUserPostsState>(
+                    builder: (context, state) {
+                      if (state is GetUserPostsSuccess) {
+                        if (state.userPosts.isEmpty) {
+                          return const NoPostHolder();
+                        }
+                        return AllPostListView(
+                            initialIndex: initialIndex, posts: state.userPosts);
+                      }
+                      return const EmptyDisplay();
+                    },
+                    listener: (context, state) {
+                      if (state is GetUserPostsSuccess &&
+                          state.userPosts.isEmpty) {
+                        Navigator.pop(context);
+                      }
+                    },
+                  )
+                : AllPostListView(initialIndex: initialIndex, posts: posts));
+  }
+}
+
+class AllPostListView extends StatelessWidget {
+  const AllPostListView(
+      {super.key, required this.initialIndex, required this.posts});
+  final int initialIndex;
+  final List<PostEntity> posts;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      controller: ScrollController(
+        initialScrollOffset: initialIndex == 0 ? 0 : initialIndex * 450.0,
+      ),
+      itemCount: posts.length,
+      itemBuilder: (context, index) {
+        return EachPost(currentPostIndex: index, currentPost: posts[index]);
+      },
+    );
   }
 }
 
@@ -83,7 +118,7 @@ class PostSuggestionFromPost extends StatelessWidget {
                     !state.isLoading) {
                   return Padding(
                     padding: AppPadding.onlyTopLarge,
-                    child: Center(child: CustomText(l10n.no_suggestions)),
+                    child: Center(child: CustomText(text: l10n.no_suggestions)),
                   );
                 }
                 return EachPost(currentPost: state.posts[index]);

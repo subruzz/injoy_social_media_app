@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   AppCustomAppbar({
@@ -10,6 +11,7 @@ class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.actions,
     this.leadingIcon,
+    this.titleSize,
     this.backGroundColor,
     this.style,
     this.leadingOnPressed,
@@ -22,7 +24,7 @@ class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final IconData? leadingIcon;
   final VoidCallback? leadingOnPressed;
   List<Widget>? actions;
-
+  final double? titleSize;
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -32,10 +34,8 @@ class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
           ? Text(
               title!,
               style: style ??
-                  Theme.of(context)
-                      .textTheme
-                      .headlineMedium
-                      ?.copyWith(fontWeight: FontWeight.w600),
+                  Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.w600, fontSize: titleSize?.sp),
             )
           : null,
       centerTitle: centerTitle,

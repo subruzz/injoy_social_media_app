@@ -42,9 +42,9 @@ class PartialUserWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomText(addAtSymbol(user.userName)),
+                    CustomText(   text: addAtSymbol(user.userName)),
                     CustomText(
-                      user.fullName ?? '',
+                      text:    user.fullName ?? '',
                       style: Theme.of(context).textTheme.bodyMedium,
                     )
                   ],

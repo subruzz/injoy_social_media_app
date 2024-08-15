@@ -8,10 +8,11 @@ class CustomText extends StatelessWidget {
   final TextAlign? textAlign;
   final Color? color;
   final double? letterSpacing;
-  const CustomText(this.text,
+  const CustomText(
       {super.key,
       this.style,
       this.color,
+      required this.text,
       this.letterSpacing,
       this.overflow,
       this.maxLines,

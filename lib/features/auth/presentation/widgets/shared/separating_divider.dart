@@ -14,7 +14,7 @@ class SeparatingDivider extends StatelessWidget {
         children: [
           const Expanded(child: CustomDivider()),
           AppSizedBox.sizedBox10W,
-          const CustomText('or'),
+          const CustomText(   text: 'or'),
           AppSizedBox.sizedBox10W,
           const Expanded(child: CustomDivider()),
         ],

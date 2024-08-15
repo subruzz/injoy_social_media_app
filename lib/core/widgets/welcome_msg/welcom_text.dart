@@ -12,7 +12,7 @@ class WelcomeTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomText(
         letterSpacing: 4,
-        text,
+         text:   text,
         style: Theme.of(context).textTheme.displayLarge,
       
     );

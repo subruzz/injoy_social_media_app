@@ -9,12 +9,14 @@ import '../../../../../../explore/presentation/pages/all_post_view.dart';
 class MediaGrid extends StatelessWidget {
   const MediaGrid(
       {super.key,
+      this.isMe = false,
       required this.medias,
       this.isShorts = false,
       this.isEdit = false});
   final List<PostEntity> medias;
   final bool isEdit;
   final bool isShorts;
+  final bool isMe;
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -30,16 +32,15 @@ class MediaGrid extends StatelessWidget {
               onTap: () {
                 if (isShorts) {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => VideoReelPage(
-                      index: index,
-                      reels: medias
-                    ),
+                    builder: (context) =>
+                        VideoReelPage(index: index, reels: medias),
                   ));
                   return;
                 }
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) {
-                    return AllPostView(initialIndex: index, posts: medias);
+                    return AllPostView(
+                        initialIndex: index, posts: medias, isMyposts: isMe);
                   },
                 ));
               },

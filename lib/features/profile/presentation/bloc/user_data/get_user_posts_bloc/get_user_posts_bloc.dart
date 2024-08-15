@@ -18,15 +18,14 @@ class GetUserPostsBloc extends Bloc<GetUserPostsEvent, GetUserPostsState> {
   GetUserPostsBloc(
     this._getUserPostsUseCase,
   ) : super(GetUserPostsInitial()) {
-    on<GetUserPostsEvent>((event, emit) {
-      emit(GetUserPostsLoading());
-    });
     on<GetUserPostsrequestedEvent>(_getUserPostsrequestedEvent);
     on<GetUserPostsAterPostUpdate>(_getUserPostsAterPostUpdate);
+    on<GetPostAfterDelete>(_getPostAfterDelete);
   }
 
   FutureOr<void> _getUserPostsrequestedEvent(
       GetUserPostsrequestedEvent event, Emitter<GetUserPostsState> emit) async {
+    emit(GetUserPostsLoading());
     log('Requested for user posts');
     final result =
         await _getUserPostsUseCase(GetUserPostsUseCaseParams(user: event.user));
@@ -34,15 +33,36 @@ class GetUserPostsBloc extends Bloc<GetUserPostsEvent, GetUserPostsState> {
     result.fold(
         ((failure) => emit(GetUserPostsError(errorMsg: failure.message))),
         (success) => emit(GetUserPostsSuccess(
-            userPosts: success,
-          )));
+              userPosts: success,
+            )));
   }
 
   FutureOr<void> _getUserPostsAterPostUpdate(
       GetUserPostsAterPostUpdate event, Emitter<GetUserPostsState> emit) async {
-    event.allUsePosts[event.index] = event.updatedPost;
-    emit(GetUserPostsSuccess(
-        userPosts: event.allUsePosts,
-));
+    if (state is! GetUserPostsSuccess) {
+      return;
+    }
+
+    final currentState = state as GetUserPostsSuccess;
+
+    final updatedUserPosts = List<PostEntity>.from(currentState.userPosts);
+
+    updatedUserPosts[event.index] = event.updatedPost;
+
+    emit(GetUserPostsSuccess(userPosts: updatedUserPosts));
+  }
+
+  FutureOr<void> _getPostAfterDelete(
+      GetPostAfterDelete event, Emitter<GetUserPostsState> emit) async {
+    if (state is! GetUserPostsSuccess) {
+      return;
+    }
+
+    final currentState = state as GetUserPostsSuccess;
+
+    final updatedUserPosts = List<PostEntity>.from(currentState.userPosts);
+    updatedUserPosts.removeAt(event.index);
+
+    emit(GetUserPostsSuccess(userPosts: updatedUserPosts));
   }
 }

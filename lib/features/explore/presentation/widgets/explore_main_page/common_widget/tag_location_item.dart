@@ -51,7 +51,7 @@ class TagLocationItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                        title,
+                        text:    title,
                         maxLines: 2,
                         style: Theme.of(context)
                             .textTheme
@@ -60,7 +60,7 @@ class TagLocationItem extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       CustomText(
-                        '$postCount posts',
+                         text:   '$postCount posts',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -93,12 +93,12 @@ class TagLocationItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      title,
+                      text:    title,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 4),
                     CustomText(
-                      '$postCount posts',
+   text: '$postCount posts',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],

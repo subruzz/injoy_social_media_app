@@ -3,6 +3,8 @@ import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
+import '../../../../core/const/enums/media_picker_type.dart';
+
 class SelectedImageOnlyButton extends StatelessWidget {
   const SelectedImageOnlyButton({
     super.key,

@@ -11,13 +11,16 @@ import 'package:social_media_app/core/services/assets/asset_services.dart';
 
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
-import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
-
-import '../../../../../../../../core/services/method_channel.dart/app_toast.dart';
+import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
+import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
+import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
+import 'package:social_media_app/features/post/presentation/pages/edit_post.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
 
 class PostOptionsBottomShett {
   static showPostOptionBottomSheet(BuildContext context,
-      {bool isEdit = false,
+      {bool isMyPost = false,
       required PostEntity post,
       VoidCallback? onShare,
       VoidCallback? onSave,
@@ -27,7 +30,8 @@ class PostOptionsBottomShett {
       VoidCallback? onEdit,
       VoidCallback? onDelete,
       VoidCallback? onAboutAccount,
-      required int postIndex}) {
+      int currentPostIndex = 0,
+      required int postImageUrlIndex}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -44,7 +48,7 @@ class PostOptionsBottomShett {
               onTap: () {},
               iconSize: 23,
             ),
-            if (!isEdit) ...[
+            if (!isMyPost) ...[
               CommonListTile(
                 leading: AppAssetsConst.download,
                 text: l10n.downloadMedia,
@@ -52,7 +56,7 @@ class PostOptionsBottomShett {
                   Navigator.pop(context);
 
                   AssetServices.saveImageWithPath(
-                      imageUrl: post.postImageUrl[postIndex]);
+                      imageUrl: post.postImageUrl[postImageUrlIndex]);
                 },
                 iconSize: 23,
               ),
@@ -76,7 +80,7 @@ class PostOptionsBottomShett {
               //   },
               // ),
             ],
-            if (isEdit) ...[
+            if (isMyPost) ...[
               ListTile(
                 leading: Icon(Icons.hide_source_rounded,
                     color: AppDarkColor().iconPrimaryColor),
@@ -92,31 +96,53 @@ class PostOptionsBottomShett {
                 title: Text(l10n.edit),
                 onTap: () {
                   Navigator.pop(context);
-                  onEdit?.call();
+
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => EditPostPage(
+                      post: post,
+                      index: currentPostIndex,
+                    ),
+                  ));
                 },
               ),
-              BlocListener<DeletePostBloc, DeletePostState>(
-                listener: (context, state) {
-                  if (state is DeletePostSuccess) {
-                    // context.read<GetUserPostsBloc>().add(
-                    //     GetUserPostsrequestedEvent(
-                    //         uid: context.read<AppUserBloc>().appUser.id));
-                    Navigator.pop(context);
-                  }
+              ListTile(
+                leading: Icon(Icons.delete_outlined,
+                    color: AppDarkColor().iconSecondarycolor),
+                title: Text(l10n.delete,
+                    style: Theme.of(context).textTheme.labelLarge),
+                onTap: () {
+                  AppInfoDialog.showInfoDialog(
+                      title: 'Are you Sure?',
+                      context: context,
+                      callBack: () {
+                        context
+                            .read<CreatePostBloc>()
+                            .add(PostDeleteEvent(postId: post.postId));
+                      },
+                      buttonChild:
+                          BlocConsumer<CreatePostBloc, CreatePostState>(
+                        builder: (context, state) {
+                          if (state is PostDeletionLoading) {
+                            return const CircularLoading();
+                          }
+                          return Text(l10n.areYouSure);
+                        },
+                        listener: (context, state) {
+                          if (state is PostDeletionSuccess) {
+                            context.read<GetUserPostsBloc>().add(
+                                GetPostAfterDelete(index: currentPostIndex));
+                            Messenger.showSnackBar(
+                                message: l10n.post_deleted_success);
+                            Navigator.pop(context);
+                          }
+                        },
+                      ));
+
+                  onDelete?.call();
                 },
-                child: ListTile(
-                  leading: Icon(Icons.delete_outlined,
-                      color: AppDarkColor().iconSecondarycolor),
-                  title: Text(l10n.delete,
-                      style: Theme.of(context).textTheme.labelLarge),
-                  onTap: () {
-                    Navigator.pop(context);
-                    onDelete?.call();
-                  },
-                ),
               ),
             ],
-            if (!isEdit)
+            if (!isMyPost)
               CommonListTile(
                 text: l10n.aboutThisAccount,
                 leading: AppAssetsConst.user,
@@ -133,7 +159,7 @@ class PostOptionsBottomShett {
                 },
                 iconSize: 22,
               ),
-            if (!isEdit)
+            if (!isMyPost)
               CommonListTile(
                 text: l10n.report,
                 iconSize: 22,

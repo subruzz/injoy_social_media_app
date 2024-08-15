@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/common/user_profile.dart';
@@ -12,10 +14,11 @@ class PostTopDetails extends StatelessWidget {
     super.key,
     required this.post,
     required this.pagecontroller,
+    required this.currentPostIndex,
   });
   final PostEntity post;
   final PageController pagecontroller;
-
+  final int currentPostIndex;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -69,6 +72,9 @@ class PostTopDetails extends StatelessWidget {
           children: [
             AppSizedBox.sizedBox10W,
             PostOptionButton(
+              currentPostIndex: currentPostIndex,
+              isMyPost:
+                  context.read<AppUserBloc>().appUser.id == post.creatorUid,
               pagecontroller: pagecontroller,
               post: post,
             ),

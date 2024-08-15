@@ -12,13 +12,16 @@ class CommonListTile extends StatelessWidget {
       this.extraColor,
       required this.text,
       this.subtitle,
-      this.leading, this.titileStyle});
+      this.leading,
+      this.titileStyle,
+      this.subTitleSize});
   final double iconSize;
   final Widget? trailing;
   final String? subtitle;
   final String text;
   final bool noPadding;
   final String? leading;
+  final double? subTitleSize;
   final VoidCallback? onTap;
   final Color? extraColor;
   final TextStyle? titileStyle;
@@ -37,16 +40,14 @@ class CommonListTile extends StatelessWidget {
         subtitle: subtitle != null
             ? Text(
                 subtitle!,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(fontSize: 10.sp, color: extraColor),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: subTitleSize?.sp ?? 10.sp, color: extraColor),
               )
             : null,
         contentPadding: noPadding ? EdgeInsets.zero : null,
         title: Text(
           text,
-          style:titileStyle?? TextStyle(color: extraColor),
+          style: titileStyle ?? TextStyle(color: extraColor),
         ),
         trailing: trailing);
   }

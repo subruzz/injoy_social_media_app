@@ -37,7 +37,7 @@ class UserSocialActionDetailsSection extends StatelessWidget {
                                 current.userPosts.length !=
                                     previous.userPosts.length),
                         builder: (context, state) {
-                          return CustomText(state is GetUserPostsSuccess
+                          return CustomText(   text: state is GetUserPostsSuccess
                               ? state.userPosts.length.toString()
                               : '0');
                         },
@@ -45,7 +45,7 @@ class UserSocialActionDetailsSection extends StatelessWidget {
                     : BlocBuilder<GetOtherUserPostsCubit,
                         GetOtherUserPostsState>(
                         builder: (context, state) {
-                          return CustomText(state is GetOtherUserPostsSuccess
+                          return CustomText(   text: state is GetOtherUserPostsSuccess
                               ? state.userPosts.length.toString()
                               : '0');
                         },
@@ -69,13 +69,13 @@ class UserSocialActionDetailsSection extends StatelessWidget {
                     BlocBuilder<FollowunfollowCubit, FollowunfollowState>(
                   builder: (context, state) {
                     return isMe
-                        ? CustomText(context
+                        ? CustomText(   text: context
                             .read<AppUserBloc>()
                             .appUser
                             .following
                             .length
                             .toString())
-                        : CustomText(user.following.length.toString());
+                        : CustomText(   text: user.following.length.toString());
                   },
                 ),
               ),
@@ -96,10 +96,10 @@ class UserSocialActionDetailsSection extends StatelessWidget {
               child: UserSocialAttribute(
                   name: localizations.followers,
                   attribute: isMe
-                      ? CustomText(user.followersCount.toString())
+                      ? CustomText(   text: user.followersCount.toString())
                       : BlocBuilder<FollowunfollowCubit, FollowunfollowState>(
                           builder: (context, state) {
-                            return CustomText(user.followersCount.toString());
+                            return CustomText(   text: user.followersCount.toString());
                           },
                         )),
             ),

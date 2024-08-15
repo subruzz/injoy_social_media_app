@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
@@ -20,9 +20,10 @@ import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/sel
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/hashtag_section/hash_tag_section.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/post_option_section/post_option_section.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/post_option_section/widgets/post_location.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_my_reels/get_my_reels_cubit.dart';
 
 import '../../../../core/services/method_channel.dart/video_trimmer.dart';
+import '../../../profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
 import '../widgets/create_post/section/create_post_input_section/post_input_section.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -117,8 +118,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               Messenger.showSnackBar(message: l10n.postAddError);
             }
             if (state is CreatePostSuccess) {
-              // context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
-              //     uid: context.read<AppUserBloc>().appUser.id));
+              final me = context.read<AppUserBloc>().appUser;
+              if (widget.isReel) {
+                context.read<GetMyReelsCubit>().getMyReels(PartialUser(
+                    id: me.id,
+                    userName: me.userName,
+                    fullName: me.fullName,
+                    profilePic: me.profilePic));
+              } else {
+                context.read<GetUserPostsBloc>().add(GetUserPostsrequestedEvent(
+                    user: PartialUser(
+                        id: me.id,
+                        userName: me.userName,
+                        fullName: me.fullName,
+                        profilePic: me.profilePic)));
+              }
               Navigator.popUntil(
                 context,
                 (route) => route.isFirst,

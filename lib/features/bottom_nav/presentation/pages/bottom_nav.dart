@@ -15,6 +15,7 @@ import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 
 import '../../../chat/presentation/cubits/chat/chat_cubit.dart';
 import '../../../explore/presentation/blocs/explore_user/explore_user_cubit.dart';
+import '../../../post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
 import '../../../post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import '../../../profile/presentation/pages/profile_page_wrapper.dart';
 import '../../../status/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
@@ -149,11 +150,14 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
             BlocProvider(create: (context) {
               final user = context.read<AppUserBloc>().appUser;
               return serviceLocator<ReelsCubit>()..getReels(user.id);
-            }),
+            }), 
             BlocProvider(
               create: (context) => serviceLocator<GetMyStatusBloc>()
                 ..add(GetAllMystatusesEvent(
                     uId: context.read<AppUserBloc>().appUser.id)),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<CreatePostBloc>(),
             ),
             BlocProvider(
                 create: (context) => serviceLocator<GetAllStatusBloc>()

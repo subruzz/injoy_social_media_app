@@ -40,7 +40,7 @@ class FollowUnfollowHelper extends StatelessWidget {
             final me = context.read<AppUserBloc>().appUser;
 
             return CustomText(
-                me.following.contains(user.id) ? l10n!.following : l10n!.follow,
+                  text:  me.following.contains(user.id) ? l10n!.following : l10n!.follow,
                 style: AppTextTheme.bodyMeidumwhiteVariant.bodyMedium
                     ?.copyWith(fontSize: 12));
           },

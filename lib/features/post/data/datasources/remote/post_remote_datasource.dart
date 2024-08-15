@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
 import 'package:social_media_app/core/errors/exception.dart';
@@ -20,8 +21,9 @@ import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 abstract interface class PostRemoteDatasource {
   Future<void> createPost(
       PostEntity post, List<SelectedByte> postImage, bool isReel);
-  Future<void> updatePost(
+  Future<PostModel> updatePost(
     UpdatePostEntity post,
+    PartialUser postUser,
     String pId,
   );
   Future<void> deletePost(String postId, bool isReel);
@@ -144,8 +146,9 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   }
 
   @override
-  Future<void> updatePost(
+  Future<PostModel> updatePost(
     UpdatePostEntity post,
+    PartialUser postUser,
     String postId,
   ) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
@@ -156,7 +159,10 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
         hashtags: post.hashtags,
       );
       await postCollection.doc(postId).update(newPost.toJson());
+      final updatedPostSnapshot = await postCollection.doc(postId).get();
+      return PostModel.fromJson(updatedPostSnapshot.data()!, postUser);
     } catch (e) {
+      log('e ${e.toString()}');
       throw const MainException(
           errorMsg: 'Error updating post',
           details:

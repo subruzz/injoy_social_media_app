@@ -7,36 +7,30 @@ import 'package:social_media_app/features/reels/domain/usecases/get_reels.dart';
 
 part 'reels_explore_state.dart';
 
-// Creating a separate cubit for fetching shorts.
-// We are not reusing the same cubit as in the reels page
-// because the shorts feature is part of the bottom bar navigation
-// and requires preserving its state.
-
 class ReelsExploreCubit extends Cubit<ReelsExploreState> {
   final GetReelsUseCase _getReelsUseCase;
 
-  ReelsExploreCubit(this._getReelsUseCase) : super(ReelsExploreInitial());
-
-  final List<PostEntity> _shorts = [];
+  ReelsExploreCubit(this._getReelsUseCase, PostEntity post)
+      : super(ReelsExploreState(reels: [post]));
 
   void init(PostEntity post) {
-    _shorts.clear(); // Clear previous data if necessary
-    _shorts.add(post);
-    emit(ReelsExploreSuccess(reels: List.from(_shorts))); // Emit state with the list copy
+    emit(state.copyWith(reels: [post])); // Re-initialize the state with the new post
   }
 
-  void getReels(String myId, String? excludedId) async {
+  Future<void> getReels(String myId, String? excludedId) async {
+    emit(state.copyWith(isLoading: true)); // Emit loading state
+
     final res = await _getReelsUseCase(
         GetReelsUseCaseParams(myId: myId, excludedId: excludedId));
 
     res.fold(
       (failure) {
-        emit(ReelsExploreFailure());
+        emit(state.copyWith(isLoading: false, isError: true)); // Emit failure state
       },
       (success) {
-        _shorts.addAll(success.reels);
-        log('Number of shorts: ${_shorts.length}');
-        emit(ReelsExploreSuccess(reels: List.from(_shorts))); // Emit state with the list copy
+        final updatedReels = List<PostEntity>.from(state.reels)..addAll(success.reels);
+        log('Number of reels: ${updatedReels.length}');
+        emit(state.copyWith(isLoading: false, reels: updatedReels)); // Emit success state with updated reels
       },
     );
   }

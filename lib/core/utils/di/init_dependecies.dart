@@ -12,7 +12,6 @@ import 'package:social_media_app/features/ai_chat/domain/repository/ai_chat_repo
 import 'package:social_media_app/features/ai_chat/domain/usecases/generate_ai_message.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/reels_explore/reels_explore_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/blocs/suggestion_from_post/suggestion_from_post_cubit.dart';
 import 'package:social_media_app/features/media_picker/data/repository/asset_repository_impl.dart';
 import 'package:social_media_app/features/media_picker/domain/repository/asset_repository.dart';
 import 'package:social_media_app/features/media_picker/data/datasource/local/asset_local_datasource.dart';
@@ -104,12 +103,10 @@ import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/get_post_comment/get_post_comment_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/like_comment/like_comment_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/like_post/like_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/save_post/save_post_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/search_hashtag/search_hashtag_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/select_tags_cubit/select_tags_cubit.dart';
-import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/update_post/update_post_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/data/datasource/status_feed_remote_datasource.dart';
 import 'package:social_media_app/features/post_status_feed/data/repository/status_feed_repository_impl.dart';
 import 'package:social_media_app/features/post_status_feed/domain/repositories/status_feed_repository.dart';
@@ -374,11 +371,10 @@ void _post() {
     ..registerFactory(() => SearchHashtagBloc(serviceLocator()))
     ..registerFactory(
         () => CreatePostsUseCase(postRepository: serviceLocator()))
-    ..registerFactory(() => CreatePostBloc(serviceLocator()))
-    ..registerFactory(() => UpdatePostBloc(serviceLocator()))
+    ..registerFactory(() =>
+        CreatePostBloc(serviceLocator(), serviceLocator(), serviceLocator()))
     ..registerFactory(
         () => DeletePostsUseCase(postRepository: serviceLocator()))
-    ..registerFactory(() => DeletePostBloc(serviceLocator()))
     ..registerFactory(() => LikePostsUseCase(postRepository: serviceLocator()))
     ..registerFactory(
         () => UnlikePostsUseCase(postRepository: serviceLocator()))
@@ -522,12 +518,8 @@ void _exploreApp() {
     ..registerFactory(() => ExploreAllPostsCubit(
           serviceLocator(),
         ))
-    ..registerFactory(() => ReelsExploreCubit(
-          serviceLocator(),
-        ))
-
-    ..registerFactory(
-        () => GetSuggestedPostsFromPostUseCase(exploreAppRepository: serviceLocator()));
+    ..registerFactory(() => GetSuggestedPostsFromPostUseCase(
+        exploreAppRepository: serviceLocator()));
 }
 
 void _chat() {

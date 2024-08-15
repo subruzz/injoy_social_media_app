@@ -15,7 +15,7 @@ class UserSocialAttribute extends StatelessWidget {
     return Column(
       children: [
         attribute,
-        CustomText(name),
+        CustomText(   text: name),
       ],
     );
   }

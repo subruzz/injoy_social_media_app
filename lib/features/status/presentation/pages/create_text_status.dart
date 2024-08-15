@@ -9,6 +9,8 @@ import 'package:social_media_app/features/status/presentation/bloc/cubit/select_
 import 'package:social_media_app/features/status/presentation/widgets/create_text_status/text_status_background_section/create_text_status_background.dart';
 import 'package:social_media_app/features/status/presentation/widgets/common/status_app_bar.dart';
 
+import '../../../../core/const/enums/media_picker_type.dart';
+
 class CreateTextStatusPage extends StatelessWidget {
   const CreateTextStatusPage(
       {super.key,

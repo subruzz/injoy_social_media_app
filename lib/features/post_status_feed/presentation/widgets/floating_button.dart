@@ -15,6 +15,7 @@ import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app
 import 'package:social_media_app/core/services/app_interal/haptic_feedback.dart';
 import 'package:social_media_app/features/ai_chat/presentation/pages/ai_chat_page.dart';
 
+import '../../../../core/const/enums/media_picker_type.dart';
 import '../../../../core/utils/routes/page_transitions.dart';
 
 class FloatingButton extends StatelessWidget {

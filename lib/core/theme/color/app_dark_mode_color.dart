@@ -29,7 +29,7 @@ class AppDarkColor extends AppColor {
           pure: const Color(0xFF000000),
           primaryText: const Color(0xFFEAEAEA),
           primaryTextSoft: const Color(0xFFf48A9A).withOpacity(0.9),
-          primaryTextBlur: const Color(0xFFFFFFFF).withOpacity(0.7),
+          primaryTextBlur: const Color(0xFFFFFFFF).withOpacity(0.8),
           secondaryText: const Color(0xFFA0A0A0),
           secondaryPrimaryText: const Color(0xFFFF4D67),
           buttonBackground: const Color(0xFFFF4D67),

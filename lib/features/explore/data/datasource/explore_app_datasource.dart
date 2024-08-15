@@ -405,7 +405,6 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       }
 
       if (post.hashtags.isNotEmpty) {
-        print('came hee${post.hashtags}');
 
         // Query for posts containing specific hashtags (interests)
         interestsQuery = _firebaseFirestore

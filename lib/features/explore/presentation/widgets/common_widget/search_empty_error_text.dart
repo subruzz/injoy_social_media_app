@@ -16,7 +16,7 @@ class ExploreFieldMessages extends StatelessWidget {
     return CustomAppPadding(
       padding: AppPadding.medium,
       child: CustomText(
-        isError ? l10n!.somethingWentWrong : l10n!.noResultFound('"$query"'),
+        text:    isError ? l10n!.somethingWentWrong : l10n!.noResultFound('"$query"'),
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 14),
       ),
     );

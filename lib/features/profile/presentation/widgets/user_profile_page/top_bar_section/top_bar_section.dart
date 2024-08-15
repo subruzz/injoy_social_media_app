@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
@@ -36,7 +38,6 @@ class ProfilePageTopBarSection extends StatelessWidget
                 return false;
               },
               builder: (context, state) {
-                log('build called');
                 return Text(
                   addAtSymbol(state.currentUser?.userName),
                   style: Theme.of(context).textTheme.displaySmall,
@@ -47,6 +48,7 @@ class ProfilePageTopBarSection extends StatelessWidget
         AppSizedBox.sizedBox10W,
         if (isMe)
           CustomSvgIcon(
+              color: AppDarkColor().iconPrimaryColor,
               height: 21,
               width: 21,
               onTap: () {
@@ -61,9 +63,14 @@ class ProfilePageTopBarSection extends StatelessWidget
             padding: AppPadding.onlyRightMedium,
             child: GestureDetector(
                 onTap: () {
-                  CustomBottomSheet.showOptions(context, localization!);
+                  Navigator.pushNamed(
+                      context, MyAppRouteConst.settingAndActivityPage);
                 },
-                child: const CustomSvgIcon(assetPath: AppAssetsConst.moreIcon)),
+                child: CustomSvgIcon(
+                  assetPath: AppAssetsConst.menu,
+                  height: 29,
+                  color: AppDarkColor().iconPrimaryColor,
+                )),
           ),
       ],
     );

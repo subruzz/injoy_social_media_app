@@ -7,7 +7,7 @@ import 'package:social_media_app/features/post_status_feed/presentation/widgets/
 class PostOptionButton extends StatelessWidget {
   const PostOptionButton(
       {super.key,
-      this.isEdit = false,
+      this.isMyPost = false,
       this.onShare,
       this.onSave,
       this.onHideUser,
@@ -16,8 +16,10 @@ class PostOptionButton extends StatelessWidget {
       this.onEdit,
       this.onDelete,
       this.onAboutAccount,
-      required this.post, required this.pagecontroller});
-  final bool isEdit;
+      required this.post,
+      required this.currentPostIndex,
+      required this.pagecontroller});
+  final bool isMyPost;
   final PostEntity post;
   final VoidCallback? onShare;
   final VoidCallback? onSave;
@@ -28,16 +30,19 @@ class PostOptionButton extends StatelessWidget {
   final VoidCallback? onDelete;
   final VoidCallback? onAboutAccount;
   final PageController pagecontroller;
-
+  final int currentPostIndex;
   @override
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () {
           PostOptionsBottomShett.showPostOptionBottomSheet(context,
               post: post,
-              isEdit: isEdit,
+              isMyPost: isMyPost,
               onShare: onShare,
-              postIndex:  pagecontroller.hasClients ? pagecontroller.page?.round() ?? 0 : 0,
+              currentPostIndex: currentPostIndex,
+              postImageUrlIndex: pagecontroller.hasClients
+                  ? pagecontroller.page?.round() ?? 0
+                  : 0,
               onSave: onSave,
               onHideUser: onHideUser,
               onAddToFavorite: onAddToFavorite,
@@ -46,6 +51,6 @@ class PostOptionButton extends StatelessWidget {
               onDelete: onDelete,
               onAboutAccount: onAboutAccount);
         },
-        icon: CustomSvgIcon(assetPath: AppAssetsConst.moreIcon));
+        icon: const CustomSvgIcon(assetPath: AppAssetsConst.moreIcon));
   }
 }

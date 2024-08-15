@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/services/assets/asset_services.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/post_action_section.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_content_section/post_content_section.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_image_section.dart/post_image_section.dart';
@@ -19,10 +18,11 @@ class EachPost extends StatefulWidget {
     this.onTurnOffCommenting,
     this.onEdit,
     this.onDelete,
+    this.currentPostIndex = 0,
     this.onAboutAccount,
     this.isEdit = false,
   });
-
+  final int currentPostIndex;
   final bool isEdit;
   final PostEntity currentPost;
   final VoidCallback? onShare;
@@ -48,7 +48,11 @@ class _EachPostState extends State<EachPost> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PostTopDetails(post: widget.currentPost,pagecontroller: _postPageController,),
+          PostTopDetails(
+            currentPostIndex: widget.currentPostIndex,
+            post: widget.currentPost,
+            pagecontroller: _postPageController,
+          ),
           AppSizedBox.sizedBox5W,
           GestureDetector(
             onTap: () {

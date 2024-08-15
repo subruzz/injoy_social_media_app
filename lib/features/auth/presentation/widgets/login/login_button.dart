@@ -47,7 +47,7 @@ class LoginButton extends StatelessWidget {
           if (state is LoginLoading) {
             return const CircularLoading();
           }
-          return CustomText('Log In',
+          return CustomText(   text: 'Log In',
               style: AppTextTheme.labelMediumPureWhiteVariations.labelMedium);
         },
       ),

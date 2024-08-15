@@ -77,7 +77,30 @@
   "typeSomething": "Type something...",
   "aboutInayaSubtitle": "I’m here to help you with any questions or tasks you might have. Whether you need information, assistance with your tasks, or just a chat, I’m here to make your experience better. Feel free to ask me anything!",
   "ok": "OK",
-  "no_suggestions": "Currently, there are no suggestions available. We'll update this soon!"
+  "no_suggestions": "Currently, there are no suggestions available. We'll update this soon!",
+  "post_deleted_success": "Post has been deleted successfully",
+  "explore": "Explore",
+  "my_posts": "My Posts",
+  "edit_post": "Edit Post",
+  "something_went_wrong_edit_post": "Something went wrong while updating the post. Please try again later.",
+  "post_update_success": "Post updated successfully!",
+  "settings_and_activity": "Settings and activity",
+  "change_username": "Change Username",
+  "delete_account": "Delete Account",
+  "your_library": "Your Library",
+  "saved": "Saved",
+  "liked": "Liked",
+  "notifications": "Notifications",
+  "security": "Security",
+  "privacy": "Privacy",
+  "premium_features": "Premium Features",
+  "help": "Help",
+  "about": "About",
+  "change_username_delete_account": "change username,delete account",
+  "chat": "Chat"
+
+
+
 }
 
 

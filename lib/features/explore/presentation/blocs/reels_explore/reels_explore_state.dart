@@ -1,21 +1,28 @@
 part of 'reels_explore_cubit.dart';
 
-sealed class ReelsExploreState extends Equatable {
-  const ReelsExploreState();
-
-  @override
-  List<Object> get props => [];
-}
-
-final class ReelsExploreInitial extends ReelsExploreState {}
-
-final class ReelsExploreLoading extends ReelsExploreState {}
-
-final class ReelsExploreFailure extends ReelsExploreState {}
-
-final class ReelsExploreSuccess extends ReelsExploreState {
+class ReelsExploreState extends Equatable {
   final List<PostEntity> reels;
+  final bool isLoading;
+  final bool isError;
+
+  const ReelsExploreState({
+    this.reels = const [],
+    this.isLoading = false,
+    this.isError = false,
+  });
+
   @override
-  List<Object> get props => [reels];
-  const ReelsExploreSuccess({required this.reels,});
+  List<Object> get props => [reels, isLoading, isError];
+
+  ReelsExploreState copyWith({
+    List<PostEntity>? reels,
+    bool? isLoading,
+    bool? isError,
+  }) {
+    return ReelsExploreState(
+      reels: reels ?? this.reels,
+      isLoading: isLoading ?? this.isLoading,
+      isError: isError ?? this.isError,
+    );
+  }
 }

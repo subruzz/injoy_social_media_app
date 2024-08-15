@@ -7,6 +7,12 @@ sealed class CreatePostEvent extends Equatable {
   List<Object> get props => [];
 }
 
+final class PostDeleteEvent extends CreatePostEvent {
+  final String postId;
+
+  const PostDeleteEvent({required this.postId});
+}
+
 final class CreatePostClickEvent extends CreatePostEvent {
   final String creatorUid;
   final String username;
@@ -35,4 +41,20 @@ final class CreatePostClickEvent extends CreatePostEvent {
       required this.latitude,
       required this.longitude,
       required this.location});
+}
+
+final class UpdatePostEvent extends CreatePostEvent {
+  final List<String> hashtags;
+  // final double? latitude;
+  // final double? longitude;
+  // final String? location;
+  final String? description;
+  final PartialUser user;
+  final String postId;
+  const UpdatePostEvent({
+    required this.hashtags,
+    required this.postId,
+    required this.description,
+    required this.user,
+  });
 }

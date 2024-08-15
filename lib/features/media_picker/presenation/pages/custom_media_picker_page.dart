@@ -20,6 +20,7 @@ import 'package:social_media_app/features/post/presentation/pages/create_post_pa
 import 'package:social_media_app/features/settings/presentation/pages/chat_wallapaper_preview_page.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 
+import '../../../../core/const/enums/media_picker_type.dart';
 import '../../../../core/widgets/common/overlay_loading_holder.dart';
 
 class CustomMediaPickerPage extends StatefulWidget {

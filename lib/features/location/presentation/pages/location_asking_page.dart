@@ -87,7 +87,7 @@ class _LocationAskingPageState extends State<LocationAskingPage> {
                 CustomButton(
                     radius: AppBorderRadius.small,
                     child: CustomText(
-                      'Use current location',
+                     text:    'Use current location',
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     onClick: () {

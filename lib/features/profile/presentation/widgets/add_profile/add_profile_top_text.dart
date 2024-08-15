@@ -7,7 +7,7 @@ class AddProfileTopText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomText(
-      'Fill Your Profile',
+        text:  'Fill Your Profile',
       style: Theme.of(context).textTheme.displaySmall,
     );
   }

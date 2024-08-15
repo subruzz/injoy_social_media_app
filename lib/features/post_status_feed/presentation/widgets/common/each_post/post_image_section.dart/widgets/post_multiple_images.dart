@@ -57,18 +57,18 @@ class PostMultipleImages extends StatelessWidget {
               );
             },
           ),
-          if (isEdit)
-            const Positioned(
-                bottom: 10,
-                left: 10,
-                child: EditScreenFeedOption(
-                    title: 'Tag People', icon: Icons.people_outline_outlined)),
-          if (isEdit)
-            const Positioned(
-                bottom: 10,
-                right: 10,
-                child: EditScreenFeedOption(
-                    title: 'Audience', icon: Icons.visibility))
+          // if (isEdit)
+          //   const Positioned(
+          //       bottom: 10,
+          //       left: 10,
+          //       child: EditScreenFeedOption(
+          //           title: 'Tag People', icon: Icons.people_outline_outlined)),
+          // if (isEdit)
+          //   const Positioned(
+          //       bottom: 10,
+          //       right: 10,
+          //       child: EditScreenFeedOption(
+          //           title: 'Audience', icon: Icons.visibility))
         ],
       ),
     );

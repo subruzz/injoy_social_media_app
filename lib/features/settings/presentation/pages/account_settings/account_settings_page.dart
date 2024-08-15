@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/common/custom_divider.dart';
@@ -10,8 +9,8 @@ import 'package:social_media_app/features/settings/presentation/pages/reset_pass
 import '../../../domain/entity/ui_entity/enums.dart';
 
 class AccountSettingsPage extends StatelessWidget {
-  const AccountSettingsPage({super.key, required this.appUser});
-  final AppUser appUser;
+  const AccountSettingsPage({super.key, required this.myId});
+  final String myId;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +35,7 @@ class AccountSettingsPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => UsernameCheckPage(
-                                      userid: appUser.id,
+                                      userid: myId,
                                       isEdit: true,
                                     )),
                           );

@@ -18,6 +18,10 @@ import 'package:social_media_app/features/profile/presentation/pages/date_of_bir
 import 'package:social_media_app/features/profile/presentation/pages/interest_selection_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/other_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
+import 'package:social_media_app/features/settings/presentation/pages/account_settings/account_settings_page.dart';
+import 'package:social_media_app/features/settings/presentation/pages/chat_settings_page.dart';
+import 'package:social_media_app/features/settings/presentation/pages/notification_preference_screen.dart';
+import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';
 import 'package:social_media_app/features/status/presentation/pages/create_mutliple_status_page.dart';
 import 'package:social_media_app/features/status/presentation/pages/create_status_page.dart';
 import 'package:social_media_app/features/status/presentation/pages/view_status_page.dart';
@@ -26,6 +30,7 @@ import 'package:social_media_app/splash_screen.dart';
 
 import '../../common/entities/single_status_entity.dart';
 import '../../common/entities/status_entity.dart';
+import '../../const/enums/media_picker_type.dart';
 
 class MyAppRouter {
   final bool isAuth;
@@ -121,10 +126,21 @@ class MyAppRouter {
         return AppPageTransitions.leftToRight(
           OtherUserProfilePage(user: user),
         );
+      case MyAppRouteConst.notificationSettingsPage:
+        return AppPageTransitions.rightToLeft(
+            const NotificationPreferenceScreen());
 
       case MyAppRouteConst.notificationPage:
         return AppPageTransitions.rightToLeft(const NotificationPage());
-
+      case MyAppRouteConst.settingAndActivityPage:
+        return AppPageTransitions.rightToLeft(const SettingsAndActivityPage());
+      case MyAppRouteConst.accountSettingsPage:
+        final Map<String, dynamic> params =
+            settings.arguments as Map<String, dynamic>;
+        final String userId = params['userId'];
+        return AppPageTransitions.rightToLeft(AccountSettingsPage(
+          myId: userId,
+        ));
       case MyAppRouteConst.hashtagPostsRoute:
         final Map<String, dynamic> params =
             settings.arguments as Map<String, dynamic>;
@@ -138,8 +154,9 @@ class MyAppRouter {
       // case MyAppRouteConst.personaChatRoute:
       //   return MaterialPageRoute(builder: (_) => const PersonalChatBuilder());
       case MyAppRouteConst.userVisitedListingRoute:
-        return MaterialPageRoute(
-            builder: (_) => const UserVisitedListingPage());
+        return AppPageTransitions.rightToLeft(const UserVisitedListingPage());
+      case MyAppRouteConst.chatSettingPage:
+        return AppPageTransitions.rightToLeft(const ChatSettingsPage());
       case MyAppRouteConst.statusCreationRoute:
         return AppPageTransitions.topToBottom(
           const StatusCreationPage(),

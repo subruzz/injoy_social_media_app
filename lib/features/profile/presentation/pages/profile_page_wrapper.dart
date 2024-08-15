@@ -8,13 +8,13 @@ import 'package:social_media_app/features/auth/presentation/pages/login_page.dar
 import 'package:social_media_app/features/profile/presentation/widgets/others_profile/other_user_details.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/top_bar_section/top_bar_section.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/user_basic_details_section/user_basic_detail_section.dart';
+import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';
 import '../../../../core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
 import '../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../core/theme/color/app_colors.dart';
 import '../../../../core/utils/routes/tranistions/app_routes_const.dart';
 import '../../../../core/widgets/dialog/app_info_dialog.dart';
 import '../../../premium_subscription/presentation/pages/premium_subscripti_builder.dart';
-import '../../../settings/presentation/pages/settings_page.dart';
 import '../widgets/user_profile_page/user_profile_tab_section/user_profile_tab_section.dart';
 import '../widgets/user_profile_page/user_social_action_details_section/user_social_action_details_section.dart';
 
@@ -71,6 +71,7 @@ class ProfilePageWrapper extends StatelessWidget {
     );
   }
 }
+
 class CustomListTile extends StatelessWidget {
   final IconData icon;
   final String text;
@@ -132,7 +133,7 @@ class CustomBottomSheet {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SettingsScreen(),
+                        builder: (context) => SettingsAndActivityPage(),
                       ));
                 },
               ),
@@ -141,25 +142,7 @@ class CustomBottomSheet {
                 icon: Icons.people_alt_outlined,
                 text: localization.seeWhoVisitedMe,
                 onTap: () {
-                  appuser.hasPremium
-                      ? Navigator.pushNamed(
-                          context,
-                          MyAppRouteConst.userVisitedListingRoute,
-                        )
-                      : AppInfoDialog.showInfoDialog(
-                          title: 'Premium Feature',
-                          subtitle:
-                              'Unlock this feature with a premium subscription for an enhanced experience.',
-                          context: context,
-                          callBack: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const PremiumSubscriptiBuilder(),
-                                ));
-                          },
-                          buttonText: 'Get Premium');
+                 
                 },
               ),
               CustomListTile(
@@ -175,7 +158,7 @@ class CustomBottomSheet {
                           onLanguageSelected: (language) {
                             context
                                 .read<AppLanguageCubit>()
-                                .changeLanguage(Locale('ml'));
+                                .changeLanguage(Locale('en'));
                           }),
                     );
                     return;
@@ -219,14 +202,16 @@ class CustomBottomSheet {
                   AppInfoDialog.showInfoDialog(
                     context: context,
                     callBack: () {
-                      FirebaseAuth.instance.signOut().then((value) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
-                          ),
-                          (route) => false,
-                        );
+                      FirebaseAuth.instance.signOut().then((value) async {
+                        if (context.mounted) {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                            (route) => false,
+                          );
+                        }
                       }).catchError((error) {});
                     },
                     title: localization.areYouSure,

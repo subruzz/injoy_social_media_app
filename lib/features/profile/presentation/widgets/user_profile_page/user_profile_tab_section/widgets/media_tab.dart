@@ -33,6 +33,7 @@ class MypostsTab extends StatelessWidget {
           return MediaGrid(
             medias: state.userPosts,
             isEdit: true,
+            isMe: true,
           );
         }
         return const EmptyDisplay();

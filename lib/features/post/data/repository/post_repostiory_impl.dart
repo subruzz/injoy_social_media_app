@@ -11,6 +11,8 @@ import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/features/post/domain/enitities/update_post.dart';
 import 'package:social_media_app/features/post/domain/repositories/post_repository.dart';
 
+import '../../../../core/common/models/partial_user_model.dart';
+
 class PostRepostioryImpl implements PostRepository {
   final PostRemoteDatasource _postRemoteDatasource;
   PostRepostioryImpl(
@@ -19,9 +21,9 @@ class PostRepostioryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, Unit>> createPost(
-      PostEntity post, List<SelectedByte> postImage,bool isReel) async {
+      PostEntity post, List<SelectedByte> postImage, bool isReel) async {
     try {
-      await _postRemoteDatasource.createPost(post, postImage,isReel);
+      await _postRemoteDatasource.createPost(post, postImage, isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg, e.details));
@@ -29,9 +31,9 @@ class PostRepostioryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> deletePost(String postId,bool isReel) async {
+  Future<Either<Failure, Unit>> deletePost(String postId, bool isReel) async {
     try {
-      await _postRemoteDatasource.deletePost(postId,isReel);
+      await _postRemoteDatasource.deletePost(postId, isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -55,13 +57,15 @@ class PostRepostioryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> updatePost(
+  Future<Either<Failure, PostEntity>> updatePost(
     UpdatePostEntity post,
+    PartialUser postUser,
     String postId,
   ) async {
     try {
-      await _postRemoteDatasource.updatePost(post, postId);
-      return right(unit);
+      final res =
+          await _postRemoteDatasource.updatePost(post, postUser, postId);
+      return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
     }
@@ -69,9 +73,9 @@ class PostRepostioryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, Unit>> likePost(
-      String postId, String currentUserUid,bool isReel) async {
+      String postId, String currentUserUid, bool isReel) async {
     try {
-      await _postRemoteDatasource.likePost(postId, currentUserUid,isReel);
+      await _postRemoteDatasource.likePost(postId, currentUserUid, isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -80,9 +84,9 @@ class PostRepostioryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, Unit>> unLikePost(
-      String postId, String currentUserUid,bool isReel) async {
+      String postId, String currentUserUid, bool isReel) async {
     try {
-      await _postRemoteDatasource.unLikePost(postId, currentUserUid,isReel);
+      await _postRemoteDatasource.unLikePost(postId, currentUserUid, isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

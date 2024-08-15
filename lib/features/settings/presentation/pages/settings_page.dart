@@ -30,12 +30,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           SettingsTile(
             icon: Icons.account_circle,
             title: 'Account',
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => AccountSettingsPage(
-                        appUser: appuser,
-                      )),
-            ),
           ),
 
           SettingsTile(

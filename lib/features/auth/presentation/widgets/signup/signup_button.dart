@@ -42,7 +42,7 @@ class SignupButton extends StatelessWidget {
             return const CircularLoading();
           }
           return CustomText(
-            'Sign Up',
+               text: 'Sign Up',
             style: AppTextTheme.labelMediumPureWhiteVariations.labelMedium,
           );
         },

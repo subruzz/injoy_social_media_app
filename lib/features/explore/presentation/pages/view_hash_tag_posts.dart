@@ -31,7 +31,7 @@ class ViewHashTagPostsScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: CustomText(
-            addHashSymbol(hashTagName),
+   text: addHashSymbol(hashTagName),
             style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),

@@ -10,6 +10,7 @@ import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/reels_explore/reels_explore_cubit.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_comment_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/common/each_post/post_action_section/widgets/post_like_button.dart';
+import 'package:social_media_app/features/reels/domain/usecases/get_reels.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../core/widgets/common/add_at_symbol.dart';
 import '../../../../core/widgets/common/app_error_gif.dart';
@@ -35,19 +36,11 @@ class VideoReelPage extends StatefulWidget {
 class _VideoReelPageState extends State<VideoReelPage> {
   late PageController _pageController;
   int currentPage = 0;
-  ReelsExploreCubit? _reelsExploreCubit;
   @override
   void initState() {
     log('video widget build');
     super.initState();
     _pageController = PageController(initialPage: widget.index);
-
-    if (widget.short != null) {
-      _reelsExploreCubit = serviceLocator<ReelsExploreCubit>();
-      _reelsExploreCubit!.init(widget.short!);
-      _reelsExploreCubit!.getReels(
-          context.read<AppUserBloc>().appUser.id, widget.short!.postId);
-    }
   }
 
   @override
@@ -69,22 +62,25 @@ class _VideoReelPageState extends State<VideoReelPage> {
                 currentPage = index;
               })
           : widget.short != null
-              ? BlocBuilder(
-                  bloc: _reelsExploreCubit,
-                  builder: (context, state) {
-                    if (state is ReelsExploreFailure) {
-                      return const AppErrorGif();
-                    }
-                    if (state is ReelsExploreSuccess) {
-                      return ReelsPageView(
-                          controller: _pageController,
-                          reels: state.reels,
-                          onChaged: (index) {
-                            currentPage = index;
-                          });
-                    }
-                    return loadingWidget();
-                  },
+              ? BlocProvider(
+                  create: (context) => ReelsExploreCubit(
+                      serviceLocator<GetReelsUseCase>(), widget.short!)
+                    ..getReels(context.read<AppUserBloc>().appUser.id,
+                        widget.short!.postId),
+                  child: BlocBuilder<ReelsExploreCubit, ReelsExploreState>(
+                    builder: (context, state) {
+                      if (state.reels.isNotEmpty) {
+                        return ReelsPageView(
+                            controller: _pageController,
+                            reels: state.reels,
+                            onChaged: (index) {
+                              currentPage = index;
+                            });
+                      }
+
+                      return loadingWidget();
+                    },
+                  ),
                 )
               : BlocBuilder<ReelsCubit, ReelsState>(
                   builder: (context, state) {
@@ -190,14 +186,15 @@ class VideoPlayerWidget extends StatefulWidget {
   State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
 }
 
-class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  late VideoPlayerController _controller;
+class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
+    with WidgetsBindingObserver {
+  late VideoPlayerController  _controller;
 
   @override
   void initState() {
-    super.initState();
-    // WidgetsBinding.instance.addObserver(this);
-    initializeController();
+    super.initState();    initializeController();
+
+    WidgetsBinding.instance.addObserver(this);
   }
 
   bool _videoInitialized = false;
@@ -236,26 +233,28 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   bool _isPlaying = false;
 
   @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-  //   if (state == AppLifecycleState.resumed) {
-  //     // App is in the foreground
-  //     _controller.play();
-  //   } else if (state == AppLifecycleState.inactive) {
-  //     // App is partially obscured
-  //     _controller.pause();
-  //   } else if (state == AppLifecycleState.paused) {
-  //     // App is in the background
-  //     _controller.pause();
-  //   } else if (state == AppLifecycleState.detached) {
-  //     // App is terminated
-  //     _controller.dispose();
-  //   }
-  // }
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // App is in the foreground
+      _controller.play();
+    } else if (state == AppLifecycleState.inactive) {
+      // App is partially obscured
+      _controller.pause();
+    } else if (state == AppLifecycleState.paused) {
+      // App is in the background
+      _controller.pause();
+    } else if (state == AppLifecycleState.detached) {
+      // App is terminated
+      _controller.dispose();
+    }
+  }
 
   @override
   void dispose() {
     log('this called to dispose');
+    WidgetsBinding.instance.removeObserver(this);
+
     _controller.dispose();
     super.dispose();
   }

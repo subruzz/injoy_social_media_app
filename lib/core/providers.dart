@@ -22,10 +22,8 @@ import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_n
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/delte_post/delete_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/like_post/like_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/search_hashtag/search_hashtag_bloc.dart';
-import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/update_post/update_post_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile/add_interests/select_interest_cubit.dart';
 import 'package:social_media_app/features/status/presentation/bloc/delete_status/delete_status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
@@ -80,9 +78,7 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<AuthBloc>()..add(AuthCurrentUser()),
   ),
-  BlocProvider(
-    create: (context) => serviceLocator<UpdatePostBloc>(),
-  ),
+
   BlocProvider(
     create: (context) => serviceLocator<AiChatCubit>(),
   ),
@@ -106,9 +102,7 @@ List<SingleChildWidget> myProviders = [
               fullName: context.read<AppUserBloc>().appUser.fullName,
               profilePic: context.read<AppUserBloc>().appUser.profilePic))),
   ),
-  BlocProvider(
-    create: (context) => serviceLocator<DeletePostBloc>(),
-  ),
+ 
   BlocProvider(
     create: (context) => serviceLocator<SearchHashtagBloc>(),
   ),

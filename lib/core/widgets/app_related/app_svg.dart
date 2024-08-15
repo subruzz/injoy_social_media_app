@@ -25,7 +25,6 @@ class CustomSvgIcon extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: SvgPicture.asset(assetPath,
-          width: width.w,
           height: height.h,
           colorFilter: ColorFilter.mode(
               color != null ? color! : AppDarkColor().iconSecondarycolor,

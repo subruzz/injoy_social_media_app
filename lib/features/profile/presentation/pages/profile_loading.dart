@@ -16,7 +16,7 @@ class AppLoadingGif extends StatelessWidget {
             height: 125,
             width: 125,
           ),
-          const CustomText('Building Your Profile..')
+          const CustomText(   text: 'Building Your Profile..')
         ],
       ),
     );

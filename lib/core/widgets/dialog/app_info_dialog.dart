@@ -14,7 +14,8 @@ class AppInfoDialog {
       String? title,
       String? subtitle,
       String closeText = 'Back',
-      required String buttonText}) {
+      Widget? buttonChild,
+       String? buttonText}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -47,14 +48,15 @@ class AppInfoDialog {
               },
             ),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                callBack();
-              },
-              child: Text(
-                buttonText,
-              ),
-            ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  callBack();
+                },
+                child: buttonText != null
+                    ? Text(
+                        buttonText,
+                      )
+                    : buttonChild),
           ],
         );
       },
