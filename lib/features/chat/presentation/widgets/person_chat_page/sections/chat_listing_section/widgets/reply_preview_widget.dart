@@ -11,6 +11,7 @@ import 'package:social_media_app/core/const/enums/message_type.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_side_bar.dart';
@@ -138,14 +139,14 @@ class HeaderRow extends StatelessWidget {
         Text(
           userName,
           style: AppTextTheme.labelMediumRedVariant.labelMedium
-              ?.copyWith(fontSize: 13.sp),
+              ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : 13.sp),
         ),
         if (showIcon)
           GestureDetector(
             onTap: () {
               context.read<MessageCubit>().initialState();
             },
-            child: Icon(Icons.close, size: 16.w),
+            child: Icon(Icons.close, size: isThatTabOrDeskTop ? 16 : 16.w),
           ),
       ],
     );
@@ -243,7 +244,8 @@ class MessageCaption extends StatelessWidget {
         child: Text(
           message!,
           style: AppTextTheme.bodyMeidumwhiteVariant.bodyMedium?.copyWith(
-              fontSize: 13.sp, color: AppDarkColor().primaryTextBlur),
+              fontSize: isThatTabOrDeskTop ? 13 : 13.sp,
+              color: AppDarkColor().primaryTextBlur),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),

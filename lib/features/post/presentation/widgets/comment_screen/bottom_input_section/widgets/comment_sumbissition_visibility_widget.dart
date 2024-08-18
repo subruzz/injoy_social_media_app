@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/sanitize_comment.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
 
@@ -48,7 +49,7 @@ class CommentSumbissitionVisibilityWidget extends StatelessWidget {
                           creatorId: creatorId)
                       : commentId.isNotEmpty
                           ? commentBasicCubit.updateComment(
-                                 isReel: isReel,
+                              isReel: isReel,
                               postId: postId,
                               commentId: commentId,
                               comment: sanitizeComment(commentController.text),
@@ -61,9 +62,9 @@ class CommentSumbissitionVisibilityWidget extends StatelessWidget {
                 },
                 child: Text(
                   value.isComment ? 'Post' : 'Edit',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelLarge, // Button text color
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      fontSize:
+                          isThatTabOrDeskTop ? 15 : null), // Button text color
                 ),
               )
             : const EmptyDisplay();

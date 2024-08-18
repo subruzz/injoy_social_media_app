@@ -17,9 +17,7 @@ class FollowingUserStatus extends StatelessWidget {
       builder: (context, state) {
         if (state is GetAllStatusSuccess) {
           return Expanded(
-            child:
-            
-             ListView.builder(
+            child: ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: AppPadding.onlyRightMedium,
                 scrollDirection: Axis.horizontal,
@@ -53,7 +51,10 @@ class FollowingUserStatus extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Text(userAttribute.userName)
+                          Text(
+                            userAttribute.userName,
+                            style: const TextStyle(fontSize: 12),
+                          )
                         ],
                       ),
                     ),

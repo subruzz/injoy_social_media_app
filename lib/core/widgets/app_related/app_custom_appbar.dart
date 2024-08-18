@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 
 class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   AppCustomAppbar({
@@ -12,10 +13,12 @@ class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.leadingIcon,
     this.titleSize,
+    this.webTitleSize = 25,
     this.backGroundColor,
     this.style,
     this.leadingOnPressed,
   });
+  final double webTitleSize;
   final TextStyle? style;
   final bool showLeading;
   final Color? backGroundColor;
@@ -33,9 +36,12 @@ class AppCustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       title: title != null
           ? Text(
               title!,
-              style: style ??
-                  Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w600, fontSize: titleSize?.sp),
+              style: isThatTabOrDeskTop
+                  ?  TextStyle(fontSize: webTitleSize)
+                  : style ??
+                      Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: isThatTabOrDeskTop ? webTitleSize : titleSize?.sp),
             )
           : null,
       centerTitle: centerTitle,

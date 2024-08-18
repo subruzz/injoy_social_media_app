@@ -9,8 +9,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:social_media_app/core/common/shared_providers/cubit/connectivity_cubit.dart';
-import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/providers.dart';
 import 'package:social_media_app/core/utils/routes/app_routes_config.dart';
@@ -67,9 +67,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Set the fit size (Find your UI design, look at the dimensions of the device screen and fill it in,unit in dp)
+    _defineThePlatform(context);
+    log(isThatTabOrDeskTop.toString());
     return ScreenUtilInit(
-      designSize: const Size(360, 784),
+      designSize:!isThatMobile
+          ? const Size(729, 1536)
+          : const Size(360, 784),
       minTextAdapt: true,
       splitScreenMode: true,
       // Use builder only if you need to use library outside ScreenUtilInit context
@@ -92,7 +95,7 @@ class MyApp extends StatelessWidget {
                     Locale('ml'),
                   ],
                   navigatorKey: navigatorKey,
-                
+
                   debugShowCheckedModeBanner: false,
                   scaffoldMessengerKey: Messenger.scaffoldKey,
                   onGenerateRoute: MyAppRouter(isAuth: false).generateRoute,
@@ -108,4 +111,14 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+}
+
+_defineThePlatform(BuildContext context) {
+  TargetPlatform platform = Theme.of(context).platform;
+  isThatTabOrDeskTop = Responsive.deskTopAndTab(context);
+  isThatTabAndMobile = Responsive.mobAndTab(context);
+  isThatTab = Responsive.isTablet(context);
+  isThatMobile =
+      platform == TargetPlatform.iOS || platform == TargetPlatform.android;
+  isThatAndroid = platform == TargetPlatform.android;
 }

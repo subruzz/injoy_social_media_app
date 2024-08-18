@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/widgets/app_related/app_bar_common_icon.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
@@ -36,7 +37,10 @@ class StatusAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: colorCubit?.color,
       title: Text(
         isChat ? l10n!.sendMedia : l10n!.createStatus,
-        style: Theme.of(context).textTheme.headlineMedium,
+        style: Theme.of(context)
+            .textTheme
+            .headlineMedium
+            ?.copyWith(fontSize: isThatTabOrDeskTop ? 23 : null),
       ),
       leading: const AppBarCommonIcon(
         icon: null,

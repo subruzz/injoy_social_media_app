@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
 
 class ColorSelectWidget extends StatelessWidget {
@@ -15,8 +15,8 @@ class ColorSelectWidget extends StatelessWidget {
       onTap: () => colorCubit.changeColor(color),
       child: Container(
         margin: AppPadding.horizontalSmall,
-        width: 40.w,
-        height: 40.h,
+        width: isThatTabOrDeskTop ? 40 : 40.w,
+        height: isThatTabOrDeskTop ? 40 : 40.h,
         decoration: BoxDecoration(
           color: color,
           shape: BoxShape.circle,

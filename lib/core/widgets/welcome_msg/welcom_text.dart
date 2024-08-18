@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 
 class WelcomeTitle extends StatelessWidget {
@@ -11,10 +12,12 @@ class WelcomeTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomText(
-        letterSpacing: 4,
-         text:   text,
-        style: Theme.of(context).textTheme.displayLarge,
-      
+      letterSpacing: 4,
+      text: text,
+      style: Theme.of(context)
+          .textTheme
+          .displayLarge
+          ?.copyWith(fontSize: Responsive.deskTopAndTab(context) ? 26 : null),
     );
   }
 }

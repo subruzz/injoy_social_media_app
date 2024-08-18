@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/tag_location_symbol.dart';
 
@@ -50,17 +51,17 @@ class TagLocationItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                          text:  title,
+                        text: title,
                         maxLines: 2,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge
-                            ?.copyWith(fontWeight: FontWeight.w500),
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: isThatTabOrDeskTop ? 16 : null),
                       ),
                       const SizedBox(height: 4),
                       CustomText(
-                         text:   '$postCount posts',
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        text: '$postCount posts',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: isThatTabOrDeskTop ? 13 : null),
                       ),
                     ],
                   ),
@@ -92,12 +93,12 @@ class TagLocationItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                       text:   title,
+                      text: title,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 4),
                     CustomText(
-                       text:   '$postCount posts',
+                      text: '$postCount posts',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],

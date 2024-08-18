@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/reels_explore/reels_explore_cubit.dart';
 import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_comment_button.dart';
 import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_like_button.dart';
@@ -30,8 +32,11 @@ class VideoReelPage extends StatefulWidget {
       this.reels,
       this.showOne = false,
       this.index = 0,
-      this.short});
+      this.short,
+      this.onCommentClick});
   final List<PostEntity>? reels;
+  final void Function(PostEntity)? onCommentClick;
+
   final bool showOne;
   final int index;
   final PostEntity? short;
@@ -61,9 +66,13 @@ class _VideoReelPageState extends State<VideoReelPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: widget.short != null && widget.showOne
-          ? VideoPlayerWidget(reel: widget.short!)
+          ? VideoPlayerWidget(
+              reel: widget.short!,
+              onCommentClick: widget.onCommentClick,
+            )
           : widget.reels != null
               ? ReelsPageView(
+                  onCommentClick: widget.onCommentClick,
                   controller: _pageController,
                   reels: widget.reels!,
                   onChaged: (index) {
@@ -79,6 +88,7 @@ class _VideoReelPageState extends State<VideoReelPage> {
                         builder: (context, state) {
                           if (state.reels.isNotEmpty) {
                             return ReelsPageView(
+                                onCommentClick: widget.onCommentClick,
                                 controller: _pageController,
                                 reels: state.reels,
                                 onChaged: (index) {
@@ -97,6 +107,7 @@ class _VideoReelPageState extends State<VideoReelPage> {
                         }
                         if (state is ReelsSuccess) {
                           return ReelsPageView(
+                              onCommentClick: widget.onCommentClick,
                               controller: _pageController,
                               reels: state.reels,
                               onChaged: (index) {
@@ -159,10 +170,13 @@ class ReelsPageView extends StatelessWidget {
       {super.key,
       required this.controller,
       required this.reels,
-      required this.onChaged});
+      required this.onChaged,
+      this.onCommentClick});
   final PageController controller;
   final List<PostEntity> reels;
   final void Function(int) onChaged;
+  final void Function(PostEntity)? onCommentClick;
+
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
@@ -174,6 +188,7 @@ class ReelsPageView extends StatelessWidget {
       },
       itemBuilder: (context, index) {
         return VideoPlayerWidget(
+          onCommentClick: onCommentClick,
           reel: reels[index],
           key: Key(reels[index].postImageUrl.first),
         );
@@ -184,10 +199,13 @@ class ReelsPageView extends StatelessWidget {
 
 class VideoPlayerWidget extends StatefulWidget {
   final PostEntity reel;
-
+  final void Function(PostEntity)? onCommentClick;
+  final bool onlyVdo;
   const VideoPlayerWidget({
     super.key,
     required this.reel,
+    this.onCommentClick,
+    this.onlyVdo = false,
   });
 
   @override
@@ -210,6 +228,32 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
 
   Future<void> initializeController() async {
     try {
+      if (kIsWeb) {
+        // Handle the video initialization for web
+        _controller = _controller = VideoPlayerController.networkUrl(
+            Uri.parse(widget.reel.postImageUrl.first))
+          ..initialize().then((_) {
+            if (mounted) {
+              setState(() {
+                _controller.setLooping(true);
+                _controller.play();
+                _videoInitialized = true;
+              });
+            }
+          }).catchError((error) {
+            log('Error initializing video controller on web: $error');
+          });
+        _controller.addListener(() {
+          if (_controller.value.isPlaying && !_isPlaying) {
+            if (mounted) {
+              setState(() {
+                _isPlaying = true;
+              });
+            }
+          }
+        });
+        return;
+      }
       var fileInfo =
           await kCacheManager.getFileFromCache(widget.reel.postImageUrl.first);
       if (fileInfo == null) {
@@ -297,6 +341,8 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
         child: Stack(
           children: [
             GestureDetector(
+              behavior:
+                  HitTestBehavior.opaque, 
               onTap: () {
                 if (mounted && _videoInitialized) {
                   setState(() {
@@ -348,66 +394,76 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                             backgroundColor: Colors.white,
                           ),
                         ),
-                  Positioned(
-                    bottom: 20,
-                    left: 10,
-                    right: 60,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            CircularUserProfile(
-                                size: 22, profile: widget.reel.userProfileUrl),
-                            AppSizedBox.sizedBox10W,
-                            Text(
-                              addAtSymbol(widget.reel.username),
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                            AppSizedBox.sizedBox10W,
-                            if (widget.reel.creatorUid != me.id)
-                              FollowUnfollowHelper(
-                                  wantWhiteBorder: true,
-                                  color: Colors.transparent,
-                                  noRad: true,
-                                  user: PartialUser(id: widget.reel.creatorUid))
-                          ],
-                        ),
-                        AppSizedBox.sizedBox10H,
-                        Column(
-                          children: [
-                            ExpandableText(
-                                text: widget.reel.description ?? '',
-                                trimLines: 2)
-                          ],
-                        )
-                      ],
+                  if (!widget.onlyVdo)
+                    Positioned(
+                      bottom: 20,
+                      left: 10,
+                      right: 60,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CircularUserProfile(
+                                  size: 22,
+                                  profile: widget.reel.userProfileUrl),
+                              AppSizedBox.sizedBox10W,
+                              Text(
+                                addAtSymbol(widget.reel.username),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                        fontSize:
+                                            isThatTabOrDeskTop ? 15 : null),
+                              ),
+                              AppSizedBox.sizedBox10W,
+                              if (widget.reel.creatorUid != me.id)
+                                FollowUnfollowHelper(
+                                    wantWhiteBorder: true,
+                                    color: Colors.transparent,
+                                    noRad: true,
+                                    user:
+                                        PartialUser(id: widget.reel.creatorUid))
+                            ],
+                          ),
+                          AppSizedBox.sizedBox10H,
+                          Column(
+                            children: [
+                              ExpandableText(
+                                  text: widget.reel.description ?? '',
+                                  trimLines: 2)
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
                   // Positioned(
+                  if (!widget.onlyVdo)
 
-                  // Action Buttons positioned at the bottom right
-                  Positioned(
-                    right: 10,
-                    bottom: 200.h,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Like Button
-                        PostLikeButton(
-                          me: me,
-                          post: widget.reel,
-                          isReel: true,
-                        ),
-                        AppSizedBox.sizedBox20H,
-                        PostCommentButton(
-                          post: widget.reel,
-                          isReel: true,
-                        ),
-                        // Share Button
-                      ],
+                    // Action Buttons positioned at the bottom right
+                    Positioned(
+                      right: 10,
+                      bottom: 200.h,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Like Button
+                          PostLikeButton(
+                            me: me,
+                            post: widget.reel,
+                            isReel: true,
+                          ),
+                          AppSizedBox.sizedBox20H,
+                          PostCommentButton(
+                            onCommentClick: widget.onCommentClick,
+                            post: widget.reel,
+                            isReel: true,
+                          ),
+                          // Share Button
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
@@ -27,30 +28,33 @@ class CreateTextStatusPage extends StatelessWidget {
       bloc: colorCubit,
       builder: (context, state) {
         return Scaffold(
-            floatingActionButton: CustomAppPadding(
-              padding: AppPadding.floatingActionBottomPaddng,
-              child: AppCustomFloatingButton(
-                  onPressed: () async {
-                    final List<SelectedByte>? res = await Navigator.pushNamed(
-                      context,
-                      MyAppRouteConst.mediaPickerRoute,
-                      arguments: {'pickerType': MediaPickerType.status},
-                    ) as List<SelectedByte>?;
+            floatingActionButton: !kIsWeb
+                ? CustomAppPadding(
+                    padding: AppPadding.floatingActionBottomPaddng,
+                    child: AppCustomFloatingButton(
+                        onPressed: () async {
+                          final List<SelectedByte>? res =
+                              await Navigator.pushNamed(
+                            context,
+                            MyAppRouteConst.mediaPickerRoute,
+                            arguments: {'pickerType': MediaPickerType.status},
+                          ) as List<SelectedByte>?;
 
-                    selectedAssets.clear();
+                          selectedAssets.clear();
 
-                    if (res != null) {
-                      changeStatusScreen();
-                      selectedAssets.addAll(res);
-                    } else {
-                      selectedAssets.clear();
-                    }
-                  },
-                  child: const Icon(Icons.camera_sharp)),
-            ),
+                          if (res != null) {
+                            changeStatusScreen();
+                            selectedAssets.addAll(res);
+                          } else {
+                            selectedAssets.clear();
+                          }
+                        },
+                        child: const Icon(Icons.camera_sharp)),
+                  )
+                : null,
             appBar: StatusAppBar(
-             colorCubit: colorCubit,
-             statusController:captonController ,
+              colorCubit: colorCubit,
+              statusController: captonController,
             ),
             body: CreateTextStatusBackground(
                 colorCubit: colorCubit, captionController: captonController));

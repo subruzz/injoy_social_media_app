@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 
 class AppBarCommonIcon extends StatelessWidget {
   const AppBarCommonIcon({super.key, required this.icon});
@@ -13,7 +14,7 @@ class AppBarCommonIcon extends StatelessWidget {
       },
       child: Icon(
         icon ?? Icons.close,
-        size: 30.w,
+        size: isThatTabOrDeskTop ? 30 : 30.w,
         color: AppDarkColor().iconPrimaryColor,
       ),
     );

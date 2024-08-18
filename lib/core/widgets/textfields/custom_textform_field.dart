@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -60,58 +62,75 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-        autofocus: widget.autoFocus,
-        onChanged: widget.onChanged,
-        readOnly: widget.readOnly ?? false,
-        maxLines: widget.maxLine ?? 1,
-        controller: widget.controller,
-        obscureText: isPassWordVisible,
-        decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderRadius: widget.radius ?? AppBorderRadius.small,
-              borderSide: const BorderSide(color: Colors.transparent),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: widget.radius ?? AppBorderRadius.small,
-              borderSide: const BorderSide(color: Colors.transparent),
-            ),
-            fillColor: AppDarkColor().secondaryBackground,
-            errorStyle: TextStyle(color: widget.errorColor),
-            errorText: widget.errorMsg,
-            suffixIcon: widget.showSuffixIcon
-                ? IconButton(
-                    onPressed: widget.obsecureText
-                        ? () {
-                            widget.obsecureText
-                                ? setState(
-                                    () {
-                                      isPassWordVisible = !isPassWordVisible;
-                                    },
-                                  )
-                                : null;
-                          }
-                        : widget.datePicker,
-                    icon: CustomSvgIcon(
-                        height: 20,
-                        width: 20,
-                        assetPath: widget.obsecureText
-                            ? isPassWordVisible
-                                ? AppAssetsConst.visibilityOff
-                                : AppAssetsConst.visibility
-                            : AppAssetsConst.calendar))
-                : null,
-            // Icon(widget.obsecureText
-            //     ? isPassWordVisible
-            //         ? Icons.visibility_outlined
-            //         : Icons.visibility_off_outlined
-            //     : Icons.calendar_month_outlined),
-            // )
-            // : null,
-            prefixIcon: widget.prefixIcon,
-            hintText: widget.hintText),
-        validator: widget.validation,
-        autovalidateMode:
-            widget.autoValidate ? AutovalidateMode.onUserInteraction : null);
+    return SizedBox(
+      
+      child: TextFormField(
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : null),
+          autofocus: widget.autoFocus,
+          onChanged: widget.onChanged,
+          readOnly: widget.readOnly ?? false,
+          maxLines: widget.maxLine ?? 1,
+          controller: widget.controller,
+          obscureText: isPassWordVisible,
+          decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderRadius: Responsive.deskTopAndTab(context)
+                    ? const BorderRadius.all(Radius.circular(5))
+                    : widget.radius ?? AppBorderRadius.small,
+                borderSide: const BorderSide(color: Colors.transparent),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: Responsive.deskTopAndTab(context)
+                    ? const BorderRadius.all(Radius.circular(5))
+                    : widget.radius ?? AppBorderRadius.small,
+                borderSide: const BorderSide(color: Colors.transparent),
+              ),
+              hintStyle: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : null),
+              fillColor: AppDarkColor().secondaryBackground,
+              errorStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: isThatTabOrDeskTop ? 12 : null,
+                  color: widget.errorColor??AppDarkColor().secondaryPrimaryText.withOpacity(.6)),
+              errorText: widget.errorMsg,
+              suffixIcon: widget.showSuffixIcon
+                  ? IconButton(
+                      onPressed: widget.obsecureText
+                          ? () {
+                              widget.obsecureText
+                                  ? setState(
+                                      () {
+                                        isPassWordVisible = !isPassWordVisible;
+                                      },
+                                    )
+                                  : null;
+                            }
+                          : widget.datePicker,
+                      icon: CustomSvgIcon(
+                          height: 20,
+                          width: 20,
+                          assetPath: widget.obsecureText
+                              ? isPassWordVisible
+                                  ? AppAssetsConst.visibilityOff
+                                  : AppAssetsConst.visibility
+                              : AppAssetsConst.calendar))
+                  : null,
+              // Icon(widget.obsecureText
+              //     ? isPassWordVisible
+              //         ? Icons.visibility_outlined
+              //         : Icons.visibility_off_outlined
+              //     : Icons.calendar_month_outlined),
+              // )
+              // : null,
+              prefixIcon: widget.prefixIcon,
+              hintText: widget.hintText),
+          validator: widget.validation,
+          autovalidateMode:
+              widget.autoValidate ? AutovalidateMode.onUserInteraction : null),
+    );
   }
 }

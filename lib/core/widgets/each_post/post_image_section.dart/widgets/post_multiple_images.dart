@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/common/cached_image.dart';
 import 'package:social_media_app/features/post/presentation/widgets/edit_post/edit_screen_feed_option.dart';
 
@@ -10,7 +12,8 @@ class PostMultipleImages extends StatelessWidget {
       {super.key,
       required this.postImageUrls,
       this.size = .4,
-      this.isEdit = false, required this.pageController});
+      this.isEdit = false,
+      required this.pageController});
   final bool isEdit;
   final List<String> postImageUrls;
   final double size;
@@ -18,7 +21,7 @@ class PostMultipleImages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: size.sh,
+      height: Responsive.deskTopAndTab(context) ? size : size.sh,
       width: double.infinity,
       child: Stack(
         children: [
@@ -36,7 +39,9 @@ class PostMultipleImages extends StatelessWidget {
                               assets: postImageUrls, initialIndex: index),
                         ));
                       },
-                      child: CachedImage(img: postImageUrls[index])),
+                      child: CachedImage(
+                          fit: isThatTabOrDeskTop ? BoxFit.contain : null,
+                          img: postImageUrls[index])),
                   if (postImageUrls.length > 1)
                     Positioned(
                         top: 2,

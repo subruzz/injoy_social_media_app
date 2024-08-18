@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/services/app_interal/haptic_feedback.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 
@@ -26,15 +28,30 @@ class ChatSendButton extends StatelessWidget {
       builder: (context, state) {
         log(state.toString());
         return Positioned(
-            bottom: state is VoiceMessageOngoing ? -10.h : 8.h,
-            right: state is VoiceMessageOngoing ? -10.w : 5.w,
+            bottom: state is VoiceMessageOngoing
+                ? isThatTabOrDeskTop
+                    ? -10
+                    : -10.h
+                : isThatTabOrDeskTop
+                    ? 8
+                    : 8.h,
+            right: state is VoiceMessageOngoing
+                ? isThatTabOrDeskTop
+                    ? -10
+                    : -10.w
+                : isThatTabOrDeskTop
+                    ? 5
+                    : 5.w,
             child: GestureDetector(
               onLongPressEnd: (details) {
+                if (kIsWeb) return;
                 if (!toggleButton.value) return;
                 final state = context.read<GetMessageCubit>().state;
                 context.read<MessageCubit>().voiceRecordStopped(state);
               },
               onLongPress: () {
+                if (kIsWeb) return;
+
                 if (!toggleButton.value) return;
                 HapticFeedbackHelper().vibrate();
                 context.read<MessageCubit>().voiceRecordingStarted();
@@ -51,8 +68,16 @@ class ChatSendButton extends StatelessWidget {
               child: AnimatedContainer(
                 curve: Curves.easeIn,
                 duration: const Duration(microseconds: 0),
-                width: state is VoiceMessageOngoing ? 100 : 50.w,
-                height: state is VoiceMessageOngoing ? 100 : 50.w,
+                width: state is VoiceMessageOngoing
+                    ? 100
+                    : isThatTabOrDeskTop
+                        ? 50
+                        : 50.w,
+                height: state is VoiceMessageOngoing
+                    ? 100
+                    : isThatTabOrDeskTop
+                        ? 50
+                        : 50.w,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(
                       state is VoiceMessageOngoing ? 50 : 25),
@@ -62,7 +87,8 @@ class ChatSendButton extends StatelessWidget {
                   child: ValueListenableBuilder(
                     valueListenable: toggleButton,
                     builder: (context, value, child) {
-                      return Icon(value ? Icons.mic : Icons.send_outlined);
+                      return Icon(
+                          value && !kIsWeb ? Icons.mic : Icons.send_outlined);
                     },
                   ),
                 ),

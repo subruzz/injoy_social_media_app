@@ -11,22 +11,24 @@ class SelectEmojiItem extends StatelessWidget {
   final VoidCallback addToTextController;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        addToTextController();
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          addToTextController();
 
-        controller.text = controller.text + emoji;
-        controller.selection = TextSelection.fromPosition(
-            TextPosition(offset: controller.text.length));
-        // setState(() {
-        //   widget.textController.text = widget.textController.text + emoji;
-        //   widget.textController.selection = TextSelection.fromPosition(
-        //       TextPosition(offset: widget.textController.text.length));
-        // });
-      },
-      child: Text(
-        emoji,
-        style: const TextStyle(fontSize: 22),
+          controller.text = controller.text + emoji;
+          controller.selection = TextSelection.fromPosition(
+              TextPosition(offset: controller.text.length));
+          // setState(() {
+          //   widget.textController.text = widget.textController.text + emoji;
+          //   widget.textController.selection = TextSelection.fromPosition(
+          //       TextPosition(offset: widget.textController.text.length));
+          // });
+        },
+        child: Text(
+          emoji,
+          style: const TextStyle(fontSize: 22),
+        ),
       ),
     );
   }

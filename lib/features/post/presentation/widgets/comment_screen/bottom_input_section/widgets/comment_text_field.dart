@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
+import '../../../../../../../core/utils/responsive/constants.dart';
+
 class CommentTextField extends StatelessWidget {
   const CommentTextField(
       {super.key,
@@ -14,6 +16,10 @@ class CommentTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: TextField(
+        style: Theme.of(context)
+            .textTheme
+            .bodySmall
+            ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : null),
         focusNode: inputNode,
         onChanged: (value) {
           onChanged(value);
@@ -21,6 +27,10 @@ class CommentTextField extends StatelessWidget {
         autofocus: true,
         controller: commentController,
         decoration: InputDecoration(
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : null),
           filled: true,
           fillColor: AppDarkColor().secondaryBackground,
           border: InputBorder.none,

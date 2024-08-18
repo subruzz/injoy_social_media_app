@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
+import 'package:social_media_app/core/widgets/web/web_width_helper.dart';
 import 'package:social_media_app/features/status/presentation/bloc/delete_status/delete_status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/widgets/view_status/status_delete_popup.dart';
 import 'package:social_media_app/features/status/presentation/widgets/view_status/status_info.dart';
@@ -60,41 +61,44 @@ class _MoreStoriesState extends State<ViewStatusPage> {
           }
         },
         child: Scaffold(
-          body: Stack(
-            children: [
-              StoryItems(
-                  uid: user.id,
-                  statuses: _statuses,
-                  currentStoryIndex: _currentStoryIndex,
-                  storyController: _storyController),
-              Positioned(
-                top: 30,
-                left: 20,
-                right: 20,
-                child: SafeArea(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      StatusInfo(
-                          isMe: widget.isMe,
-                          user: user,
-                          statusEntity: widget.statusEntity,
-                          created: _statuses[_currentStoryIndex.value]
-                              .createdAt
-                              .toDate(),
-                          currentStoryIndex: _currentStoryIndex),
-                      if (widget.isMe)
-                        StatusDeletePopup(deleteStatus: () {
-                          deleteStatus(
-                              context,
-                              _statuses[_currentStoryIndex.value].statusId,
-                              _statuses[_currentStoryIndex.value].statusImage);
-                        })
-                    ],
+          body: WebWidthHelper(
+            child: Stack(
+              children: [
+                StoryItems(
+                    uid: user.id,
+                    statuses: _statuses,
+                    currentStoryIndex: _currentStoryIndex,
+                    storyController: _storyController),
+                Positioned(
+                  top: 30,
+                  left: 20,
+                  right: 20,
+                  child: SafeArea(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        StatusInfo(
+                            isMe: widget.isMe,
+                            user: user,
+                            statusEntity: widget.statusEntity,
+                            created: _statuses[_currentStoryIndex.value]
+                                .createdAt
+                                .toDate(),
+                            currentStoryIndex: _currentStoryIndex),
+                        if (widget.isMe)
+                          StatusDeletePopup(deleteStatus: () {
+                            deleteStatus(
+                                context,
+                                _statuses[_currentStoryIndex.value].statusId,
+                                _statuses[_currentStoryIndex.value]
+                                    .statusImage);
+                          })
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ));
   }

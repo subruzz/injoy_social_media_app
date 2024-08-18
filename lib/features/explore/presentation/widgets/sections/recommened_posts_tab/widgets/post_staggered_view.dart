@@ -2,16 +2,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/cached_image.dart';
 import 'package:social_media_app/core/widgets/common/mulitple_post_indicator.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/all_post_view.dart';
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 
+import '../../../../../../../core/utils/routes/tranistions/hero_dialog.dart';
+import '../../../../../../bottom_nav/presentation/pages/popup_container_web.dart';
+
 class PostStaggeredView extends StatelessWidget {
   const PostStaggeredView(
-      {super.key, this.showTheList = false, required this.allPosts});
+      {super.key, this.showTheList = false, required this.allPosts, this.fit});
   final List<PostEntity> allPosts;
   final bool showTheList;
+  final BoxFit? fit;
   @override
   Widget build(BuildContext context) {
     return MasonryGridView.builder(
@@ -27,6 +32,15 @@ class PostStaggeredView extends StatelessWidget {
           padding: const EdgeInsets.all(3.0),
           child: GestureDetector(
             onTap: () {
+              if (isThatTabOrDeskTop) {
+                Navigator.of(context).push(HeroDialogRoute(
+                  builder: (context) => PopupContainerWeb(
+                    isShorts: allPosts[index].isThatvdo,
+                    post: allPosts[index],
+                  ),
+                ));
+                return;
+              }
               if (allPosts[index].isThatvdo) {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => VideoReelPage(
@@ -52,6 +66,7 @@ class PostStaggeredView extends StatelessWidget {
                 child: AspectRatio(
                     aspectRatio: aspectRatio,
                     child: CachedImage(
+                        fit: fit,
                         img: allPosts[index].isThatvdo
                             ? allPosts[index].extra!
                             : allPosts[index].postImageUrl.first)),

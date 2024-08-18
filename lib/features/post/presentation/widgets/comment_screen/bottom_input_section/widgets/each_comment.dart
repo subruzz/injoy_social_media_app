@@ -2,6 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
@@ -36,7 +39,9 @@ class EachComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppPadding.symmetric(vertical: 15, horizontal: 5),
+      padding: isThatTabOrDeskTop
+          ? const EdgeInsets.symmetric(horizontal: 5, vertical: 8)
+          : AppPadding.symmetric(vertical: 15, horizontal: 5),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onLongPressStart: (details) async {
@@ -96,7 +101,8 @@ class EachComment extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Text(
+                                Flexible(
+                                  child: Text(
                                     addAtSymbol(
                                       comment.userName,
                                     ),
@@ -104,12 +110,31 @@ class EachComment extends StatelessWidget {
                                         ? Theme.of(context)
                                             .textTheme
                                             .titleMedium
+                                            ?.copyWith(
+                                                fontSize: isThatTabOrDeskTop
+                                                    ? 15
+                                                    : null)
                                         : Theme.of(context)
                                             .textTheme
-                                            .labelMedium),
+                                            .labelMedium
+                                            ?.copyWith(
+                                                fontSize: isThatTabOrDeskTop
+                                                    ? 12
+                                                    : null),
+                                  ),
+                                ),
                                 AppSizedBox.sizedBox15W,
-                                Text(
-                                    '${comment.createdAt.toDate().timeAgo()} ${comment.isEdited ? '(edited)' : ''}'),
+                                Flexible(
+                                  child: Text(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium
+                                          ?.copyWith(
+                                              fontSize: isThatTabOrDeskTop
+                                                  ? 12
+                                                  : null),
+                                      '${comment.createdAt.toDate().timeAgo()} ${comment.isEdited ? '(edited)' : ''}'),
+                                ),
                               ],
                             ),
                             AppSizedBox.sizedBox5H,

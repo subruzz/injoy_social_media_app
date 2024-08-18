@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 
 class CustomText extends StatelessWidget {
   final String text;
@@ -22,7 +23,11 @@ class CustomText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: style ?? Theme.of(context).textTheme.labelMedium,
+      style: style ??
+          Theme.of(context)
+              .textTheme
+              .labelMedium
+              ?.copyWith(fontSize: isThatTabOrDeskTop ? 15 : null),
       maxLines: maxLines ?? 2,
       overflow: overflow ?? TextOverflow.ellipsis,
       textAlign: textAlign,

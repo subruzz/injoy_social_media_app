@@ -3,6 +3,8 @@ import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
+import '../../../../../core/utils/responsive/constants.dart';
+
 class AuthChoosingText extends StatelessWidget {
   const AuthChoosingText({super.key, this.islogin = false});
   final bool islogin;
@@ -14,9 +16,13 @@ class AuthChoosingText extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(islogin
-                ? AppUiStringConst.dontHaveAccount
-                : AppUiStringConst.haveAccount),
+            Text(
+                islogin
+                    ? AppUiStringConst.dontHaveAccount
+                    : AppUiStringConst.haveAccount,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: isThatTabOrDeskTop ? 16 : null,
+                    )),
             TextButton(
               onPressed: () {
                 if (islogin) {
@@ -28,10 +34,9 @@ class AuthChoosingText extends StatelessWidget {
               },
               child: Text(
                 islogin ? AppUiStringConst.signUp : AppUiStringConst.login,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: AppDarkColor().secondaryPrimaryText),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppDarkColor().secondaryPrimaryText,
+                    fontSize: isThatTabOrDeskTop ? 16 : null),
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/custom_divider.dart';
 import 'package:social_media_app/features/settings/presentation/pages/account_settings/account_settings_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_settings_page.dart';
@@ -25,35 +26,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: ListView(
         children: [
+          ...getMySettingsItem(context),
           // SettingsTile(
           //     icon: Icons.person_add, title: 'Follow and Invite Friends'),
-          SettingsTile(
-            icon: Icons.account_circle,
-            title: 'Account',
-          ),
 
-          SettingsTile(
-              icon: Icons.notifications,
-              title: 'Notifications',
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => NotificationPreferenceScreen(),
-                  ))),
-          SettingsTile(
-              icon: Icons.chat,
-              title: 'Chat',
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatSettingsPage(),
-                  ))),
-          SettingsTile(
-            icon: Icons.lock,
-            title: 'Privacy',
-            onTap: () {
-              // FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('myChat').
-            },
-          ),
-          SettingsTile(icon: Icons.security, title: 'Security'),
-          SettingsTile(icon: Icons.help, title: 'Help'),
-          SettingsTile(icon: Icons.info, title: 'About'),
           // SwitchListTile(
           //   title: Text('Dark Theme'),
           //   secondary: Icon(Icons.brightness_6),
@@ -80,9 +56,46 @@ class SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
+      leading: Icon(
+        icon,
+        color: !isThatMobile ? Colors.white : null,
+      ),
+      title: Text(
+        title,
+        style: isThatMobile ? null : const TextStyle(fontSize: 13),
+      ),
       onTap: onTap,
     );
   }
+}
+
+List<Widget> getMySettingsItem(BuildContext context) {
+  return [
+    SettingsTile(
+      icon: Icons.account_circle,
+      title: 'Account',
+    ),
+    SettingsTile(
+        icon: Icons.notifications,
+        title: 'Notifications',
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => NotificationPreferenceScreen(),
+            ))),
+    SettingsTile(
+        icon: Icons.chat,
+        title: 'Chat',
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ChatSettingsPage(),
+            ))),
+    SettingsTile(
+      icon: Icons.lock,
+      title: 'Privacy',
+      onTap: () {
+        // FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('myChat').
+      },
+    ),
+    SettingsTile(icon: Icons.security, title: 'Security'),
+    SettingsTile(icon: Icons.help, title: 'Help'),
+    SettingsTile(icon: Icons.info, title: 'About'),
+  ];
 }

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
@@ -115,14 +116,13 @@ class _PersonChatPageState extends State<PersonChatPage> {
                     toggleButton: _toggleButton),
               ],
             ),
-
-            ChatSendButton(
-              toggleButton: _toggleButton,
-              sendMessage: () {
-                _sendTextMsg();
-              },
-              messageController: _textMsgController,
-            ),
+              ChatSendButton(
+                toggleButton: _toggleButton,
+                sendMessage: () {
+                  _sendTextMsg();
+                },
+                messageController: _textMsgController,
+              ),
             // Align(
             //   alignment: Alignment.topCenter,
             //   child: DateHeader(

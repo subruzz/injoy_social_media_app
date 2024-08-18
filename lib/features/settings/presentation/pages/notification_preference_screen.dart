@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
@@ -46,12 +47,7 @@ class _NotificationPreferenceScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Notification',
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-      ),
+      appBar: AppCustomAppbar(title: 'Noficiation',),
       body: CustomAppPadding(
         child: BlocConsumer<SettingsCubit, SettingsState>(
           listener: (context, state) {

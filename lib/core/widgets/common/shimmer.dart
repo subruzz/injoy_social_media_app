@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 
 class ShimmerEachPost extends StatelessWidget {
@@ -77,7 +79,7 @@ class ShimmerEachPost extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
                     width: double.infinity,
-                    height: 200,
+                    height: isThatTabOrDeskTop ? .4.sh : 450,
                     color: Colors.white,
                   ),
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
-import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
@@ -42,10 +42,13 @@ class PartialUserWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomText(   text: addAtSymbol(user.userName)),
+                    CustomText(text: addAtSymbol(user.userName)),
                     CustomText(
-                      text:    user.fullName ?? '',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      text: user.fullName ?? '',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : null),
                     )
                   ],
                 ),

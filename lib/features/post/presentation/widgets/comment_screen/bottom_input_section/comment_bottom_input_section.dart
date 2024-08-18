@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/user_profile.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/widgets/comment_sumbissition_visibility_widget.dart';
@@ -38,15 +39,16 @@ class CommentBottomInputSection extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: Container(
-        height: 90.h,
+        height: isThatTabOrDeskTop ? 60 : 90.h,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         color: AppDarkColor().secondaryBackground,
         child: Column(
           children: [
-            EmojiPicker(
-              commentController: commentController,
-              commentSubmitSelection: commentSubmitSelection,
-            ),
+            if (!isThatTabOrDeskTop)
+              EmojiPicker(
+                commentController: commentController,
+                commentSubmitSelection: commentSubmitSelection,
+              ),
             Row(
               children: [
                 const CircularUserProfile(

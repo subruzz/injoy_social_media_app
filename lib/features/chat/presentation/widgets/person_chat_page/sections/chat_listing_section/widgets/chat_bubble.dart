@@ -6,6 +6,7 @@ import 'package:social_media_app/core/const/enums/message_type.dart';
 import 'package:social_media_app/core/const/extensions/time_ago.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_audio_widget.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_photo_widget.dart';
@@ -109,13 +110,17 @@ class TimestampAndTickWidget extends StatelessWidget {
         if (messageItem.createdAt != null)
           Text(
             messageItem.createdAt!.toDate().to12HourFormat(),
-            style: AppTextTheme.bodysmallPureWhiteVariations.bodySmall,
+            style: AppTextTheme.bodysmallPureWhiteVariations.bodySmall
+                ?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: isThatTabOrDeskTop ? 12 : null),
           ),
         AppSizedBox.sizedBox5W,
         if (isShowTick)
           Icon(
             messageItem.isSeen ? Icons.done_all : Icons.done,
-            size: 16.w,
+            size:isThatTabOrDeskTop?16: 16.w,
             color: Colors.white,
           ),
       ],
@@ -137,10 +142,10 @@ class MessageContentWidget extends StatelessWidget {
       case MessageTypeConst.textMessage:
         return Text(
           messageItem.message ?? '',
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: isThatTabOrDeskTop ? 16 : null),
         );
       case MessageTypeConst.photoMessage:
         return ChatPhotoWidget(

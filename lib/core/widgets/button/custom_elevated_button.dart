@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
+
+import '../../const/app_config/web_design_const.dart';
 
 class CustomButton extends StatelessWidget {
   final Widget child;
@@ -32,14 +35,16 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width?.w,
-      height: height?.h,
+      width: isThatTabOrDeskTop ? width : width?.w,
+      height: isThatTabOrDeskTop ? 40 : height?.h,
       child: ElevatedButton(
           style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
               backgroundColor: WidgetStatePropertyAll(color),
               shape: WidgetStatePropertyAll(
                 RoundedRectangleBorder(
-                  borderRadius: radius ?? AppBorderRadius.small,
+                  borderRadius: isThatTabOrDeskTop
+                      ?  buttonOrTextFieldRadius
+                      : radius ?? AppBorderRadius.small,
                   side: BorderSide(
                       color: borderColor ?? AppDarkColor().secondaryBackground,
                       width: 1.0),

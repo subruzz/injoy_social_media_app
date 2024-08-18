@@ -2,13 +2,16 @@ part of '../presentation/pages/bottom_nav.dart';
 
 final List<SMIBool> _riveIconInputs = [];
 final List<StateMachineController?> _controllers = [];
-List<Widget> pages = [
-  const HomePage(),
-  const ExplorePageBuilder(),
-  const VideoReelPage(),
-  const ChatMainTabPage(),
-  const ProfilePageWrapper()
-];
+List<Widget> getScreens({bool isWeb = false}) {
+  List<Widget> pages = [
+    const HomePage(),
+    const ExplorePageBuilder(),
+    isWeb ? const VideosPageWeb() : const VideoReelPage(),
+    isWeb ? const ChatWebScreen() : const ChatMainTabPage(),
+    const ProfilePageWrapper()
+  ];
+  return pages;
+}
 
 void animateTheIcon(int index) {
   _riveIconInputs[index].change(true);

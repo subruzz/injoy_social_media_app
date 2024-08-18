@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
@@ -28,7 +29,6 @@ class GoogleAuthButton extends StatelessWidget {
               arguments: state.user,
             );
           } else {
-     
             Navigator.pushReplacementNamed(
               context,
               MyAppRouteConst.bottomNavRoute,
@@ -49,8 +49,10 @@ class GoogleAuthButton extends StatelessWidget {
             height: 25.h,
           ),
           color: AppDarkColor().buttonWhitishBackground,
-          child: CustomText(   text: AppUiStringConst.googleLogin,
-              style: AppTextTheme.titleMediumBlackVariation.titleMedium),
+          child: CustomText(
+              text: AppUiStringConst.googleLogin,
+              style: AppTextTheme.titleMediumBlackVariation.titleMedium
+                  ?.copyWith(fontSize: isThatTabOrDeskTop ? 16 : null)),
           onClick: () {
             context.read<GoogleAuthBloc>().add(GoogleAuthStartEvent());
           },

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 
@@ -25,6 +26,7 @@ class PostHashtag extends StatelessWidget {
                 child: Text(
                   '#$tag',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: isThatTabOrDeskTop ? 15 : null,
                         color: Colors.blue,
                       ),
                 ),

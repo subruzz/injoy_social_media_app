@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/each_post/post_image_section.dart/widgets/post_multiple_images.dart';
-
 
 class PostImageSection extends StatelessWidget {
   const PostImageSection(
@@ -21,6 +21,7 @@ class PostImageSection extends StatelessWidget {
         children: [
           if (postImages.isNotEmpty)
             PostMultipleImages(
+              size: isThatTabOrDeskTop ? 450 : .4,
               postImageUrls: postImages,
               pageController: pagecontroller,
             ),

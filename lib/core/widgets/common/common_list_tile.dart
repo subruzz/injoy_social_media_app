@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 
 class CommonListTile extends StatelessWidget {
@@ -18,7 +19,7 @@ class CommonListTile extends StatelessWidget {
   final double iconSize;
   final Widget? trailing;
   final String? subtitle;
-  final String text;
+  final String? text;
   final bool noPadding;
   final String? leading;
   final double? subTitleSize;
@@ -41,14 +42,19 @@ class CommonListTile extends StatelessWidget {
             ? Text(
                 subtitle!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontSize: subTitleSize?.sp ?? 10.sp, color: extraColor),
+                    fontSize: isThatTabOrDeskTop
+                        ? subTitleSize??10
+                        : subTitleSize?.sp ?? 10,
+                    color: extraColor),
               )
             : null,
         contentPadding: noPadding ? EdgeInsets.zero : null,
-        title: Text(
-          text,
-          style: titileStyle ?? TextStyle(color: extraColor),
-        ),
+        title:text!=null? Text(
+          text!,
+          style: titileStyle ??
+              TextStyle(
+                  color: extraColor, fontSize: isThatTabOrDeskTop ? 20 : null),
+        ):null,
         trailing: trailing);
   }
 }

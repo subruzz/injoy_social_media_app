@@ -13,6 +13,8 @@ class AppAssetsConst {
   static const String accountsettings = 'assets/svgs/account_settings.svg';
   static const String noti2 = 'assets/svgs/noti_2.svg';
   static const String menu = 'assets/svgs/menu.svg';
+  static const String search = 'assets/svgs/search.svg';
+  static const String home = 'assets/svgs/home.svg';
 
   static const String chat = 'assets/svgs/chat.svg';
   static const String add = 'assets/svgs/add_circle.svg';
@@ -47,6 +49,7 @@ class AppAssetsConst {
   static const String googleLogo = 'assets/images/google.png';
   static const String ai = 'assets/images/ai.png';
   static const String userSecondaryProfile = 'assets/images/profile_icon.png';
+  static const String applogo = 'assets/images/app_logo.png';
 
   // GIFs
   static const String buildProfile = 'assets/gifs/profile_building.gif';

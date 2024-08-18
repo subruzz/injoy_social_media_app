@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/app_error_gif.dart';
 import 'package:social_media_app/core/common_empty_holder.dart';
 import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
@@ -79,10 +80,9 @@ class ChatListingSectionSection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Text(
                         date,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: Colors.white),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.white,
+                            fontSize: isThatTabOrDeskTop ? 14 : null),
                       ),
                     ),
                   ),

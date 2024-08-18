@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 
 class CustomSvgIcon extends StatelessWidget {
   final String assetPath;
@@ -25,7 +26,7 @@ class CustomSvgIcon extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: SvgPicture.asset(assetPath,
-          height: height.h,
+          height: Responsive.deskTopAndTab(context) ? height : height.h,
           colorFilter: ColorFilter.mode(
               color != null ? color! : AppDarkColor().iconSecondarycolor,
               blendMode)),

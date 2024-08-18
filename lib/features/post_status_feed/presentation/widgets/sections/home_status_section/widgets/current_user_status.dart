@@ -107,6 +107,7 @@ class MyStatusViewState extends State<MyStatusView> {
               AppSizedBox.sizedBox5H,
               const Text(
                 'You',
+                style: TextStyle(fontSize: 12),
               )
             ],
           ),

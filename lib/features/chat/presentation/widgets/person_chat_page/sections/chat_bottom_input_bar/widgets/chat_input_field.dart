@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:giphy_picker/giphy_picker.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/const/extensions/stop_watch.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
@@ -47,57 +48,66 @@ class ChatInputField extends StatelessWidget {
                         : messageInfoStoreState.userName,
                   )
                 : const EmptyDisplay(),
-            TextField(
-              focusNode: focusNode,
-              onChanged: (value) {
-                // if (showAttachWindow.value) {
-                //   showAttachWindow.value = false;
-                // }
-                toggleButton.value = value.isEmpty;
-                log(toggleButton.value.toString());
-              },
-              controller: messageController,
-              decoration: InputDecoration(
-                fillColor: AppDarkColor().softBackground,
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: messageInfoStoreState is MessageReplyClicked
-                      ? const BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20))
-                      : const BorderRadius.all(Radius.circular(20)),
-                  borderSide: BorderSide.none,
-                ),
-                border: const OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                prefixIcon: GestureDetector(
-                  onTap: () async {
-                    final GiphyGif? gif = await pickGif(context);
-                    if (gif != null && context.mounted) {
-                      final url =
-                          'https://media.giphy.com/media/${gif.id}/giphy.gif';
-                      context.read<MessageCubit>().sendMessage(
-                          messageState: context.read<GetMessageCubit>().state,
-                          recentTextMessage: url,
-                          messageType: MessageTypeConst.gifMessage);
-                    }
-                  },
-                  child: Icon(
-                    Icons.emoji_emotions_outlined,
-                    color: AppDarkColor().iconSoftColor,
+            SizedBox(
+              height: isThatTabOrDeskTop ? 50 : null,
+              child: TextField(
+                focusNode: focusNode,
+                onChanged: (value) {
+                  // if (showAttachWindow.value) {
+                  //   showAttachWindow.value = false;
+                  // }
+                  toggleButton.value = value.isEmpty;
+                  log(toggleButton.value.toString());
+                },
+                controller: messageController,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : null),
+                decoration: InputDecoration(
+                  hintStyle:
+                      isThatTabOrDeskTop ? const TextStyle(fontSize: 13) : null,
+                  fillColor: AppDarkColor().softBackground,
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: messageInfoStoreState is MessageReplyClicked
+                        ? const BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20))
+                        : const BorderRadius.all(Radius.circular(20)),
+                    borderSide: BorderSide.none,
                   ),
-                ),
-                hintText: AppUiStringConst.message,
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      MyAppRouteConst.mediaPickerRoute,
-                      arguments: {'pickerType': MediaPickerType.chat},
-                    );
-                  },
-                  child: const Icon(Icons.camera_alt_outlined),
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  prefixIcon: GestureDetector(
+                    onTap: () async {
+                      final GiphyGif? gif = await pickGif(context);
+                      if (gif != null && context.mounted) {
+                        final url =
+                            'https://media.giphy.com/media/${gif.id}/giphy.gif';
+                        context.read<MessageCubit>().sendMessage(
+                            messageState: context.read<GetMessageCubit>().state,
+                            recentTextMessage: url,
+                            messageType: MessageTypeConst.gifMessage);
+                      }
+                    },
+                    child: Icon(
+                      Icons.emoji_emotions_outlined,
+                      color: AppDarkColor().iconSoftColor,
+                    ),
+                  ),
+                  hintText: AppUiStringConst.message,
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        MyAppRouteConst.mediaPickerRoute,
+                        arguments: {'pickerType': MediaPickerType.chat},
+                      );
+                    },
+                    child: const Icon(Icons.camera_alt_outlined),
+                  ),
                 ),
               ),
             ),

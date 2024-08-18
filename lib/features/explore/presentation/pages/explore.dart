@@ -4,8 +4,10 @@ import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/utils/other/debouncer.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
+import 'package:social_media_app/core/widgets/web/web_width_helper.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_recommended_post/get_recommended_post_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
@@ -96,36 +98,41 @@ class _ExplorePageState extends State<ExplorePage>
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: CustomAppPadding(
-          padding: AppPadding.medium,
-          child: Column(
-            children: [
-              CustomTextField(
-                onChanged: (value) {
-                  _debouncer.run(() {
-                    _isTextEntered.value = value.isNotEmpty;
-                    _performSearch();
-                  });
-                },
-                // prefixIcon: Icons.search,
-                controller: _searchController,
-                hintText: '${l10n!.search} ...',
-              ),
-              AppSizedBox.sizedBox10H,
-              ValueListenableBuilder(
-                valueListenable: _isTextEntered,
-                builder: (context, value, child) {
-                  if (value) {
-                    return ExploreTab(
-                      tabController: _tabController,
-                      currentTab: _currentTab,
-                    );
-                  } else {
-                    return const ExploreAllPosts();
-                  }
-                },
-              )
-            ],
+        child: WebWidthHelper(
+          width: 800,
+          child: CustomAppPadding(
+            padding: AppPadding.medium,
+            child: Column(
+              children: [
+                CustomTextField(
+                  onChanged: (value) {
+                    _debouncer.run(() {
+                      _isTextEntered.value = value.isNotEmpty;
+                      _performSearch();
+                    });
+                  },
+                  // prefixIcon: Icons.search,
+                  controller: _searchController,
+                  hintText: '${l10n!.search} ...',
+                ),
+                isThatTabOrDeskTop
+                    ? AppSizedBox.sizedBox20H
+                    : AppSizedBox.sizedBox10H,
+                ValueListenableBuilder(
+                  valueListenable: _isTextEntered,
+                  builder: (context, value, child) {
+                    if (value) {
+                      return ExploreTab(
+                        tabController: _tabController,
+                        currentTab: _currentTab,
+                      );
+                    } else {
+                      return const ExploreAllPosts();
+                    }
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

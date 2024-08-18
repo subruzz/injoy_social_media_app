@@ -7,6 +7,7 @@ import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/common/user_profile.dart';
 
 import '../../../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import '../../../../../../core/utils/responsive/constants.dart';
 import '../../../../../../core/widgets/app_related/empty_display.dart';
 
 class UserBasicDetailSection extends StatelessWidget {
@@ -83,7 +84,10 @@ class MyProfileBasicDetails extends StatelessWidget {
                   ? MyprofileContentHelper(
                       child: Text(
                         state.user.fullName ?? '',
-                        style: Theme.of(context).textTheme.headlineLarge,
+                        style:
+                            Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                  fontSize: isThatTabOrDeskTop ? 18 : null,
+                                ),
                       ),
                     )
                   : const EmptyDisplay();
@@ -102,7 +106,10 @@ class MyProfileBasicDetails extends StatelessWidget {
                       child: Text(state.user.occupation ?? '',
                           textAlign: TextAlign.center,
                           style: AppTextTheme
-                              .bodyMeidumLightGreyVariant.bodyMedium),
+                              .bodyMeidumLightGreyVariant.bodyMedium
+                              ?.copyWith(
+                            fontSize: isThatTabOrDeskTop ? 16 : null,
+                          )),
                     )
                   : const EmptyDisplay();
             },
@@ -119,7 +126,10 @@ class MyProfileBasicDetails extends StatelessWidget {
                   ? MyprofileContentHelper(
                       child: Text(state.user.about ?? '',
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    fontSize: isThatTabOrDeskTop ? 15 : null,
+                                  )),
                     )
                   : const EmptyDisplay();
             },

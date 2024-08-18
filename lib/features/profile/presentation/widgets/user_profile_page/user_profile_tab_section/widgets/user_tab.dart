@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 
 class UserTab extends StatelessWidget {
@@ -30,7 +31,8 @@ class UserTab extends StatelessWidget {
           AppSizedBox.sizedBox10W,
           Text(
             tabTitle,
-            style: TextStyle(color: labelColor),
+            style: TextStyle(
+                color: labelColor, fontSize: isThatTabOrDeskTop ? 16 : null),
           ),
         ],
       ),

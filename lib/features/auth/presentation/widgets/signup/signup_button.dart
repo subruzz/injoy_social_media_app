@@ -8,14 +8,16 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/signup_bloc/signup_bloc.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 
+import '../../../../../core/utils/responsive/constants.dart';
 import '../../../../../core/widgets/loading/circular_loading.dart';
 
 class SignupButton extends StatelessWidget {
-  const SignupButton(
-      {super.key,
-      required this.formKey,
-      required this.emailController,
-      required this.passwordController,});
+  const SignupButton({
+    super.key,
+    required this.formKey,
+    required this.emailController,
+    required this.passwordController,
+  });
   final GlobalKey<FormState> formKey;
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -26,8 +28,8 @@ class SignupButton extends StatelessWidget {
         listener: (context, state) {
           if (state is SignupFailure) {
             Messenger.showSnackBar(
-                message: '${state.errorMsg}\n${state.details}',
-              );
+              message: '${state.errorMsg}\n${state.details}',
+            );
           }
           if (state is SignupSuccess) {
             Navigator.pushReplacementNamed(
@@ -42,9 +44,9 @@ class SignupButton extends StatelessWidget {
             return const CircularLoading();
           }
           return CustomText(
-               text: 'Sign Up',
-            style: AppTextTheme.labelMediumPureWhiteVariations.labelMedium,
-          );
+              text: 'Sign Up',
+              style: AppTextTheme.labelMediumPureWhiteVariations.labelMedium
+                  ?.copyWith(fontSize: isThatTabOrDeskTop ? 16 : null));
         },
       ),
       onClick: () {

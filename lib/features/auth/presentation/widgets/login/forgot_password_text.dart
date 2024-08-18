@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 
 import '../../pages/forgot_password_page.dart';
 
@@ -24,10 +25,9 @@ class ForgotPasswordText extends StatelessWidget {
           },
           child: Text(
             'Forgot Password?',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(color: AppDarkColor().secondaryPrimaryText),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontSize: isThatTabOrDeskTop ? 15 : null,
+                color: AppDarkColor().secondaryPrimaryText),
           )),
     );
   }

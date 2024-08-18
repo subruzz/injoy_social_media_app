@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/app_error_gif.dart';
 import 'package:social_media_app/core/common_empty_holder.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
@@ -29,9 +30,7 @@ class NotificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppCustomAppbar(
-     
-           title:  "Notifications",
-        
+          title: "Notifications",
         ),
         body: BlocBuilder<NotificationCubit, NotificationState>(
           builder: (context, state) {
@@ -114,7 +113,9 @@ class NotificationCard extends StatelessWidget {
       child: Padding(
         padding: AppPadding.onlyTopSmall,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppBorderRadius.getRadius(10)),
+          borderRadius: isThatTabOrDeskTop
+              ? BorderRadius.circular(10)
+              : BorderRadius.circular(AppBorderRadius.getRadius(10)),
           child: InkWell(
             onTap: () {
               if (notification.notificationType == NotificationType.profile) {
@@ -130,10 +131,12 @@ class NotificationCard extends StatelessWidget {
                   NotificationType.post) {}
             },
             child: Container(
-              padding: AppPadding.medium,
+              padding:
+                  isThatTabOrDeskTop ? AppPadding.small : AppPadding.medium,
               decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(AppBorderRadius.getRadius(10)),
+                borderRadius: isThatTabOrDeskTop
+                    ? BorderRadius.circular(10)
+                    : BorderRadius.circular(AppBorderRadius.getRadius(10)),
                 border: Border.all(
                   color: AppDarkColor().secondaryBackground,
                   width: 2.0,
@@ -152,7 +155,11 @@ class NotificationCard extends StatelessWidget {
                       children: [
                         Text(
                           '${notification.senderName} ${notification.text}',
-                          style: Theme.of(context).textTheme.bodySmall,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                  fontSize: isThatTabOrDeskTop ? 12 : null),
                         ),
                         AppSizedBox.sizedBox5H,
                         Text(notification.time.toDate().timeAgo(),
@@ -161,7 +168,7 @@ class NotificationCard extends StatelessWidget {
                                 .bodySmall
                                 ?.copyWith(
                                     color: AppDarkColor().secondaryPrimaryText,
-                                    fontSize: 10.sp)),
+                                    fontSize: isThatTabOrDeskTop ? 10 : 10.sp)),
                       ],
                     ),
                   ),

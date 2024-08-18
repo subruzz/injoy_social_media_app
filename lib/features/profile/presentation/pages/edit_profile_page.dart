@@ -6,7 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
+import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 import 'package:social_media_app/core/widgets/loading/loading_bar.dart';
@@ -53,11 +56,8 @@ class _AddProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Edit Your Profile',
-          style: Theme.of(context).textTheme.displaySmall,
-        ),
+      appBar: AppCustomAppbar(
+        title: 'Edit Your Profile',
       ),
       body: BlocConsumer<ProfileBloc, ProfileState>(
         listener: (context, state) {
@@ -113,7 +113,13 @@ class _AddProfilePageState extends State<EditProfilePage> {
                       ),
                       AppSizedBox.sizedBox15H,
                       CustomButton(
-                          child: const Text('Update'),
+                          child: Text(
+                            'Update',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(fontWeight: FontWeight.w600, color: Colors.white, fontSize: !isThatMobile ? 13 : null),
+                          ),
                           onClick: () {
                             if (_formKey.currentState!.validate()) {
                               context.read<ProfileBloc>().add(UpdateProfilEvent(

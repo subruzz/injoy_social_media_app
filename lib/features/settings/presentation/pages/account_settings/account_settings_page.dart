@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/common/custom_divider.dart';
+import 'package:social_media_app/core/widgets/dialog/general_dialog_for_web.dart';
 import 'package:social_media_app/features/profile/presentation/pages/username_check_page.dart';
 import 'package:social_media_app/features/settings/domain/entity/ui_entity/ui_consts.dart';
 import 'package:social_media_app/features/settings/presentation/pages/reset_password_page.dart';
@@ -14,11 +17,8 @@ class AccountSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Account Settings',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+        appBar: AppCustomAppbar(
+          title: 'Account Settings',
         ),
         body: CustomAppPadding(
           child: ListView.separated(
@@ -31,6 +31,16 @@ class AccountSettingsPage extends StatelessWidget {
                     onTap: () {
                       switch (accountSettingItem.accountSettingType) {
                         case AccountSettingsType.changeUserName:
+                          if (isThatTabOrDeskTop) {
+                            Navigator.pop(context);
+                            GeneralDialogForWeb.showSideDialog(
+                                context: context,
+                                child: UsernameCheckPage(
+                                  userid: myId,
+                                  isEdit: true,
+                                ));
+                            return;
+                          }
                           Navigator.push(
                             context,
                             MaterialPageRoute(

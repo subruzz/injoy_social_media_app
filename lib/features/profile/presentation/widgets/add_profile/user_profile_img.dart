@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/edit_profile.dart';
 
 import '../../../../../core/services/assets/asset_services.dart';
@@ -36,7 +37,7 @@ class UserProfileImg extends StatelessWidget {
         //       )),
         // ),
         Positioned(
-          right: 20.r,
+          right: isThatMobile ? 20.r : 20,
           bottom: 0,
           child: GestureDetector(
               onTap: () async {

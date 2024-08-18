@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 
 class Messenger {
   static final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   static showSnackBar({
     String message = 'An unexpected error occurred, please try again!',
+    double snackBarWidth = 300.0, // Add a parameter for width
   }) {
-    Size size = MediaQuery.of(scaffoldKey.currentState!.context).size;
-
+    // Remove MediaQuery to avoid errors when no context is available
     scaffoldKey.currentState!.clearSnackBars();
     scaffoldKey.currentState!.showSnackBar(
       SnackBar(
@@ -20,23 +21,31 @@ class Messenger {
         backgroundColor: AppDarkColor().secondaryBackground,
         margin: const EdgeInsets.only(
             right: 20, left: 20, top: 30, bottom: 20), // Adjust top margin
-        content: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Image.asset(
-                'assets/images/app_logo.png',
-                height: 24, // Adjust image height
-                width: 24, // Adjust image width
+        content: SizedBox(
+          width: isThatTabOrDeskTop
+              ? snackBarWidth
+              : null, // Set the width of the Container
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Image.asset(
+                  'assets/images/app_logo.png',
+                  height: 24, // Adjust image height
+                  width: 24, // Adjust image width
+                ),
               ),
-            ),
-            Expanded(
-              child: Text(
-                message,
-                style: TextStyle(color: Colors.white.withOpacity(.8), fontSize: 14),
+              Expanded(
+                child: Text(
+                  message,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(.8),
+                    fontSize: 14,
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

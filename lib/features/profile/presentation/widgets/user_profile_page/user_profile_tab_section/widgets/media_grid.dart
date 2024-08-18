@@ -2,9 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/mulitple_post_indicator.dart';
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 
+import '../../../../../../../core/utils/routes/tranistions/hero_dialog.dart';
+import '../../../../../../bottom_nav/presentation/pages/popup_container_web.dart';
 import '../../../../../../explore/presentation/widgets/all_post_view.dart';
 
 class MediaGrid extends StatelessWidget {
@@ -34,6 +37,15 @@ class MediaGrid extends StatelessWidget {
             padding: const EdgeInsets.all(2.0),
             child: GestureDetector(
               onTap: () {
+                if (isThatTabOrDeskTop) {
+                  Navigator.of(context).push(HeroDialogRoute(
+                    builder: (context) => PopupContainerWeb(
+                      isShorts: media.isThatvdo,
+                      post: media,
+                    ),
+                  ));
+                  return;
+                }
                 if (isShorts || media.isThatvdo) {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => VideoReelPage(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_bottom_input_bar/widgets/chat_input_field.dart';
 
 class ChatInputBarSection extends StatelessWidget {
@@ -25,7 +26,9 @@ class ChatInputBarSection extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: .8.sw,
+            width: isThatTabOrDeskTop
+                ? MediaQuery.of(context).size.width * .3
+                : .8.sw,
             child: ChatInputField(
               messageController: messageController,
               showAttachWindow: showAttachWindow,

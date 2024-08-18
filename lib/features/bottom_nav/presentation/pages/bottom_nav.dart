@@ -3,9 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_event.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/pages/chat_web.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/pages/videos_page_web.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/widgets/bottom_bar_items.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore_page_builder.dart';
+import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cubit.dart';
@@ -53,10 +56,13 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
     }
   }
 
+  List<Widget> _pages = [];
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+    _pages = getScreens();
   }
 
   @override
@@ -87,7 +93,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
         child: Scaffold(
             body: LazyIndexedStack(
               index: _currentPage,
-              children: List.generate(5, (i) => pages[i]),
+              children: List.generate(5, (i) => _pages[i]),
             ),
             bottomNavigationBar: BottomBarItems(
                 animateToIcon: (index) {

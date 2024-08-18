@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
@@ -74,11 +75,16 @@ class _CreateUsernamePageState extends State<UsernameCheckPage> {
                         style: Theme.of(context)
                             .textTheme
                             .displayMedium
-                            ?.copyWith(fontWeight: FontWeight.w700)),
+                            ?.copyWith(
+                                fontSize: isThatMobile ? null : 20,
+                                fontWeight: FontWeight.w700)),
                     AppSizedBox.sizedBox5H,
                     Text(
                       "Choose a username for your profile. You can change it later if you want.",
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontSize: isThatMobile ? null : 14),
                     ),
                     AppSizedBox.sizedBox15H,
                     UserNameCheckField(
@@ -136,7 +142,12 @@ class _CreateUsernamePageState extends State<UsernameCheckPage> {
                           radius: AppBorderRadius.small,
                           child: usernameState is AddUserNameLoading
                               ? const CircularLoading()
-                              : const Text('Next'),
+                              : Text(
+                                  'Next',
+                                  style: isThatMobile
+                                      ? null
+                                      : const TextStyle(fontSize: 14),
+                                ),
                         );
                       },
                     )

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/widgets/each_post/post_action_section/post_action_section.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/comment_basic_action/comment_basic_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/get_post_comment/get_post_comment_cubit.dart';
@@ -64,82 +68,100 @@ class _CommentScreenState extends State<CommentScreen> {
       listenWhen: (previous, current) =>
           current is CommentDeletedSuccess || current is CommentAddedSuccess,
       listener: (context, state) {},
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.8,
-        minChildSize: 0.5,
-        maxChildSize: 0.9,
-        expand: false,
-        builder: (context, scrollController) {
-          return BlocConsumer<GetPostCommentCubit, GetPostCommentState>(
-            bloc: _readComment,
-            builder: (context, state) {
-              if (state is GetPostCommentSuccess) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 60.0),
-                        child: state.postComments.isEmpty
-                            ? const NoCommentDisplay()
-                            : ListView.builder(
-                                padding: const EdgeInsets.all(8.0),
+      child: isThatTabOrDeskTop
+          ? _getComments(appUser, null)
+          : DraggableScrollableSheet(
+              initialChildSize: 0.8,
+              minChildSize: 0.5,
+              maxChildSize: 0.9,
+              expand: false,
+              builder: (context, scrollController) {
+                return _getComments(appUser, scrollController);
+              },
+            ),
+    );
+  }
 
-                                controller:
-                                    scrollController, // Use the scroll controller
-                                itemCount: state.postComments.length,
-                                itemBuilder: (context, index) {
-                                  final comment = state.postComments[index];
-                                  return EachComment(
-                                      isReel: widget.isReel,
-                                      commentBasicCubit: _commentBasic,
-                                      creatorId: widget.post.creatorUid,
-                                      postId: widget.post.postId,
-                                      commentId: comment.commentId,
-                                      editCall: () {
-                                        inputNode?.requestFocus();
+  Widget _getComments(AppUser user, ScrollController? controller) {
+    return BlocConsumer<GetPostCommentCubit, GetPostCommentState>(
+      bloc: _readComment,
+      builder: (context, state) {
+        if (state is GetPostCommentSuccess) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: isThatTabOrDeskTop
+                    ? 0
+                    : MediaQuery.of(context).viewInsets.bottom),
+            child: Stack(
+              children: [
+                Padding(
+                  padding:
+                      EdgeInsets.only(bottom: isThatTabOrDeskTop ? 0 : 60.0),
+                  child: state.postComments.isEmpty
+                      ? const NoCommentDisplay()
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(8.0),
 
-                                        _commentController.text =
-                                            comment.comment;
-                                        commentId = comment.commentId;
-                                        _commentSubmitSelection.value = (
-                                          isComment: false,
-                                          isEdit: true,
-                                          isTextEmpty: false
-                                        );
-                                      },
-                                      comment: comment,
-                                      myId: appUser.id);
+                          controller: controller, // Use the scroll controller
+                          itemCount: state.postComments.length,
+                          itemBuilder: (context, index) {
+                            final comment = state.postComments[index];
+                            return EachComment(
+                                isReel: widget.isReel,
+                                commentBasicCubit: _commentBasic,
+                                creatorId: widget.post.creatorUid,
+                                postId: widget.post.postId,
+                                commentId: comment.commentId,
+                                editCall: () {
+                                  inputNode?.requestFocus();
+
+                                  _commentController.text = comment.comment;
+                                  commentId = comment.commentId;
+                                  _commentSubmitSelection.value = (
+                                    isComment: false,
+                                    isEdit: true,
+                                    isTextEmpty: false
+                                  );
                                 },
-                              ),
-                      ),
-                      CommentBottomInputSection(
-                          isReel: widget.isReel,
-                          commentBasicCubit: _commentBasic,
-                          creatorId: widget.post.creatorUid,
-                          commentController: _commentController,
-                          commentSubmitSelection: _commentSubmitSelection,
-                          myId: appUser.id,
-                          postId: widget.post.postId,
-                          commentId: commentId)
-                    ],
-                  ),
-                );
-              }
-              if (state is GetPostCommentFailure) {
-                return Center(
-                  child: Text(state.erroMsg),
-                );
-              }
-              return const Center(
-                child: CircularLoadingGrey(),
-              );
-            },
-            listener: (context, state) {},
+                                comment: comment,
+                                myId: user.id);
+                          },
+                        ),
+                ),
+                if (isThatTabOrDeskTop)
+                  Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Container(
+                          color: AppDarkColor().secondaryBackground,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(left: 15,top: 10, bottom: 70.0),
+                            child: SocialActions(
+                                post: widget.post, likeAnim: () {}),
+                          ))),
+                CommentBottomInputSection(
+                    isReel: widget.isReel,
+                    commentBasicCubit: _commentBasic,
+                    creatorId: widget.post.creatorUid,
+                    commentController: _commentController,
+                    commentSubmitSelection: _commentSubmitSelection,
+                    myId: user.id,
+                    postId: widget.post.postId,
+                    commentId: commentId)
+              ],
+            ),
           );
-        },
-      ),
+        }
+        if (state is GetPostCommentFailure) {
+          return Center(
+            child: Text(state.erroMsg),
+          );
+        }
+        return const Center(
+          child: CircularLoadingGrey(),
+        );
+      },
+      listener: (context, state) {},
     );
   }
 }

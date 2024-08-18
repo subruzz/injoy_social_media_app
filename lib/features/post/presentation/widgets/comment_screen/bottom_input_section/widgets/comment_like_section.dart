@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/post/domain/enitities/comment_entity.dart';
 
 import '../../../../../../../core/theme/color/app_colors.dart';
@@ -50,18 +51,19 @@ class _CommentLikeSectionState extends State<CommentLikeSection> {
                 ? Icon(
                     color: AppDarkColor().iconSecondarycolor,
                     Icons.favorite_border_outlined,
-                    size: 20.w,
+                    size: isThatTabOrDeskTop ? 20 : 20.w,
                   )
                 : Icon(
                     Icons.favorite,
-                    size: 20.w,
+                    size: isThatTabOrDeskTop ? 20 : 20.w,
                     color: AppDarkColor().iconSoftColor,
                   ),
           ),
-          Text(
-            widget.comment.likes.length.toString(),
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(widget.comment.likes.length.toString(),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(fontSize: isThatTabOrDeskTop ? 12 : null)),
         ],
       ),
     );
