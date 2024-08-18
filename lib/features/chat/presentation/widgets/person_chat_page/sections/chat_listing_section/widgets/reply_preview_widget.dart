@@ -138,7 +138,7 @@ class HeaderRow extends StatelessWidget {
       children: [
         Text(
           userName,
-          style: AppTextTheme.labelMediumRedVariant.labelMedium
+          style: AppTextTheme.getResponsiveTextTheme(context).labelMedium
               ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : 13.sp),
         ),
         if (showIcon)
@@ -243,7 +243,7 @@ class MessageCaption extends StatelessWidget {
       return Expanded(
         child: Text(
           message!,
-          style: AppTextTheme.bodyMeidumwhiteVariant.bodyMedium?.copyWith(
+          style: AppTextTheme.getResponsiveTextTheme(context).bodyMedium?.copyWith(
               fontSize: isThatTabOrDeskTop ? 13 : 13.sp,
               color: AppDarkColor().primaryTextBlur),
           maxLines: 2,

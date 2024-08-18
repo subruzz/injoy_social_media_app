@@ -118,8 +118,7 @@ class _CachedVideoMessageWidgetState extends State<CachedVideoMessageWidget> {
                         ),
                         AppSizedBox.sizedBox5W,
                         Text(
-                            style: AppTextTheme
-                                .labelMediumPureWhiteVariations.labelMedium,
+                            style: AppTextTheme.getResponsiveTextTheme(context).labelMedium,
                             videoPlayerController!.value.duration
                                 .videoFormatedDuration()),
                       ],

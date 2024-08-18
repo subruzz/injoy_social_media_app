@@ -110,7 +110,7 @@ class TimestampAndTickWidget extends StatelessWidget {
         if (messageItem.createdAt != null)
           Text(
             messageItem.createdAt!.toDate().to12HourFormat(),
-            style: AppTextTheme.bodysmallPureWhiteVariations.bodySmall
+            style: AppTextTheme.getResponsiveTextTheme(context).bodySmall
                 ?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,

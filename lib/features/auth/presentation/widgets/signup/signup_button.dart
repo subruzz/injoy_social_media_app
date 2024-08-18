@@ -45,7 +45,7 @@ class SignupButton extends StatelessWidget {
           }
           return CustomText(
               text: 'Sign Up',
-              style: AppTextTheme.labelMediumPureWhiteVariations.labelMedium
+              style:AppTextTheme.getResponsiveTextTheme(context).labelMedium
                   ?.copyWith(fontSize: isThatTabOrDeskTop ? 16 : null));
         },
       ),

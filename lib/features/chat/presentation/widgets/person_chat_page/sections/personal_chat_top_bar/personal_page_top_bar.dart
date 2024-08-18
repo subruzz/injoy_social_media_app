@@ -39,7 +39,7 @@ class PersonalPageTopBar extends StatelessWidget
                     user.isOnline
                         ? AppUiStringConst.online
                         : user.lastSeen?.toDate().onlineStatus() ?? '',
-                    style: AppTextTheme.bodyMeidumwhiteVariant.bodyMedium
+                    style:AppTextTheme.getResponsiveTextTheme(context).bodyMedium
                         ?.copyWith(
                             fontSize: isThatTabOrDeskTop ? 11 : 11.sp,
                             color: AppDarkColor().chatTileGradientOne))

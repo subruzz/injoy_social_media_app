@@ -49,7 +49,7 @@ class LoginButton extends StatelessWidget {
           }
           return CustomText(
               text: 'Log In',
-              style: AppTextTheme.labelMediumPureWhiteVariations.labelMedium
+              style: AppTextTheme.getResponsiveTextTheme(context).labelMedium
                   ?.copyWith(fontSize: isThatTabOrDeskTop ? 16 : null));
         },
       ),

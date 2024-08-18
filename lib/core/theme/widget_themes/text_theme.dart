@@ -1,6 +1,10 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+
+import '../../utils/responsive/responsive_Text.dart';
 
 final class AppTextTheme {
   AppTextTheme._();
@@ -82,73 +86,23 @@ final class AppTextTheme {
     ),
   );
 
-  // Variations for different styles
-  static TextTheme titleLargeVariations = TextTheme(
-    titleLarge: TextStyle(
-      color: Colors.red, // Example: Red color
-      fontSize: 18.sp,
-    ),
-  );
-
-  static TextTheme titleMediumBlackVariation = TextTheme(
-    titleMedium: TextStyle(
-      color: AppDarkColor().background,
-      fontSize: 15.sp,
-      fontWeight: FontWeight.w600,
-    ),
-  );
-
-  static TextTheme titleSmallVariations = TextTheme(
-    titleSmall: TextStyle(
-      color: Colors.grey, // Example: Grey color
-      fontSize: 16.sp,
-      fontWeight: FontWeight.w500,
-    ),
-  );
-
-  static TextTheme labelLargeVariations = TextTheme(
-    labelLarge: TextStyle(
-      color: Colors.blue, // Example: Blue color
-      fontSize: 15.sp,
-      fontWeight: FontWeight.bold,
-    ),
-  );
-
-  static TextTheme labelMediumPureWhiteVariations = TextTheme(
-    labelMedium: TextStyle(
-      color: Colors.white,
-      fontSize: 15.sp,
-    ),
-  );
-  static TextTheme bodysmallPureWhiteVariations = TextTheme(
-    bodySmall: TextStyle(
-      color: Colors.white,
-      fontSize: 11.sp,
-    ),
-  );
-
-  static TextTheme labelSmallVariations = TextTheme(
-    labelSmall: TextStyle(
-      color: Colors.green, // Example: Green color
-      fontSize: 14.sp,
-      fontWeight: FontWeight.w700,
-    ),
-  );
-  static TextTheme bodyMeidumLightGreyVariant = TextTheme(
-    bodyMedium: TextStyle(
-      color: const Color.fromARGB(255, 209, 208, 208),
-      fontSize: 14.sp,
-    ),
-  );
-  static TextTheme bodyMeidumwhiteVariant = TextTheme(
-    bodyMedium: TextStyle(
-        color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w500),
-  );
-  static TextTheme labelMediumRedVariant = TextTheme(
-    labelMedium: TextStyle(
-      color: _color.secondaryPrimaryText,
-      fontSize: 15.sp,
-      fontWeight: FontWeight.w600,
-    ),
-  );
+  static TextTheme getResponsiveTextTheme(BuildContext context) {
+    return TextTheme(
+      displayLarge: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.displayLarge!),
+      displayMedium: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.displayMedium!),
+      displaySmall: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.displaySmall!),
+      headlineLarge: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.headlineLarge!),
+      headlineMedium: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.headlineMedium!),
+      headlineSmall: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.headlineSmall!),
+      titleLarge: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.titleLarge!),
+      titleMedium: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.titleMedium!),
+      titleSmall: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.titleSmall!),
+      labelLarge: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.labelLarge!),
+      labelMedium: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.labelMedium!),
+      labelSmall: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.labelSmall!),
+      bodyLarge: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.bodyLarge!),
+      bodyMedium: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.bodyMedium!),
+      bodySmall: ResponsiveText.getResponsiveTextStyle(context, appTextTheme.bodySmall!),
+    );
+  }
 }

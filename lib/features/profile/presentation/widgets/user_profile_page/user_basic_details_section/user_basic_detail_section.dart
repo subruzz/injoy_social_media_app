@@ -34,7 +34,7 @@ class UserBasicDetailSection extends StatelessWidget {
           AppSizedBox.sizedBox3H,
           if (user.occupation != null)
             Text(user.occupation ?? '',
-                style: AppTextTheme.bodyMeidumLightGreyVariant.bodyMedium),
+                style: AppTextTheme.getResponsiveTextTheme(context).bodyMedium),
           AppSizedBox.sizedBox3H,
           if (user.about != null)
             Text(user.about ?? '',
@@ -105,8 +105,7 @@ class MyProfileBasicDetails extends StatelessWidget {
                   ? MyprofileContentHelper(
                       child: Text(state.user.occupation ?? '',
                           textAlign: TextAlign.center,
-                          style: AppTextTheme
-                              .bodyMeidumLightGreyVariant.bodyMedium
+                          style: AppTextTheme.getResponsiveTextTheme(context).bodyMedium
                               ?.copyWith(
                             fontSize: isThatTabOrDeskTop ? 16 : null,
                           )),

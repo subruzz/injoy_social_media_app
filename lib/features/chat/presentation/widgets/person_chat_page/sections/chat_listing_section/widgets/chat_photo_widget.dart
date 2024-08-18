@@ -23,7 +23,7 @@ class ChatPhotoWidget extends StatelessWidget {
         ),
         if (caption != null)
           Text(caption!,
-              style: AppTextTheme.labelMediumPureWhiteVariations.labelMedium)
+              style:AppTextTheme.getResponsiveTextTheme(context).labelMedium)
       ],
     );
   }

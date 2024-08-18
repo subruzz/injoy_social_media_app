@@ -25,7 +25,7 @@ class NoPostsPlaceholder extends StatelessWidget {
               );
             },
             child: Text('Start Creating',
-                style: AppTextTheme.labelMediumRedVariant.labelMedium))
+                style: AppTextTheme.getResponsiveTextTheme(context).labelMedium))
       ],
     );
   }

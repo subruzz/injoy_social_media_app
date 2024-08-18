@@ -9,7 +9,8 @@ class SocialActionText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(text,
-        style: AppTextTheme.labelMediumPureWhiteVariations.labelMedium
+        style: AppTextTheme.getResponsiveTextTheme(context)
+            .labelMedium
             ?.copyWith(
                 fontSize: Responsive.deskTopAndTab(context) ? 15 : 13.sp));
   }

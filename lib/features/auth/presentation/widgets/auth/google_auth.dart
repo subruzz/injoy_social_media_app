@@ -51,7 +51,7 @@ class GoogleAuthButton extends StatelessWidget {
           color: AppDarkColor().buttonWhitishBackground,
           child: CustomText(
               text: AppUiStringConst.googleLogin,
-              style: AppTextTheme.titleMediumBlackVariation.titleMedium
+              style: AppTextTheme.getResponsiveTextTheme(context).titleMedium
                   ?.copyWith(fontSize: isThatTabOrDeskTop ? 16 : null)),
           onClick: () {
             context.read<GoogleAuthBloc>().add(GoogleAuthStartEvent());

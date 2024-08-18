@@ -45,7 +45,8 @@ class FollowUnfollowHelper extends StatelessWidget {
                 text: me.following.contains(user.id)
                     ? l10n!.following
                     : l10n!.follow,
-                style: AppTextTheme.bodyMeidumwhiteVariant.bodyMedium
+                style: AppTextTheme.getResponsiveTextTheme(context)
+                    .bodyMedium
                     ?.copyWith(fontSize: isThatTabOrDeskTop ? 6.sp : 12));
           },
         ),

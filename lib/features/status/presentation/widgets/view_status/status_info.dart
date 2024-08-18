@@ -53,7 +53,7 @@ class StatusInfo extends StatelessWidget {
               valueListenable: currentStoryIndex,
               builder: (BuildContext context, dynamic value, Widget? child) {
                 return Text(created.timeAgo(),
-                    style: AppTextTheme.bodysmallPureWhiteVariations.bodySmall);
+                    style: AppTextTheme.getResponsiveTextTheme(context).bodySmall);
               },
             ),
           ],
