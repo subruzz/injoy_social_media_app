@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 
@@ -46,8 +47,8 @@ class FollowUnfollowHelper extends StatelessWidget {
                     ? l10n!.following
                     : l10n!.follow,
                 style: AppTextTheme.getResponsiveTextTheme(context)
-                    .bodyMedium
-                    ?.copyWith(fontSize: isThatTabOrDeskTop ? 6.sp : 12));
+                    .bodySmall
+                    ?.copyWith(  color: AppDarkColor().primaryText));
           },
         ),
         onClick: () {

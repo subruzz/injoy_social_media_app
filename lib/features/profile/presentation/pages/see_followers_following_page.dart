@@ -37,7 +37,9 @@ class SeeFollowersFollowingPage extends StatelessWidget {
                 length: 2,
                 child: Column(
                   children: [
-                    const TabBar(tabs: [
+                    const TabBar(
+                   
+                      tabs: [
                       Tab(
                         text: 'Following',
                       ),

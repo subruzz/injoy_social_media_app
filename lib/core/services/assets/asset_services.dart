@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,6 +29,20 @@ class AssetServices {
     return resultToFile;
   }
 
+  static Future<List<Uint8List>?> pickMultipleImagesAsBytes() async {
+    final result = await _picker.pickMultiImage(limit: 3, imageQuality: 30);
+    final List<Uint8List> resultToBytes = [];
+
+    for (var i in result) {
+      final bytes = await i.readAsBytes();
+      resultToBytes.add(bytes);
+    }
+    if (resultToBytes.isEmpty) {
+      return null;
+    }
+    return resultToBytes;
+  }
+
   static Future<File?> compressImage(File file, String targetPath) async {
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
@@ -37,6 +52,7 @@ class AssetServices {
     if (result == null) return null;
     return File(result.path);
   }
+
   //to save images to gallery
   static Future<void> saveImageWithPath({required String imageUrl}) async {
     ToastService.showToast('Media will be downloaded shortly...');

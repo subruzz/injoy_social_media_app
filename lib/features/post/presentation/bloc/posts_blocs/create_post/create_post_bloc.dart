@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -55,7 +56,10 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
             userProfileUrl: event.userProfileUrl,
             postImageUrl: const []);
         final res = await _createPostsUseCase(CreatePostsUseCaseParams(
-            post: newPost, image: event.postPics, isReel: event.isReel));
+            post: newPost,
+            image: event.postPics,
+            postImgesFromWeb: event.postImgesFromWeb,
+            isReel: event.isReel));
         res.fold(
             (failure) => emit(CreatePostFailure(errorMsg: failure.details)),
             (success) => emit(CreatePostSuccess()));

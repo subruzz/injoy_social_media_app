@@ -63,7 +63,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      
       child: TextFormField(
           style: Theme.of(context)
               .textTheme
@@ -76,6 +75,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           controller: widget.controller,
           obscureText: isPassWordVisible,
           decoration: InputDecoration(
+              filled: true,
+              fillColor: AppDarkColor().fillColor,
               enabledBorder: OutlineInputBorder(
                 borderRadius: Responsive.deskTopAndTab(context)
                     ? const BorderRadius.all(Radius.circular(5))
@@ -92,10 +93,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   .textTheme
                   .bodySmall
                   ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : null),
-              fillColor: AppDarkColor().secondaryBackground,
+              // fillColor: AppDarkColor().secondaryBackground,
               errorStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: isThatTabOrDeskTop ? 12 : null,
-                  color: widget.errorColor??AppDarkColor().secondaryPrimaryText.withOpacity(.6)),
+                  color: widget.errorColor ??
+                      AppDarkColor().secondaryPrimaryText.withOpacity(.6)),
               errorText: widget.errorMsg,
               suffixIcon: widget.showSuffixIcon
                   ? IconButton(

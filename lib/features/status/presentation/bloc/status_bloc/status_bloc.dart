@@ -56,7 +56,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
         createdAt: currentTime,
         content: event.content,
         color: event.color,
-        viewers: []);
+        viewers: {});
     final res = await _createStatusUseCase(CreateStatusUseCaseParams(
       singleStatus: newStatus,
     ));

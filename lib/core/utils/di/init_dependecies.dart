@@ -11,7 +11,6 @@ import 'package:social_media_app/features/ai_chat/data/repostiory/ai_chat_repo_i
 import 'package:social_media_app/features/ai_chat/domain/repository/ai_chat_repository.dart';
 import 'package:social_media_app/features/ai_chat/domain/usecases/generate_ai_message.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/blocs/reels_explore/reels_explore_cubit.dart';
 import 'package:social_media_app/features/media_picker/data/repository/asset_repository_impl.dart';
 import 'package:social_media_app/features/media_picker/domain/repository/asset_repository.dart';
 import 'package:social_media_app/features/media_picker/data/datasource/local/asset_local_datasource.dart';
@@ -112,7 +111,9 @@ import 'package:social_media_app/features/post_status_feed/data/repository/statu
 import 'package:social_media_app/features/post_status_feed/domain/repositories/status_feed_repository.dart';
 import 'package:social_media_app/features/post_status_feed/domain/usecases/get_all_users.dart';
 import 'package:social_media_app/features/post_status_feed/domain/usecases/get_for_you_posts.dart';
+import 'package:social_media_app/features/post_status_feed/domain/usecases/get_status_viewers.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/for_you_posts/for_you_post_bloc.dart';
+import 'package:social_media_app/features/post_status_feed/presentation/bloc/status_viewers/status_viewers_cubit.dart';
 import 'package:social_media_app/features/premium_subscription/data/datasource/premium_subscription_datasource.dart';
 import 'package:social_media_app/features/premium_subscription/data/repository/premium_subsription_repo_impl.dart';
 import 'package:social_media_app/features/premium_subscription/domain/repositories/premium_subscription_repository.dart';
@@ -407,7 +408,10 @@ void _getUserPosts() {
     ..registerFactory(
         () => GetUserShortsUseCase(userPostRepository: serviceLocator()))
     ..registerFactory(() => GetMyReelsCubit(serviceLocator()))
-    ..registerFactory(() => GetOtherUserShortsCubit(serviceLocator()));
+    ..registerFactory(() => GetOtherUserShortsCubit(serviceLocator()))
+    ..registerFactory(
+        () => GetStatusViewersUseCase(statusFeedRepository: serviceLocator()))
+    ..registerFactory(() => StatusViewersCubit(serviceLocator()));
 }
 
 void _postFeed() {

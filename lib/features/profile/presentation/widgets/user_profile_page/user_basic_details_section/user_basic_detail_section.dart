@@ -82,13 +82,9 @@ class MyProfileBasicDetails extends StatelessWidget {
             builder: (context, state) {
               return state is AppUserLoggedIn
                   ? MyprofileContentHelper(
-                      child: Text(
-                        state.user.fullName ?? '',
-                        style:
-                            Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                  fontSize: isThatTabOrDeskTop ? 18 : null,
-                                ),
-                      ),
+                      child: Text(state.user.fullName ?? '',
+                          style: AppTextTheme.getResponsiveTextTheme(context)
+                              .headlineLarge),
                     )
                   : const EmptyDisplay();
             },
@@ -105,10 +101,8 @@ class MyProfileBasicDetails extends StatelessWidget {
                   ? MyprofileContentHelper(
                       child: Text(state.user.occupation ?? '',
                           textAlign: TextAlign.center,
-                          style: AppTextTheme.getResponsiveTextTheme(context).bodyMedium
-                              ?.copyWith(
-                            fontSize: isThatTabOrDeskTop ? 16 : null,
-                          )),
+                          style: AppTextTheme.getResponsiveTextTheme(context)
+                              .bodyMedium),
                     )
                   : const EmptyDisplay();
             },
@@ -125,10 +119,8 @@ class MyProfileBasicDetails extends StatelessWidget {
                   ? MyprofileContentHelper(
                       child: Text(state.user.about ?? '',
                           textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    fontSize: isThatTabOrDeskTop ? 15 : null,
-                                  )),
+                          style: AppTextTheme.getResponsiveTextTheme(context)
+                              .bodySmall),
                     )
                   : const EmptyDisplay();
             },

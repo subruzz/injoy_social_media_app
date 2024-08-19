@@ -11,7 +11,6 @@ abstract interface class OtherUserDataSource {
   Future<AppUser> getOtherUserProfile(String uid);
   Future<void> followUser(String currentUid, String otherUid);
   Future<void> unfollowUser(String currentUid, String otherUid);
- 
 }
 
 class OtherUserDataSourceImpl implements OtherUserDataSource {
@@ -23,7 +22,12 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
   @override
   Future<AppUser> getOtherUserProfile(String uid) async {
     try {
-      return await serviceLocator<FirebaseHelper>().getUserDetailsFuture(uid);
+      final res =
+          await serviceLocator<FirebaseHelper>().getUserDetailsFuture(uid);
+      if (res == null) {
+        throw const MainException();
+      }
+      return res;
     } catch (e) {
       log('error is this ${e.toString()}');
       throw const MainException();
@@ -69,6 +73,4 @@ class OtherUserDataSourceImpl implements OtherUserDataSource {
       throw MainException(errorMsg: e.toString());
     }
   }
-
-  
 }

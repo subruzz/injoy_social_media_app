@@ -19,6 +19,7 @@ import '../../../../core/const/app_config/web_design_const.dart';
 import '../../../../core/utils/di/init_dependecies.dart';
 import '../../../chat/presentation/cubits/chat/chat_cubit.dart';
 import '../../../explore/presentation/blocs/explore_user/explore_user_cubit.dart';
+import '../../../popup_new_post.dart';
 import '../../../post_status_feed/presentation/bloc/for_you_posts/get_my_status/get_my_status_bloc.dart';
 import '../../../reels/presentation/bloc/reels/reels_cubit.dart';
 
@@ -152,10 +153,19 @@ class _WebLayoutState extends State<WebLayout> {
 
                                   GeneralDialogForWeb.showSideDialog(
                                       context: context,
-                                      child:const NotificationPage());
+                                      child: const NotificationPage());
                                 },
                                 text: 'Notification',
                                 asset: AppAssetsConst.noti2),
+                            AppSizedBox.sizedBox30H,
+                            WebLayoutDrawwer(
+                                showText: !showTheExtraSide,
+                                changePage: () {
+                                  Navigator.of(context).push(HeroDialogRoute(
+                                      builder: (context) => PopupNewPostWeb()));
+                                },
+                                text: 'Create',
+                                asset: AppAssetsConst.add),
                             AppSizedBox.sizedBox30H,
                             WebLayoutDrawwer(
                                 showText: !showTheExtraSide,

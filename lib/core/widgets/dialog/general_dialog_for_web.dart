@@ -6,6 +6,7 @@ class GeneralDialogForWeb {
   static void showSideDialog(
       {required BuildContext context,
       required Widget child,
+      AlignmentGeometry alignment = Alignment.topRight,
       double width = 400}) {
     showGeneralDialog(
       context: context,
@@ -13,8 +14,9 @@ class GeneralDialogForWeb {
       barrierDismissible: true,
       barrierLabel: 'Label',
       pageBuilder: (_, __, ___) {
+       
         return Align(
-          alignment: Alignment.topRight,
+          alignment: alignment,
           child: Container(
               decoration: const BoxDecoration(
                 border: Border(
@@ -25,7 +27,7 @@ class GeneralDialogForWeb {
                 ),
               ),
               width: width,
-              child:child),
+              child: child),
         );
       },
     );

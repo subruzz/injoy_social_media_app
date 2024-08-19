@@ -1,10 +1,9 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 
-import '../../utils/responsive/responsive_Text.dart';
+import '../../utils/responsive/responsive_text.dart';
 
 final class AppTextTheme {
   AppTextTheme._();
@@ -14,75 +13,75 @@ final class AppTextTheme {
     displayLarge: TextStyle(
       color: _color.primaryText,
       fontWeight: FontWeight.w600,
-      fontSize: 30.sp,
+      fontSize: 30,
       letterSpacing: 1.5,
     ),
     displayMedium: TextStyle(
       color: _color.primaryText,
       fontWeight: FontWeight.w600,
-      fontSize: 25.sp,
+      fontSize: 25,
       height: 1.5,
     ),
     displaySmall: TextStyle(
       color: _color.primaryText,
       fontWeight: FontWeight.w600,
-      fontSize: 23.sp,
+      fontSize: 23,
     ),
     headlineLarge: TextStyle(
       letterSpacing: 1.2,
       color: _color.primaryText,
       fontWeight: FontWeight.w500,
-      fontSize: 21.sp,
+      fontSize: 21,
     ),
     headlineMedium: TextStyle(
       color: _color.primaryText,
       fontWeight: FontWeight.w500,
-      fontSize: 20.sp,
+      fontSize: 20,
     ),
     headlineSmall: TextStyle(
       color: _color.primaryText,
       fontWeight: FontWeight.w500,
-      fontSize: 19.sp,
+      fontSize: 19,
     ),
     titleLarge: TextStyle(
       color: _color.primaryText,
-      fontSize: 18.sp,
+      fontSize: 18,
     ),
     titleMedium: TextStyle(
       color: _color.primaryText,
-      fontSize: 17.sp,
+      fontSize: 17,
     ),
     titleSmall: TextStyle(
       color: _color.primaryText,
-      fontSize: 16.sp,
+      fontSize: 16,
       fontWeight: FontWeight.bold,
     ),
     labelLarge: TextStyle(
       color: _color.primaryText,
-      fontSize: 15.sp,
+      fontSize: 15,
       fontWeight: FontWeight.bold,
     ),
     labelMedium: TextStyle(
       color: _color.primaryText,
-      fontSize: 15.sp,
+      fontSize: 15,
       fontWeight: FontWeight.w500,
     ),
     labelSmall: TextStyle(
       color: _color.primaryText,
-      fontSize: 14.sp,
+      fontSize: 14,
       fontWeight: FontWeight.w600,
     ),
     bodyLarge: TextStyle(
       color: _color.primaryText,
-      fontSize: 14.sp,
+      fontSize: 14,
     ),
     bodyMedium: TextStyle(
         color: _color.secondaryText,
-        fontSize: 13.sp,
+        fontSize: 13,
         fontWeight: FontWeight.w500),
     bodySmall: TextStyle(
-      color: _color.secondaryText,
-      fontSize: 12.sp,
+      color: _color.primaryText,
+      fontSize: 12,
     ),
   );
 

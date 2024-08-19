@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 
-import '../../errors/exception.dart';
 
 class FirebaseHelper {
   final FirebaseFirestore _firestore;
@@ -29,7 +27,7 @@ class FirebaseHelper {
   }
 
   // Method to get user details as a future
-  Future<AppUserModel> getUserDetailsFuture(String userId) async {
+  Future<AppUserModel?> getUserDetailsFuture(String userId) async {
     final doc = await _firestore
         .collection(FirebaseCollectionConst.users)
         .doc(userId)
@@ -37,18 +35,18 @@ class FirebaseHelper {
     if (doc.exists && doc.data() != null) {
       return AppUserModel.fromJson(doc.data() as Map<String, dynamic>);
     } else {
-      throw Exception("User not found");
+      return null;
     }
   }
 
   //to get the partial detail of the user
-  Future<PartialUser> getUserPartialDetails(String id) async {
+  Future<PartialUser?> getUserPartialDetails(String id) async {
     final userDoc = await FirebaseFirestore.instance
         .collection(FirebaseCollectionConst.users)
         .doc(id)
         .get();
     if (!userDoc.exists) {
-      throw const MainException();
+      return null;
     }
     return PartialUser.fromJson(userDoc.data()!);
   }

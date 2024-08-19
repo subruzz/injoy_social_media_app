@@ -7,9 +7,8 @@ final class AppTextFieldTheme {
   static final AppDarkColor _color = AppDarkColor();
 
   static InputDecorationTheme textFieldTheme = InputDecorationTheme(
-    filled: true,
+
     prefixIconColor: _color.iconSoftColor,
-    fillColor: _color.fillColor,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.0),
       borderSide: BorderSide.none,

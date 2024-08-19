@@ -50,7 +50,7 @@ class StatusDottedBordersWidget extends CustomPainter {
               ? images!.isEmpty
                   ? greyColor
                   : tabColor
-              : images![0].viewers.contains(uid)
+              : images![0].viewers.containsKey(uid)
                   ? greyColor.withOpacity(.5)
                   : tabColor
           ..strokeWidth = 6
@@ -84,7 +84,7 @@ class StatusDottedBordersWidget extends CustomPainter {
             //here you can compare your SEEN story index with the arc index to make it grey
             ..color = isMe
                 ? tabColor
-                : images![i].viewers.contains(uid)
+                : images![i].viewers.keys.contains(uid)
                     ? greyColor.withOpacity(.6)
                     : tabColor
             ..strokeWidth = 6

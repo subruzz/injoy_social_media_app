@@ -5,6 +5,8 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 
+import '../../../../../../../core/theme/widget_themes/text_theme.dart';
+
 class UserTab extends StatelessWidget {
   const UserTab(
       {super.key,
@@ -29,11 +31,7 @@ class UserTab extends StatelessWidget {
             color: AppDarkColor().iconSoftColor,
           ),
           AppSizedBox.sizedBox10W,
-          Text(
-            tabTitle,
-            style: TextStyle(
-                color: labelColor, fontSize: isThatTabOrDeskTop ? 16 : null),
-          ),
+          Text(tabTitle, style: AppTextTheme.appTextTheme.labelMedium),
         ],
       ),
     );

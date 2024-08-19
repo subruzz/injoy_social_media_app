@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/utils/responsive/constants.dart';
 
 class Responsive extends StatelessWidget {
   final Widget mobile;
@@ -17,31 +16,33 @@ class Responsive extends StatelessWidget {
 
   // This isMobile, isTablet, isDesktop help us later
   static bool isMobile(BuildContext context) =>
-      MediaQuery.of(context).size.width < 850;
+      MediaQuery.of(context).size.width < 800;
 
   static bool isTablet(BuildContext context) =>
       MediaQuery.of(context).size.width < 1100 &&
-      MediaQuery.of(context).size.width >= 850;
-  static bool mobAndTab(BuildContext context) =>
-      MediaQuery.of(context).size.width <= 1100;
+      MediaQuery.of(context).size.width >= 800;
+ 
   static bool isDesktop(BuildContext context) =>
       MediaQuery.of(context).size.width >= 1100;
   static bool deskTopAndTab(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 850;
+      MediaQuery.of(context).size.width >= 800;
+  static bool isBtwMobAndTab(BuildContext context) =>
+      MediaQuery.of(context).size.width >= 500 &&
+      MediaQuery.of(context).size.width < 800;
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     // If our width is more than 1100 then we consider it a desktop
-    if (isThatMobile) {
-      return mobile ;
+    if (size.width >= 1100) {
+      return desktop;
     }
-    // If width it less then 1100 and more then 850 we consider it as tablet
-    // else if (size.width >= 850 && tablet != null) {
-    //   return tablet!;
-    // }
+    // If width it less then 1100 and more then 800 we consider it as tablet
+    else if (size.width >= 800 && tablet != null) {
+      return tablet!;
+    }
     // Or less then that we called it mobile
     else {
-      return desktop;
+      return mobile;
     }
   }
 }

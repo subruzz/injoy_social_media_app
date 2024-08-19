@@ -21,7 +21,7 @@ class PostMultipleImages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: Responsive.deskTopAndTab(context) ? size : size.sh,
+      height: isThatMobile ? size.sh : size,
       width: double.infinity,
       child: Stack(
         children: [
@@ -40,7 +40,10 @@ class PostMultipleImages extends StatelessWidget {
                         ));
                       },
                       child: CachedImage(
-                          fit: isThatTabOrDeskTop ? BoxFit.contain : null,
+                          fit: isThatTabOrDeskTop ||
+                                  Responsive.isBtwMobAndTab(context)
+                              ? BoxFit.contain
+                              : null,
                           img: postImageUrls[index])),
                   if (postImageUrls.length > 1)
                     Positioned(

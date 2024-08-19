@@ -4,7 +4,7 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 
 class AppBarCommonIcon extends StatelessWidget {
-  const AppBarCommonIcon({super.key, required this.icon});
+  const AppBarCommonIcon({super.key,  this.icon});
   final IconData? icon;
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class AppBarCommonIcon extends StatelessWidget {
       },
       child: Icon(
         icon ?? Icons.close,
-        size: isThatTabOrDeskTop ? 30 : 30.w,
+        size:isThatBtwMobAndTab?30: isThatTabOrDeskTop ? 30 : 30.w,
         color: AppDarkColor().iconPrimaryColor,
       ),
     );

@@ -12,8 +12,14 @@ import 'package:social_media_app/core/widgets/helper/follow_unfollow_helper.dart
 import 'package:social_media_app/core/widgets/common/user_profile.dart';
 
 class PartialUserWidget extends StatelessWidget {
-  const PartialUserWidget({super.key, required this.user});
+  const PartialUserWidget(
+      {super.key,
+      this.replaceFullName,
+      this.wantFollowB = true,
+      required this.user});
   final PartialUser user;
+  final bool wantFollowB;
+  final String? replaceFullName;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -32,29 +38,39 @@ class PartialUserWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                CircularUserProfile(
-                  size: 27,
-                  profile: user.profilePic,
-                ),
-                AppSizedBox.sizedBox15W,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(text: addAtSymbol(user.userName)),
-                    CustomText(
-                      text: user.fullName ?? '',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : null),
-                    )
-                  ],
-                ),
-              ],
+            Expanded(
+              child: Row(
+                children: [
+                  CircularUserProfile(
+                    size: 27,
+                    profile: user.profilePic,
+                  ),
+                  AppSizedBox.sizedBox15W,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          text: addAtSymbol(user.userName),
+                          maxLines: 1,
+                        ),
+                        CustomText(
+                          maxLines: 1,
+                          text: replaceFullName ?? user.fullName ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  fontSize: isThatTabOrDeskTop ? 13 : null),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            if (user.id != context.read<AppUserBloc>().appUser.id)
+            if (wantFollowB &&
+                user.id != context.read<AppUserBloc>().appUser.id)
               FollowUnfollowHelper(user: user),
           ],
         ),

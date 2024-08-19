@@ -65,7 +65,7 @@ class ChatCallItem extends StatelessWidget {
                   .bodyMedium
                   ?.copyWith(fontSize: isThatTabOrDeskTop ? 14 : null))
           : null,
-      trailing: Column(
+      trailing:  !isThatTabOrDeskTop? Column(
         children: [
           // DecoratedBox(
           //   decoration: BoxDecoration(
@@ -76,7 +76,7 @@ class ChatCallItem extends StatelessWidget {
           //     child: Text('2'),
           //   ),
           // ),
-          if (!isThatTabOrDeskTop)
+      
             CustomText(
               style: Theme.of(context)
                   .textTheme
@@ -85,7 +85,7 @@ class ChatCallItem extends StatelessWidget {
               text: chat!.createdAt.toDate().toCustomFormat(),
             )
         ],
-      ),
+      ):null
     );
   }
 }

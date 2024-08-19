@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:typed_data';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
@@ -15,7 +17,7 @@ class CreatePostsUseCase implements UseCase<Unit, CreatePostsUseCaseParams> {
   @override
   Future<Either<Failure, Unit>> call(params) async {
     return await _postRepository.createPost(
-        params.post, params.image, params.isReel);
+        params.post, params.image, params.postImgesFromWeb, params.isReel);
   }
 }
 
@@ -23,7 +25,11 @@ class CreatePostsUseCaseParams {
   final bool isReel;
   final PostEntity post;
   final List<SelectedByte> image;
+  final List<Uint8List>? postImgesFromWeb;
 
   CreatePostsUseCaseParams(
-      {required this.isReel, required this.post, required this.image});
+      {required this.isReel,
+      required this.post,
+      required this.image,
+      required this.postImgesFromWeb});
 }

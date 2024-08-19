@@ -8,7 +8,8 @@ import 'package:story_view/widgets/story_view.dart';
 class StoryItems extends StatelessWidget {
   const StoryItems(
       {super.key,
-      required this.statuses,required this.uid,
+      required this.statuses,
+      required this.uid,
       required this.currentStoryIndex,
       required this.storyController});
   final List<SingleStatusEntity> statuses;
@@ -35,12 +36,10 @@ class StoryItems extends StatelessWidget {
       ],
       onStoryShow: (storyItem, index) {
         currentStoryIndex.value = index;
-        if (!statuses[index]
-            .viewers
-            .contains(uid)) {
+        if (statuses[index].uId == uid) return;
+        if (!statuses[index].viewers.keys.contains(uid)) {
           context.read<StatusBloc>().add(SeenStatusUpateEvent(
-              statusId: statuses[index].statusId,
-              viewedUid: uid));
+              statusId: statuses[index].statusId, viewedUid: uid));
         }
       },
       onComplete: () {
@@ -52,5 +51,3 @@ class StoryItems extends StatelessWidget {
     );
   }
 }
-
-

@@ -9,10 +9,8 @@ import 'package:social_media_app/features/profile/presentation/widgets/others_pr
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/top_bar_section/top_bar_section.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/user_basic_details_section/user_basic_detail_section.dart';
 import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';
-import '../../../../core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
 import '../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../core/theme/color/app_colors.dart';
-import '../../../../core/utils/routes/tranistions/app_routes_const.dart';
 import '../../../../core/widgets/dialog/app_info_dialog.dart';
 import '../../../premium_subscription/presentation/pages/premium_subscripti_builder.dart';
 import '../widgets/user_profile_page/user_profile_tab_section/user_profile_tab_section.dart';

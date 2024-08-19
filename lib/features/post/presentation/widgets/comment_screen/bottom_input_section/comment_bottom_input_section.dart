@@ -44,7 +44,7 @@ class CommentBottomInputSection extends StatelessWidget {
         color: AppDarkColor().secondaryBackground,
         child: Column(
           children: [
-            if (!isThatTabOrDeskTop)
+            if (isThatMobile)
               EmojiPicker(
                 commentController: commentController,
                 commentSubmitSelection: commentSubmitSelection,

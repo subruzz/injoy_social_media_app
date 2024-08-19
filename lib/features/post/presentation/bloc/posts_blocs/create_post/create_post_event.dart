@@ -27,7 +27,8 @@ final class CreatePostClickEvent extends CreatePostEvent {
   final List<SelectedByte> postPics;
   final bool isCommentOff;
   final bool isReel;
-
+  final List<Uint8List>? postImgesFromWeb;
+  final bool isWeb;
   const CreatePostClickEvent(
       {required this.postPics,
       required this.creatorUid,
@@ -38,8 +39,10 @@ final class CreatePostClickEvent extends CreatePostEvent {
       required this.userProfileUrl,
       required this.isReel,
       required this.hashtags,
+      this.postImgesFromWeb,
       required this.latitude,
       required this.longitude,
+      this.isWeb = false,
       required this.location});
 }
 

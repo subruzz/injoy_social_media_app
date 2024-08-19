@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
     _defineThePlatform(context);
     log(isThatTabOrDeskTop.toString());
     return ScreenUtilInit(
-      designSize:!isThatMobile
+      designSize: Responsive.isDesktop(context)
           ? const Size(729, 1536)
           : const Size(360, 784),
       minTextAdapt: true,
@@ -115,9 +115,14 @@ class MyApp extends StatelessWidget {
 
 _defineThePlatform(BuildContext context) {
   TargetPlatform platform = Theme.of(context).platform;
-  isThatTabOrDeskTop = Responsive.deskTopAndTab(context);
-  isThatTabAndMobile = Responsive.mobAndTab(context);
-  isThatTab = Responsive.isTablet(context);
+  double width = MediaQuery.of(context).size.width; // Call MediaQuery only once
+
+  // Determine screen size and platform
+  isThatTabOrDeskTop = width >= 800;
+  isThatTabAndMobile = width <= 1100;
+  isThatTab = width >= 800 && width < 1100;
+  isThatDeskTop = width >= 1100;
+  isThatBtwMobAndTab = width >= 500 && width < 800;
   isThatMobile =
       platform == TargetPlatform.iOS || platform == TargetPlatform.android;
   isThatAndroid = platform == TargetPlatform.android;

@@ -31,6 +31,7 @@ class GetAllStatusBloc extends Bloc<GetAllStatusEvent, GetAllStatusState> {
     } on SocketException {
       emit(GetAllStatusFailure());
     } catch (e) {
+      log(e.toString());
       emit(GetAllStatusFailure());
     }
   }

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
@@ -42,7 +43,7 @@ class OtherUserFollowMessageSection extends StatelessWidget {
                             const Locale('ml')
                         ? 13
                         : null,
-                    iconSize: 20.w,
+                    iconSize: isThatTabOrDeskTop ? 20 : 20.w,
                     iconData: Icons.person_add_alt,
                     radius: AppBorderRadius.horizontalExtraLarge,
                     title: me.following.contains(currentVisitedUser.id)
@@ -112,7 +113,7 @@ class OtherUserFollowMessageSection extends StatelessWidget {
           Expanded(
               child: CustomButtonWithIcon(
                   iconColor: AppDarkColor().buttonBackground,
-                  iconSize: 20.w,
+                  iconSize: isThatTabOrDeskTop ? 20 :20.w,
                   iconData: CupertinoIcons.chat_bubble_text,
                   borderColor: AppDarkColor().buttonBackground,
                   color: AppDarkColor().background,

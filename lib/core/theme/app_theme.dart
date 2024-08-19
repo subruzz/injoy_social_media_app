@@ -124,11 +124,11 @@ final class AppDarkTheme {
       labelStyle: TextStyle(
         color: _color.primaryText,
         fontWeight: FontWeight.w600,
-        fontSize: 16.sp,
+        fontSize: 16,
       ),
       unselectedLabelStyle: TextStyle(
         color: _color.secondaryText,
-        fontSize: 16.sp,
+        fontSize: 16,
         fontWeight: FontWeight.w600,
       ),
       indicatorSize: TabBarIndicatorSize.tab,

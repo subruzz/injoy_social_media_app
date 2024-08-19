@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 
 class CustomButtonWithIcon extends StatelessWidget {
   final VoidCallback onClick;
@@ -38,30 +39,30 @@ class CustomButtonWithIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  SizedBox(
-        width: width,
-        height: 37.w,
-        child: ElevatedButton.icon(
-          style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-              backgroundColor: WidgetStatePropertyAll(color),
-              shape: WidgetStatePropertyAll(
-                RoundedRectangleBorder(
-                  borderRadius: radius ?? AppBorderRadius.small,
-                  side: BorderSide(
-                      color: borderColor ?? AppDarkColor().secondaryBackground,
-                      width: 1.0),
-                ),
-              )),
-          onPressed: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-            onClick();
-          },
-          icon: Icon(iconData, color: iconColor, size: iconSize),
-          label: Text(title,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: textColor,fontSize: fontSize?.sp)), // Display child widget as label
-        ),
-      
+    return SizedBox(
+      width: width,
+      height: isThatTabOrDeskTop ? 37 : 37.w,
+      child: ElevatedButton.icon(
+        style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+            backgroundColor: WidgetStatePropertyAll(color),
+            shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: radius ?? AppBorderRadius.small,
+                side: BorderSide(
+                    color: borderColor ?? AppDarkColor().secondaryBackground,
+                    width: 1.0),
+              ),
+            )),
+        onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+          onClick();
+        },
+        icon: Icon(iconData, color: iconColor, size: iconSize),
+        label: Text(title,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: textColor,
+                fontSize:isThatTabOrDeskTop?fontSize: fontSize?.sp)), // Display child widget as label
+      ),
     );
   }
 }

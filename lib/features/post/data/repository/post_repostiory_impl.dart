@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'dart:typed_data';
+
 import 'package:fpdart/fpdart.dart';
 
 import 'package:social_media_app/core/errors/exception.dart';
@@ -21,9 +23,13 @@ class PostRepostioryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, Unit>> createPost(
-      PostEntity post, List<SelectedByte> postImage, bool isReel) async {
+      PostEntity post,
+      List<SelectedByte> postImage,
+      List<Uint8List>? postImgesFromWeb,
+      bool isReel) async {
     try {
-      await _postRemoteDatasource.createPost(post, postImage, isReel);
+      await _postRemoteDatasource.createPost(
+          post, postImage, postImgesFromWeb, isReel);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg, e.details));

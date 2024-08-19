@@ -26,6 +26,8 @@ Future<SelectedByte> convertAssetToSelectedByte(AssetEntity asset) async {
       if (tempFile == null) {
         throw Exception('Failed to get file from asset');
       }
+      final w = asset.width;
+      final h = asset.height;
 
       return SelectedByte(
         mediaType: isImage ? MediaType.photo : MediaType.video,

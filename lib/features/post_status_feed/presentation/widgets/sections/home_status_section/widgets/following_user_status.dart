@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
@@ -15,7 +17,12 @@ class FollowingUserStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GetAllStatusBloc, GetAllStatusState>(
       builder: (context, state) {
+        if (state is GetAllStatusFailure) {
+          return Text('error');
+        }
         if (state is GetAllStatusSuccess) {
+          log(state.allStatus.toString());
+
           return Expanded(
             child: ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -23,6 +30,7 @@ class FollowingUserStatus extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: state.allStatus.length,
                 itemBuilder: (context, index) {
+                  log(state.allStatus.toString());
                   final userAttribute = state.allStatus[index];
                   return GestureDetector(
                     onTap: () {

@@ -4,16 +4,21 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
+import 'package:social_media_app/core/common/functions/firebase_helper.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_field_const.dart';
 import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/core/utils/other/cut_off_time.dart';
 import 'package:social_media_app/features/status/data/models/status_model.dart';
 
 abstract interface class StatusFeedRemoteDatasource {
   Stream<List<StatusEntity>> getStatuses(String uid);
   Stream<List<SingleStatusEntity>> getMyStatus(String uid);
+  Future<List<(PartialUser, Timestamp)>> getStatuseViewers(
+      Map<String, Timestamp> viewersId);
 }
 
 class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
@@ -44,7 +49,7 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
       return statuses.snapshots().map((status) => status.docs
           .map((doc) => SingleStatusEntity.fromJson(doc.data()))
           .toList());
-    }  catch (e) {
+    } catch (e) {
       throw MainException(
           errorMsg: AppErrorMessages.myStatusFetchFailed,
           details: e.toString());
@@ -101,7 +106,7 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
             .collection(FirebaseCollectionConst.statuses)
             .where(FirebaseFieldConst.createdAt, isGreaterThan: cutoffTimestamp)
             .where(FirebaseFieldConst.uId, whereIn: followings)
-            .orderBy(FirebaseFieldConst.createdAt, descending: true);
+            .orderBy(FirebaseFieldConst.createdAt, descending: false);
 
         yield* statusCollection.snapshots().asyncMap((querySnapshot) async {
           // Group statuses by userId
@@ -133,6 +138,26 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
     } catch (e) {
       throw MainException(
           errorMsg: AppErrorMessages.statusFetchFailed, details: e.toString());
+    }
+  }
+
+  @override
+  Future<List<(PartialUser, Timestamp)>> getStatuseViewers(
+      Map<String, Timestamp> viewersId) async {
+    try {
+      final List<(PartialUser, Timestamp)> statusViewers = [];
+
+      for (var viewer in viewersId.entries) {
+        final user = await serviceLocator<FirebaseHelper>()
+            .getUserPartialDetails(viewer.key);
+        if (user == null) continue;
+        statusViewers.add((user, viewer.value));
+      }
+
+      return statusViewers;
+    } catch (e) {
+      log('error getting status viewers ${e.toString()}');
+      throw const MainException();
     }
   }
 }

@@ -33,18 +33,17 @@ class _CachedImageState extends State<CachedImage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return AspectRatio(
-      aspectRatio:
-          16 / 9, // Adjust this ratio as needed (e.g., 16:9, 4:3, etc.)
-      child: InteractiveViewer(
-        transformationController: _transformationController,
-        minScale: .1,
-        maxScale: 4.0,
-        onInteractionEnd: (details) {
-          _transformationController.value = Matrix4.identity();
-        },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
+    return InteractiveViewer(
+      transformationController: _transformationController,
+      minScale: .1,
+      maxScale: 4.0,
+      onInteractionEnd: (details) {
+        _transformationController.value = Matrix4.identity();
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: AspectRatio(
+          aspectRatio: 4/3,
           child: CachedNetworkImage(
               placeholder: (BuildContext context, String url) => const Center(
                     child: CircularLoadingGrey(),
@@ -54,9 +53,9 @@ class _CachedImageState extends State<CachedImage> {
                       child: Text(l10n!.failedToLoadImage,
                           style: Theme.of(context).textTheme.bodySmall)),
               imageUrl: widget.img,
-              height: widget.size?.sh,
-              width: double.infinity,
-              fit: widget.fit ?? BoxFit.fill),
+              // height: widget.size?.sh,
+              // width: double.infinity,
+              fit: widget.fit ?? BoxFit.cover),
         ),
       ),
     );

@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
@@ -10,6 +12,7 @@ import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/hashtag_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/services/firebase/firebase_storage.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
 import 'package:social_media_app/features/explore/data/model/explore_seearch_location_model.dart';
 import 'package:social_media_app/features/post/data/models/update_post_model.dart';
@@ -19,8 +22,8 @@ import 'package:social_media_app/features/post/domain/enitities/update_post.dart
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 
 abstract interface class PostRemoteDatasource {
-  Future<void> createPost(
-      PostEntity post, List<SelectedByte> postImage, bool isReel);
+  Future<void> createPost(PostEntity post, List<SelectedByte> postImage,
+      List<Uint8List>? postImgesFromWeb, bool isReel);
   Future<PostModel> updatePost(
     UpdatePostEntity post,
     PartialUser postUser,
@@ -42,9 +45,11 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
       {required this.firestore, required this.firebaseStorage});
 
   @override
-  Future<void> createPost(
-      PostEntity post, List<SelectedByte> postImage, bool isReel) async {
-    if (postImage.isEmpty) return;
+  Future<void> createPost(PostEntity post, List<SelectedByte> postImage,
+      List<Uint8List>? postImgesFromWeb, bool isReel) async {
+    print('came here 1');
+
+    if (isThatMobile && postImage.isEmpty) return;
     final postCollection =
         FirebaseFirestore.instance.collection(FirebaseCollectionConst.posts);
     final hashtagCollection =
@@ -58,15 +63,19 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
           : '${FirebaseFirestoreConst.reelPath}/${post.creatorUid}/${FirebaseFirestoreConst.reelPath}';
       final assetItem = await serviceLocator<FirebaseStorageService>()
           .uploadListOfAssets(
+            postImgesFromWeb: postImgesFromWeb,
               assets: postImage,
               reference: refToAsset,
               isPhoto: !isReel,
               needThumbnail: isReel);
-      if ((isReel && assetItem.url == null) ||
-          !isReel && assetItem.urls.isEmpty) {
+      print('came here 2');
+      if (isThatMobile && (isReel && assetItem.url == null) ||
+          isThatMobile && !isReel && assetItem.urls.isEmpty) {
         log('here');
         throw const MainException();
       }
+      print('came here 3');
+
       final newPost = PostModel(
           isThatvdo: isReel,
           isEdited: false,

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
@@ -9,7 +11,10 @@ import '../../../../core/common/models/partial_user_model.dart';
 
 abstract interface class PostRepository {
   Future<Either<Failure, Unit>> createPost(
-      PostEntity post, List<SelectedByte> postImage, bool isReel);
+      PostEntity post,
+      List<SelectedByte> postImage,
+      List<Uint8List>? postImgesFromWeb,
+      bool isReel);
   Future<Either<Failure, List<PostEntity>>> getAllPosts(String uid);
   Future<Either<Failure, PostEntity>> updatePost(
     UpdatePostEntity post,

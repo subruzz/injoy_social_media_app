@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 
 class ExpandableText extends StatefulWidget {
@@ -59,9 +60,10 @@ class ExpandableTextState extends State<ExpandableText> {
         if (textPainter.didExceedMaxLines) {
           textSpan = TextSpan(
             text: _readMore ? widget.text.substring(0, endIndex) : widget.text,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontSize: Responsive.deskTopAndTab(context) ? 13 : null,
-                color: AppDarkColor().primaryText.withOpacity(.9)),
+            style: AppTextTheme.getResponsiveTextTheme(context)
+                .bodyMedium
+                ?.copyWith(
+                    color: AppDarkColor().primaryText.withOpacity(.9)),
             children: <TextSpan>[link],
           );
         } else {
