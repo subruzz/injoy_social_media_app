@@ -61,17 +61,16 @@ class ExpandableTextState extends State<ExpandableText> {
           textSpan = TextSpan(
             text: _readMore ? widget.text.substring(0, endIndex) : widget.text,
             style: AppTextTheme.getResponsiveTextTheme(context)
-                .bodyMedium
-                ?.copyWith(
-                    color: AppDarkColor().primaryText.withOpacity(.9)),
+                .labelSmall
+                ?.copyWith(color: AppDarkColor().primaryText.withOpacity(.9)),
             children: <TextSpan>[link],
           );
         } else {
           textSpan = TextSpan(
             text: widget.text,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontSize: Responsive.deskTopAndTab(context) ? 13 : null,
-                color: AppDarkColor().primaryText.withOpacity(.9)),
+            style: AppTextTheme.getResponsiveTextTheme(context)
+                .labelSmall
+                ?.copyWith(color: AppDarkColor().primaryText.withOpacity(.9)),
           );
         }
         return RichText(

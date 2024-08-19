@@ -3,7 +3,9 @@ import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
+import 'package:social_media_app/core/utils/other/cut_off_time.dart';
 
+import '../../const/fireabase_const/firebase_field_const.dart';
 
 class FirebaseHelper {
   final FirebaseFirestore _firestore;
@@ -106,5 +108,22 @@ class FirebaseHelper {
     }
 
     return reels;
+  }
+
+  Future<void> deleteUnWantedStatus(String myId) async {
+    final statusCollection =
+        _firestore.collection(FirebaseCollectionConst.statuses);
+
+    final cutoffTimestamp = cutOffTime;
+
+    ///returning the list of statuses of current user from status collection using
+    ///the user id
+    final statuses = await statusCollection
+        .where(FirebaseFieldConst.uId, isEqualTo: myId)
+        .where(FirebaseFieldConst.createdAt, isLessThan: cutoffTimestamp)
+        .get();
+    for (var status in statuses.docs) {
+      await status.reference.delete();
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
+import 'package:social_media_app/core/services/method_channel.dart/restart_app.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/premium_badge.dart';
 
@@ -17,6 +18,11 @@ class AppTopBarTextWithPremium extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        IconButton(
+            onPressed: () {
+              Restart.restartApp();
+            },
+            icon: Icon(Icons.read_more)),
         Flexible(
           child: isThatTab
               ? Image.asset(

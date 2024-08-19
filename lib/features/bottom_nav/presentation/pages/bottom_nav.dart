@@ -1,6 +1,9 @@
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
+import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_event.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/chat_web.dart';
@@ -60,6 +63,9 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
 
   @override
   void initState() {
+    serviceLocator<FirebaseHelper>()
+        .deleteUnWantedStatus(context.read<AppUserBloc>().appUser.id);
+
     WidgetsBinding.instance.addObserver(this);
     super.initState();
     _pages = getScreens();

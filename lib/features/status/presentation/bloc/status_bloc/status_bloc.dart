@@ -31,7 +31,6 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     required SeeenStatusUpdateUseCase seeenStatusUpdateUseCase,
     required CreateMultipleStatusUseCase createMultipleStatusUseCase,
   })  : _createStatusUseCase = createStatusUseCase,
-      
         _seeenStatusUpdateUseCase = seeenStatusUpdateUseCase,
         _createMultipleStatusUseCase = createMultipleStatusUseCase,
         super(StatusInitial()) {
@@ -49,6 +48,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
           errorMsg: AppErrorMessages.statusEmptyContent, detailError: ''));
       return;
     }
+
     final currentTime = Timestamp.now();
     final newStatus = SingleStatusEntity(
         uId: event.userId,
@@ -66,8 +66,6 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
         (success) => emit(StatusCreateSuccess()));
   }
 
-  
-
   FutureOr<void> _seeenStatusUpdate(
       SeenStatusUpateEvent event, Emitter<StatusState> emit) async {
     final res = await _seeenStatusUpdateUseCase(SeeenStatusUpdateUseCaseParams(
@@ -81,7 +79,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
   FutureOr<void> _createMultipleStatuses(
       CreateMultipleStatusEvent event, Emitter<StatusState> emit) async {
     emit(StatusCreateLoading());
-
+  
     final userEntity = StatusEntity(
       statuses: [],
       uId: event.userId,

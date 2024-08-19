@@ -63,7 +63,8 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
                 ..add(GetAlbumsEvent(
                     type: widget.pickerType == MediaPickerType.reels
                         ? RequestType.video
-                        : widget.pickerType == MediaPickerType.chat
+                        : widget.pickerType == MediaPickerType.chat ||
+                                widget.pickerType == MediaPickerType.status
                             ? RequestType.common
                             : RequestType.image))),
         ],

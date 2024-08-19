@@ -14,8 +14,8 @@ class AssetLocalSourceImpl implements AssetLocalSource {
   @override
   Future<List<AssetEntity>> loadAssets(AssetPathEntity selectedAlbum) async {
     try {
-      List<AssetEntity> assetList =
-          await selectedAlbum.getAssetListPaged(page: 0, size: 30);
+      List<AssetEntity> assetList = await selectedAlbum.getAssetListRange(
+          start: 0, end: await selectedAlbum.assetCountAsync);
       return assetList;
     } catch (e) {
       throw MainException(errorMsg: e.toString());
@@ -50,7 +50,7 @@ class AssetLocalSourceImpl implements AssetLocalSource {
         ),
       );
       albums = await PhotoManager.getAssetPathList(
-       type: type, filterOption: filterOption);
+          type: type, filterOption: filterOption);
       return (albums, true);
     } catch (e) {
       throw const MainException(

@@ -110,7 +110,6 @@ class _EachPostState extends State<EachPost> {
                 hashtags: widget.currentPost.hashtags,
                 postDesc: widget.currentPost.description,
               ),
-              AppSizedBox.sizedBox5H,
               PostImageSection(
                 postImages: widget.currentPost.postImageUrl,
                 pagecontroller: _postPageController,
