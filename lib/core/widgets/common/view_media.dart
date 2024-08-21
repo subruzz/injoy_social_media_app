@@ -1,22 +1,20 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
-import 'package:social_media_app/core/widgets/common/cached_image.dart';
-import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/common/page_view.dart';
 import 'package:social_media_app/core/widgets/common/page_view_indicator.dart';
 
 class ViewMedia extends StatefulWidget {
   const ViewMedia({
     super.key,
-    required this.assets,
+    this.assets = const [],
+    this.isThatVdo = false,
     required this.initialIndex,
   });
-
   final List<String> assets;
   final int initialIndex;
+  final bool isThatVdo;
 
   @override
   State<ViewMedia> createState() => _ViewMediaState();
@@ -27,6 +25,7 @@ class _ViewMediaState extends State<ViewMedia> {
   @override
   void initState() {
     super.initState();
+
     final safeInitialIndex =
         (widget.initialIndex >= 0 && widget.initialIndex < widget.assets.length)
             ? widget.initialIndex
@@ -46,6 +45,7 @@ class _ViewMediaState extends State<ViewMedia> {
       body: Stack(
         children: [
           CustomPageView(
+            isThatVdo: widget.isThatVdo,
             pageController: _pageC,
             netImages: widget.assets,
             fit: BoxFit.contain,

@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/widgets/common/cached_image.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
+import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 import 'package:video_player/video_player.dart';
 
 class CustomPageView extends StatelessWidget {
@@ -13,12 +14,14 @@ class CustomPageView extends StatelessWidget {
     this.netImages,
     this.onPagechanged,
     this.fit,
+    this.isThatVdo = false,
   });
   final PageController pageController;
   final List<SelectedByte>? images;
   final List<String>? netImages;
   final Function(int)? onPagechanged;
   final BoxFit? fit;
+  final bool isThatVdo;
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
@@ -31,10 +34,17 @@ class CustomPageView extends StatelessWidget {
             ? images![index].mediaType == MediaType.photo
                 ? Image.file(images![index].selectedFile!)
                 : VideoWidget(videoFile: images![index].selectedFile!)
-            : CachedImage(
-                img: netImages![index],
-                fit: fit,
-              );
+            : isThatVdo
+                ? Center(
+                  child: VideoPlayerWidget(
+                      onlyVdo: true,
+                      vdo: netImages!.first,
+                    ),
+                )
+                : CachedImage(
+                    img: netImages![index],
+                    fit: fit,
+                  );
         // : CreatePostImage(
         //     onTap: () {
         //       //  context.read<PickMultipleImageCubit>().removeImage(images[index]);

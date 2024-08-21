@@ -9,7 +9,7 @@ import 'package:social_media_app/features/explore/presentation/widgets/all_post_
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 
 import '../../../../../../../core/utils/routes/tranistions/hero_dialog.dart';
-import '../../../../../../bottom_nav/presentation/pages/popup_container_web.dart';
+import '../../../../../../bottom_nav/presentation/web/popup_container_web.dart';
 
 class PostStaggeredView extends StatelessWidget {
   const PostStaggeredView(

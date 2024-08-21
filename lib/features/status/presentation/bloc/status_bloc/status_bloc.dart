@@ -11,7 +11,7 @@ import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/utils/other/id_generator.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/status/domain/usecases/create_multiple_status.dart';
 
 import 'package:social_media_app/features/status/domain/usecases/create_status.dart';
@@ -79,19 +79,23 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
   FutureOr<void> _createMultipleStatuses(
       CreateMultipleStatusEvent event, Emitter<StatusState> emit) async {
     emit(StatusCreateLoading());
-  
-    final userEntity = StatusEntity(
-      statuses: [],
-      uId: event.userId,
-      userName: event.userName,
-      lastCreated: Timestamp.now(),
-      profilePic: event.profilePic,
-    );
+    //just to make sure nothing goes wrong
+    final lengthofCaption = event.captions.length;
+    final List<SingleStatusEntity> statuses = [];
+    for (int i = 0; i < event.statusImages.length; i++) {
+      final newS = SingleStatusEntity(
+          uId: event.userId,
+          content: i < lengthofCaption ? event.captions[i] : null,
+          statusId: IdGenerator.generateUniqueId(),
+          createdAt: Timestamp.now(),
+          isThatVdo: event.statusImages[i].mediaType == MediaType.video,
+          viewers: {});
+      statuses.add(newS);
+    }
+
     final res = await _createMultipleStatusUseCase(
         CreateMutlipleStatusUseCaseParams(
-            captions: event.captions,
-            status: userEntity,
-            assets: event.statusImages));
+            statuses: statuses, assets: event.statusImages));
     res.fold(
         (failure) => emit(StatusCreateFailure(
             errorMsg: failure.message, detailError: failure.details)),

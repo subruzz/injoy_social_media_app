@@ -45,7 +45,7 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
       final statuses = statusCollection
           .where(FirebaseFieldConst.uId, isEqualTo: uid)
           .where(FirebaseFieldConst.createdAt, isGreaterThan: cutoffTimestamp)
-          .orderBy(FirebaseFieldConst.createdAt, descending: true);
+          .orderBy(FirebaseFieldConst.createdAt, descending: false);
       return statuses.snapshots().map((status) => status.docs
           .map((doc) => SingleStatusEntity.fromJson(doc.data()))
           .toList());

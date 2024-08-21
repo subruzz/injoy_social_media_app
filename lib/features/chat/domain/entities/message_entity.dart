@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 
 class MessageEntity extends Equatable {
   final String senderUid;
@@ -21,10 +21,12 @@ class MessageEntity extends Equatable {
   final bool isEdited;
   final String? repliedMessgeCreatorId;
   final DateTime? deletedAt;
+  final bool isItReply;
 
   const MessageEntity({
     required this.isDeleted,
     required this.isEdited,
+    this.isItReply = false,
     this.repliedToMe,
     this.repliedMessageAssetLink,
     this.repliedMessgeCreatorId,

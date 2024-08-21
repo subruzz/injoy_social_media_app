@@ -1,4 +1,4 @@
-import 'dart:isolate';
+import 'package:provider/single_child_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,12 +6,12 @@ import 'package:rive/rive.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_event.dart';
-import 'package:social_media_app/features/bottom_nav/presentation/pages/chat_web.dart';
-import 'package:social_media_app/features/bottom_nav/presentation/pages/videos_page_web.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/web/chat_web.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/web/videos_page_web.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/widgets/bottom_bar_items.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore_page_builder.dart';
-import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
+import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cubit.dart';
@@ -24,7 +24,6 @@ import '../../../post_status_feed/presentation/bloc/following_post_feed/followin
 import '../../../profile/presentation/pages/profile_page_wrapper.dart';
 import '../../../post_status_feed/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
 import '../../../post_status_feed/presentation/bloc/for_you_posts/get_my_status/get_my_status_bloc.dart';
-import 'package:provider/single_child_widget.dart';
 part '../../utils/bottom_nav_providers.dart';
 part '../../utils/rive_ui_const.dart';
 

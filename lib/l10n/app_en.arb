@@ -102,7 +102,16 @@
   "saved_posts": "Saved posts",
   "no_posts_found": "No Posts found \nFollow more users to see their posts here!",
   "no_posts_found_dynamic": "No {postType} posts found",
-  "noViewsYet": "No views yet"
+  "noViewsYet": "No views yet",
+  "chatSettings": "Chat Settings",
+  "clearChatHistory": "This will clear all your chat history",
+  "clear": "clear",
+  "changeChatBackground": "Change Chat Background",
+  "clearAllChats": "Clear All Chats",
+  "showLastSeen": "Show Last Seen"
+
+
+
 
 
 

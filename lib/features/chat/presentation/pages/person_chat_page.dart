@@ -12,6 +12,7 @@ import 'package:social_media_app/features/chat/presentation/widgets/person_chat_
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_bottom_input_bar/widgets/chat_send_button.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/chat_listing_section_section.dart';
 
+import '../../../../core/utils/di/init_dependecies.dart';
 import '../cubits/messages_cubits/message/message_cubit.dart';
 import '../widgets/person_chat_page/sections/personal_chat_top_bar/personal_page_top_bar.dart';
 
@@ -33,30 +34,29 @@ class _PersonChatPageState extends State<PersonChatPage> {
   final ValueNotifier<bool> _toggleButton = ValueNotifier(true);
   final ValueNotifier<bool> _showAttachWindow = ValueNotifier(false);
   final ScrollController _scrollController = ScrollController();
-  Future<void> _scrollToBottom() async {
+  void _scrollToBottom({bool first = false}) {
     if (_scrollController.hasClients) {
-      await Future.delayed(const Duration(milliseconds: 100));
+      final bottomOffset = _scrollController.position.maxScrollExtent +
+          MediaQuery.of(context).viewInsets.bottom;
       _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
+        bottomOffset,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInCirc,
       );
     }
   }
 
+  final _getMessageCubit = serviceLocator<GetMessageCubit>();
   final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     log('otherUserId is ${widget.otherUserId}');
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom();
-    });
 
     super.initState();
+    _getMessageCubit.setRecipientMessageUserDetails(
+        widget.myId, widget.otherUserId);
   }
-
-  String? _selectedDate;
 
   void _handleDateChange(String date) {
     log(date);
@@ -65,10 +65,16 @@ class _PersonChatPageState extends State<PersonChatPage> {
 
   @override
   Widget build(BuildContext context) {
+  
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToBottom();
+    });
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       // top bar section ----> (online status ,name..)
-      appBar: const PersonalPageTopBar(),
+      appBar: PersonalPageTopBar(
+        getMessageCubit: _getMessageCubit,
+      ),
       body: GestureDetector(
         onTap: () {
           _showAttachWindow.value = false;
@@ -98,6 +104,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
               children: [
                 //messages listing
                 ChatListingSectionSection(
+                    getMessageCubit: _getMessageCubit,
                     onmessageDateChange: _handleDateChange,
                     myid: widget.myId,
                     onSwipe: (message) {
@@ -107,6 +114,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
                     scrollController: _scrollController),
                 //input field for creating chat
                 ChatInputBarSection(
+                    getMessageCubit: _getMessageCubit,
                     focusNode: _focusNode,
                     messageController: _textMsgController,
                     showAttachWindow: _showAttachWindow,
@@ -116,13 +124,14 @@ class _PersonChatPageState extends State<PersonChatPage> {
                     toggleButton: _toggleButton),
               ],
             ),
-              ChatSendButton(
-                toggleButton: _toggleButton,
-                sendMessage: () {
-                  _sendTextMsg();
-                },
-                messageController: _textMsgController,
-              ),
+            ChatSendButton(
+              getMessageState: _getMessageCubit,
+              toggleButton: _toggleButton,
+              sendMessage: () {
+                _sendTextMsg();
+              },
+              messageController: _textMsgController,
+            ),
             // Align(
             //   alignment: Alignment.topCenter,
             //   child: DateHeader(
@@ -177,16 +186,15 @@ class _PersonChatPageState extends State<PersonChatPage> {
   }
 
   void _sendMessage({required String message, required String type}) {
-    final state = context.read<GetMessageCubit>().state;
     final messageCubit = context.read<MessageCubit>();
     if (type == MessageTypeConst.textMessage) {
       messageCubit.sendMessage(
-          messageState: state,
+          messageState: _getMessageCubit.state,
           recentTextMessage: message,
           messageType: type,
           captions: []);
     } else if (type == MessageTypeConst.audioMessage) {
-      messageCubit.voiceRecordStopped(state);
+      messageCubit.voiceRecordStopped(_getMessageCubit.state);
     }
   }
 }

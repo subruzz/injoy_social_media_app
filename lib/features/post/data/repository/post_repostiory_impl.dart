@@ -6,7 +6,7 @@ import 'package:fpdart/fpdart.dart';
 
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/post/data/datasources/remote/post_remote_datasource.dart';
 import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';
 import 'package:social_media_app/core/common/entities/post.dart';

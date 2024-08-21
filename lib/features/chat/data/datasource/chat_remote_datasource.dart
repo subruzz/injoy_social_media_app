@@ -7,7 +7,7 @@ import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/features/chat/data/model/chat_model.dart';
 import 'package:social_media_app/features/chat/data/model/message_model.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 
 abstract interface class ChatRemoteDatasource {
   Future<void> sendMessage(ChatModel chat, List<MessageEntity> message);
@@ -141,11 +141,22 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
         log(fileUrl);
       }
 
-      final newMessage = message.toDocument(time: time);
-
+      MessageModel myMessage = message;
+      MessageModel recieverMsg = message;
+      if (message.isItReply) {
+        if (message.repliedToMe != null && message.repliedToMe!) {
+          myMessage = myMessage.copyWith(repliedTo: 'You');
+          recieverMsg = recieverMsg.copyWith(repliedTo: message.repliedTo);
+        } else {
+          myMessage = myMessage.copyWith(repliedTo: message.repliedTo);
+          recieverMsg = recieverMsg.copyWith(repliedTo: 'You');
+        }
+      }
       // Use set to create a new document for each message
-      transaction.set(myMessagesRef.doc(message.messageId), newMessage);
-      transaction.set(otherMessagesRef.doc(message.messageId), newMessage);
+      transaction.set(myMessagesRef.doc(message.messageId),
+          myMessage.toDocument(time: time));
+      transaction.set(otherMessagesRef.doc(message.messageId),
+          recieverMsg.toDocument(time: time));
     }
   }
 

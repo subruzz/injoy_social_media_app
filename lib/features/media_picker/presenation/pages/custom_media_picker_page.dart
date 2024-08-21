@@ -19,6 +19,8 @@ import 'package:social_media_app/features/chat/presentation/cubits/messages_cubi
 import 'package:social_media_app/features/post/presentation/pages/create_post_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_wallapaper_preview_page.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
+import 'package:social_media_app/features/status/presentation/pages/create_mutliple_status_page.dart';
 
 import '../../../../core/const/enums/media_picker_type.dart';
 import '../../../../core/widgets/common/overlay_loading_holder.dart';
@@ -136,14 +138,23 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
                             selectedImages:
                                 state.selectedImages.selectedFiles)));
                   } else {
-                    Navigator.pushNamed(
-                      context,
-                      MyAppRouteConst.createMultipleStatusRoute,
-                      arguments: {
-                        'selectedAssets': state.selectedImages.selectedFiles,
-                        'isChat': widget.pickerType == MediaPickerType.chat,
-                      },
-                    );
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CreateMutlipleStatusPage(
+                            assets: state.selectedImages.selectedFiles,
+                            isChat: widget.pickerType == MediaPickerType.chat,
+                            getMessageCubit: widget.getMessageCubit,
+                          ),
+                        ));
+                    // Navigator.pushNamed(
+                    //   context,
+                    //   MyAppRouteConst.createMultipleStatusRoute,
+                    //   arguments: {
+                    //     'selectedAssets': state.selectedImages.selectedFiles,
+                    //     'isChat': widget.pickerType == MediaPickerType.chat,
+                    //   },
+                    // );
                   }
                   // Navigator.of(context).push(MaterialPageRoute(
                   //   builder: (context) => CropImagePage(

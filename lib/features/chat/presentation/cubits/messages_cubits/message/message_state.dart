@@ -14,6 +14,8 @@ class MessageLoading extends MessageState {
   List<Object> get props => [];
 }
 
+final class MessageSuccess extends MessageState {}
+
 class MessageLoaded extends MessageState {
   final List<MessageEntity> messages;
 
@@ -57,7 +59,8 @@ final class MessageReplyClicked extends MessageState {
       required this.repliedMessageCreator,
       required this.caption});
   @override
-  List<Object?> get props => [repliedToMe, messageType, caption, assetPath, userName];
+  List<Object?> get props =>
+      [repliedToMe, messageType, caption, assetPath, userName];
 }
 
 final class MessageReplyRemoved extends MessageState {}

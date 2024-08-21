@@ -7,11 +7,15 @@ import 'package:social_media_app/core/const/extensions/time_ago.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/widgets/common/view_media.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_audio_widget.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_photo_widget.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_video_widget.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
+import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
+
+import '../../../../../../../../core/const/chat_const/chat_const.dart';
 
 class ChatBubble extends StatelessWidget {
   final MessageEntity messageItem;
@@ -66,28 +70,43 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: messageItem.repliedTo != null ? double.infinity : null,
-      margin: messageItem.repliedTo == null
-          ? AppPadding.only(top: 10.h, bottom: 5.h)
-          : null,
-      decoration: BoxDecoration(
-        gradient: _getGradient(),
-        color: _getColor(),
-        borderRadius: _getBorderRadius(),
-      ),
-      child: Stack(
-        children: [
-          Padding(
-              padding: _getPadding(),
-              child: MessageContentWidget(messageItem: messageItem)),
-          Positioned(
-            bottom: 4.h,
-            right: 5.w,
-            child: TimestampAndTickWidget(
-                messageItem: messageItem, isShowTick: isShowTick),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        if (messageItem.messageType == MessageTypeConst.photoMessage ||
+            messageItem.messageType == MessageTypeConst.videoMessage) {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ViewMedia(
+              initialIndex: 0,
+              isThatVdo:
+                  messageItem.messageType == MessageTypeConst.videoMessage,
+              assets: [messageItem.assetLink!],
+            ),
+          ));
+        }
+      },
+      child: Container(
+        width: messageItem.repliedTo != null ? double.infinity : null,
+        margin: messageItem.repliedTo == null
+            ? AppPadding.only(top: 10.h, bottom: 5.h)
+            : null,
+        decoration: BoxDecoration(
+          gradient: _getGradient(),
+          color: _getColor(),
+          borderRadius: _getBorderRadius(),
+        ),
+        child: Stack(
+          children: [
+            Padding(
+                padding: _getPadding(),
+                child: MessageContentWidget(messageItem: messageItem)),
+            Positioned(
+              bottom: 4.h,
+              right: 5.w,
+              child: TimestampAndTickWidget(
+                  messageItem: messageItem, isShowTick: isShowTick),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -110,7 +129,8 @@ class TimestampAndTickWidget extends StatelessWidget {
         if (messageItem.createdAt != null)
           Text(
             messageItem.createdAt!.toDate().to12HourFormat(),
-            style: AppTextTheme.getResponsiveTextTheme(context).bodySmall
+            style: AppTextTheme.getResponsiveTextTheme(context)
+                .bodySmall
                 ?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
@@ -120,7 +140,7 @@ class TimestampAndTickWidget extends StatelessWidget {
         if (isShowTick)
           Icon(
             messageItem.isSeen ? Icons.done_all : Icons.done,
-            size:isThatTabOrDeskTop?16: 16.w,
+            size: isThatTabOrDeskTop ? 16 : 16.w,
             color: Colors.white,
           ),
       ],
@@ -157,8 +177,30 @@ class MessageContentWidget extends StatelessWidget {
         );
       case MessageTypeConst.videoMessage:
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedVideoMessageWidget(url: messageItem.assetLink!),
+            ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(5)),
+              child: VideoPlayerWidget(
+                vdo: messageItem.assetLink!,
+                onlyVdo: true,
+                playAndLoop: false,
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ViewMedia(
+                      initialIndex: 0,
+                      isThatVdo: messageItem.messageType ==
+                          MessageTypeConst.videoMessage,
+                      assets: [messageItem.assetLink!],
+                    ),
+                  ));
+                },
+              ),
+            ),
+            Text(messageItem.message ?? '',
+                style: AppTextTheme.getResponsiveTextTheme(context)
+                    .labelMedium
+                    ?.copyWith(color: Colors.white))
           ],
         );
       default:

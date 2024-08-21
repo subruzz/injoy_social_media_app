@@ -8,11 +8,13 @@ class CommonListTile extends StatelessWidget {
       {super.key,
       this.trailing,
       this.onTap,
+      this.showTrail = true,
       this.iconSize = 20,
       this.noPadding = false,
       this.extraColor,
       required this.text,
       this.subtitle,
+      this.removePaddingRight = false,
       this.leading,
       this.titileStyle,
       this.subTitleSize});
@@ -26,35 +28,51 @@ class CommonListTile extends StatelessWidget {
   final VoidCallback? onTap;
   final Color? extraColor;
   final TextStyle? titileStyle;
+  final bool showTrail;
+  final bool removePaddingRight;
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        onTap: onTap,
-        leading: leading != null
-            ? CustomSvgIcon(
-                assetPath: leading!,
-                height: iconSize,
-                width: iconSize,
-                color: extraColor,
+      onTap: onTap,
+      leading: leading != null
+          ? CustomSvgIcon(
+              assetPath: leading!,
+              height: iconSize,
+              width: iconSize,
+              color: extraColor,
+            )
+          : null,
+      subtitle: subtitle != null
+          ? Text(
+              subtitle!,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: isThatTabOrDeskTop
+                      ? subTitleSize ?? 10
+                      : subTitleSize?.sp ?? 10,
+                  color: extraColor),
+            )
+          : null,
+      contentPadding: removePaddingRight
+          ? const EdgeInsets.only(left: 16)
+          : noPadding
+              ? EdgeInsets.zero
+              : null,
+      title: text != null
+          ? Text(
+              text!,
+              style: titileStyle ??
+                  TextStyle(
+                      color: extraColor,
+                      fontSize: isThatTabOrDeskTop ? 20 : null),
+            )
+          : null,
+      trailing: showTrail
+          ? trailing ??
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 18,
               )
-            : null,
-        subtitle: subtitle != null
-            ? Text(
-                subtitle!,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontSize: isThatTabOrDeskTop
-                        ? subTitleSize??10
-                        : subTitleSize?.sp ?? 10,
-                    color: extraColor),
-              )
-            : null,
-        contentPadding: noPadding ? EdgeInsets.zero : null,
-        title:text!=null? Text(
-          text!,
-          style: titileStyle ??
-              TextStyle(
-                  color: extraColor, fontSize: isThatTabOrDeskTop ? 20 : null),
-        ):null,
-        trailing: trailing);
+          : null,
+    );
   }
 }

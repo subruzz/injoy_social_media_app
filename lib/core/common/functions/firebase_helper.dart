@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
@@ -5,7 +7,11 @@ import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/utils/other/cut_off_time.dart';
 
+import '../../../features/notification/data/datacource/remote/device_notification.dart';
+import '../../../features/notification/domain/entities/customnotifcation.dart';
+import '../../../features/settings/domain/entity/ui_entity/enums.dart';
 import '../../const/fireabase_const/firebase_field_const.dart';
+import '../../errors/exception.dart';
 
 class FirebaseHelper {
   final FirebaseFirestore _firestore;
@@ -125,5 +131,66 @@ class FirebaseHelper {
     for (var status in statuses.docs) {
       await status.reference.delete();
     }
+  }
+
+  Future<void> createNotification(
+      {required CustomNotification notification,
+      required NotificationPreferenceEnum notificationPreferenceType}) async {
+    try {
+      log('called notiication thing');
+      AppUserModel? user = await getUserDetailsFuture(notification.receiverId);
+      if (user == null) return;
+      String token = user.token;
+      log(token);
+      log(user.notificationPreferences.isNotificationPaused.toString());
+
+      if (user.notificationPreferences.isNotificationPaused) {
+        return;
+      }
+      switch (notificationPreferenceType) {
+        case NotificationPreferenceEnum.likes:
+          if (user.notificationPreferences.isLikeNotificationPaused) {
+            return; // Likes notifications are paused
+          }
+          break;
+        case NotificationPreferenceEnum.comments:
+          if (user.notificationPreferences.isCommentNotificationPaused) {
+            return; // Comments notifications are paused
+          }
+          break;
+        case NotificationPreferenceEnum.follow:
+          if (user.notificationPreferences.isFollowNotificationPaused) {
+            return; // Follow notifications are paused
+          }
+          break;
+        case NotificationPreferenceEnum.messages:
+          if (user.notificationPreferences.isMessageNotificationPaused) {
+            return; // Messages notifications are paused
+          }
+          break;
+        default:
+          // Handle other cases or default behavior
+          break;
+      }
+
+      if (token.isNotEmpty) {
+        await DeviceNotification.sendNotificationToUser(
+            deviceToken: token, notification: notification);
+        await _createNotification(notification);
+      }
+    } catch (e) {
+      log('error is this from the notification${e.toString()}');
+      throw const MainException();
+    }
+  }
+
+  Future<void> _createNotification(CustomNotification notification) async {
+    final notificationRef = _firestore
+        .collection(FirebaseCollectionConst.users)
+        .doc(notification.receiverId);
+    await notificationRef
+        .collection('notifications')
+        .doc(notification.notificationId)
+        .set(notification.toMap());
   }
 }

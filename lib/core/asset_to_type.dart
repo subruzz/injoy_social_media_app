@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 
 Future<SelectedByte> convertAssetToSelectedByte(AssetEntity asset) async {
   try {

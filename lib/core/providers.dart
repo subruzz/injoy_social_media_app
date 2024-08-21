@@ -103,7 +103,6 @@ List<SingleChildWidget> myProviders = [
   BlocProvider(
     create: (context) => serviceLocator<SearchHashtagBloc>(),
   ),
-  BlocProvider(create: (context) => serviceLocator<MessageCubit>()),
   BlocProvider(
     create: (context) => serviceLocator<LikePostBloc>(),
   ),

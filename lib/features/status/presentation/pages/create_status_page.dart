@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/status/presentation/pages/create_mutliple_status_page.dart';
 import 'package:social_media_app/features/status/presentation/widgets/create_multiple_status/create_text_status_page_builder.dart';
 

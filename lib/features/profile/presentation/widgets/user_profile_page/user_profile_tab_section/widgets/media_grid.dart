@@ -7,7 +7,7 @@ import 'package:social_media_app/core/widgets/common/mulitple_post_indicator.dar
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 
 import '../../../../../../../core/utils/routes/tranistions/hero_dialog.dart';
-import '../../../../../../bottom_nav/presentation/pages/popup_container_web.dart';
+import '../../../../../../bottom_nav/presentation/web/popup_container_web.dart';
 import '../../../../../../explore/presentation/widgets/all_post_view.dart';
 
 class MediaGrid extends StatelessWidget {

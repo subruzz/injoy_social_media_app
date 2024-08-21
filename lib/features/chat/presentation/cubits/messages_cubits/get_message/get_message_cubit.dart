@@ -36,18 +36,19 @@ class GetMessageCubit extends Cubit<GetMessageState> {
       _userSubscription = userDetailsStream.listen(
         (appUserModel) {
           if (_loadchat) {
-            _loadchat = false;
             getPersonalChats(senderId: userId, recipientId: otherUserId);
           }
           final userStatus = UserStatusInfo(
               isOnline: appUserModel.onlineStatus,
+              userPic: appUserModel.profilePic,
               userName: appUserModel.userName ?? '',
               lastSeen: appUserModel.lastSeen);
           emit(state.copyWith(
-              loading: false,
+              loading: _loadchat,
               otherUser: appUserModel,
               errorMessage: null,
               statusInfo: userStatus));
+          if (_loadchat) _loadchat = false;
         },
         onError: (error) {
           emit(state.copyWith(loading: false, errorMessage: 'User not found'));
@@ -109,9 +110,12 @@ class UserStatusInfo extends Equatable {
   final bool isOnline;
 
   final Timestamp? lastSeen;
-
+  final String? userPic;
   const UserStatusInfo(
-      {required this.userName, required this.isOnline, required this.lastSeen});
+      {required this.userName,
+      this.userPic,
+      required this.isOnline,
+      required this.lastSeen});
   @override
-  List<Object?> get props => [userName, isOnline, lastSeen];
+  List<Object?> get props => [userName, userPic, isOnline, lastSeen];
 }

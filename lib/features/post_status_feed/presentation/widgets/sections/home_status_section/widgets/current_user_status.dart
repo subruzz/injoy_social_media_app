@@ -35,7 +35,7 @@ class MyStatusViewState extends State<MyStatusView> {
     return BlocBuilder<GetMyStatusBloc, GetMyStatusState>(
       builder: (context, state) {
         return CustomAppPadding(
-          padding: AppPadding.only(left: 25, right: 15),
+          padding: AppPadding.only(left: 25, right: 18),
           child: Column(
             children: [
               AnimatedLoadingBorder(

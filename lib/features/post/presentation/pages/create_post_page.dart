@@ -13,7 +13,7 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 import 'package:social_media_app/core/widgets/common/overlay_loading_holder.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/select_tags_cubit/select_tags_cubit.dart';

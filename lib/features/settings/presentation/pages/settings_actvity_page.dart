@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
@@ -7,12 +8,14 @@ import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/common/custom_divider.dart';
+import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 
 import '../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../../core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
 import '../../../../core/const/languages/app_languages.dart';
 import '../../../../core/widgets/dialog/app_info_dialog.dart';
 import '../../../../core/widgets/dialog/dialogs.dart';
+import '../../../profile/presentation/pages/profile_page_wrapper.dart';
 
 class SettingsAndActivityPage extends StatelessWidget {
   const SettingsAndActivityPage({super.key});
@@ -85,9 +88,7 @@ class SettingsAndActivityPage extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) => LanguageSelectionDialog(
-                      onLanguageSelected: (language) {
-                      
-                      }),
+                      onLanguageSelected: (language) {}),
                 );
                 return;
               }
@@ -109,6 +110,29 @@ class SettingsAndActivityPage extends StatelessWidget {
               asset: AppAssetsConst.chat,
               onTap: () => Navigator.pushNamed(
                   context, MyAppRouteConst.chatSettingPage)),
+          CustomListTile(
+            color: AppDarkColor().iconSecondarycolor,
+            icon: Icons.logout,
+            text: 'logout ',
+            onTap: () {
+              AppInfoDialog.showInfoDialog(
+                context: context,
+                callBack: () {
+                  FirebaseAuth.instance.signOut().then((value) async {
+                    if (context.mounted) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                        (route) => false,
+                      );
+                    }
+                  }).catchError((error) {});
+                },
+              );
+            },
+          ),
           // SettingsTile(
           //   icon: Icons.lock,
           //   title: l10n.privacy,
@@ -143,10 +167,7 @@ class SettingsListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonListTile(
-      trailing: const Icon(
-        Icons.arrow_forward_ios_rounded,
-        size: 18,
-      ),
+  
       iconSize: iconSize,
       subtitle: subT,
       text: text,

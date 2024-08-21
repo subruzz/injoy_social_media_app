@@ -17,8 +17,9 @@ class ChatSendButton extends StatelessWidget {
     required this.toggleButton,
     required this.sendMessage,
     required this.messageController,
+    required this.getMessageState,
   });
-
+  final GetMessageCubit getMessageState;
   final ValueNotifier<bool> toggleButton;
   final VoidCallback? sendMessage;
   final TextEditingController messageController;
@@ -46,8 +47,10 @@ class ChatSendButton extends StatelessWidget {
               onLongPressEnd: (details) {
                 if (kIsWeb) return;
                 if (!toggleButton.value) return;
-                final state = context.read<GetMessageCubit>().state;
-                context.read<MessageCubit>().voiceRecordStopped(state);
+
+                context
+                    .read<MessageCubit>()
+                    .voiceRecordStopped(getMessageState.state);
               },
               onLongPress: () {
                 if (kIsWeb) return;

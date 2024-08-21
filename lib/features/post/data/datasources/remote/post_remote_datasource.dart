@@ -13,7 +13,7 @@ import 'package:social_media_app/core/common/models/hashtag_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/services/firebase/firebase_storage.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/explore/data/model/explore_seearch_location_model.dart';
 import 'package:social_media_app/features/post/data/models/update_post_model.dart';
 import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';

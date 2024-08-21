@@ -60,7 +60,9 @@ class FollowingUserStatus extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            userAttribute.userName,
+                            userAttribute.userName.length > 10
+                                ? '${userAttribute.userName.substring(0, 10)}...'
+                                : userAttribute.userName,
                             style: const TextStyle(fontSize: 12),
                           )
                         ],

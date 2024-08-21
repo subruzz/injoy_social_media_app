@@ -6,27 +6,9 @@ import 'package:social_media_app/features/chat/presentation/widgets/chat_main_ta
 
 import '../widgets/chat_main_tab_page/sections/tab_section/widgets/chat_message_tab.dart';
 
-class ChatMainTabPage extends StatefulWidget {
+class ChatMainTabPage extends StatelessWidget {
   const ChatMainTabPage({super.key, this.openChat});
   final void Function(String id)? openChat;
-
-  @override
-  State<ChatMainTabPage> createState() => _ChatMainTabPageState();
-}
-
-class _ChatMainTabPageState extends State<ChatMainTabPage> {
-  @override
-  void initState() {
-    super.initState();
-    log('Chat is built ');
-  }
-
-  @override
-  void dispose() {
-    log('Chat is disposed ');
-
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +19,7 @@ class _ChatMainTabPageState extends State<ChatMainTabPage> {
           localizations: l10n!,
         ),
         body: ChatMessageTabView(
-          openChat: widget.openChat,
+          openChat: openChat,
         ));
   }
 }

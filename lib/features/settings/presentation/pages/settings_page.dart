@@ -1,11 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/custom_divider.dart';
+import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
+import 'package:social_media_app/features/profile/presentation/pages/profile_page_wrapper.dart';
 import 'package:social_media_app/features/settings/presentation/pages/account_settings/account_settings_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_settings_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/notification_preference_screen.dart';
+
+import '../../../../core/widgets/dialog/app_info_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -97,5 +103,29 @@ List<Widget> getMySettingsItem(BuildContext context) {
     SettingsTile(icon: Icons.security, title: 'Security'),
     SettingsTile(icon: Icons.help, title: 'Help'),
     SettingsTile(icon: Icons.info, title: 'About'),
+    CustomListTile(
+      color: AppDarkColor().iconSecondarycolor,
+      icon: Icons.logout,
+      text: 'logout ',
+      onTap: () {
+        AppInfoDialog.showInfoDialog(
+          context: context,
+          callBack: () {
+            FirebaseAuth.instance.signOut().then((value) async {
+              if (context.mounted) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                  (route) => false,
+                );
+              }
+            }).catchError((error) {});
+          },
+         
+        );
+      },
+    ),
   ];
 }

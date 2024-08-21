@@ -6,7 +6,7 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/textfields/content_input_textfield.dart';
 import 'package:social_media_app/core/widgets/common/custom_round_button.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 
 import '../../../../../core/const/enums/message_type.dart';
@@ -22,13 +22,15 @@ class MultipleStatusInputBar extends StatelessWidget {
       this.onCaptionChanged,
       required this.isChat,
       this.getMessageCubit,
-      required this.l10n});
+      required this.l10n,
+      this.messageCubit});
   final TextEditingController captionController;
   final List<SelectedByte> alreadySelected;
   final List<String> captions;
   final void Function(String)? onCaptionChanged;
   final bool isChat;
-  final GetMessageCubit? getMessageCubit;
+  final GetMessageState? getMessageCubit;
+  final MessageCubit? messageCubit;
   final AppLocalizations l10n;
   @override
   Widget build(BuildContext context) {
@@ -52,9 +54,9 @@ class MultipleStatusInputBar extends StatelessWidget {
               icon: Icons.send,
               onPressed: () {
                 final user = context.read<AppUserBloc>().appUser;
-                if (isChat) {
-                  context.read<MessageCubit>().sendMessage(
-                      messageState: getMessageCubit!.state,
+                if (isChat && messageCubit != null) {
+                  messageCubit!.sendMessage(
+                      messageState: getMessageCubit!,
                       recentTextMessage: '',
                       selectedAssets: alreadySelected,
                       messageType: MessageTypeConst.photoMessage,

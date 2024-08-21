@@ -11,6 +11,8 @@ import 'package:social_media_app/features/post_status_feed/presentation/bloc/fol
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/floating_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_top_bar_section/home_top_bar.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_status_section/user_status.dart';
+import '../../../../core/utils/di/init_dependecies.dart';
+import '../../../notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import '../bloc/get_all_statsus/get_all_status_bloc.dart';
 import '../widgets/sections/home_tab_bar_section/widgets/following_post_tab_view.dart';
 
@@ -59,32 +61,37 @@ class _HomePageState extends State<HomePage> {
     final l10n = context.l10n;
 
     final me = context.read<AppUserBloc>().appUser;
-    return Scaffold(
-      floatingActionButton: FloatingButton(
-        l10n: l10n!,
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          if (context.mounted) {
-            context.read<FollowingPostFeedBloc>().add(FollowingPostFeedGetEvent(
-                following: me.following, uId: me.id, isFirst: true));
-            context
-                .read<GetAllStatusBloc>()
-                .add(GetAllstatusesEvent(uId: me.id));
-          }
-        },
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            if (Responsive.isMobile(context)) const HomeTopBar(),
-            SliverPadding(
-              padding: AppPadding.onlyTopExtraSmall,
-              sliver: const SliverToBoxAdapter(
-                child: UserStatus(),
+    return BlocProvider(
+      create: (context) => serviceLocator<NotificationCubit>()
+        ..getMynotifications(myId: context.read<AppUserBloc>().appUser.id),
+      child: Scaffold(
+        floatingActionButton: FloatingButton(
+          l10n: l10n!,
+        ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            if (context.mounted) {
+              context.read<FollowingPostFeedBloc>().add(
+                  FollowingPostFeedGetEvent(
+                      following: me.following, uId: me.id, isFirst: true));
+              context
+                  .read<GetAllStatusBloc>()
+                  .add(GetAllstatusesEvent(uId: me.id));
+            }
+          },
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              if (Responsive.isMobile(context)) const HomeTopBar(),
+              SliverPadding(
+                padding: AppPadding.onlyTopExtraSmall,
+                sliver: const SliverToBoxAdapter(
+                  child: UserStatus(),
+                ),
               ),
-            ),
-            const FollowingPostTabView()
-          ],
+              const FollowingPostTabView()
+            ],
+          ),
         ),
       ),
     );

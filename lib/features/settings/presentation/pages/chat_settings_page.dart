@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
@@ -11,68 +12,58 @@ import 'package:social_media_app/features/settings/domain/entity/ui_entity/enums
 
 import '../../../../core/const/enums/media_picker_type.dart';
 import '../../../../core/widgets/app_related/app_padding.dart';
-import '../../domain/entity/ui_entity/ui_consts.dart';
 
 class ChatSettingsPage extends StatelessWidget {
   const ChatSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Chat Settings',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+      appBar: AppBar(
+        title: Text(
+          l10n!.chatSettings,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
-        body: CustomAppPadding(
-          child: ListView.separated(
-              itemBuilder: (context, index) {
-                final chatSettings = SettingsUiConst.chatSettings[index];
-                return CommonListTile(
-                    trailing: chatSettings.chatSettingsType ==
-                            ChatSettingsType.showLastSeen
-                        ? CommonSwitch(
-                          value: true,
-                          onChanged: (value) {},
-                        )
-                        : SettingsUiConst.righArrow,
-                    onTap: () {
-                      switch (chatSettings.chatSettingsType) {
-                        case ChatSettingsType.chatbg:
-                          Navigator.pushNamed(
-                            context,
-                            MyAppRouteConst.mediaPickerRoute,
-                            arguments: {
-                              'pickerType': MediaPickerType.wallapaper
-                            },
-                          );
-
-                          break;
-                        case null:
-                        case ChatSettingsType.clearChat:
-                          AppInfoDialog.showInfoDialog(
-                              title: 'Are You Sure?',
-                              subtitle: 'This will clear all your chat history',
-                              context: context,
-                              callBack: () {
-                                context.read<ChatCubit>().deleteMyChats(
-                                    myId:
-                                        context.read<AppUserBloc>().appUser.id);
-                              },
-                              buttonText: 'Clear');
-                        case ChatSettingsType.blocked:
-                        case ChatSettingsType.showLastSeen:
-                      }
+      ),
+      body: CustomAppPadding(
+        child: ListView(
+          children: [
+            CommonListTile(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  MyAppRouteConst.mediaPickerRoute,
+                  arguments: {'pickerType': MediaPickerType.wallapaper},
+                );
+              },
+              text: l10n.changeChatBackground,
+            ),
+            const CustomDivider(),
+            CommonListTile(
+              onTap: () {
+                AppInfoDialog.showInfoDialog(
+                    title: l10n.areYouSure,
+                    subtitle: l10n.clearChatHistory,
+                    context: context,
+                    callBack: () {
+                      context.read<ChatCubit>().deleteMyChats(
+                          myId: context.read<AppUserBloc>().appUser.id);
                     },
-                    text: chatSettings.title);
+                    buttonText: l10n.clear);
               },
-              separatorBuilder: (context, index) {
-                return const CustomDivider();
-              },
-              itemCount: SettingsUiConst.accountSettings.length),
-        ));
+              text: l10n.clearAllChats,
+            ),
+            const CustomDivider(),
+            CommonListTile(
+              removePaddingRight: true,
+              onTap: () {},
+              text: l10n.showLastSeen,
+              trailing: CommonSwitch(value: true, onChanged: (value) {}),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
-
-// Placeholder pages

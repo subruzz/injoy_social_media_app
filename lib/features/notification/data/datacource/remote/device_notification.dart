@@ -50,8 +50,7 @@ class DeviceNotification {
   }
 
   static void tokenRefresh() {
-    _firebaseMessaging.onTokenRefresh.listen((value) async{
-    });
+    _firebaseMessaging.onTokenRefresh.listen((value) async {});
   }
 
   static Future<String?> getAccessToken() async {
@@ -79,6 +78,7 @@ class DeviceNotification {
   static sendNotificationToUser(
       {required String deviceToken,
       required CustomNotification notification}) async {
+    print('this called');
     String notificationRoute;
     String routeParameterId;
     switch (notification.notificationType) {
@@ -91,7 +91,7 @@ class DeviceNotification {
         routeParameterId = notification.uniqueId; // Handle follow notification
         break;
       case NotificationType.post:
-        notificationRoute = "profile";
+        notificationRoute = "post";
         routeParameterId = notification.uniqueId;
         break;
     }

@@ -62,7 +62,7 @@ class ExpandableTextState extends State<ExpandableText> {
             text: _readMore ? widget.text.substring(0, endIndex) : widget.text,
             style: AppTextTheme.getResponsiveTextTheme(context)
                 .labelSmall
-                ?.copyWith(color: AppDarkColor().primaryText.withOpacity(.9)),
+                ?.copyWith(color: AppDarkColor().primaryText.withOpacity(.9),fontWeight: FontWeight.w400),
             children: <TextSpan>[link],
           );
         } else {
@@ -70,7 +70,7 @@ class ExpandableTextState extends State<ExpandableText> {
             text: widget.text,
             style: AppTextTheme.getResponsiveTextTheme(context)
                 .labelSmall
-                ?.copyWith(color: AppDarkColor().primaryText.withOpacity(.9)),
+                ?.copyWith(color: AppDarkColor().primaryText.withOpacity(.9),fontWeight: FontWeight.w400),
           );
         }
         return RichText(

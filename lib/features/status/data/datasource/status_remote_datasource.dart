@@ -1,20 +1,26 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
+import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_field_const.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/firebase/firebase_storage.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 
 abstract interface class StatusRemoteDatasource {
   Future<void> createStatus(SingleStatusEntity singleStatus);
   Future<void> seenStatusUpdate(String statusId, String viewedUserId);
   Future<void> deleteStatus(String statusId, String? imgUrl);
   Future<void> createMultipleStatus(
-      StatusEntity status, List<String> caption, List<SelectedByte> assets);
+      List<SingleStatusEntity> statuses, List<SelectedByte> assets);
   Future<List<Map<String, String>>> uploadStatusImages(
       List<SelectedByte> postImages, String pId);
 }
@@ -63,8 +69,8 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
   }
 
   @override
-  Future<void> createMultipleStatus(StatusEntity status, List<String> captions,
-      List<SelectedByte> assets) async {
+  Future<void> createMultipleStatus(
+      List<SingleStatusEntity> statuses, List<SelectedByte> assets) async {
     try {
       final statusCollection =
           firestore.collection(FirebaseCollectionConst.statuses);
@@ -73,32 +79,43 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
       // The images are returned in a map because we need a unique ID for each status.
       // By creating the ID here, we can reference the images of this status.
       // The map will return the status image ID, which will be assigned as the status ID.
-
-      final images = await uploadStatusImages(assets, status.uId);
-
-      final currentTime = Timestamp.now();
+      final uid = FirebaseAuth.instance.currentUser?.uid;
+      if (uid == null) {
+        throw const MainException();
+      }
 
       // Using batched writes for efficiency
       WriteBatch batch = FirebaseFirestore.instance.batch();
-
-      // Iterating over each uploaded image and creating new single status entity
-      for (int i = 0; i < images.length; i++) {
-        final newStatus = SingleStatusEntity(
-            uId: status.uId,
-            statusImage: images[i]['downloadUrl']!, //image url from the map
-            content: captions[i].isEmpty ? null : captions[i],
-            statusId: images[i][
-                'imageId']!, //image id from the map to use it for statusid as well
-            createdAt: currentTime,
-            viewers: {});
-
-        // Add set operation to the batch
-        batch.set(statusCollection.doc(newStatus.statusId), newStatus.toJson());
+      for (int i = 0; i < assets.length; i++) {
+        final res = await serviceLocator<FirebaseStorageService>()
+            .uploadSingleAsset(
+                asset: assets[i].selectedFile!,
+                reference:
+                    '${FirebaseFirestoreConst.statusImages}/$uid/${FirebaseFirestoreConst.statusImages}');
+        if (res == null) continue;
+        statuses[i] = statuses[i].copyWith(statusImage: res);
+        batch.set(
+            statusCollection.doc(statuses[i].statusId), statuses[i].toJson());
       }
+      // Iterating over each uploaded image and creating new single status entity
+      // for (int i = 0; i < images.length; i++) {
+      //   final newStatus = SingleStatusEntity(
+      //       uId: status.uId,
+      //       statusImage: images[i]['downloadUrl']!, //image url from the map
+      //       content: captions[i].isEmpty ? null : captions[i],
+      //       statusId: images[i][
+      //           'imageId']!, //image id from the map to use it for statusid as well
+      //       createdAt: currentTime,
+      //       viewers: {});
+
+      //   // Add set operation to the batch
+      //   batch.set(statusCollection.doc(newStatus.statusId), newStatus.toJson());
+      // }
 
       // Commit the batch
       await batch.commit();
     } catch (e) {
+      log('erroe adding multiple status ${e.toString()}');
       throw MainException(details: e.toString());
     }
   }
@@ -121,29 +138,30 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
   }
 
   @override
-Future<void> seenStatusUpdate(String statusId, String viewedUserId) async {
-  try {
-    final statusRef = firestore.collection(FirebaseCollectionConst.statuses).doc(statusId);
+  Future<void> seenStatusUpdate(String statusId, String viewedUserId) async {
+    try {
+      final statusRef =
+          firestore.collection(FirebaseCollectionConst.statuses).doc(statusId);
 
-    // Fetch the current viewers map
-    final statusDoc = await statusRef.get();
-    final viewersMap = statusDoc.data()?['viewers'] as Map<String, dynamic>? ?? {};
+      // Fetch the current viewers map
+      final statusDoc = await statusRef.get();
+      final viewersMap =
+          statusDoc.data()?['viewers'] as Map<String, dynamic>? ?? {};
 
-    // Get the current timestamp
-    final currentTimestamp = FieldValue.serverTimestamp();
+      // Get the current timestamp
+      final currentTimestamp = FieldValue.serverTimestamp();
 
-    // Update the viewers map with the new timestamp for the viewed user
-    viewersMap[viewedUserId] = currentTimestamp;
+      // Update the viewers map with the new timestamp for the viewed user
+      viewersMap[viewedUserId] = currentTimestamp;
 
-    // Write the updated viewers map back to Firestore
-    await statusRef.update({
-      FirebaseFieldConst.viewersListOfStatuses: viewersMap,
-    });
-  } catch (e) {
-    throw const MainException();
+      // Write the updated viewers map back to Firestore
+      await statusRef.update({
+        FirebaseFieldConst.viewersListOfStatuses: viewersMap,
+      });
+    } catch (e) {
+      throw const MainException();
+    }
   }
-}
-
 
   @override
   Future<List<Map<String, String>>> uploadStatusImages(

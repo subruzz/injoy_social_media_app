@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 
 class MessageModel extends MessageEntity {
   const MessageModel({
@@ -13,6 +13,7 @@ class MessageModel extends MessageEntity {
     super.message,
     super.createdAt,
     super.assetPath,
+    super.isItReply,
     required super.isSeen,
     super.repliedTo,
     super.assetLink,
@@ -32,6 +33,7 @@ class MessageModel extends MessageEntity {
       repliedMessageAssetLink: entity.repliedMessageAssetLink,
       isDeleted: entity.isDeleted,
       isEdited: entity.isEdited,
+      isItReply: entity.isItReply,
       deletedAt: entity.deletedAt,
       senderUid: entity.senderUid,
       recipientUid: entity.recipientUid,
@@ -57,6 +59,7 @@ class MessageModel extends MessageEntity {
       assetLink: snap['assetLink'],
       isDeleted: snap['isDeleted'],
       isEdited: snap['isEdited'],
+      isItReply: snap['isItReply'] ?? false,
       deletedAt: snap['deleteAt'],
       senderUid: snap['senderUid'],
       repliedToMe: snap['repliedToMe'],
@@ -77,6 +80,7 @@ class MessageModel extends MessageEntity {
         'repliedMessageAssetLink': repliedMessageAssetLink,
         'isDeleted': isDeleted,
         'isEdited': isEdited,
+        'isItReply': isItReply,
         'assetLink': assetLink,
         'deleteAt': deletedAt,
         'senderUid': senderUid,
@@ -84,7 +88,6 @@ class MessageModel extends MessageEntity {
         'recipientUid': recipientUid,
         'createdAt': time,
         'isSeen': isSeen,
-        'repliedToMe': repliedToMe,
         'message': message,
         'messageType': messageType,
         'repliedMessage': repliedMessage,
@@ -106,12 +109,13 @@ class MessageModel extends MessageEntity {
     bool? isSeen,
     bool? repliedToMe,
     String? repliedTo,
+    bool? isItReply,
     String? repliedMessage,
     String? repliedMessageType,
     String? messageId,
     bool? isDeleted,
     bool? isEdited,
-    bool?isThisreply,
+    bool? isThisreply,
     DateTime? deletedAt,
   }) {
     return MessageModel(
@@ -122,10 +126,10 @@ class MessageModel extends MessageEntity {
         messageType: messageType ?? this.messageType,
         message: message ?? this.message,
         createdAt: createdAt ?? this.createdAt,
+        isItReply: isItReply ?? this.isItReply,
         repliedToMe: repliedToMe ?? this.repliedToMe,
         assetPath: assetPath ?? this.assetPath,
         isSeen: isSeen ?? this.isSeen,
-        
         repliedTo: repliedTo ?? this.repliedTo,
         repliedMessage: repliedMessage ?? this.repliedMessage,
         repliedMessageType: repliedMessageType ?? this.repliedMessageType,

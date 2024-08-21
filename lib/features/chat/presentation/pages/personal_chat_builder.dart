@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/pages/person_chat_page.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+
 class PersonalChatBuilder extends StatelessWidget {
   const PersonalChatBuilder({super.key, required this.otherUserId});
   final String otherUserId;
@@ -12,10 +13,7 @@ class PersonalChatBuilder extends StatelessWidget {
     final id = context.read<AppUserBloc>().appUser.id;
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => serviceLocator<GetMessageCubit>()
-            ..setRecipientMessageUserDetails(id, otherUserId),
-        )
+        BlocProvider(create: (context) => serviceLocator<MessageCubit>())
       ],
       child: PersonChatPage(
         otherUserId: otherUserId,

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 
 import 'widgets/desc_text_field.dart';
 

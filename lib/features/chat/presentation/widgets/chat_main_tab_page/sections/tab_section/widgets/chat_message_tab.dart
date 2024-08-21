@@ -40,8 +40,7 @@ class ChatMessageTabView extends StatelessWidget {
             itemCount: state.chatItems.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding:  EdgeInsets.only(
-                    bottom: isThatTabOrDeskTop ? 10.0 : 0),
+                padding: EdgeInsets.only(bottom:  isThatTabOrDeskTop ? 10.0 : 0),
                 child: ChatCallItem(
                   openChat: openChat,
                   otherUserId: state.chatItems[index].senderUid,

@@ -15,7 +15,9 @@ import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_side_bar.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
+
+import '../../../../../../../../core/const/chat_const/chat_const.dart';
 
 class ReplyPreviewWidget extends StatelessWidget {
   final String messageType;
@@ -86,10 +88,7 @@ class ReplyPreviewWidget extends StatelessWidget {
                         userName: !isReplyChat
                             ? userName
                             : (isReplyChat && messageItem != null)
-                                ? (messageItem!.repliedMessgeCreatorId ==
-                                        context.read<AppUserBloc>().appUser.id)
-                                    ? 'You'
-                                    : messageItem!.repliedTo ?? ''
+                                ? messageItem!.repliedTo ?? ''
                                 : '',
                         showIcon: showIcon,
                       );
@@ -138,7 +137,8 @@ class HeaderRow extends StatelessWidget {
       children: [
         Text(
           userName,
-          style: AppTextTheme.getResponsiveTextTheme(context).labelMedium
+          style: AppTextTheme.getResponsiveTextTheme(context)
+              .labelMedium
               ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : 13.sp),
         ),
         if (showIcon)
@@ -243,9 +243,11 @@ class MessageCaption extends StatelessWidget {
       return Expanded(
         child: Text(
           message!,
-          style: AppTextTheme.getResponsiveTextTheme(context).bodyMedium?.copyWith(
-              fontSize: isThatTabOrDeskTop ? 13 : 13.sp,
-              color: AppDarkColor().primaryTextBlur),
+          style: AppTextTheme.getResponsiveTextTheme(context)
+              .bodyMedium
+              ?.copyWith(
+                  fontSize: isThatTabOrDeskTop ? 13 : 13.sp,
+                  color: AppDarkColor().primaryTextBlur),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),

@@ -59,4 +59,26 @@ class SingleStatusEntity {
       'viewers': viewers.map((key, value) => MapEntry(key, value)),
     };
   }
+
+  SingleStatusEntity copyWith({
+    String? statusId,
+    String? content,
+    Timestamp? createdAt,
+    int? color,
+    String? statusImage,
+    Map<String, Timestamp>? viewers,
+    String? uId,
+    bool? isThatVdo,
+  }) {
+    return SingleStatusEntity(
+      statusId: statusId ?? this.statusId,
+      content: content ?? this.content,
+      createdAt: createdAt ?? this.createdAt,
+      color: color ?? this.color,
+      statusImage: statusImage ?? this.statusImage,
+      viewers: viewers ?? this.viewers,
+      uId: uId ?? this.uId,
+      isThatVdo: isThatVdo ?? this.isThatVdo,
+    );
+  }
 }

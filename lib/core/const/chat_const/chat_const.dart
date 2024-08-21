@@ -1,37 +1,7 @@
-import 'dart:developer';
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:giphy_picker/giphy_picker.dart';
-import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 
-class SelectedImagesDetails {
-  List<SelectedByte> selectedFiles;
-  bool multiSelectionMode;
-
-  SelectedImagesDetails({
-    required this.selectedFiles,
-    required this.multiSelectionMode,
-  });
-}
-
-class SelectedByte {
-  File? selectedFile; // File may be null for web
-  MediaType mediaType;
-
-  SelectedByte({
-    required this.mediaType,
-    this.selectedFile, // Optional for web
-  });
-}
-
-enum MediaType {
-  audio,
-  video,
-  photo,
-  none,
-}
+import '../app_config/app_border_radius.dart';
 
 Future<GiphyGif?> pickGif(BuildContext context) async {
   GiphyGif? gif;
@@ -40,8 +10,8 @@ Future<GiphyGif?> pickGif(BuildContext context) async {
         showPreviewPage: false,
         context: context,
         apiKey: 'HN4nOunS6Eg8OHF5LLDRibdbHGrpm6l8');
-  } catch (e) {
-    log('errror');
+  } catch (_) {
+    return null;
   }
   return gif;
 }

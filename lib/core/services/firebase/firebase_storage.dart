@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:social_media_app/core/services/assets/asset_services.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
-import '../../../features/chat/presentation/widgets/person_chat_page/utils.dart';
+import '../assets/asset_model.dart';
 import '../method_channel.dart/video_thumbnail.dart';
 import '../../utils/other/id_generator.dart';
 

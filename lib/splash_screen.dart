@@ -6,7 +6,7 @@ import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
-import 'package:social_media_app/features/bottom_nav/presentation/pages/web_layout.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/web/web_layout.dart';
 import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
 import 'package:social_media_app/features/profile/presentation/pages/username_check_page.dart';
 
@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen>
           if (state is AuthLoggedInOrUpdate) {
             // context.read<InitialSetupCubit>().startInitialSetup(
             //     uId: state.user.id, following: state.user.following);
-            Navigator.of(context).push(MaterialPageRoute(
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => const Responsive(
                   mobile: BottonNavWithAnimatedIcons(),
                   tablet: WebLayout(),

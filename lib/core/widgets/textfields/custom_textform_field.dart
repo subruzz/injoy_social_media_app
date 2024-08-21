@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
@@ -25,10 +26,16 @@ class CustomTextField extends StatefulWidget {
   final BorderRadius? radius;
   final bool autoFocus;
   final void Function(String)? onChanged;
+  final String? suffixIcon;
+  final VoidCallback? suffixPressed;
+  final double? iconSize;
   final void Function()? datePicker;
   const CustomTextField(
       {super.key,
+      this.suffixPressed,
       this.onChanged,
+      this.suffixIcon,
+      this.iconSize,
       this.backgroundColor,
       this.controller,
       this.autoValidate = true,
@@ -64,10 +71,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: TextFormField(
-          style: Theme.of(context)
-              .textTheme
+          style: AppTextTheme.getResponsiveTextTheme(context)
               .bodySmall
-              ?.copyWith(fontSize: isThatTabOrDeskTop ? 13 : null),
+              ?.copyWith(fontSize: 14),
           autofocus: widget.autoFocus,
           onChanged: widget.onChanged,
           readOnly: widget.readOnly ?? false,
@@ -99,28 +105,40 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   color: widget.errorColor ??
                       AppDarkColor().secondaryPrimaryText.withOpacity(.6)),
               errorText: widget.errorMsg,
-              suffixIcon: widget.showSuffixIcon
-                  ? IconButton(
-                      onPressed: widget.obsecureText
-                          ? () {
-                              widget.obsecureText
-                                  ? setState(
-                                      () {
-                                        isPassWordVisible = !isPassWordVisible;
-                                      },
-                                    )
-                                  : null;
-                            }
-                          : widget.datePicker,
-                      icon: CustomSvgIcon(
-                          height: 20,
-                          width: 20,
-                          assetPath: widget.obsecureText
-                              ? isPassWordVisible
-                                  ? AppAssetsConst.visibilityOff
-                                  : AppAssetsConst.visibility
-                              : AppAssetsConst.calendar))
-                  : null,
+
+              //!not the best way chane this this is a custom textfield no specific logic should be here
+              suffixIcon: widget.suffixIcon != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: CustomSvgIcon(
+                          height: widget.iconSize ?? 20,
+                          width: widget.iconSize ?? 20,
+                          assetPath: widget.suffixIcon!,
+                          onTap: widget.suffixPressed),
+                    )
+                  : widget.showSuffixIcon
+                      ? IconButton(
+                          onPressed: widget.obsecureText
+                              ? () {
+                                  widget.obsecureText
+                                      ? setState(
+                                          () {
+                                            isPassWordVisible =
+                                                !isPassWordVisible;
+                                          },
+                                        )
+                                      : null;
+                                }
+                              : widget.datePicker,
+                          icon: CustomSvgIcon(
+                              height: 20,
+                              width: 20,
+                              assetPath: widget.obsecureText
+                                  ? isPassWordVisible
+                                      ? AppAssetsConst.visibilityOff
+                                      : AppAssetsConst.visibility
+                                  : AppAssetsConst.calendar))
+                      : null,
               // Icon(widget.obsecureText
               //     ? isPassWordVisible
               //         ? Icons.visibility_outlined

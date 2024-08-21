@@ -159,7 +159,10 @@ class _MoreStoriesState extends State<ViewStatusPage> {
                             builder: (context) {
                               return DraggableScrollableSheet(
                                 initialChildSize: .3, minChildSize: 0.3,
-                                maxChildSize: 0.9,
+                                maxChildSize: getBottomSheetHeight(
+                                    _statuses[_currentStoryIndex.value]
+                                        .viewers
+                                        .length),
                                 expand:
                                     false, // Set to false to allow the bottom sheet to have a fixed height
                                 builder: (context, scrollController) {
@@ -233,6 +236,18 @@ class _MoreStoriesState extends State<ViewStatusPage> {
             ),
           ),
         ));
+  }
+
+  double getBottomSheetHeight(int length) {
+    if (length < 3) {
+      return .3;
+    } else if (length < 6) {
+      return .5;
+    } else if (length < 9) {
+      return .7;
+    } else {
+      return .9;
+    }
   }
 }
 

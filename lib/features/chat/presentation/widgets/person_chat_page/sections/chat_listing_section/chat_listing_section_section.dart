@@ -19,28 +19,28 @@ import 'package:swipe_to/swipe_to.dart';
 
 import '../../../../cubits/messages_cubits/message/message_cubit.dart';
 
-import 'package:intl/intl.dart';
-
 class ChatListingSectionSection extends StatelessWidget {
   const ChatListingSectionSection({
-    Key? key,
+    super.key,
     required this.goToBottom,
     required this.scrollController,
     required this.onSwipe,
     required this.myid,
     this.onmessageDateChange,
-  }) : super(key: key);
+    required this.getMessageCubit,
+  });
 
   final VoidCallback goToBottom;
   final ScrollController scrollController;
   final Function(MessageEntity) onSwipe;
   final String myid;
   final Function(String)? onmessageDateChange;
-
+  final GetMessageCubit getMessageCubit;
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: BlocConsumer<GetMessageCubit, GetMessageState>(
+        bloc: getMessageCubit,
         listener: (context, state) {
           if (state.messages.isNotEmpty) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -89,7 +89,7 @@ class ChatListingSectionSection extends StatelessWidget {
                   ...messages.map((message) {
                     return SwipeTo(
                       onRightSwipe: (details) {
-                        final state = context.read<GetMessageCubit>().state;
+                        final state = getMessageCubit.state;
                         context.read<MessageCubit>().replyClicked(
                               otherUserState: state,
                               repliedMessagecreator: message.senderUid,
@@ -126,8 +126,7 @@ class ChatListingSectionSection extends StatelessWidget {
                               subtitle: AppIngoMsg.deleteMessage,
                               callBack: () {
                                 context.read<MessageCubit>().deleteMessage(
-                                    messageState:
-                                        context.read<GetMessageCubit>().state,
+                                    messageState: getMessageCubit.state,
                                     messageId: message.messageId);
                               },
                               buttonText: AppUiStringConst.delete,

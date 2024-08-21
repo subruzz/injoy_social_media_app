@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/create_posts.dart';
 import 'package:uuid/uuid.dart';
 

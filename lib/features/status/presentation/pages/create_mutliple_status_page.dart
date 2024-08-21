@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/core/widgets/common/overlay_loading_holder.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/widgets/common/status_app_bar.dart';
 import 'package:social_media_app/features/status/presentation/widgets/create_multiple_status/multiple_status_input_bar.dart';
@@ -20,7 +22,7 @@ class CreateMutlipleStatusPage extends StatefulWidget {
       this.getMessageCubit});
   final List<SelectedByte> assets;
   final bool isChat;
-  final GetMessageCubit? getMessageCubit;
+  final GetMessageState? getMessageCubit;
 
   @override
   State<CreateMutlipleStatusPage> createState() =>
@@ -33,9 +35,14 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
   List<String> _captions = [];
   int _pageIndex = 0;
   final ValueNotifier<List<SelectedByte>> _selectedAssets = ValueNotifier([]);
+  MessageCubit? _messageCubit;
   @override
   void initState() {
     super.initState();
+
+    if (widget.getMessageCubit != null) {
+      _messageCubit = serviceLocator<MessageCubit>();
+    }
     _selectedAssets.value = widget.assets;
     // Initializing captions list with empty strings
     _captions = List.generate(widget.assets.length, (index) => '');
@@ -65,7 +72,7 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
+    print(_messageCubit);
     return Scaffold(
       appBar: StatusAppBar(
         isChat: widget.isChat,
@@ -83,53 +90,108 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
         },
         isTextStatus: false,
       ),
-      body: BlocConsumer<StatusBloc, StatusState>(
-        listenWhen: (previousState, state) {
-          return state is StatusCreateLoading ||
-              state is StatusCreateFailure ||
-              state is StatusCreateSuccess;
-        },
-        listener: (context, state) {
-          if (state is StatusCreateFailure) {
-            Messenger.showSnackBar(message: l10n!.statusHiccupError);
-          }
-          if (state is StatusCreateSuccess) {
-            Messenger.showSnackBar(message:l10n!.statusPostedSuccess);
-            Navigator.popUntil(
-              context,
-              (route) => route.isFirst,
-            );
-          }
-        },
-        builder: (context, state) {
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              //shows the selected assets
-              SelectedAssetsSection(
-                  pageController: _pageController,
-                  selectedAssets: _selectedAssets.value),
-              //shows the pageview indicator
-              SelectedAssetsIndicator(
-                  pageController: _pageController,
-                  selectedAssets: _selectedAssets.value),
-              //input bar for adding caption
-              MultipleStatusInputBar(
-                l10n: l10n!,
-                isChat: widget.isChat,
-                captionController: _captionController,
-                alreadySelected: _selectedAssets.value,
-                captions: _captions,
-                onCaptionChanged: _onCaptionChanged,
-              ),
-              if (state is StatusCreateLoading)
-                const OverlayLoadingHolder(
-                  wantWhiteLoading: true,
-                )
-            ],
-          );
-        },
-      ),
+      body: widget.getMessageCubit != null
+          ? BlocConsumer(
+              listener: (context, state) {
+                if (state is MessageSuccess) {
+                  Messenger.showSnackBar(message: l10n!.statusPostedSuccess);
+                  for (int i = 0; i < 2; i++) {
+                    Navigator.pop(context);
+                  }
+                  // Navigator.popUntil(
+                  //   context,
+                  //   (route) => route.isFirst,
+                  // );
+                }
+              },
+              bloc: _messageCubit!,
+              builder: (context, state) {
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    //shows the selected assets
+                    SelectedAssetsSection(
+                        pageController: _pageController,
+                        selectedAssets: _selectedAssets.value),
+                    //shows the pageview indicator
+                    SelectedAssetsIndicator(
+                        pageController: _pageController,
+                        selectedAssets: _selectedAssets.value),
+                    //input bar for adding caption
+                    MultipleStatusInputBar(
+                      messageCubit: _messageCubit,
+                      getMessageCubit: widget.getMessageCubit,
+                      l10n: l10n!,
+                      isChat: widget.isChat,
+                      captionController: _captionController,
+                      alreadySelected: _selectedAssets.value,
+                      captions: _captions,
+                      onCaptionChanged: _onCaptionChanged,
+                    ),
+                    if (state is MessageLoading)
+                      const OverlayLoadingHolder(
+                        wantWhiteLoading: true,
+                      )
+                  ],
+                );
+              },
+            )
+          : BlocConsumer<StatusBloc, StatusState>(
+              listenWhen: (previousState, state) {
+                return state is StatusCreateLoading ||
+                    state is StatusCreateFailure ||
+                    state is StatusCreateSuccess;
+              },
+              listener: (context, state) {
+                if (state is StatusCreateFailure) {
+                  Messenger.showSnackBar(message: l10n!.statusHiccupError);
+                }
+                if (state is StatusCreateSuccess) {
+                  Messenger.showSnackBar(message: l10n!.statusPostedSuccess);
+                  for (int i = 0; i < 2; i++) {
+                    Navigator.pop(context);
+                  }
+                  // Navigator.popUntil(
+                  //   context,
+                  //   (route) => route.isFirst,
+                  // );
+                }
+              },
+              builder: (context, state) {
+                return BlocBuilder<MessageCubit, MessageState>(
+                  builder: (context, messageState) {
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        //shows the selected assets
+                        SelectedAssetsSection(
+                            pageController: _pageController,
+                            selectedAssets: _selectedAssets.value),
+                        //shows the pageview indicator
+                        SelectedAssetsIndicator(
+                            pageController: _pageController,
+                            selectedAssets: _selectedAssets.value),
+                        //input bar for adding caption
+                        MultipleStatusInputBar(
+                          getMessageCubit: widget.getMessageCubit,
+                          l10n: l10n!,
+                          isChat: widget.isChat,
+                          captionController: _captionController,
+                          alreadySelected: _selectedAssets.value,
+                          captions: _captions,
+                          onCaptionChanged: _onCaptionChanged,
+                        ),
+                        if (state is StatusCreateLoading ||
+                            messageState is MessageLoading)
+                          const OverlayLoadingHolder(
+                            wantWhiteLoading: true,
+                          )
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }

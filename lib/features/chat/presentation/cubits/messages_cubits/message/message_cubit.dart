@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:record/record.dart';
 import 'package:social_media_app/core/services/app_interal/app_internal_service.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
@@ -17,7 +17,7 @@ import 'package:social_media_app/features/chat/domain/usecases/delete_message_us
 import 'package:social_media_app/features/chat/domain/usecases/seen_message_update_usecase.dart';
 import 'package:social_media_app/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 
 import '../../../../domain/entities/message_reply_entity.dart';
 
@@ -35,6 +35,9 @@ class MessageCubit extends Cubit<MessageState> {
     _messageReply = _messageReply;
   }
 
+  final ValueNotifier<MessageReplyClicked?> messageReplyNotifier =
+      ValueNotifier(null);
+
   MessageReplyEntity _messageReply = MessageReplyEntity();
   MessageReplyEntity get getMessageReply => _messageReply;
   MessageCubit(this._sendMessageUseCase, this._deleteMessageUsecase,
@@ -48,16 +51,28 @@ class MessageCubit extends Cubit<MessageState> {
       required GetMessageState otherUserState,
       String? caption}) {
     if (otherUserState.otherUser == null) return;
-    emit(MessageReplyClicked(
-        userName: _appUserBloc.appUser.userName ?? '',
+    messageReplyNotifier.value = MessageReplyClicked(
+        userName: otherUserState.otherUser?.id == repliedMessagecreator
+            ? otherUserState.otherUser?.userName ?? ''
+            : _appUserBloc.appUser.userName ?? '',
         repliedToMe: isMe,
         repliedMessageCreator: repliedMessagecreator,
         messageType: messageType,
         assetPath: assetPath,
-        caption: caption));
+        caption: caption);
+    // emit(MessageReplyClicked(
+    //     userName: otherUserState.otherUser?.id == repliedMessagecreator
+    //         ? otherUserState.otherUser?.userName ?? ''
+    //         : _appUserBloc.appUser.userName ?? '',
+    //     repliedToMe: isMe,
+    //     repliedMessageCreator: repliedMessagecreator,
+    //     messageType: messageType,
+    //     assetPath: assetPath,
+    //     caption: caption));
   }
 
   void initialState() {
+    messageReplyNotifier.value = null;
     emit(MessageInitial());
   }
 
@@ -72,11 +87,16 @@ class MessageCubit extends Cubit<MessageState> {
       log('null');
       return;
     }
-    final otherUser = messageState.otherUser!;
-    final MessageReplyClicked? replyState =
-        state is MessageReplyClicked ? state as MessageReplyClicked : null;
 
+    final otherUser = messageState.otherUser!;
+    final MessageReplyClicked? replyState = messageReplyNotifier.value;
+    // It's important to handle message loading here rather than at the start.
+    // If we emit the loading state at the start and the reply state is active,
+    // the reply state may be lost. This ensures that the loading state does not
+    // interfere with or overwrite the current reply state.
+    emit(MessageLoading());
     final newChat = ChatEntity(
+        lastSenderId: _appUserBloc.appUser.id,
         senderName: _appUserBloc.appUser.userName,
         senderProfile: _appUserBloc.appUser.profilePic,
         senderUid: _appUserBloc.appUser.id,
@@ -97,6 +117,8 @@ class MessageCubit extends Cubit<MessageState> {
         final newMessage = MessageEntity(
             isDeleted: false,
             createdAt: null,
+            isItReply: replyState != null,
+            repliedToMe: replyState?.repliedToMe,
             repliedMessgeCreatorId: replyState?.repliedMessageCreator,
             repliedMessage: replyState?.caption,
             repliedMessageAssetLink: replyState?.assetPath,
@@ -117,7 +139,9 @@ class MessageCubit extends Cubit<MessageState> {
       }
     } else {
       newMessge = MessageEntity(
+          repliedToMe: replyState?.repliedToMe,
           isDeleted: false,
+          isItReply: replyState != null,
           repliedMessgeCreatorId: replyState?.repliedMessageCreator,
           createdAt: null,
           message: recentTextMessage,
@@ -138,8 +162,10 @@ class MessageCubit extends Cubit<MessageState> {
         chat: newChat,
         message: selectedAssets != null ? multipleMessages : [newMessge!]));
     res.fold((failure) => emit(MessageFailure(errorMsg: failure.message)),
-        (success) {});
-    initialState();
+        (success) {
+      emit(MessageSuccess());
+    });
+    // initialState();
   }
 
   void deleteMessage({
@@ -173,6 +199,7 @@ class MessageCubit extends Cubit<MessageState> {
 
   void voiceRecordStopped(GetMessageState messageState) async {
     _timer?.cancel();
+    emit(MessageInitial());
     String? audioPath = await _audioRecorder.stop();
     if (audioPath == null || messageState.otherUser == null) {
       return emit(
@@ -180,10 +207,11 @@ class MessageCubit extends Cubit<MessageState> {
     }
 
     final otherUser = messageState.otherUser!;
-    initialState();
+    final MessageReplyClicked? replyState = messageReplyNotifier.value;
 
     log('called');
     final newChat = ChatEntity(
+        lastSenderId: _appUserBloc.appUser.id,
         senderName: _appUserBloc.appUser.userName,
         senderProfile: _appUserBloc.appUser.profilePic,
         senderUid: _appUserBloc.appUser.id,
@@ -199,6 +227,8 @@ class MessageCubit extends Cubit<MessageState> {
       isDeleted: false,
       createdAt: null,
       message: '',
+      repliedToMe: replyState?.repliedToMe,
+      isItReply: replyState != null,
       isEdited: false,
       assetPath: SelectedByte(
         mediaType: MediaType.audio,
@@ -210,6 +240,11 @@ class MessageCubit extends Cubit<MessageState> {
       messageType: MessageTypeConst.audioMessage,
       isSeen: false,
       messageId: IdGenerator.generateUniqueId(),
+      repliedMessgeCreatorId: replyState?.repliedMessageCreator,
+      repliedMessage: replyState?.caption,
+      repliedMessageAssetLink: replyState?.assetPath,
+      repliedMessageType: replyState?.messageType,
+      repliedTo: replyState?.userName,
     );
     final res = await _sendMessageUseCase(
         SendMessageUseCaseParams(chat: newChat, message: [newMessage]));

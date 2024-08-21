@@ -18,11 +18,6 @@ class AppTopBarTextWithPremium extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        IconButton(
-            onPressed: () {
-              Restart.restartApp();
-            },
-            icon: Icon(Icons.read_more)),
         Flexible(
           child: isThatTab
               ? Image.asset(

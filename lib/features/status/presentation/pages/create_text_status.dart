@@ -5,7 +5,7 @@ import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_floating_button.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/utils.dart';
+import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/status/presentation/bloc/cubit/select_color_cubit.dart';
 import 'package:social_media_app/features/status/presentation/widgets/create_text_status/text_status_background_section/create_text_status_background.dart';
 import 'package:social_media_app/features/status/presentation/widgets/common/status_app_bar.dart';
