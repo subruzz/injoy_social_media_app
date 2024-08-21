@@ -14,17 +14,17 @@ part 'chat_state.dart';
 class ChatCubit extends Cubit<ChatState> {
   final GetMyChatsUsecase _getMyChatsUsecase;
   final DeleteChatUsecase _deleteChatUsecase;
-  StreamSubscription<Either<Failure,List<ChatEntity>>>? _chatSubscription;
+  StreamSubscription<Either<Failure, List<ChatEntity>>>? _chatSubscription;
 
   ChatCubit(this._getMyChatsUsecase, this._deleteChatUsecase)
       : super(ChatInitial());
 
   Future<void> getMyChats({required String myId}) async {
     emit(ChatLoading());
-    
+
     // Unsubscribe from any previous subscriptions
     _chatSubscription?.cancel();
-    
+
     // Subscribe to the chat stream
     final streamRes = _getMyChatsUsecase.call(myId);
     _chatSubscription = streamRes.listen(
@@ -42,17 +42,11 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future<void> deleteMyChats({required String myId}) async {
     emit(ChatLoading());
-    
-    // Unsubscribe from the stream before deleting
-    _chatSubscription?.cancel();
 
     final res = await _deleteChatUsecase(DeleteChatUsecaseParams(myId: myId));
     res.fold(
       (failure) => emit(ChatFailure(errorMsg: failure.message)),
-      (success) {
-        // Optionally, you can re-fetch the chat list if needed
-        getMyChats(myId: myId);
-      },
+      (success) {},
     );
   }
 

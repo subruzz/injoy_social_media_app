@@ -108,15 +108,24 @@
   "clear": "clear",
   "changeChatBackground": "Change Chat Background",
   "clearAllChats": "Clear All Chats",
-  "showLastSeen": "Show Last Seen"
-
-
-
-
-
-
-
-
+  "showLastSeen": "Show Last Seen",
+  "more_info_and_support": "More info and support",
+  "help": "Help",
+  "privacy_center": "Privacy center",
+  "terms_and_conditions": "Terms & conditions",
+  "account_settings": "Account Settings",
+  "change_username": "Change Username",
+  "delete_account": "Delete Account",
+  "pause_all": "Pause All",
+  "pause_all_subtitle": "Pause all notifications",
+  "likes": "Likes",
+  "likes_subtitle": "Pauses the notification of post likes",
+  "follow_subtitle": "Pauses the notification when someone follows you",
+  "comments": "Comments",
+  "comments_subtitle": "Pauses the notification of post comments",
+  "messages": "Message",
+  "messages_subtitle": "Pauses the notification when a new message arrives",
+  "subscription_details": "Your subscription details"
 
 
 }

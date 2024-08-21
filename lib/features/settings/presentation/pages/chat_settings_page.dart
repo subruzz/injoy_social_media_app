@@ -8,7 +8,6 @@ import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/common/common_switch.dart';
 import 'package:social_media_app/core/widgets/common/custom_divider.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat/chat_cubit.dart';
-import 'package:social_media_app/features/settings/domain/entity/ui_entity/enums.dart';
 
 import '../../../../core/const/enums/media_picker_type.dart';
 import '../../../../core/widgets/app_related/app_padding.dart';

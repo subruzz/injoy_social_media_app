@@ -19,7 +19,7 @@ import 'package:social_media_app/features/profile/presentation/pages/date_of_bir
 import 'package:social_media_app/features/profile/presentation/pages/interest_selection_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/other_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
-import 'package:social_media_app/features/settings/presentation/pages/account_settings/account_settings_page.dart';
+import 'package:social_media_app/features/settings/presentation/pages/account_settings_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_settings_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/liked_or_saved_post_builder.dart';
 import 'package:social_media_app/features/settings/presentation/pages/notification_preference_screen.dart';

@@ -5,55 +5,7 @@ import 'package:social_media_app/core/utils/other/debouncer.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/search_hashtag/search_hashtag_bloc.dart';
 
-// class CreatePostImage extends StatelessWidget {
-//   final File? selectedImage;
-//   final String? alreadyImmage;
-//   final void Function() onTap;
 
-//   const CreatePostImage(
-//       {super.key, this.selectedImage, required this.onTap, this.alreadyImmage});
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       fit: StackFit.expand,
-//       children: [
-//         GestureDetector(
-//           onTap: () {
-//             Navigator.of(context).push(MaterialPageRoute(
-//               builder: (context) => ViewImagePage(img: selectedImage!),
-//             ));
-//           },
-//           child: ClipRRect(
-//             borderRadius: BorderRadius.circular(8),
-//             child: Image.file(
-//               selectedImage!,
-//               fit: BoxFit.cover,
-//             ),
-//           ),
-//         ),
-//         Positioned(
-//           top: 8,
-//           right: 8,
-//           child: InkWell(
-//             onTap: onTap,
-//             child: Container(
-//               padding: const EdgeInsets.all(4),
-//               decoration: BoxDecoration(
-//                 color: Colors.black.withOpacity(0.5),
-//                 shape: BoxShape.circle,
-//               ),
-//               child: const Icon(
-//                 Icons.close,
-//                 size: 20,
-//                 color: Colors.white,
-//               ),
-//             ),
-//           ),
-//         )
-//       ],
-//     );
-//   }
-// }
 
 class SearchHashTagSheet extends StatelessWidget {
   const SearchHashTagSheet(
@@ -69,7 +21,7 @@ class SearchHashTagSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
       child: Column(
         children: [
           AppSizedBox.sizedBox15H,
@@ -117,7 +69,7 @@ class SearchHashTagSheet extends StatelessWidget {
                         onTap: () {
                           addToUi(state.hashtags[index].hashtagName);
                         },
-                        title: Text(state.hashtags[index].hashtagName),
+                        title: Text('#${state.hashtags[index].hashtagName}'),
                       );
                     },
                   ),

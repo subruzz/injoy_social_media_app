@@ -21,6 +21,7 @@ import 'package:social_media_app/features/notification/data/datacource/remote/de
 import 'package:social_media_app/firebase_options.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:social_media_app/restart_widget.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
@@ -58,7 +59,7 @@ void main() async {
 
   await initDependencies();
 
-  runApp(MyApp(navigatorKey: navigatorKey));
+  runApp(RestartWidget(child: MyApp(navigatorKey: navigatorKey)));
 }
 
 class MyApp extends StatelessWidget {

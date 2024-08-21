@@ -54,7 +54,7 @@ class SettingsUiConst {
       notificationSettingsType: NotificationPreferenceEnum.comments,
     ),
     SettingsTileEntity(
-      title: 'Pause All',
+      title: 'Message',
       subTitle: 'Pauses the notification when a new message arrives',
       notificationSettingsType: NotificationPreferenceEnum.messages,
     ),

@@ -2,14 +2,18 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
-import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 
 class ExpandableText extends StatefulWidget {
   final String text;
   final int trimLines;
   final Color? color;
+  final Widget? otherW;
   const ExpandableText(
-      {super.key, this.color, required this.text, required this.trimLines});
+      {super.key,
+      this.color,
+      this.otherW,
+      required this.text,
+      required this.trimLines});
 
   @override
   ExpandableTextState createState() => ExpandableTextState();
@@ -62,7 +66,9 @@ class ExpandableTextState extends State<ExpandableText> {
             text: _readMore ? widget.text.substring(0, endIndex) : widget.text,
             style: AppTextTheme.getResponsiveTextTheme(context)
                 .labelSmall
-                ?.copyWith(color: AppDarkColor().primaryText.withOpacity(.9),fontWeight: FontWeight.w400),
+                ?.copyWith(
+                    color: AppDarkColor().primaryText.withOpacity(.9),
+                    fontWeight: FontWeight.w400),
             children: <TextSpan>[link],
           );
         } else {
@@ -70,13 +76,21 @@ class ExpandableTextState extends State<ExpandableText> {
             text: widget.text,
             style: AppTextTheme.getResponsiveTextTheme(context)
                 .labelSmall
-                ?.copyWith(color: AppDarkColor().primaryText.withOpacity(.9),fontWeight: FontWeight.w400),
+                ?.copyWith(
+                    color: AppDarkColor().primaryText.withOpacity(.9),
+                    fontWeight: FontWeight.w400),
           );
         }
-        return RichText(
-          softWrap: true,
-          overflow: TextOverflow.clip,
-          text: textSpan,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              softWrap: true,
+              overflow: TextOverflow.clip,
+              text: textSpan,
+            ),
+            if (!_readMore && widget.otherW != null) widget.otherW!
+          ],
         );
       },
     );

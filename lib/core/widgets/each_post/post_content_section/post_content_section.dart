@@ -5,9 +5,11 @@ import 'package:social_media_app/core/widgets/each_post/post_content_section/wid
 import '../../common/expandable_text.dart';
 
 class PostContentSection extends StatelessWidget {
-  const PostContentSection({super.key, this.postDesc, required this.hashtags});
+  const PostContentSection(
+      {super.key, this.postDesc, required this.hashtags, this.location});
   final String? postDesc;
   final List<String> hashtags;
+  final String? location;
   @override
   Widget build(BuildContext context) {
     return Column(

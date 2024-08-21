@@ -47,7 +47,6 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   @override
   Future<void> createPost(PostEntity post, List<SelectedByte> postImage,
       List<Uint8List>? postImgesFromWeb, bool isReel) async {
-    print('came here 1');
 
     if (isThatMobile && postImage.isEmpty) return;
     final postCollection =
@@ -68,13 +67,11 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
               reference: refToAsset,
               isPhoto: !isReel,
               needThumbnail: isReel);
-      print('came here 2');
       if (isThatMobile && (isReel && assetItem.url == null) ||
           isThatMobile && !isReel && assetItem.urls.isEmpty) {
         log('here');
         throw const MainException();
       }
-      print('came here 3');
 
       final newPost = PostModel(
           isThatvdo: isReel,

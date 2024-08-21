@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
+import 'package:social_media_app/main.dart';
+import 'package:social_media_app/restart_widget.dart';
 
 import '../../../../../../../core/const/app_config/app_padding.dart';
 import '../../../../../../../core/const/assets/app_assets.dart';
@@ -22,6 +24,8 @@ class HomeTopNotification extends StatelessWidget {
             children: [
               CustomSvgIcon(
                 onTap: () {
+                  RestartWidget.restartApp(navigatorKey.currentContext!);
+                  return;
                   Navigator.pushNamed(
                       context, MyAppRouteConst.notificationPage);
                 },

@@ -99,13 +99,15 @@ class PostTopDetails extends StatelessWidget {
                         ),
                       ],
                     ),
-                    CustomText(
-                      maxLines: 1,
-                      text: post.userFullName,
-                      style: AppTextTheme.getResponsiveTextTheme(context)
-                          .bodyMedium,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    if (post.location != null)
+                      CustomText(
+                        maxLines: 1,
+                        text: '📍${post.location}' ,
+                        style: AppTextTheme.getResponsiveTextTheme(context)
+                            .bodyMedium
+                            ?.copyWith(),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                   ],
                 ),
               ),

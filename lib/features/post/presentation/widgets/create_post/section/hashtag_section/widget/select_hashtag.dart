@@ -22,17 +22,21 @@ class SelectHashtag extends StatelessWidget {
       child: InkWell(
         onTap: () {
           showModalBottomSheet(
+            isScrollControlled: true,
             context: context,
             builder: (context) {
-              return SearchHashTagSheet(
-                  addToUi: (value) {
-                    selectTagsCubit.addTag(value);
-                  },
-                  hashtagController: hashtagcontroller,
-                  debouncer: _debouncer,
-                  onpresses: () {
-                    selectTagsCubit.addTag(hashtagcontroller.text.trim());
-                  });
+              return SafeArea(
+                child: SearchHashTagSheet(
+                    addToUi: (value) {
+                      selectTagsCubit.addTag(value);
+                    },
+                    hashtagController: hashtagcontroller,
+                    debouncer: _debouncer,
+                    onpresses: () {
+                      selectTagsCubit.addTag(hashtagcontroller.text.trim());
+                      hashtagcontroller.clear();
+                    }),
+              );
             },
           ).then((result) {
             _debouncer.cancel();

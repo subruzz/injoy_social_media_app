@@ -379,9 +379,11 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                       ? const Center(
                           child: CircularLoadingGrey(),
                         )
-                      : AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
-                          child: VideoPlayer(_controller)),
+                      : widget.vdo != null
+                          ? AspectRatio(
+                              aspectRatio: _controller.value.aspectRatio,
+                              child: VideoPlayer(_controller))
+                          : VideoPlayer(_controller),
                   if (!_isPlaying)
                     const Icon(
                       Icons.play_arrow,

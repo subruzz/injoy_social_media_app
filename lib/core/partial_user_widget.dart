@@ -24,14 +24,10 @@ class PartialUserWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(
-          context,
-          MyAppRouteConst.otherUserProfile,
-          arguments: {
-            'userName': user.userName ?? '',
-            'otherUserId': user.id,
-          },
-        );
+        Navigator.pushNamed(context, MyAppRouteConst.otherUserProfile,
+            arguments: {
+              'user': user
+            });
       },
       child: Padding(
         padding: AppPadding.verticalSmall,

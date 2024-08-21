@@ -19,6 +19,7 @@ import 'package:social_media_app/features/chat/domain/usecases/send_message_use_
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
 
+import '../../../../../../core/common/entities/user_entity.dart';
 import '../../../../domain/entities/message_reply_entity.dart';
 
 part 'message_state.dart';
@@ -34,6 +35,8 @@ class MessageCubit extends Cubit<MessageState> {
   set setMessageReply(MessageEntity reply) {
     _messageReply = _messageReply;
   }
+
+  StreamSubscription<AppUser>? _userSubscription;
 
   final ValueNotifier<MessageReplyClicked?> messageReplyNotifier =
       ValueNotifier(null);

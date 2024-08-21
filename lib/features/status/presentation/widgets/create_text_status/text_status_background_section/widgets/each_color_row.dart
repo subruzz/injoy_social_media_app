@@ -15,9 +15,11 @@ class EachColorRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           for (var colorData in ColorData.colorItems(colorCubit))
-            ColorSelectWidget(
-              color: colorData.color,
-              colorCubit: colorData.colorCubit,
+            Expanded(
+              child: ColorSelectWidget(
+                color: colorData.color,
+                colorCubit: colorData.colorCubit,
+              ),
             ),
         ],
       ),

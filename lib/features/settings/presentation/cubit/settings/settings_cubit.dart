@@ -16,6 +16,9 @@ class SettingsCubit extends Cubit<SettingsState> {
       required NotificationPreferenceEnum notificationPreferenceType,
       required bool value,
       required String myid}) async {
+    if (!value) {
+      notificatonPreferernce.isNotificationPaused = false;
+    }
     switch (notificationPreferenceType) {
       case NotificationPreferenceEnum.pauseAll:
         notificatonPreferernce.isNotificationPaused = value;
@@ -41,6 +44,12 @@ class SettingsCubit extends Cubit<SettingsState> {
         notificatonPreferernce.isMessageNotificationPaused = value;
 
         break;
+    }
+    if (notificatonPreferernce.isLikeNotificationPaused &&
+        notificatonPreferernce.isCommentNotificationPaused &&
+        notificatonPreferernce.isMessageNotificationPaused &&
+        notificatonPreferernce.isFollowNotificationPaused) {
+      notificatonPreferernce.isNotificationPaused = true;
     }
     emit(NotifiationPreferenceLoading());
     final res = await _editNotificationPreferenceUseCase(
