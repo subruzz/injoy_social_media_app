@@ -11,7 +11,6 @@ import 'package:social_media_app/features/bottom_nav/presentation/web/videos_pag
 import 'package:social_media_app/features/bottom_nav/presentation/widgets/bottom_bar_items.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore_page_builder.dart';
-import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cubit.dart';
@@ -59,7 +58,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
   }
 
   List<Widget> _pages = [];
-
+  final FocusNode? _focusNodeForExplore = FocusNode();
   @override
   void initState() {
     serviceLocator<FirebaseHelper>()
@@ -67,7 +66,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
 
     WidgetsBinding.instance.addObserver(this);
     super.initState();
-    _pages = getScreens();
+    _pages = getScreens(focusNodeForExplore: _focusNodeForExplore);
   }
 
   @override
@@ -104,6 +103,9 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
                 animateToIcon: (index) {
                   animateTheIcon(index);
                   setState(() {
+                    if (_focusNodeForExplore?.hasFocus == true) {
+                      _focusNodeForExplore?.unfocus();
+                    }
                     _currentPage = index;
                   });
                 },

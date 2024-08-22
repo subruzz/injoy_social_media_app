@@ -11,10 +11,12 @@ class SelectHashtag extends StatelessWidget {
   SelectHashtag(
       {super.key,
       required this.selectTagsCubit,
-      required this.hashtagcontroller});
+      required this.hashtagcontroller,
+    });
   final SelectTagsCubit selectTagsCubit;
   final TextEditingController hashtagcontroller;
   final _debouncer = Debouncer(delay: const Duration(milliseconds: 500));
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,6 +29,7 @@ class SelectHashtag extends StatelessWidget {
             builder: (context) {
               return SafeArea(
                 child: SearchHashTagSheet(
+                    selectTagsCubit: selectTagsCubit,
                     addToUi: (value) {
                       selectTagsCubit.addTag(value);
                     },

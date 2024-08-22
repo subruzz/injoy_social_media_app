@@ -49,7 +49,8 @@ class Geometry {
   factory Geometry.fromJson(Map<String, dynamic> json) {
     return Geometry(
       coordinates: (json['coordinates'] as List)
-          .map((coord) => coord as double)
+          .map((coord) => (coord as num)
+              .toDouble()) // Convert num (int or double) to double
           .toList(),
       type: json['type'],
     );
@@ -65,7 +66,6 @@ class Geometry {
 
 class Properties {
   final String osmType;
-  final int osmId;
   final List<double>? extent;
   final String? country;
   final String osmKey;
@@ -80,7 +80,6 @@ class Properties {
 
   Properties({
     required this.osmType,
-    required this.osmId,
     this.extent,
     this.country,
     required this.osmKey,
@@ -97,9 +96,8 @@ class Properties {
   factory Properties.fromJson(Map<String, dynamic> json) {
     return Properties(
       osmType: json['osm_type'],
-      osmId: json['osm_id'],
       extent: json['extent'] != null
-          ? (json['extent'] as List).map((e) => e as double).toList()
+          ? (json['extent'] as List).map((e) => (e as num).toDouble()).toList()
           : null,
       country: json['country'],
       osmKey: json['osm_key'],
@@ -117,7 +115,6 @@ class Properties {
   Map<String, dynamic> toJson() {
     return {
       'osm_type': osmType,
-      'osm_id': osmId,
       'extent': extent,
       'country': country,
       'osm_key': osmKey,

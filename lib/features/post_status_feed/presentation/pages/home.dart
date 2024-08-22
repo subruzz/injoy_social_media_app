@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart%20';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
-import 'package:social_media_app/core/widgets/web/web_width_helper.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/floating_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_top_bar_section/home_top_bar.dart';
@@ -65,9 +63,9 @@ class _HomePageState extends State<HomePage> {
       create: (context) => serviceLocator<NotificationCubit>()
         ..getMynotifications(myId: context.read<AppUserBloc>().appUser.id),
       child: Scaffold(
-        floatingActionButton: FloatingButton(
+        floatingActionButton:isThatMobile? FloatingButton(
           l10n: l10n!,
-        ),
+        ):null,
         body: RefreshIndicator(
           onRefresh: () async {
             if (context.mounted) {

@@ -18,6 +18,7 @@ class AppInfoDialog {
       bool dismissable = false,
       String? subtitle,
       String closeText = 'Back',
+      bool pop = true,
       Widget? buttonChild,
       String? buttonText}) {
     showDialog(
@@ -54,7 +55,7 @@ class AppInfoDialog {
             ),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  if (pop) Navigator.pop(context);
                   callBack();
                 },
                 child: buttonText != null

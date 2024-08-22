@@ -88,6 +88,7 @@ class _EditPostPageState extends State<EditPostPage> {
                     final selectedHashtags = _selectTagsCubit.state;
 
                     context.read<CreatePostBloc>().add(UpdatePostEvent(
+                          oldPostHashTags: widget.post.hashtags,
                           user: PartialUser(
                               id: widget.post.creatorUid,
                               profilePic: widget.post.userProfileUrl,

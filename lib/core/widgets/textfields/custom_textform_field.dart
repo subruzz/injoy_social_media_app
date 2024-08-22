@@ -71,6 +71,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: TextFormField(
+          focusNode: widget.focusNode,
           style: AppTextTheme.getResponsiveTextTheme(context)
               .bodySmall
               ?.copyWith(fontSize: 14),

@@ -4,10 +4,11 @@ import 'package:social_media_app/features/post/presentation/widgets/create_post/
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/hashtag_section/widget/selected_hashtags.dart';
 
 class HashTagSection extends StatelessWidget {
-  const HashTagSection(
-      {super.key,
-      required this.hashTagController,
-      required this.selectTagsCubit});
+  const HashTagSection({
+    super.key,
+    required this.hashTagController,
+    required this.selectTagsCubit,
+  });
   final TextEditingController hashTagController;
   final SelectTagsCubit selectTagsCubit;
   @override
@@ -15,7 +16,9 @@ class HashTagSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SelectedHashtags(selectTagsCubit: selectTagsCubit),
+        SelectedHashtags(
+          selectTagsCubit: selectTagsCubit,
+        ),
         SelectHashtag(
             selectTagsCubit: selectTagsCubit,
             hashtagcontroller: hashTagController),

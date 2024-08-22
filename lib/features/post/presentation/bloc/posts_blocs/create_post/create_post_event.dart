@@ -9,8 +9,9 @@ sealed class CreatePostEvent extends Equatable {
 
 final class PostDeleteEvent extends CreatePostEvent {
   final String postId;
+  final List<String> postMedias;
 
-  const PostDeleteEvent({required this.postId});
+  const PostDeleteEvent({required this.postId, required this.postMedias});
 }
 
 final class CreatePostClickEvent extends CreatePostEvent {
@@ -54,8 +55,10 @@ final class UpdatePostEvent extends CreatePostEvent {
   final String? description;
   final PartialUser user;
   final String postId;
+  final List<String> oldPostHashTags;
   const UpdatePostEvent({
     required this.hashtags,
+    required this.oldPostHashTags,
     required this.postId,
     required this.description,
     required this.user,

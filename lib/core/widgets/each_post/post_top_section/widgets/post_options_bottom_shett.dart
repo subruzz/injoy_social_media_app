@@ -112,16 +112,19 @@ class PostOptionsBottomShett {
                     style: Theme.of(context).textTheme.labelLarge),
                 onTap: () {
                   AppInfoDialog.showInfoDialog(
+                      pop: false,
                       title: 'Are you Sure?',
                       context: context,
                       callBack: () {
-                        context
-                            .read<CreatePostBloc>()
-                            .add(PostDeleteEvent(postId: post.postId));
+                        context.read<CreatePostBloc>().add(PostDeleteEvent(
+                            postId: post.postId,
+                            postMedias: post.postImageUrl));
                       },
                       buttonChild:
                           BlocConsumer<CreatePostBloc, CreatePostState>(
                         builder: (context, state) {
+                          log('post stat eis $state');
+
                           if (state is PostDeletionLoading) {
                             return const CircularLoading();
                           }
@@ -129,10 +132,14 @@ class PostOptionsBottomShett {
                         },
                         listener: (context, state) {
                           if (state is PostDeletionSuccess) {
+                            log('post stat esuccessis $state');
+
+                            log('post deleted successfully');
                             context.read<GetUserPostsBloc>().add(
                                 GetPostAfterDelete(index: currentPostIndex));
                             Messenger.showSnackBar(
                                 message: l10n.post_deleted_success);
+                            Navigator.pop(context);
                             Navigator.pop(context);
                           }
                         },

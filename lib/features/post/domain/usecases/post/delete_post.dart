@@ -12,14 +12,14 @@ class DeletePostsUseCase implements UseCase<Unit, DeletePostsUseCaseParams> {
       : _postRepository = postRepository;
   @override
   Future<Either<Failure, Unit>> call(params) async {
-    return await _postRepository.deletePost(params.postId, params.isReel);
+    return await _postRepository.deletePost(params.postId, params.isReel,postMedias: params.postMedias);
   }
 }
 
 class DeletePostsUseCaseParams {
   final String postId;
   final bool isReel;
-
-  DeletePostsUseCaseParams({required this.postId, required this.isReel});
-
+  final List<String> postMedias;
+  DeletePostsUseCaseParams(
+      {required this.postId, required this.isReel, required this.postMedias});
 }

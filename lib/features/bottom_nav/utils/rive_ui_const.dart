@@ -2,10 +2,15 @@ part of '../presentation/pages/bottom_nav.dart';
 
 final List<SMIBool> _riveIconInputs = [];
 final List<StateMachineController?> _controllers = [];
-List<Widget> getScreens({bool isWeb = false}) {
+List<Widget> getScreens({
+  bool isWeb = false,
+  FocusNode? focusNodeForExplore,
+}) {
   List<Widget> pages = [
     const HomePage(),
-    const ExplorePageBuilder(),
+    ExplorePageBuilder(
+      exploreFocusNode: focusNodeForExplore,
+    ),
     isWeb ? const VideosPageWeb() : const VideoReelPage(),
     isWeb ? const ChatWebScreen() : const ChatMainTabPage(),
     const ProfilePageWrapper()

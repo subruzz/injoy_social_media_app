@@ -11,8 +11,8 @@ import '../blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import '../blocs/search_user/search_user_cubit.dart';
 
 class ExplorePageBuilder extends StatelessWidget {
-  const ExplorePageBuilder({super.key});
-
+  const ExplorePageBuilder({super.key, this.exploreFocusNode});
+  final FocusNode? exploreFocusNode;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -30,7 +30,9 @@ class ExplorePageBuilder extends StatelessWidget {
           create: (context) => serviceLocator<SearchLocationExploreCubit>(),
         ),
       ],
-      child: const ExplorePage(),
+      child: ExplorePage(
+        focusNodeForExplore: exploreFocusNode,
+      ),
     );
   }
 }

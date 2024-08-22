@@ -4,6 +4,7 @@ class UpdatePostModel extends UpdatePostEntity {
   UpdatePostModel({
     required super.hashtags,
     super.description,
+    required super.oldPostHashtags,
   });
 
   Map<String, dynamic> toJson() {

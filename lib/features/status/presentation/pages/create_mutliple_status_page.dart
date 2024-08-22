@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
@@ -41,6 +43,7 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
     super.initState();
 
     if (widget.getMessageCubit != null) {
+      print('not null');
       _messageCubit = serviceLocator<MessageCubit>();
     }
     _selectedAssets.value = widget.assets;
@@ -72,7 +75,7 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    print(_messageCubit);
+    log('log is ${_messageCubit}');
     return Scaffold(
       appBar: StatusAppBar(
         isChat: widget.isChat,
@@ -158,7 +161,7 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
                 }
               },
               builder: (context, state) {
-                return BlocBuilder<MessageCubit, MessageState>(
+                return BlocBuilder<StatusBloc, StatusState>(
                   builder: (context, messageState) {
                     return Stack(
                       alignment: Alignment.center,

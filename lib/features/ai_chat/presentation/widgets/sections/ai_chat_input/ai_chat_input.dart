@@ -38,7 +38,7 @@ class _AiChatInputState extends State<AiChatInput> {
           children: [
             Expanded(
               child: CustomTextField(
-                focusNode: _focusNode,
+                // focusNode: _focusNode,
                 radius: AppBorderRadius.large,
                 hintText: widget.l10n.typeSomething,
                 controller: _aiChatController,

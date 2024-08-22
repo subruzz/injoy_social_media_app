@@ -147,17 +147,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // SelectedAssetsSection(
-                    //     isPost: true,
-                    //     pageController: _pageController,
-                    //     selectedAssets: widget.selectedImages),
-                    // Center(
-                    // child: SelectedAssetsIndicator(
-                    //     isPost: true,
-                    //     pageController: _pageController,
-                    //     selectedAssets: widget.selectedImages),
-                    // ),
-                    //input for creating post
+                   
                     PostInputSection(
                       l10n: l10n,
                       descriptionController: _descriptionController,

@@ -24,8 +24,6 @@ class HomeTopNotification extends StatelessWidget {
             children: [
               CustomSvgIcon(
                 onTap: () {
-                  RestartWidget.restartApp(navigatorKey.currentContext!);
-                  return;
                   Navigator.pushNamed(
                       context, MyAppRouteConst.notificationPage);
                 },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:googleapis/analytics/v3.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
@@ -15,7 +14,6 @@ import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_n
 import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
-import '../../../../core/const/app_config/web_design_const.dart';
 import '../../../../core/utils/di/init_dependecies.dart';
 import '../../../chat/presentation/cubits/chat/chat_cubit.dart';
 import '../../../explore/presentation/blocs/explore_user/explore_user_cubit.dart';
@@ -254,6 +252,7 @@ class WebLayoutDrawwer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonListTile(
+      showTrail: false,
       iconSize: 27,
       onTap: changePage,
       text: Responsive.isDesktop(context) && showText ? text : null,

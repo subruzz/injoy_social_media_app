@@ -18,6 +18,7 @@ import '../../../../core/const/languages/app_languages.dart';
 import '../../../../core/utils/app_related/open_email.dart';
 import '../../../../core/widgets/dialog/app_info_dialog.dart';
 import '../../../../core/widgets/dialog/dialogs.dart';
+import '../../../premium_subscription/presentation/pages/premium_subscripti_builder.dart';
 import '../../../profile/presentation/pages/profile_page_wrapper.dart';
 
 class SettingsAndActivityPage extends StatelessWidget {
@@ -76,6 +77,13 @@ class SettingsAndActivityPage extends StatelessWidget {
           ),
           SettingsListTile(
             onTap: () {
+              !appuser.hasPremium
+                  ? Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PremiumSubscriptiBuilder(),
+                      ))
+                  : () {};
               // appuser.hasPremium
               //     ? Navigator.pushNamed(
               //         context,
@@ -112,6 +120,7 @@ class SettingsAndActivityPage extends StatelessWidget {
                 );
                 return;
               }
+              AppDialogsCommon.noPremium(context);
             },
             asset: AppAssetsConst.language,
           ),

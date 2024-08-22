@@ -71,8 +71,8 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
       PostDeleteEvent event, Emitter<CreatePostState> emit) async {
     emit(PostDeletionLoading());
 
-    final res = await _deletePostsUseCase(
-        DeletePostsUseCaseParams(postId: event.postId, isReel: true));
+    final res = await _deletePostsUseCase(DeletePostsUseCaseParams(
+        postId: event.postId, isReel: true, postMedias: event.postMedias));
 
     res.fold((failure) => emit(PostDeletionFailure()),
         (success) => emit(PostDeletionSuccess()));
@@ -83,6 +83,7 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
     emit(UpdatePostLoading());
 
     final updatedPost = UpdatePostEntity(
+      oldPostHashtags: event.oldPostHashTags,
       hashtags: event.hashtags,
       description: event.description,
     );

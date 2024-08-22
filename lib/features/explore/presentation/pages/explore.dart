@@ -16,7 +16,9 @@ import 'package:social_media_app/core/widgets/explore_all_posts.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/sections/tab/explore_tab.dart';
 
 class ExplorePage extends StatefulWidget {
-  const ExplorePage({super.key});
+  const ExplorePage({super.key, this.focusNodeForExplore});
+  final FocusNode? focusNodeForExplore;
+
   @override
   State<ExplorePage> createState() => _ExplorePageState();
 }
@@ -30,7 +32,6 @@ class _ExplorePageState extends State<ExplorePage>
   final Debouncer _debouncer =
       Debouncer(delay: const Duration(milliseconds: 500));
   final ValueNotifier<int> _currentTab = ValueNotifier(0);
-
   @override
   void initState() {
     super.initState();
@@ -105,6 +106,8 @@ class _ExplorePageState extends State<ExplorePage>
             child: Column(
               children: [
                 CustomTextField(
+                  focusNode: widget.focusNodeForExplore,
+                  autoFocus: false,
                   onChanged: (value) {
                     _debouncer.run(() {
                       _isTextEntered.value = value.isNotEmpty;

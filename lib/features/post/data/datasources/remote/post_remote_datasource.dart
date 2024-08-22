@@ -29,7 +29,8 @@ abstract interface class PostRemoteDatasource {
     PartialUser postUser,
     String pId,
   );
-  Future<void> deletePost(String postId, bool isReel);
+  Future<void> deletePost(String postId, bool isReel,
+      {required List<String> postMedias});
   Future<void> likePost(String postId, String currentUserUid, bool isReel);
   Future<void> unLikePost(String postId, String currentUserUid, bool isReel);
   Future<void> savePosts(String postId);
@@ -47,7 +48,6 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   @override
   Future<void> createPost(PostEntity post, List<SelectedByte> postImage,
       List<Uint8List>? postImgesFromWeb, bool isReel) async {
-
     if (isThatMobile && postImage.isEmpty) return;
     final postCollection =
         FirebaseFirestore.instance.collection(FirebaseCollectionConst.posts);
@@ -62,7 +62,7 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
           : '${FirebaseFirestoreConst.reelPath}/${post.creatorUid}/${FirebaseFirestoreConst.reelPath}';
       final assetItem = await serviceLocator<FirebaseStorageService>()
           .uploadListOfAssets(
-            postImgesFromWeb: postImgesFromWeb,
+              postImgesFromWeb: postImgesFromWeb,
               assets: postImage,
               reference: refToAsset,
               isPhoto: !isReel,
@@ -158,30 +158,80 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
     String postId,
   ) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
+    final hashtagCollection = FirebaseFirestore.instance.collection('hashtags');
 
     try {
-      final newPost = UpdatePostModel(
-        description: post.description,
-        hashtags: post.hashtags,
-      );
-      await postCollection.doc(postId).update(newPost.toJson());
+      // Update the post in Firestore
+      await postCollection.doc(postId).update(post.toJson());
+
+      // Get updated post data
       final updatedPostSnapshot = await postCollection.doc(postId).get();
-      return PostModel.fromJson(updatedPostSnapshot.data()!, postUser);
+      final updatedPostData = updatedPostSnapshot.data();
+
+      if (updatedPostData == null) {
+        throw Exception("Post not found.");
+      }
+
+      // Handle hashtag updates
+      final Set<String> newHashtags = Set.from(post.hashtags);
+      final Set<String> oldHashtags = Set.from(post.oldPostHashtags);
+
+      final Set<String> hashtagsToAdd = newHashtags.difference(oldHashtags);
+      final Set<String> hashtagsToRemove = oldHashtags.difference(newHashtags);
+
+      // Add new hashtags
+      for (String hashtag in hashtagsToAdd) {
+        final hashtagDoc = hashtagCollection.doc(hashtag);
+        final hashtagSnapshot = await hashtagDoc.get();
+
+        if (hashtagSnapshot.exists) {
+          await hashtagDoc.update({
+            'count': FieldValue.increment(1),
+          });
+        } else {
+          await hashtagDoc.set({
+            'count': 1,
+          });
+        }
+      }
+
+      // Remove old hashtags
+      for (String hashtag in hashtagsToRemove) {
+        final hashtagDoc = hashtagCollection.doc(hashtag);
+        final hashtagSnapshot = await hashtagDoc.get();
+
+        if (hashtagSnapshot.exists) {
+          final currentCount = hashtagSnapshot['count'] as int;
+          if (currentCount > 1) {
+            await hashtagDoc.update({
+              'count': FieldValue.increment(-1),
+            });
+          } else {
+            await hashtagDoc.delete();
+          }
+        }
+      }
+
+      // Return the updated post model
+      return PostModel.fromJson(updatedPostData, postUser);
     } catch (e) {
       log('e ${e.toString()}');
-      throw const MainException(
-          errorMsg: 'Error updating post',
-          details:
-              'There was an erro occured during updating the post,Please try again!');
+      throw const MainException();
     }
   }
 
   @override
-  Future<void> deletePost(String postId, bool isReel) async {
+  Future<void> deletePost(String postId, bool isReel,
+      {required List<String> postMedias}) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
     try {
-      postCollection.doc(postId).delete();
+      await postCollection.doc(postId).delete();
+      // for (var media in postMedias) {
+      //   await firebaseStorage.refFromURL(media).delete();
+      // }
     } catch (e) {
+      log('error updating the pst ${e.toString()}');
+
       throw const MainException(errorMsg: 'Error while deleting the post');
     }
   }

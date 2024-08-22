@@ -11,6 +11,7 @@ import 'package:social_media_app/core/const/extensions/video_duration.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/reels_explore/reels_explore_cubit.dart';
 import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_comment_button.dart';
@@ -419,23 +420,28 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                                   size: 22,
                                   profile: widget.reel!.userProfileUrl),
                               AppSizedBox.sizedBox10W,
-                              Text(
-                                addAtSymbol(widget.reel!.username),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium
-                                    ?.copyWith(
-                                        fontSize:
-                                            isThatTabOrDeskTop ? 15 : null),
+                              Expanded(
+                                child: CustomText(
+                                  maxLines: 1,
+                                  text: addAtSymbol(widget.reel!.username),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium
+                                      ?.copyWith(
+                                          fontSize:
+                                              isThatTabOrDeskTop ? 15 : null),
+                                ),
                               ),
                               AppSizedBox.sizedBox10W,
                               if (widget.reel!.creatorUid != me.id)
-                                FollowUnfollowHelper(
-                                    wantWhiteBorder: true,
-                                    color: Colors.transparent,
-                                    noRad: true,
-                                    user: PartialUser(
-                                        id: widget.reel!.creatorUid))
+                                Expanded(
+                                  child: FollowUnfollowHelper(
+                                      wantWhiteBorder: true,
+                                      color: Colors.transparent,
+                                      noRad: true,
+                                      user: PartialUser(
+                                          id: widget.reel!.creatorUid)),
+                                )
                             ],
                           ),
                           AppSizedBox.sizedBox10H,

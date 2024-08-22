@@ -17,9 +17,13 @@ class PostContentSection extends StatelessWidget {
       children: [
         if (postDesc != null || hashtags.isNotEmpty) AppSizedBox.sizedBox5H,
         if (postDesc != null && postDesc!.isNotEmpty)
-          ExpandableText(text: postDesc ?? '', trimLines: 2),
-        if (postDesc != null) AppSizedBox.sizedBox10H,
-        if (hashtags.isNotEmpty) PostHashtag(hashtags: hashtags),
+          ExpandableText(
+            text: postDesc,
+            trimLines: 2,
+            otherW: PostHashtag(hashtags: hashtags),
+          ),
+        if (postDesc == null) PostHashtag(hashtags: hashtags),
+        AppSizedBox.sizedBox5H,
       ],
     );
   }

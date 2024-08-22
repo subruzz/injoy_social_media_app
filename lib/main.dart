@@ -76,7 +76,6 @@ class MyApp extends StatelessWidget {
           : const Size(360, 784),
       minTextAdapt: true,
       splitScreenMode: true,
-      // Use builder only if you need to use library outside ScreenUtilInit context
       builder: (_, child) {
         return MultiBlocProvider(
           providers: myProviders,
