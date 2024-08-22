@@ -1,6 +1,4 @@
-
 part of '../presentation/pages/bottom_nav.dart';
-
 
 List<SingleChildWidget> _getBottomBarProviders(AppUser user) {
   return [

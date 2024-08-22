@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:provider/single_child_widget.dart';
 
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:rive/rive.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_event.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_bar_cubit.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/web/chat_web.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/web/videos_page_web.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/widgets/bottom_bar_items.dart';
@@ -15,6 +18,7 @@ import 'package:social_media_app/features/post_status_feed/presentation/pages/ho
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cubit.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:video_player/video_player.dart';
 import '../../../../core/common/entities/user_entity.dart';
 import '../../../../core/widgets/helpet_packages.dart/lazy_indexted_stack.dart';
 import '../../../chat/presentation/cubits/chat/chat_cubit.dart';
@@ -59,6 +63,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
 
   List<Widget> _pages = [];
   final FocusNode? _focusNodeForExplore = FocusNode();
+  void Function()? pauseReelsVideo;
   @override
   void initState() {
     serviceLocator<FirebaseHelper>()
@@ -66,7 +71,12 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
 
     WidgetsBinding.instance.addObserver(this);
     super.initState();
-    _pages = getScreens(focusNodeForExplore: _focusNodeForExplore);
+    _pages = getScreens(
+      onPause: (pauseFunction) {
+        pauseReelsVideo = pauseFunction;
+      },
+      focusNodeForExplore: _focusNodeForExplore,
+    );
   }
 
   @override
@@ -87,6 +97,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
       canPop: _currentPage == 0,
       onPopInvoked: (didPop) {
         if (!didPop) {
+          context.read<BottomBarCubit>().changeIndex(0);
           setState(() {
             _currentPage = 0;
           });
@@ -99,19 +110,23 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
               index: _currentPage,
               children: List.generate(5, (i) => _pages[i]),
             ),
-            bottomNavigationBar: BottomBarItems(
-                animateToIcon: (index) {
-                  animateTheIcon(index);
-                  setState(() {
-                    if (_focusNodeForExplore?.hasFocus == true) {
-                      _focusNodeForExplore?.unfocus();
-                    }
-                    _currentPage = index;
-                  });
-                },
-                controllers: _controllers,
-                riveIconInputs: _riveIconInputs,
-                currentPage: _currentPage)),
+            bottomNavigationBar: Builder(builder: (context) {
+              return BottomBarItems(
+                  animateToIcon: (index) {
+                    animateTheIcon(index);
+                    setState(() {
+                      context.read<BottomBarCubit>().changeIndex(index);
+                      log('our index is ${context.read<BottomBarCubit>().state.index}');
+                      if (_focusNodeForExplore?.hasFocus == true) {
+                        _focusNodeForExplore?.unfocus();
+                      }
+                      _currentPage = index;
+                    });
+                  },
+                  controllers: _controllers,
+                  riveIconInputs: _riveIconInputs,
+                  currentPage: _currentPage);
+            })),
       ),
     );
   }

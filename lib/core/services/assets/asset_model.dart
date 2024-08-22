@@ -1,4 +1,5 @@
 import 'dart:io';
+
 class SelectedImagesDetails {
   List<SelectedByte> selectedFiles;
   bool multiSelectionMode;
@@ -10,12 +11,12 @@ class SelectedImagesDetails {
 }
 
 class SelectedByte {
-  File? selectedFile; // File may be null for web
+  File selectedFile; 
   MediaType mediaType;
 
   SelectedByte({
     required this.mediaType,
-    this.selectedFile, // Optional for web
+    required this.selectedFile
   });
 }
 
@@ -25,4 +26,3 @@ enum MediaType {
   photo,
   none,
 }
-

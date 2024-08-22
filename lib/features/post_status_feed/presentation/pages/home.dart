@@ -57,7 +57,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-
     final me = context.read<AppUserBloc>().appUser;
     return BlocProvider(
       create: (context) => serviceLocator<NotificationCubit>()

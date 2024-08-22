@@ -19,9 +19,14 @@ import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cu
 import 'package:video_player/video_player.dart';
 
 class ReelsPage extends StatefulWidget {
-  const ReelsPage({super.key, this.initialIndex = 0, this.availableReels});
+  const ReelsPage(
+      {super.key,
+      this.initialIndex = 0,
+      this.availableReels,
+      this.vdoController});
   final int initialIndex;
   final List<PostEntity>? availableReels;
+  final VideoPlayerController? vdoController;
   @override
   State<ReelsPage> createState() => _ReelsPageState();
 }
@@ -55,9 +60,14 @@ class _ReelsPageState extends State<ReelsPage> {
 
 class ReelsPageView extends StatelessWidget {
   const ReelsPageView(
-      {super.key, required this.reels, required this.initialIndex});
+      {super.key,
+      required this.reels,
+      required this.initialIndex,
+      this.vdoController});
   final List<PostEntity> reels;
   final int initialIndex;
+  final VideoPlayerController? vdoController;
+
   @override
   Widget build(BuildContext context) {
     return PageView.builder(

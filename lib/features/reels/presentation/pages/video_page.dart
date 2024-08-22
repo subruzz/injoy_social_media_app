@@ -7,12 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/extensions/video_duration.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_bar_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/reels_explore/reels_explore_cubit.dart';
 import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_comment_button.dart';
 import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_like_button.dart';
@@ -38,14 +40,20 @@ class VideoReelPage extends StatefulWidget {
       this.reels,
       this.showOne = false,
       this.index = 0,
+      this.isItFromBottomBar = false,
       this.short,
-      this.onCommentClick});
+      this.onCommentClick,
+      this.vdoController,
+      this.onPause});
   final List<PostEntity>? reels;
   final void Function(PostEntity)? onCommentClick;
-
+  final VideoPlayerController? vdoController;
+  final bool isItFromBottomBar;
   final bool showOne;
   final int index;
   final PostEntity? short;
+  final void Function(void Function())? onPause;
+
   @override
   State<VideoReelPage> createState() => _VideoReelPageState();
 }
@@ -94,6 +102,7 @@ class _VideoReelPageState extends State<VideoReelPage> {
                         builder: (context, state) {
                           if (state.reels.isNotEmpty) {
                             return ReelsPageView(
+                                vdoController: widget.vdoController,
                                 onCommentClick: widget.onCommentClick,
                                 controller: _pageController,
                                 reels: state.reels,
@@ -113,6 +122,9 @@ class _VideoReelPageState extends State<VideoReelPage> {
                         }
                         if (state is ReelsSuccess) {
                           return ReelsPageView(
+                              onPause: widget.onPause,
+                              isItFromBottomBar: widget.isItFromBottomBar,
+                              vdoController: widget.vdoController,
                               onCommentClick: widget.onCommentClick,
                               controller: _pageController,
                               reels: state.reels,
@@ -177,11 +189,18 @@ class ReelsPageView extends StatelessWidget {
       required this.controller,
       required this.reels,
       required this.onChaged,
-      this.onCommentClick});
+      this.isItFromBottomBar = false,
+      this.onCommentClick,
+      this.vdoController,
+      this.onPause});
   final PageController controller;
+  final bool isItFromBottomBar;
+  final void Function(void Function())? onPause;
+
   final List<PostEntity> reels;
   final void Function(int) onChaged;
   final void Function(PostEntity)? onCommentClick;
+  final VideoPlayerController? vdoController;
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +213,9 @@ class ReelsPageView extends StatelessWidget {
       },
       itemBuilder: (context, index) {
         return VideoPlayerWidget(
+          onPause: onPause,
+          isItFromBottomBar: isItFromBottomBar,
+          vdoController: vdoController,
           onCommentClick: onCommentClick,
           reel: reels[index],
           key: Key(reels[index].postImageUrl.first),
@@ -209,15 +231,22 @@ class VideoPlayerWidget extends StatefulWidget {
   final VoidCallback? onTap;
   final bool playAndLoop;
   final void Function(PostEntity)? onCommentClick;
+  final VideoPlayerController? vdoController;
+  final bool isItFromBottomBar;
   final bool onlyVdo;
+  final void Function(void Function())? onPause;
+
   const VideoPlayerWidget({
     super.key,
     this.vdo,
+    this.isItFromBottomBar = false,
     this.reel,
     this.playAndLoop = true,
     this.onCommentClick,
     this.onlyVdo = false,
     this.onTap,
+    this.vdoController,
+    this.onPause,
   });
 
   @override
@@ -234,7 +263,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
     vdoLink =
         widget.vdo != null ? widget.vdo! : widget.reel!.postImageUrl.first;
     initializeController();
-
+    if (widget.onPause != null) {
+      widget.onPause!(_pauseVideo);
+    }
     if (widget.playAndLoop) {
       WidgetsBinding.instance.addObserver(this);
     }
@@ -246,19 +277,19 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
     try {
       if (kIsWeb) {
         // Handle the video initialization for web
-        _controller =
-            _controller = VideoPlayerController.networkUrl(Uri.parse(vdoLink))
-              ..initialize().then((_) {
-                if (mounted) {
-                  setState(() {
-                    if (widget.playAndLoop) _controller.setLooping(true);
-                    if (widget.playAndLoop) _controller.play();
-                    _videoInitialized = true;
-                  });
-                }
-              }).catchError((error) {
-                log('Error initializing video controller on web: $error');
+
+        _controller = VideoPlayerController.networkUrl(Uri.parse(vdoLink))
+          ..initialize().then((_) {
+            if (mounted) {
+              setState(() {
+                if (widget.playAndLoop) _controller.setLooping(true);
+                if (widget.playAndLoop) _controller.play();
+                _videoInitialized = true;
               });
+            }
+          }).catchError((error) {
+            log('Error initializing video controller on web: $error');
+          });
         _controller.addListener(() {
           if (_controller.value.isPlaying && !_isPlaying) {
             if (mounted) {
@@ -314,6 +345,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    if (!_videoInitialized) return;
     if (state == AppLifecycleState.resumed) {
       // App is in the foreground
       _controller.play();
@@ -329,180 +361,195 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
     }
   }
 
+  void _pauseVideo() {
+    if (_videoInitialized && _controller.value.isPlaying) {
+      _controller.pause();
+    }
+  }
+
   @override
   void dispose() {
     log('this called to dispose');
     WidgetsBinding.instance.removeObserver(this);
-
-    _controller.dispose();
+    if (_videoInitialized) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final me = context.read<AppUserBloc>().appUser;
+    log('is it ini ${widget.vdoController}');
+    return widget.isItFromBottomBar
+        ? BlocConsumer<BottomBarCubit, BottomBarState>(
+            listener: (context, state) {
+              if (state.index != 2 && _videoInitialized) {
+                _controller.pause();
+              } else if (_videoInitialized) {
+                _controller.play();
+              }
+            },
+            builder: (context, state) {
+              return _getVdoBody(me);
+            },
+          )
+        : _getVdoBody(me);
+  }
 
-    return PopScope(
-      onPopInvoked: (didPop) {
-        if (mounted && _videoInitialized) {
-          _controller.pause();
-        }
-      },
-      child: SafeArea(
-        top: false,
-        left: false,
-        right: false,
-        child: Stack(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {
-                if (widget.onTap != null) {
-                  return widget.onTap!();
-                }
-                if (mounted && _videoInitialized) {
-                  setState(() {
-                    if (_controller.value.isPlaying) {
-                      _controller.pause();
-                      _isPlaying = false;
-                    } else {
-                      _controller.play();
-                      _isPlaying = true;
-                    }
-                  });
-                }
-              },
-              child: Stack(
-                alignment:
-                    Alignment.center, // Aligns the play icon to the center
-                children: [
-                  !_videoInitialized
-                      ? const Center(
-                          child: CircularLoadingGrey(),
-                        )
-                      : widget.vdo != null
-                          ? AspectRatio(
-                              aspectRatio: _controller.value.aspectRatio,
-                              child: VideoPlayer(_controller))
-                          : VideoPlayer(_controller),
-                  if (!_isPlaying)
-                    const Icon(
-                      Icons.play_arrow,
-                      size: 50.0,
-                      color: Colors.white,
-                    ),
-                  if (_videoInitialized)
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: VideoProgressIndicator(
-                        _controller,
-                        allowScrubbing: true,
-                        colors: VideoProgressColors(
-                          playedColor: AppDarkColor().buttonBackground,
-                          bufferedColor: Colors.grey,
-                          backgroundColor: Colors.white,
-                        ),
+  Widget _getVdoBody(AppUser me) {
+    return SafeArea(
+      top: false,
+      left: false,
+      right: false,
+      child: Stack(
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              if (widget.onTap != null) {
+                return widget.onTap!();
+              }
+              if (mounted && _videoInitialized) {
+                setState(() {
+                  if (_controller.value.isPlaying) {
+                    _controller.pause();
+                    _isPlaying = false;
+                  } else {
+                    _controller.play();
+                    _isPlaying = true;
+                  }
+                });
+              }
+            },
+            child: Stack(
+              alignment: Alignment.center, // Aligns the play icon to the center
+              children: [
+                !_videoInitialized
+                    ? const Center(
+                        child: CircularLoadingGrey(),
+                      )
+                    : widget.vdo != null
+                        ? AspectRatio(
+                            aspectRatio: _controller.value.aspectRatio,
+                            child: VideoPlayer(_controller))
+                        : VideoPlayer(_controller),
+                if (!_isPlaying)
+                  const Icon(
+                    Icons.play_arrow,
+                    size: 50.0,
+                    color: Colors.white,
+                  ),
+                if (_videoInitialized)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: VideoProgressIndicator(
+                      _controller,
+                      allowScrubbing: true,
+                      colors: VideoProgressColors(
+                        playedColor: AppDarkColor().buttonBackground,
+                        bufferedColor: Colors.grey,
+                        backgroundColor: Colors.white,
                       ),
                     ),
-                  if (!widget.onlyVdo && widget.reel != null)
-                    Positioned(
-                      bottom: 20,
-                      left: 10,
-                      right: 60,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              CircularUserProfile(
-                                  size: 22,
-                                  profile: widget.reel!.userProfileUrl),
-                              AppSizedBox.sizedBox10W,
-                              Expanded(
-                                child: CustomText(
-                                  maxLines: 1,
-                                  text: addAtSymbol(widget.reel!.username),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium
-                                      ?.copyWith(
-                                          fontSize:
-                                              isThatTabOrDeskTop ? 15 : null),
-                                ),
-                              ),
-                              AppSizedBox.sizedBox10W,
-                              if (widget.reel!.creatorUid != me.id)
-                                Expanded(
-                                  child: FollowUnfollowHelper(
-                                      wantWhiteBorder: true,
-                                      color: Colors.transparent,
-                                      noRad: true,
-                                      user: PartialUser(
-                                          id: widget.reel!.creatorUid)),
-                                )
-                            ],
-                          ),
-                          AppSizedBox.sizedBox10H,
-                          Column(
-                            children: [
-                              ExpandableText(
-                                  text: widget.reel!.description ?? '',
-                                  trimLines: 2)
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  if (!widget.onlyVdo && widget.reel != null)
-                    Positioned(
-                      right: 10,
-                      bottom: 200.h,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Like Button
-                          PostLikeButton(
-                            me: me,
-                            post: widget.reel!,
-                            isReel: true,
-                          ),
-                          AppSizedBox.sizedBox20H,
-                          PostCommentButton(
-                            onCommentClick: widget.onCommentClick,
-                            post: widget.reel!,
-                            isReel: true,
-                          ),
-                          // Share Button
-                        ],
-                      ),
-                    ),
-                  if (_videoInitialized && widget.vdo != null)
-                    Positioned(
-                        left: 10,
-                        bottom: 10,
-                        child: Row(
+                  ),
+                if (!widget.onlyVdo && widget.reel != null)
+                  Positioned(
+                    bottom: 20,
+                    left: 10,
+                    right: 60,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            const CustomSvgIcon(
-                              height: 15,
-                              assetPath: AppAssetsConst.video,
-                              color: Colors.white,
+                            CircularUserProfile(
+                                size: 22, profile: widget.reel!.userProfileUrl),
+                            AppSizedBox.sizedBox10W,
+                            Expanded(
+                              child: CustomText(
+                                maxLines: 1,
+                                text: addAtSymbol(widget.reel!.username),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                        fontSize:
+                                            isThatTabOrDeskTop ? 15 : null),
+                              ),
                             ),
-                            AppSizedBox.sizedBox5W,
-                            Text(
-                                style:
-                                    AppTextTheme.getResponsiveTextTheme(context)
-                                        .labelMedium,
-                                _controller.value.duration
-                                    .videoFormatedDuration()),
+                            AppSizedBox.sizedBox10W,
+                            if (widget.reel!.creatorUid != me.id)
+                              Expanded(
+                                child: FollowUnfollowHelper(
+                                    wantWhiteBorder: true,
+                                    color: Colors.transparent,
+                                    noRad: true,
+                                    user: PartialUser(
+                                        id: widget.reel!.creatorUid)),
+                              )
                           ],
-                        ))
-                ],
-              ),
+                        ),
+                        AppSizedBox.sizedBox10H,
+                        Column(
+                          children: [
+                            ExpandableText(
+                                text: widget.reel!.description ?? '',
+                                trimLines: 2)
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                if (!widget.onlyVdo && widget.reel != null)
+                  Positioned(
+                    right: 10,
+                    bottom: 200.h,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Like Button
+                        PostLikeButton(
+                          me: me,
+                          post: widget.reel!,
+                          isReel: true,
+                        ),
+                        AppSizedBox.sizedBox20H,
+                        PostCommentButton(
+                          onCommentClick: widget.onCommentClick,
+                          post: widget.reel!,
+                          isReel: true,
+                        ),
+                        // Share Button
+                      ],
+                    ),
+                  ),
+                if (_videoInitialized && widget.vdo != null)
+                  Positioned(
+                      left: 10,
+                      bottom: 10,
+                      child: Row(
+                        children: [
+                          const CustomSvgIcon(
+                            height: 15,
+                            assetPath: AppAssetsConst.video,
+                            color: Colors.white,
+                          ),
+                          AppSizedBox.sizedBox5W,
+                          Text(
+                              style:
+                                  AppTextTheme.getResponsiveTextTheme(context)
+                                      .labelMedium,
+                              _controller.value.duration
+                                  .videoFormatedDuration()),
+                        ],
+                      ))
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

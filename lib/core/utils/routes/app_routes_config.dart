@@ -4,6 +4,7 @@ import 'package:social_media_app/core/utils/routes/page_transitions.dart';
 
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/features/ai_chat/presentation/pages/ai_chat_page.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_bar_builder.dart';
 import 'package:social_media_app/features/media_picker/presenation/pages/custom_media_picker_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
@@ -69,7 +70,7 @@ class MyAppRouter {
         );
       case MyAppRouteConst.bottomNavRoute:
         return MaterialPageRoute(
-            builder: (_) => const BottonNavWithAnimatedIcons());
+            builder: (_) => const BottomBarBuilder());
 
       case MyAppRouteConst.addProfilePage:
         return MaterialPageRoute(builder: (_) => AddProfilePage());
