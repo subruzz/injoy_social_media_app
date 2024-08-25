@@ -8,10 +8,9 @@ sealed class CreatePostEvent extends Equatable {
 }
 
 final class PostDeleteEvent extends CreatePostEvent {
-  final String postId;
-  final List<String> postMedias;
+  final PostEntity post;
 
-  const PostDeleteEvent({required this.postId, required this.postMedias});
+  const PostDeleteEvent({required this.post});
 }
 
 final class CreatePostClickEvent extends CreatePostEvent {

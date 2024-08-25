@@ -29,8 +29,7 @@ abstract interface class PostRemoteDatasource {
     PartialUser postUser,
     String pId,
   );
-  Future<void> deletePost(String postId, bool isReel,
-      {required List<String> postMedias});
+  Future<void> deletePost(PostEntity post);
   Future<void> likePost(String postId, String currentUserUid, bool isReel);
   Future<void> unLikePost(String postId, String currentUserUid, bool isReel);
   Future<void> savePosts(String postId);
@@ -221,17 +220,64 @@ class PostRemoteDataSourceImpl implements PostRemoteDatasource {
   }
 
   @override
-  Future<void> deletePost(String postId, bool isReel,
-      {required List<String> postMedias}) async {
+  Future<void> deletePost(PostEntity post) async {
     final postCollection = FirebaseFirestore.instance.collection('posts');
-    try {
-      await postCollection.doc(postId).delete();
-      // for (var media in postMedias) {
-      //   await firebaseStorage.refFromURL(media).delete();
-      // }
-    } catch (e) {
-      log('error updating the pst ${e.toString()}');
+    final hashtagsCollection =
+        FirebaseFirestore.instance.collection('hashtags');
+    final locationsCollection =
+        FirebaseFirestore.instance.collection('locations');
 
+    try {
+      // Start a batch to perform all deletions atomically
+      final batch = FirebaseFirestore.instance.batch();
+
+      // Delete the post document
+      final postDoc = postCollection.doc(post.postId);
+      batch.delete(postDoc);
+
+      // Update hashtag counts
+      if (post.hashtags.isNotEmpty) {
+        for (var hashtag in post.hashtags) {
+          final hashtagDoc = hashtagsCollection.doc(hashtag);
+          final docSnapshot = await hashtagDoc.get();
+          if (docSnapshot.exists) {
+            final currentCount = docSnapshot.data()?['count'] ?? 0;
+            if (currentCount > 1) {
+              batch.update(hashtagDoc, {'count': currentCount - 1});
+            } else {
+              // Optionally delete the hashtag if count reaches 0
+              batch.delete(hashtagDoc);
+            }
+          }
+        }
+      }
+
+      // Update location count
+      if (post.location != null) {
+        final locationDoc = locationsCollection.doc(post.location);
+        final docSnapshot = await locationDoc.get();
+        if (docSnapshot.exists) {
+          final currentCount = docSnapshot.data()?['count'] ?? 0;
+          if (currentCount > 1) {
+            batch.update(locationDoc, {'count': currentCount - 1});
+          } else {
+            // Optionally delete the location if count reaches 0
+            batch.delete(locationDoc);
+          }
+        }
+      }
+
+      // Commit the batch operation
+      await batch.commit();
+
+      for (var media in post.postImageUrl) {
+        await firebaseStorage.refFromURL(media).delete();
+      }
+      if (post.extra != null) {
+        await firebaseStorage.refFromURL(post.extra!).delete();
+      }
+    } catch (e) {
+      log('Error deleting the post: ${e.toString()}');
       throw const MainException(errorMsg: 'Error while deleting the post');
     }
   }

@@ -19,4 +19,6 @@ final class GetUserShortsSuccess extends GetMyReelsState {
   const GetUserShortsSuccess({
     required this.myShorts,
   });
+  @override
+  List<Object> get props => [myShorts];
 }

@@ -48,7 +48,7 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
             username: event.username,
             description: event.description,
             likes: const [],
-            location: event.location,
+            location: event.location?.trim(),
             latitude: event.latitude,
             longitude: event.longitude,
             totalComments: 0,
@@ -71,8 +71,8 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
       PostDeleteEvent event, Emitter<CreatePostState> emit) async {
     emit(PostDeletionLoading());
 
-    final res = await _deletePostsUseCase(DeletePostsUseCaseParams(
-        postId: event.postId, isReel: true, postMedias: event.postMedias));
+    final res =
+        await _deletePostsUseCase(DeletePostsUseCaseParams(post: event.post));
 
     res.fold((failure) => emit(PostDeletionFailure()),
         (success) => emit(PostDeletionSuccess()));

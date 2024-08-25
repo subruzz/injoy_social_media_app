@@ -16,11 +16,11 @@ class PostContentSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (postDesc != null || hashtags.isNotEmpty) AppSizedBox.sizedBox5H,
-        if (postDesc != null && postDesc!.isNotEmpty)
+        if (postDesc != null)
           ExpandableText(
             text: postDesc,
             trimLines: 2,
-            otherW: PostHashtag(hashtags: hashtags),
+            otherW: hashtags.isEmpty ? null : PostHashtag(hashtags: hashtags),
           ),
         if (postDesc == null) PostHashtag(hashtags: hashtags),
         AppSizedBox.sizedBox5H,

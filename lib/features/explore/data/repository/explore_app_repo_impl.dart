@@ -55,10 +55,11 @@ class ExploreAppRepoImpl implements ExploreAppRepository {
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> getTopPostsOfLocation(
-      String location) async {
+  Future<Either<Failure, List<PostEntity>>> getPostsOfHashTagsOrLocation(
+      String tagOrLocation, bool isLoc) async {
     try {
-      final res = await _exploreAppDatasource.getTopPostsOfLocation(location);
+      final res = await _exploreAppDatasource.getPostsOfHashTagsOrLocation(
+          tagOrLocation, isLoc);
       return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -66,32 +67,11 @@ class ExploreAppRepoImpl implements ExploreAppRepository {
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> searchRecentPostsOfLocation(
-      String location) async {
+  Future<Either<Failure, List<PostEntity>>> getShortsOfTagOrLocation(
+      String tagOrLocation, bool isLoc) async {
     try {
-      final res =
-          await _exploreAppDatasource.searchRecentPostsOfLocation(location);
-      return right(res);
-    } on MainException catch (e) {
-      return left(Failure(e.errorMsg));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<PostEntity>>> getTopPostsOfHashTags(
-      String tag) async {
-    try {
-      final res = await _exploreAppDatasource.getTopPostsOfHashTags(tag);
-      return right(res);
-    } on MainException catch (e) {
-      return left(Failure(e.errorMsg));
-    }
-  }
-
-  @override
-  Future<Either<Failure, List<PostEntity>>> getShortsOfTag(String tag) async {
-    try {
-      final res = await _exploreAppDatasource.getShortsOfTag(tag);
+      final res = await _exploreAppDatasource.getShortsOfTagOrLocation(
+          tagOrLocation, isLoc);
       return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

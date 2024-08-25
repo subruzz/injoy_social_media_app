@@ -37,6 +37,7 @@ class TagLocationItem extends StatelessWidget {
                           color: Colors.white,
                         )
                       : Text(
+                          textAlign: TextAlign.start,
                           '#',
                           style: TextStyle(
                             color: Colors.white,
@@ -51,6 +52,7 @@ class TagLocationItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
+                        textAlign: TextAlign.start,
                         text: title,
                         maxLines: 2,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -59,6 +61,7 @@ class TagLocationItem extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       CustomText(
+                        textAlign: TextAlign.start,
                         text: '$postCount posts',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontSize: isThatTabOrDeskTop ? 13 : null),

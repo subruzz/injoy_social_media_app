@@ -172,14 +172,12 @@ class MessageCubit extends Cubit<MessageState> {
   }
 
   void deleteMessage({
-    required String messageId,
+    required List<MessageEntity> messages,
     required GetMessageState messageState,
   }) async {
     if (messageState.otherUser == null) return;
-    final res = await _deleteMessageUsecase(DeleteMessageUsecaseParams(
-        sendorId: _appUserBloc.appUser.id,
-        recieverId: messageState.otherUser!.id,
-        messageId: messageId));
+    final res = await _deleteMessageUsecase(
+        DeleteMessageUsecaseParams(messages: messages));
     res.fold((failure) => emit(MessageFailure(errorMsg: failure.message)),
         (success) {});
   }

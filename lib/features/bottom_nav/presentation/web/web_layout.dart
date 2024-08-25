@@ -11,6 +11,7 @@ import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/dialog/general_dialog_for_web.dart';
 import 'package:social_media_app/core/widgets/web/web_width_helper.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
+import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
@@ -151,7 +152,10 @@ class _WebLayoutState extends State<WebLayout> {
 
                                   GeneralDialogForWeb.showSideDialog(
                                       context: context,
-                                      child: const NotificationPage());
+                                      child: NotificationPage(
+                                        notificationCubit:
+                                            serviceLocator<NotificationCubit>(),
+                                      ));
                                 },
                                 text: 'Notification',
                                 asset: AppAssetsConst.noti2),

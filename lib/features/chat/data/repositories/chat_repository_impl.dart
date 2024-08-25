@@ -27,10 +27,9 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<Either<Failure, Unit>> deleteMessage(
-      String sendorId, String recieverId, String messageId) async {
+      List<MessageEntity> messages) async {
     try {
-      await _chatRemoteDatasource.deleteMessage(
-          sendorId, recieverId, messageId);
+      await _chatRemoteDatasource.deleteMessage(messages);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

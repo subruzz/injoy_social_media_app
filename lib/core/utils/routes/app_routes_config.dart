@@ -10,8 +10,9 @@ import 'package:social_media_app/features/auth/presentation/pages/login_page.dar
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
-import 'package:social_media_app/features/explore/presentation/pages/view_hash_tag_posts.dart';
+import 'package:social_media_app/features/explore/presentation/pages/view_tag_or_location_posts.dart';
 import 'package:social_media_app/features/location/presentation/pages/location_asking_page_builder.dart';
+import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:social_media_app/features/post/presentation/pages/create_post_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
@@ -69,8 +70,7 @@ class MyAppRouter {
           ),
         );
       case MyAppRouteConst.bottomNavRoute:
-        return MaterialPageRoute(
-            builder: (_) => const BottomBarBuilder());
+        return MaterialPageRoute(builder: (_) => const BottomBarBuilder());
 
       case MyAppRouteConst.addProfilePage:
         return MaterialPageRoute(builder: (_) => AddProfilePage());
@@ -134,7 +134,12 @@ class MyAppRouter {
             const NotificationPreferenceScreen());
 
       case MyAppRouteConst.notificationPage:
-        return AppPageTransitions.rightToLeft(const NotificationPage());
+        final Map<String, dynamic> params =
+            settings.arguments as Map<String, dynamic>;
+        final NotificationCubit notificationCubit = params['notificationcubit'];
+        return AppPageTransitions.rightToLeft(NotificationPage(
+          notificationCubit: notificationCubit,
+        ));
       case MyAppRouteConst.likedOrSavedPostsPage:
         final Map<String, dynamic>? params =
             settings.arguments as Map<String, dynamic>?;
@@ -154,15 +159,6 @@ class MyAppRouter {
         return AppPageTransitions.rightToLeft(AccountSettingsPage(
           myId: userId,
         ));
-      case MyAppRouteConst.hashtagPostsRoute:
-        final Map<String, dynamic> params =
-            settings.arguments as Map<String, dynamic>;
-        final String hashTagName = params['hashTagName'];
-        final int? hashTagPostCount = params['hashTagPostCount'];
-        return MaterialPageRoute(
-          builder: (_) => ViewHashTagPostsScreen(
-              hashTagName: hashTagName, hashTagPostCount: hashTagPostCount),
-        );
 
       // case MyAppRouteConst.personaChatRoute:
       //   return MaterialPageRoute(builder: (_) => const PersonalChatBuilder());

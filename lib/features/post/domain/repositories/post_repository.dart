@@ -21,8 +21,7 @@ abstract interface class PostRepository {
     PartialUser postUser,
     String postId,
   );
-  Future<Either<Failure, Unit>> deletePost(String postId, bool isReel,
-      {required List<String> postMedias});
+  Future<Either<Failure, Unit>> deletePost(PostEntity post);
   Future<Either<Failure, Unit>> likePost(
       String postId, String currentUserUid, bool isReel);
   Future<Either<Failure, Unit>> unLikePost(

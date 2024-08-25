@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/pages/location_post_view.dart';
+import 'package:social_media_app/features/explore/presentation/pages/custom_map_design.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/explore_search_loading.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/search_empty_error_text.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/tag_location_item.dart';
+
+import '../../../pages/view_tag_or_location_posts.dart';
 
 class LocationSearchTab extends StatelessWidget {
   const LocationSearchTab({super.key});
@@ -24,10 +26,15 @@ class LocationSearchTab extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => LocationPostView(
-                      location: state.searchedLocations[index].locationName,
-                      locationCount: state.searchedLocations[index].count,
-                    ),
+                    builder: (context) {
+                      return ViewTagOrLocationPosts(
+                        loc: state.searchedLocations[index],
+                        tagOrLocation:
+                            state.searchedLocations[index].locationName,
+                        postCount: state.searchedLocations[index].count,
+                        isLoc: true,
+                      );
+                    },
                   ));
                 },
                 child: TagLocationItem(

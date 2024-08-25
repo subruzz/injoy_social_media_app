@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/view_hashtag_posts/widgets/shorts_of_tag.dart';
-import 'package:social_media_app/features/explore/presentation/widgets/view_hashtag_posts/widgets/top_hash_tag_posts.dart';
+import 'package:social_media_app/features/explore/presentation/widgets/tag_or_location_posts/widgets/shorts_of_tag.dart';
+import 'package:social_media_app/features/explore/presentation/widgets/tag_or_location_posts/widgets/hashtag_or_location_posts.dart';
 
 class HashtagPostsTabBarSection extends StatelessWidget {
-  const HashtagPostsTabBarSection({super.key, required this.hashtagName});
-  final String hashtagName;
+  const HashtagPostsTabBarSection(
+      {super.key, this.isLoc = false, required this.tagOrLocation});
+  final String tagOrLocation;
+  final bool isLoc;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,10 +31,10 @@ class HashtagPostsTabBarSection extends StatelessWidget {
         Expanded(
           child: TabBarView(
             children: [
-              TopHashTagPosts(
-                hashtagName: hashtagName,
+              HashtagOrLocationPosts(
+                tagOrLocation: tagOrLocation,
               ),
-              ShortsOfLocationORTag(name: hashtagName),
+              ShortsOfLocationORTag(name: tagOrLocation),
             ],
           ),
         ),

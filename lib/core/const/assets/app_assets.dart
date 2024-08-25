@@ -55,6 +55,7 @@ class AppAssetsConst {
   static const String ai = 'assets/images/ai.png';
   static const String userSecondaryProfile = 'assets/images/profile_icon.png';
   static const String applogo = 'assets/images/app_logo.png';
+  static const String nonoti = 'assets/images/no_noti.png';
 
   // GIFs
   static const String buildProfile = 'assets/gifs/profile_building.gif';

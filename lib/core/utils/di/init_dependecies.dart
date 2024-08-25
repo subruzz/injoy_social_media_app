@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/services/firebase/firebase_storage.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/common/shared_providers/cubit/following_cubit.dart';
 import 'package:social_media_app/features/ai_chat/data/datasource/ai_chat_datasource.dart';
 import 'package:social_media_app/features/ai_chat/data/repostiory/ai_chat_repo_impl.dart';
 import 'package:social_media_app/features/ai_chat/domain/repository/ai_chat_repository.dart';
@@ -51,16 +50,16 @@ import 'package:social_media_app/features/explore/data/datasource/explore_app_da
 import 'package:social_media_app/features/explore/data/repository/explore_app_repo_impl.dart';
 import 'package:social_media_app/features/explore/domain/repositories/explore_app_repository.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_all_posts.dart';
-import 'package:social_media_app/features/explore/domain/usecases/get_hashtag_top_posts.dart';
+import 'package:social_media_app/features/explore/domain/usecases/get_hashtag_or_location_posts.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_suggested_posts_from_post.dart';
-import 'package:social_media_app/features/explore/domain/usecases/get_shorts_of_tag.dart';
+import 'package:social_media_app/features/explore/domain/usecases/get_shorts_of_tag_or_location.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_recommended_post.dart';
 import 'package:social_media_app/features/explore/domain/usecases/search_hash_tags.dart';
 import 'package:social_media_app/features/explore/domain/usecases/search_locations_explore.dart';
 import 'package:social_media_app/features/explore/domain/usecases/search_user.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/explore_user/explore_user_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_hash_tag_posts_cubit.dart';
-import 'package:social_media_app/features/explore/presentation/blocs/get_shorts_of_tag/get_shorts_hashtag_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/get_hashtag_posts/get_tag_or_location_posts_cubit.dart';
+import 'package:social_media_app/features/explore/presentation/blocs/get_shorts_of_tag_or_location/get_shorts_hashtag_or_location_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/get_recommended_post/get_recommended_post_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_hash_tag/search_hash_tag_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_location_explore/search_location_explore_cubit.dart';
@@ -230,7 +229,6 @@ Future<void> initDependencies() async {
 
   serviceLocator.registerFactory(
       () => FirebaseHelper(firestore: FirebaseFirestore.instance));
-  serviceLocator.registerFactory(() => FollowingCubit());
   // serviceLocator.registerFactory(() => InitialSetupCubit(
   //     getAllStatusBloc: serviceLocator(),
   //     getMyStatusBloc: serviceLocator(),
@@ -515,16 +513,16 @@ void _exploreApp() {
     ..registerFactory(() =>
         SearchLocationsExploreUseCase(exploreAppRepository: serviceLocator()))
     ..registerFactory(() => SearchLocationExploreCubit(serviceLocator()))
-    ..registerFactory(
-        () => GetShortsOfTagUseCase(exploreAppRepository: serviceLocator()))
-    ..registerFactory(
-        () => GetHashtagTopPostsUseCase(exploreAppRepository: serviceLocator()))
-    ..registerFactory(() => GetHashTagPostsCubit(
+    ..registerFactory(() =>
+        GetShortsOfTagOrLocationUseCase(exploreAppRepository: serviceLocator()))
+    ..registerFactory(() => GetHashtagOrLocationPostsUseCase(
+        exploreAppRepository: serviceLocator()))
+    ..registerFactory(() => GetTagOrLocationPostsCubit(
           serviceLocator(),
         ))
     ..registerFactory(
         () => GetAllPostsUseCase(exploreAppRepository: serviceLocator()))
-    ..registerFactory(() => GetShortsHashtagCubit(serviceLocator()))
+    ..registerFactory(() => GetShortsHashtagOrLocationCubit(serviceLocator()))
     ..registerFactory(() => ExploreAllPostsCubit(
           serviceLocator(),
         ))

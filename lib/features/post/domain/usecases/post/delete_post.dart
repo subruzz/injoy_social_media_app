@@ -5,6 +5,8 @@ import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/post/domain/repositories/post_repository.dart';
 
+import '../../../../../core/common/entities/post.dart';
+
 class DeletePostsUseCase implements UseCase<Unit, DeletePostsUseCaseParams> {
   final PostRepository _postRepository;
 
@@ -12,14 +14,12 @@ class DeletePostsUseCase implements UseCase<Unit, DeletePostsUseCaseParams> {
       : _postRepository = postRepository;
   @override
   Future<Either<Failure, Unit>> call(params) async {
-    return await _postRepository.deletePost(params.postId, params.isReel,postMedias: params.postMedias);
+    return await _postRepository.deletePost(params.post);
   }
 }
 
 class DeletePostsUseCaseParams {
-  final String postId;
-  final bool isReel;
-  final List<String> postMedias;
-  DeletePostsUseCaseParams(
-      {required this.postId, required this.isReel, required this.postMedias});
+  final PostEntity post;
+
+  DeletePostsUseCaseParams({required this.post});
 }

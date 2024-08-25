@@ -24,15 +24,16 @@ import 'package:social_media_app/features/notification/presentation/pages/cubit/
 import '../../../../core/widgets/loading/circular_loading.dart';
 
 class NotificationPage extends StatelessWidget {
-  const NotificationPage({super.key});
-
+  const NotificationPage({super.key, required this.notificationCubit});
+  final NotificationCubit notificationCubit;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppCustomAppbar(
           title: "Notifications",
         ),
-        body: BlocBuilder<NotificationCubit, NotificationState>(
+        body: BlocBuilder(
+          bloc: notificationCubit,
           builder: (context, state) {
             if (state is NotificationFailed) {
               return const Center(
@@ -46,12 +47,13 @@ class NotificationPage extends StatelessWidget {
             }
             if (state is NotificationLoaded) {
               if (state.notifications.isEmpty) {
-                return const Center(
+                return Center(
                   child: CommonEmptyHolder(
-                      size: 170,
+                      size: 70,
                       isGif: true,
+                      color: AppDarkColor().buttonBackground.withOpacity(.8),
                       message: 'No new notifications',
-                      asset: AppAssetsConst.noNotification),
+                      asset: AppAssetsConst.nonoti),
                 );
               }
               log('notification is ${state.notifications}');
@@ -86,15 +88,13 @@ class NotificationCard extends StatelessWidget {
     return Dismissible(
       key: ValueKey(notification.notificationId),
       background: Container(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 16.0), // Padding around the background
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         alignment: Alignment.centerRight,
         color: AppDarkColor().buttonBackground,
         child: const Row(
-          mainAxisSize:
-              MainAxisSize.min, // Make the row only as wide as necessary
+          mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(width: 16.0), // Space between the item and the background
+            SizedBox(width: 16.0),
             Icon(
               Icons.delete,
               color: Colors.white,

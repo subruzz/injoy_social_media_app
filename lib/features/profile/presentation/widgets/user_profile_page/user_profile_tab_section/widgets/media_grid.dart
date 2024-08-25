@@ -49,6 +49,7 @@ class MediaGrid extends StatelessWidget {
                 if (isShorts || media.isThatvdo) {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => VideoReelPage(
+                        isMyShorts: isMe,
                         showOne: showOnlyOne,
                         short: showOnlyOne ? media : null,
                         index: index,

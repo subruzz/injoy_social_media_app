@@ -1,5 +1,7 @@
 // lib/features/location/data/datasources/location_remote_data_source.dart
 
+import 'dart:developer';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:social_media_app/core/const/enums/location_enum.dart';
@@ -54,6 +56,7 @@ class LocationLocalDataSourceImpl implements LocationLocalDataSource {
 
       return place.toReadableString();
     } catch (e) {
+      log('error getting device locatin ${e.toString()}');
       throw const MainException();
     }
   }

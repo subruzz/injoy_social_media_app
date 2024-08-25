@@ -37,10 +37,9 @@ class PostRepostioryImpl implements PostRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> deletePost(String postId, bool isReel,
-      {required List<String> postMedias}) async {
+  Future<Either<Failure, Unit>> deletePost(PostEntity post) async {
     try {
-      await _postRemoteDatasource.deletePost(postId, isReel,postMedias: postMedias);
+      await _postRemoteDatasource.deletePost(post);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,17 +16,16 @@ abstract interface class ExploreAppDatasource {
   Future<List<HashtagModel>> searchHashTags(String query);
   Future<List<PostModel>> getRecommended(String query);
   Future<List<SearchLocationModel>> searchLocationInExplore(String query);
-  Future<List<PostModel>> getTopPostsOfLocation(String location);
-  Future<List<PostModel>> searchRecentPostsOfLocation(String location);
-  Future<List<PostModel>> getTopPostsOfHashTags(String tag);
-  Future<List<PostModel>> getShortsOfTag(String tag);
+
+  Future<List<PostModel>> getPostsOfHashTagsOrLocation(
+      String tagOrLocation, bool isLoc);
+  Future<List<PostModel>> getShortsOfTagOrLocation(
+      String tagOrLocation, bool isLoc);
   Future<List<PostModel>> getAllPosts(String id);
   Future<List<PostModel>> getPostSuggestionFromPost(
     PostEntity post,
     String myId,
   );
-  Future<List<PostModel>> getSuggestedPostBasedOnaPost(PostEntity post);
-  Future<List<PostModel>> getShortsInExplore(PostEntity post);
 }
 
 class ExploreAppDatasourceImpl implements ExploreAppDatasource {
@@ -47,16 +45,31 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       List<PostModel> posts = [];
       final userRef =
           _firebaseFirestore.collection(FirebaseCollectionConst.users);
+
+      // Cache map to store fetched user details
+      final Map<String, PartialUser> userCache = {};
       final QuerySnapshot<Map<String, dynamic>> allPosts = await postRef.get();
       for (var post in allPosts.docs) {
-        final userDoc = await userRef.doc(post['creatorUid']).get();
-        if (!userDoc.exists) continue;
-        final PartialUser user = PartialUser.fromJson(userDoc.data()!);
+        final creatorUid = post['creatorUid'] as String;
+
+        // Check if the user details are already in the cache
+        PartialUser? user = userCache[creatorUid];
+
+        if (user == null) {
+          // Fetch user details if not in the cache
+          final userDoc = await userRef.doc(creatorUid).get();
+          if (!userDoc.exists) continue;
+          user = PartialUser.fromJson(userDoc.data()!);
+
+          // Store the fetched user in the cache
+          userCache[creatorUid] = user;
+        }
+
         final currentPost = PostModel.fromJson(post.data(), user);
         posts.add(currentPost);
       }
+
       return posts;
-//
     } catch (e) {
       throw const MainException();
     }
@@ -190,40 +203,131 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
     }
   }
 
+  // @override
+  // Future<List<PostModel>> searchRecentPostsOfLocation(String location) async {
+  //   try {
+  //     final locationRef = _firebaseFirestore
+  //         .collection('locations')
+  //         .doc(location)
+  //         .collection('postIds');
+  //     final querySnapshot = await locationRef.get();
+
+  //     final List<String> postIds =
+  //         querySnapshot.docs.map((doc) => doc.id).toList();
+
+  //     final allPosts = await _firebaseFirestore
+  //         .collection('posts')
+  //         .where(FieldPath.documentId, whereIn: postIds)
+  //         .orderBy('createAt', descending: true)
+  //         .orderBy('totalComments', descending: true)
+  //         .get();
+  //     List<PostModel> posts = [];
+  //     final userRef =
+  //         _firebaseFirestore.collection(FirebaseCollectionConst.users);
+
+  //     for (var post in allPosts.docs) {
+  //       final userDoc = await userRef.doc(post['creatorUid']).get();
+  //       if (!userDoc.exists) continue;
+  //       final PartialUser user =
+  //           PartialUser.fromJson(userDoc as Map<String, dynamic>);
+  //       final currentPost = PostModel.fromJson(post.data(), user);
+  //       posts.add(currentPost);
+  //     }
+  //     // final List<PostModel> posts = postsQuery.docs.map((doc) {
+  //     //   final data = doc.data();
+  //     //   return PostModel.fromJson(data, null);
+  //     // }).toList();
+
+  //     return posts;
+  //   } catch (e) {
+  //     throw const MainException();
+  //   }
+  // }
+
+  // @override
+  // Future<List<PostModel>> getTopPostsOfLocation(String location) async {
+  //   try {
+  //     final allPosts = await _firebaseFirestore
+  //         .collection('posts')
+  //         .where('location', isEqualTo: location)
+  //         .where('isThatvdo', isEqualTo: false)
+  //         .get();
+
+  //     List<PostModel> posts = [];
+  //     final userRef =
+  //         _firebaseFirestore.collection(FirebaseCollectionConst.users);
+
+  //     // Cache map to store fetched user details
+  //     final Map<String, PartialUser> userCache = {};
+
+  //     for (var post in allPosts.docs) {
+  //       final creatorUid = post['creatorUid'] as String;
+
+  //       // Check if the user details are already in the cache
+  //       PartialUser? user = userCache[creatorUid];
+
+  //       if (user == null) {
+  //         // Fetch user details if not in the cache
+  //         final userDoc = await userRef.doc(creatorUid).get();
+  //         if (!userDoc.exists) continue;
+  //         user = PartialUser.fromJson(userDoc.data() as Map<String, dynamic>);
+
+  //         // Store the fetched user in the cache
+  //         userCache[creatorUid] = user;
+  //       }
+
+  //       final currentPost = PostModel.fromJson(post.data(), user);
+  //       posts.add(currentPost);
+  //     }
+
+  //     return posts;
+  //   } catch (e) {
+  //     throw const MainException();
+  //   }
+  // }
+
   @override
-  Future<List<PostModel>> searchRecentPostsOfLocation(String location) async {
+  Future<List<PostModel>> getPostsOfHashTagsOrLocation(
+      String tagOrLocation, bool isLoc) async {
     try {
-      final locationRef = _firebaseFirestore
-          .collection('locations')
-          .doc(location)
-          .collection('postIds');
-      final querySnapshot = await locationRef.get();
+      final allPosts = isLoc
+          ? await _firebaseFirestore
+              .collection('posts')
+              .where('location', isEqualTo: tagOrLocation)
+              .where('isThatvdo', isEqualTo: false)
+              .get()
+          : await _firebaseFirestore
+              .collection('posts')
+              .where('hashtags', arrayContains: tagOrLocation)
+              .where('isThatvdo', isEqualTo: false)
+              .get();
 
-      final List<String> postIds =
-          querySnapshot.docs.map((doc) => doc.id).toList();
-
-      final allPosts = await _firebaseFirestore
-          .collection('posts')
-          .where(FieldPath.documentId, whereIn: postIds)
-          .orderBy('createAt', descending: true)
-          .orderBy('totalComments', descending: true)
-          .get();
       List<PostModel> posts = [];
       final userRef =
           _firebaseFirestore.collection(FirebaseCollectionConst.users);
 
+      // Cache map to store fetched user details
+      final Map<String, PartialUser> userCache = {};
+
       for (var post in allPosts.docs) {
-        final userDoc = await userRef.doc(post['creatorUid']).get();
-        if (!userDoc.exists) continue;
-        final PartialUser user =
-            PartialUser.fromJson(userDoc as Map<String, dynamic>);
+        final creatorUid = post['creatorUid'] as String;
+
+        // Check if the user details are already in the cache
+        PartialUser? user = userCache[creatorUid];
+
+        if (user == null) {
+          // Fetch user details if not in the cache
+          final userDoc = await userRef.doc(creatorUid).get();
+          if (!userDoc.exists) continue;
+          user = PartialUser.fromJson(userDoc.data() as Map<String, dynamic>);
+
+          // Store the fetched user in the cache
+          userCache[creatorUid] = user;
+        }
+
         final currentPost = PostModel.fromJson(post.data(), user);
         posts.add(currentPost);
       }
-      // final List<PostModel> posts = postsQuery.docs.map((doc) {
-      //   final data = doc.data();
-      //   return PostModel.fromJson(data, null);
-      // }).toList();
 
       return posts;
     } catch (e) {
@@ -232,103 +336,47 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
   }
 
   @override
-  Future<List<PostModel>> getTopPostsOfLocation(String location) async {
+  Future<List<PostModel>> getShortsOfTagOrLocation(
+      String tagOrLocation, bool isLoc) async {
     try {
-      final locationRef = _firebaseFirestore
-          .collection('locations')
-          .doc(location)
-          .collection('postIds');
-      final querySnapshot = await locationRef.get();
-
-      final List<String> postIds =
-          querySnapshot.docs.map((doc) => doc.id).toList();
-
-      final allPosts = await _firebaseFirestore
-          .collection('posts')
-          .where(FieldPath.documentId, whereIn: postIds)
-          .orderBy('likesCount', descending: true)
-          .orderBy('totalComments', descending: true)
-          .get();
+      final allPosts = isLoc
+          ? await _firebaseFirestore
+              .collection('posts')
+              .where('location', isEqualTo: tagOrLocation)
+              .where('isThatvdo', isEqualTo: true)
+              .get()
+          : await _firebaseFirestore
+              .collection('posts')
+              .where('hashtags', arrayContains: tagOrLocation)
+              .where('isThatvdo', isEqualTo: true)
+              .get();
 
       List<PostModel> posts = [];
       final userRef =
           _firebaseFirestore.collection(FirebaseCollectionConst.users);
 
+      // Cache map to store fetched user details
+      final Map<String, PartialUser> userCache = {};
+
       for (var post in allPosts.docs) {
-        final userDoc = await userRef.doc(post['creatorUid']).get();
-        if (!userDoc.exists) continue;
-        final PartialUser user =
-            PartialUser.fromJson(userDoc as Map<String, dynamic>);
+        final creatorUid = post['creatorUid'] as String;
+
+        // Check if the user details are already in the cache
+        PartialUser? user = userCache[creatorUid];
+
+        if (user == null) {
+          // Fetch user details if not in the cache
+          final userDoc = await userRef.doc(creatorUid).get();
+          if (!userDoc.exists) continue;
+          user = PartialUser.fromJson(userDoc.data() as Map<String, dynamic>);
+
+          // Store the fetched user in the cache
+          userCache[creatorUid] = user;
+        }
+
         final currentPost = PostModel.fromJson(post.data(), user);
         posts.add(currentPost);
       }
-
-      // final List<PostModel> posts = postsQuery.docs.map((doc) {
-      //   final data = doc.data();
-      //   return PostModel.fromJson(data,null);
-      // }).toList();
-
-      return posts;
-    } catch (e) {
-      throw const MainException();
-    }
-  }
-
-  @override
-  Future<List<PostModel>> getTopPostsOfHashTags(String tag) async {
-    try {
-      final allPosts = await _firebaseFirestore
-          .collection('posts')
-          .where('hashtags', arrayContains: tag)
-          .where('isThatvdo', isEqualTo: false)
-          .get();
-      List<PostModel> posts = [];
-      final userRef =
-          _firebaseFirestore.collection(FirebaseCollectionConst.users);
-
-      for (var post in allPosts.docs) {
-        final userDoc = await userRef.doc(post['creatorUid']).get();
-        if (!userDoc.exists) continue;
-        final PartialUser user =
-            PartialUser.fromJson(userDoc.data() as Map<String, dynamic>);
-        final currentPost = PostModel.fromJson(post.data(), user);
-        posts.add(currentPost);
-      }
-      // final List<PostModel> posts = querySnapshot.docs.map((doc) {
-      //   final data = doc.data();
-      //   return PostModel.fromJson(data, null);
-      // }).toList();
-
-      return posts;
-    } catch (e) {
-      throw const MainException();
-    }
-  }
-
-  @override
-  Future<List<PostModel>> getShortsOfTag(String tag) async {
-    try {
-      final allPosts = await _firebaseFirestore
-          .collection('posts')
-          .where('hashtags', arrayContains: tag)
-          .where('isThatvdo', isEqualTo: true)
-          .get();
-      List<PostModel> posts = [];
-      final userRef =
-          _firebaseFirestore.collection(FirebaseCollectionConst.users);
-
-      for (var post in allPosts.docs) {
-        final userDoc = await userRef.doc(post['creatorUid']).get();
-        if (!userDoc.exists) continue;
-        final PartialUser user =
-            PartialUser.fromJson(userDoc.data() as Map<String, dynamic>);
-        final currentPost = PostModel.fromJson(post.data(), user);
-        posts.add(currentPost);
-      }
-      // final List<PostModel> posts = querySnapshot.docs.map((doc) {
-      //   final data = doc.data();
-      //   return PostModel.fromJson(data, null);
-      // }).toList();
 
       return posts;
     } catch (e) {
@@ -407,7 +455,6 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       }
 
       if (post.hashtags.isNotEmpty) {
-        // Query for posts containing specific hashtags (interests)
         interestsQuery = _firebaseFirestore
             .collection(FirebaseCollectionConst.posts)
             .where('isThatvdo', isEqualTo: false)
@@ -427,6 +474,7 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       final List<QueryDocumentSnapshot> nearbyDocs = nearbyPostsQuery != null
           ? (interestsQuery != null ? results[1].docs : results[0].docs)
           : [];
+
       // Create a set to track unique post IDs and prevent duplicates
       final Set<String> postIds = {};
       final List<PostModel> allPosts = [];
@@ -434,6 +482,9 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
       // Reference to the users collection
       final userRef =
           _firebaseFirestore.collection(FirebaseCollectionConst.users);
+
+      // Cache map to store fetched user details
+      final Map<String, PartialUser> userCache = {};
 
       // Helper function to process documents and add unique posts
       Future<void> processDocs(List<QueryDocumentSnapshot> docs) async {
@@ -443,13 +494,20 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
           final id = data['postId'];
           if (id == post.postId || id == null || !postIds.add(id)) continue;
 
-          // Fetch the user document for this post
-          final userDoc = await userRef.doc(data['creatorUid']).get();
-          if (!userDoc.exists) continue;
+          final creatorUid = data['creatorUid'] as String;
 
-          // Create the PartialUser object
-          final PartialUser user =
-              PartialUser.fromJson(userDoc.data() as Map<String, dynamic>);
+          // Check if the user details are already in the cache
+          PartialUser? user = userCache[creatorUid];
+
+          if (user == null) {
+            // Fetch user details if not in the cache
+            final userDoc = await userRef.doc(creatorUid).get();
+            if (!userDoc.exists) continue;
+            user = PartialUser.fromJson(userDoc.data() as Map<String, dynamic>);
+
+            // Store the fetched user in the cache
+            userCache[creatorUid] = user;
+          }
 
           // Create the PostModel with the user data
           final PostModel currentPost = PostModel.fromJson(data, user);
@@ -465,18 +523,6 @@ class ExploreAppDatasourceImpl implements ExploreAppDatasource {
     } catch (e) {
       throw const MainException();
     }
-  }
-
-  @override
-  Future<List<PostModel>> getSuggestedPostBasedOnaPost(PostEntity post) {
-    // TODO: implement getSuggestedPostBasedOnaPost
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<PostModel>> getShortsInExplore(PostEntity post) {
-    // TODO: implement getShortsInExplore
-    throw UnimplementedError();
   }
 
 //   @override

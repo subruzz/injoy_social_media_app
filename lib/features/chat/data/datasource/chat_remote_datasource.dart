@@ -14,8 +14,7 @@ abstract interface class ChatRemoteDatasource {
   Stream<List<ChatModel>> getMyChat(String myId);
   Stream<List<MessageModel>> getSingleUserMessages(
       String sendorId, String recipientId);
-  Future<void> deleteMessage(
-      String sendorId, String recieverId, String messageId);
+  Future<void> deleteMessage(List<MessageEntity> messages);
   Future<void> seenMessageUpdate(
       String sendorId, String recieverId, String messageId);
 
@@ -198,38 +197,51 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   }
 
   @override
-  Future<void> deleteMessage(
-      String senderId, String receiverId, String messageId) async {
-    log('Deleting message with ID: $messageId');
+  Future<void> deleteMessage(List<MessageEntity> messages) async {
     try {
-      final myMessagesRef = _firestore
-          .collection('users')
-          .doc(senderId)
-          .collection('myChat')
-          .doc(receiverId)
-          .collection('messages')
-          .doc(messageId);
+      for (var message in messages) {
+        final myMessagesRef = _firestore
+            .collection('users')
+            .doc(message.senderUid)
+            .collection('myChat')
+            .doc(message.recipientUid)
+            .collection('messages')
+            .doc(message.messageId);
 
-      final otherMessagesRef = _firestore
-          .collection('users')
-          .doc(receiverId)
-          .collection('myChat')
-          .doc(senderId)
-          .collection('messages')
-          .doc(messageId);
+        final otherMessagesRef = _firestore
+            .collection('users')
+            .doc(message.recipientUid)
+            .collection('myChat')
+            .doc(message.senderUid)
+            .collection('messages')
+            .doc(message.messageId);
 
-      // Perform the transaction
-      await _firestore.runTransaction((transaction) async {
-        // Delete the message from sender's chat
-        transaction.delete(myMessagesRef);
+        // Check if assetLink is not null before attempting to delete
+        if (message.assetLink != null) {
+          try {
+            await FirebaseStorage.instance
+                .refFromURL(message.assetLink!)
+                .delete();
+          } catch (e) {
+            throw const MainException();
+          }
+        }
 
-        // Delete the message from receiver's chat
-        transaction.delete(otherMessagesRef);
-      });
+        // Perform the transaction
+        await _firestore.runTransaction((transaction) async {
+          try {
+            // Delete the message from sender's chat
+            transaction.delete(myMessagesRef);
 
-      log('Message deleted successfully');
+            // Delete the message from receiver's chat
+            transaction.delete(otherMessagesRef);
+          } catch (e) {
+            throw const MainException();
+          }
+        });
+      }
     } catch (e) {
-      log('Error deleting message: $e');
+      print('Error deleting messages: $e');
       throw const MainException();
     }
   }

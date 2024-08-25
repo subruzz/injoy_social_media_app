@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
+import 'package:social_media_app/features/explore/presentation/pages/view_tag_or_location_posts.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/explore_search_loading.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/search_empty_error_text.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/tag_location_item.dart';
@@ -28,14 +29,16 @@ class HashtagSearchTab extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    MyAppRouteConst.hashtagPostsRoute,
-                    arguments: {
-                      'hashTagName': state.searchedHashtags[index].hashtagName,
-                      'hashTagPostCount': state.searchedHashtags[index].count,
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) {
+                      return ViewTagOrLocationPosts(
+                        tagOrLocation:
+                            state.searchedHashtags[index].hashtagName,
+                        postCount: state.searchedHashtags[index].count,
+                        isLoc: false,
+                      );
                     },
-                  );
+                  ));
                 },
                 child: TagLocationItem(
                   title:
@@ -47,7 +50,6 @@ class HashtagSearchTab extends StatelessWidget {
           );
         }
         if (state is SearchHashTagFailure) {
-      
           return const ExploreFieldMessages(
             isError: true,
           );

@@ -18,13 +18,8 @@ abstract interface class ExploreAppRepository {
     String myId,
   );
   Future<Either<Failure, List<PostEntity>>> getAllPosts(String id);
-
-  //posts based on location
-  Future<Either<Failure, List<PostEntity>>> getTopPostsOfLocation(
-      String location);
-  Future<Either<Failure, List<PostEntity>>> searchRecentPostsOfLocation(
-      String location);
-  //posts based on tags
-  Future<Either<Failure, List<PostEntity>>> getTopPostsOfHashTags(String tag);
-  Future<Either<Failure, List<PostEntity>>> getShortsOfTag(String tag);
+  Future<Either<Failure, List<PostEntity>>> getPostsOfHashTagsOrLocation(
+      String tagOrLocation, bool isLoc);
+  Future<Either<Failure, List<PostEntity>>> getShortsOfTagOrLocation(
+      String tagOrLocation, bool isLoc);
 }

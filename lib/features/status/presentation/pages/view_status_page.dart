@@ -49,6 +49,7 @@ class _MoreStoriesState extends State<ViewStatusPage> {
   late List<SingleStatusEntity> _statuses;
   final ValueNotifier<bool> _playPauseStatus = ValueNotifier(false);
   final _statusViewCubit = serviceLocator<StatusViewersCubit>();
+  final _deleteStatus = serviceLocator<DeleteStatusBloc>();
   @override
   void initState() {
     _statuses =
@@ -58,14 +59,17 @@ class _MoreStoriesState extends State<ViewStatusPage> {
 
   @override
   void dispose() {
+    _currentStoryIndex.dispose();
+    _statuses.clear();
+    _playPauseStatus.dispose();
+    _statusViewCubit.close();
+    _deleteStatus.close();
     _storyController.dispose();
     super.dispose();
   }
 
   void deleteStatus(BuildContext context, String statusId, String? imgUrl) {
-    context
-        .read<DeleteStatusBloc>()
-        .add(DeleteStatus(sId: statusId, imgUrl: imgUrl));
+    _deleteStatus.add(DeleteStatus(sId: statusId, imgUrl: imgUrl));
   }
 
   @override
@@ -105,14 +109,16 @@ class _MoreStoriesState extends State<ViewStatusPage> {
                         Row(
                           children: [
                             if (widget.isMe)
-                              StatusDeletePopup(deleteStatus: () {
-                                deleteStatus(
-                                    context,
-                                    _statuses[_currentStoryIndex.value]
-                                        .statusId,
-                                    _statuses[_currentStoryIndex.value]
-                                        .statusImage);
-                              }),
+                              StatusDeletePopup(
+                                  deleteStatusBloc: _deleteStatus,
+                                  deleteStatus: () {
+                                    deleteStatus(
+                                        context,
+                                        _statuses[_currentStoryIndex.value]
+                                            .statusId,
+                                        _statuses[_currentStoryIndex.value]
+                                            .statusImage);
+                                  }),
                             AppSizedBox.sizedBox10W,
                             ValueListenableBuilder(
                               valueListenable: _playPauseStatus,

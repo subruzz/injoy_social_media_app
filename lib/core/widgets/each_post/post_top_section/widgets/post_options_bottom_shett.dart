@@ -16,6 +16,7 @@ import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
 import 'package:social_media_app/features/post/presentation/pages/edit_post.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_my_reels/get_my_reels_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
 
 class PostOptionsBottomShett {
@@ -31,6 +32,7 @@ class PostOptionsBottomShett {
       VoidCallback? onDelete,
       VoidCallback? onAboutAccount,
       int currentPostIndex = 0,
+      bool isShorts = false,
       required int postImageUrlIndex}) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -55,8 +57,11 @@ class PostOptionsBottomShett {
                 onTap: () {
                   Navigator.pop(context);
 
-                  AssetServices.saveImageWithPath(
-                      imageUrl: post.postImageUrl[postImageUrlIndex]);
+                  isShorts
+                      ? AssetServices.saveVideo(
+                          videoUrl: post.postImageUrl[postImageUrlIndex])
+                      : AssetServices.saveImageWithPath(
+                          imageUrl: post.postImageUrl[postImageUrlIndex]);
                 },
                 iconSize: 23,
               ),
@@ -81,30 +86,22 @@ class PostOptionsBottomShett {
               // ),
             ],
             if (isMyPost) ...[
-              ListTile(
-                leading: Icon(Icons.hide_source_rounded,
-                    color: AppDarkColor().iconPrimaryColor),
-                title: Text(l10n.turnOffCommenting),
-                onTap: () {
-                  Navigator.pop(context);
-                  onTurnOffCommenting?.call();
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.edit_outlined,
-                    color: AppDarkColor().iconPrimaryColor),
-                title: Text(l10n.edit),
-                onTap: () {
-                  Navigator.pop(context);
+              if (!isShorts)
+                ListTile(
+                  leading: Icon(Icons.edit_outlined,
+                      color: AppDarkColor().iconPrimaryColor),
+                  title: Text(l10n.edit),
+                  onTap: () {
+                    Navigator.pop(context);
 
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => EditPostPage(
-                      post: post,
-                      index: currentPostIndex,
-                    ),
-                  ));
-                },
-              ),
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => EditPostPage(
+                        post: post,
+                        index: currentPostIndex,
+                      ),
+                    ));
+                  },
+                ),
               ListTile(
                 leading: Icon(Icons.delete_outlined,
                     color: AppDarkColor().iconSecondarycolor),
@@ -116,9 +113,9 @@ class PostOptionsBottomShett {
                       title: 'Are you Sure?',
                       context: context,
                       callBack: () {
-                        context.read<CreatePostBloc>().add(PostDeleteEvent(
-                            postId: post.postId,
-                            postMedias: post.postImageUrl));
+                        context
+                            .read<CreatePostBloc>()
+                            .add(PostDeleteEvent(post: post));
                       },
                       buttonChild:
                           BlocConsumer<CreatePostBloc, CreatePostState>(
@@ -135,8 +132,13 @@ class PostOptionsBottomShett {
                             log('post stat esuccessis $state');
 
                             log('post deleted successfully');
-                            context.read<GetUserPostsBloc>().add(
-                                GetPostAfterDelete(index: currentPostIndex));
+                            isShorts
+                                ? context
+                                    .read<GetMyReelsCubit>()
+                                    .getShortsAfterDelete(currentPostIndex)
+                                : context.read<GetUserPostsBloc>().add(
+                                    GetPostAfterDelete(
+                                        index: currentPostIndex));
                             Messenger.showSnackBar(
                                 message: l10n.post_deleted_success);
                             Navigator.pop(context);
@@ -166,14 +168,14 @@ class PostOptionsBottomShett {
                 },
                 iconSize: 22,
               ),
-            if (!isMyPost)
-              CommonListTile(
-                text: l10n.report,
-                iconSize: 22,
-                extraColor: AppDarkColor().secondaryPrimaryText,
-                leading: AppAssetsConst.report,
-                onTap: () {},
-              ),
+            // if (!isMyPost)
+            //   CommonListTile(
+            //     text: l10n.report,
+            //     iconSize: 22,
+            //     extraColor: AppDarkColor().secondaryPrimaryText,
+            //     leading: AppAssetsConst.report,
+            //     onTap: () {},
+            //   ),
           ],
         );
       },

@@ -18,4 +18,14 @@ class GetMyReelsCubit extends Cubit<GetMyReelsState> {
     res.fold((failure) => emit(GetUserShortsError()),
         (success) => emit(GetUserShortsSuccess(myShorts: success)));
   }
+
+  void getShortsAfterDelete(int index) {
+    if (state is! GetUserShortsSuccess) return;
+    final currentState = state as GetUserShortsSuccess;
+
+    final updatedUserPosts = List<PostEntity>.from(currentState.myShorts);
+    updatedUserPosts.removeAt(index);
+
+    emit(GetUserShortsSuccess(myShorts: updatedUserPosts));
+  }
 }

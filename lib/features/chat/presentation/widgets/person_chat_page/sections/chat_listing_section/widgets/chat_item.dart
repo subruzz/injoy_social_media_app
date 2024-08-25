@@ -5,7 +5,6 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_bubble.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/reply_preview_widget.dart';
-import 'package:social_media_app/core/services/assets/asset_model.dart';
 
 import '../../../../../../../../core/const/chat_const/chat_const.dart';
 

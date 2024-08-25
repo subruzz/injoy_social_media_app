@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -22,7 +23,6 @@ import 'package:social_media_app/features/notification/data/datacource/remote/de
 import 'package:social_media_app/firebase_options.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:social_media_app/restart_widget.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
@@ -33,6 +33,11 @@ void main() async {
   await dotenv.load(fileName: '.env');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseAppCheck.instance.activate(
+    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    androidProvider: AndroidProvider.debug,
+    appleProvider: AppleProvider.appAttest,
   );
   if (!kIsWeb) {
     Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
@@ -63,7 +68,7 @@ void main() async {
 
   await initDependencies();
 
-  runApp(RestartWidget(child: MyApp(navigatorKey: navigatorKey)));
+  runApp(MyApp(navigatorKey: navigatorKey));
 }
 
 class MyApp extends StatelessWidget {
@@ -119,7 +124,7 @@ class MyApp extends StatelessWidget {
 
 _defineThePlatform(BuildContext context) {
   TargetPlatform platform = Theme.of(context).platform;
-  double width = MediaQuery.of(context).size.width; // Call MediaQuery only once
+  double width = MediaQuery.of(context).size.width;
 
   // Determine screen size and platform
   isThatTabOrDeskTop = width >= 800;

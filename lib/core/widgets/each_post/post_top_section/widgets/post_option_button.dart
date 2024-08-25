@@ -16,6 +16,7 @@ class PostOptionButton extends StatelessWidget {
       this.onEdit,
       this.onDelete,
       this.onAboutAccount,
+      this.isShorts = false,
       required this.post,
       required this.currentPostIndex,
       required this.pagecontroller});
@@ -31,11 +32,13 @@ class PostOptionButton extends StatelessWidget {
   final VoidCallback? onAboutAccount;
   final PageController pagecontroller;
   final int currentPostIndex;
+  final bool isShorts;
   @override
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () {
           PostOptionsBottomShett.showPostOptionBottomSheet(context,
+              isShorts: isShorts,
               post: post,
               isMyPost: isMyPost,
               onShare: onShare,
@@ -51,6 +54,8 @@ class PostOptionButton extends StatelessWidget {
               onDelete: onDelete,
               onAboutAccount: onAboutAccount);
         },
-        icon: const CustomSvgIcon(assetPath: AppAssetsConst.moreIcon));
+        icon: isShorts
+            ? const Icon(Icons.more_horiz)
+            : const CustomSvgIcon(assetPath: AppAssetsConst.moreIcon));
   }
 }

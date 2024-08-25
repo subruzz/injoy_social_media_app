@@ -10,8 +10,7 @@ abstract class ChatRepository {
   Stream<Either<Failure, List<ChatEntity>>> getMyChat(String myId);
   Stream<Either<Failure, List<MessageEntity>>> getSingleUserMessages(
       String sendorId, String recipientId);
-  Future<Either<Failure, Unit>> deleteMessage(
-      String sendorId, String recieverId, String messageId);
+  Future<Either<Failure, Unit>> deleteMessage(List<MessageEntity> messages);
   Future<Either<Failure, Unit>> seenMessageUpdate(
       String sendorId, String recieverId, String messageId);
 

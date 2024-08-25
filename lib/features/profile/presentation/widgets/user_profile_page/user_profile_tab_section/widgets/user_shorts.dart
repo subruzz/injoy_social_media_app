@@ -27,6 +27,7 @@ class MyShortsTab extends StatelessWidget {
             );
           }
           return MediaGrid(
+            isMe: true,
             medias: state.myShorts,
             isShorts: true,
           );

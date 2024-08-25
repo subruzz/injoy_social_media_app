@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,5 +36,10 @@ class SearchHashtagBloc extends Bloc<SearchHashtagEvent, SearchHashtagState> {
         emit(SearchHashtagSuccess(hashtags: success));
       });
     });
+  
+  }
+  @override
+  Future<void> close() {
+log('search bloc close');    return super.close();
   }
 }

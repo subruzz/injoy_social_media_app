@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_user/get_other_user_posts/get_other_user_posts_cubit.dart';
@@ -24,9 +25,9 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
   @override
   void initState() {
     super.initState();
-    context.read<WhoVisitedBloc>().add(AddUserToVisited(
-        myId: context.read<AppUserBloc>().appUser.id,
-        visitedUserId: widget.user.id));
+    serviceLocator<FirebaseHelper>().addTheVisitedUser(
+        visitedUserId: widget.user.id,
+        myId: context.read<AppUserBloc>().appUser.id);
   }
 
   @override

@@ -5,7 +5,6 @@ import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/enums/location_enum.dart';
-import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/utils/other/debouncer.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
@@ -17,7 +16,6 @@ import 'package:social_media_app/features/location/data/models/location_search_m
 import 'package:social_media_app/features/location/domain/entities/location.dart';
 import 'package:social_media_app/features/location/presentation/blocs/location_bloc/location_bloc.dart';
 import 'package:social_media_app/features/location/presentation/widgets/location_dialog.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/index.dart';
 
 import '../../../../core/widgets/app_related/common_text.dart';
 import '../../../../core/widgets/button/custom_elevated_button.dart';
@@ -31,13 +29,6 @@ class LocationAskingPage extends StatefulWidget {
 }
 
 class _LocationAskingPageState extends State<LocationAskingPage> {
-  void submitProfile(BuildContext context, UserLocation? location) {
-    context.read<ProfileBloc>().add(CompleteProfileSetup(
-        userName: '',
-        location: location,
-        uid: context.read<AppUserBloc>().appUser.id));
-  }
-
   final _debouncer = Debouncer(delay: const Duration(milliseconds: 700));
   @override
   Widget build(BuildContext context) {
@@ -87,7 +78,7 @@ class _LocationAskingPageState extends State<LocationAskingPage> {
                 CustomButton(
                     radius: AppBorderRadius.small,
                     child: CustomText(
-                     text:    'Use current location',
+                      text: 'Use current location',
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     onClick: () {
@@ -96,7 +87,17 @@ class _LocationAskingPageState extends State<LocationAskingPage> {
                 AppSizedBox.sizedBox10H,
                 BlocConsumer(
                   bloc: locationBloc,
-                  listener: (context, state) {},
+                  listener: (context, state) {
+                    if (state is LocationSuccess) {
+                      Navigator.pop(
+                          context,
+                          UserLocation(
+                              latitude: state.location.latitude,
+                              longitude: state.location.longitude,
+                              currentLocation:
+                                  state.location.currentLocation?.trim()));
+                    }
+                  },
                   builder: (context, state) {
                     if (state is LocationFailure) {
                       return const Center(child: AppErrorGif());

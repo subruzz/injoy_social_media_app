@@ -127,7 +127,7 @@ class ChatListingSectionSection extends StatelessWidget {
                               callBack: () {
                                 context.read<MessageCubit>().deleteMessage(
                                     messageState: getMessageCubit.state,
-                                    messageId: message.messageId);
+                                    messages: [message]);
                               },
                               buttonText: AppUiStringConst.delete,
                             );

@@ -193,4 +193,47 @@ class FirebaseHelper {
         .doc(notification.notificationId)
         .set(notification.toMap());
   }
+
+  Future<void> addTheVisitedUser({
+    required String visitedUserId,
+    required String myId,
+  }) async {
+    final userRef = _firestore.collection(FirebaseCollectionConst.users);
+    final whoVisitedMeRef =
+        _firestore.collection(FirebaseCollectionConst.whoVisitedMe);
+    try {
+      await _firestore.runTransaction((transaction) async {
+        // Reference to the visited user's document
+        final visitedUserDocRef = userRef.doc(visitedUserId);
+        final visitedUserDoc = await transaction.get(visitedUserDocRef);
+
+        if (!visitedUserDoc.exists) {
+          return;
+        }
+
+        // Reference to the 'whoVisitedMe' collection for the visited user
+        final whoVisitedMeDocRef = whoVisitedMeRef
+            .doc(visitedUserId)
+            .collection(FirebaseCollectionConst.visitors)
+            .doc(myId);
+
+        // Check if the visitor record already exists
+        final whoVisitedMeDoc = await transaction.get(whoVisitedMeDocRef);
+        log('called this');
+        if (!whoVisitedMeDoc.exists) {
+          // Update the visit count in the visited user's document
+          transaction.update(
+              visitedUserDocRef, {'visitCount': FieldValue.increment(1)});
+
+          // Add the visitor record to the 'whoVisitedMe' collection
+          transaction.set(whoVisitedMeDocRef, {
+            'visitorUserId': myId,
+            'timestamp': FieldValue.serverTimestamp(),
+          });
+        }
+      });
+    } catch (e) {
+      throw const MainException();
+    }
+  }
 }

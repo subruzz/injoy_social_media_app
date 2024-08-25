@@ -10,18 +10,21 @@ class CommonEmptyHolder extends StatelessWidget {
       this.size = 120,
       required this.message,
       required this.asset,
-      this.isGif = false});
+      this.isGif = false,
+      this.color});
   final String message;
   final bool isGif;
   final double size;
   final String asset;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         isGif
-            ? Image.asset(asset, width: isThatTabOrDeskTop ? size : size.w)
+            ? Image.asset(asset,
+                width: isThatTabOrDeskTop ? size : size.w, color: color)
             : Lottie.asset(asset, width: isThatTabOrDeskTop ? size : size.w),
         AppSizedBox.sizedBox10H,
         Text(

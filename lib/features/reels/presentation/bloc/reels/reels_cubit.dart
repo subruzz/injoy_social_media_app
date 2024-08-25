@@ -17,6 +17,7 @@ class ReelsCubit extends Cubit<ReelsState> {
 
   void getReels(String myId, {bool isInitialLoad = true}) async {
     try {
+      emit(ReelsLoading());
       final res = await _getReelsUseCase(
           GetReelsUseCaseParams(myId: myId, lastDoc: _lastDocument));
 

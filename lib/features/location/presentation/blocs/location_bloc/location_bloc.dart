@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,6 +47,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
           emit(LocationFailure());
       }
     });
+    log('state is $state');
   }
 
   FutureOr<void> _getSuggestedLocation(
@@ -53,6 +55,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
     final res = await _searchLocationUseCase(
         SearchLocationUseCaseParams(query: event.query));
     res.fold((failure) => emit(LocationFailure()),
-        (success) =>emit( LocationSearchLoaded(success)));
+        (success) => emit(LocationSearchLoaded(success)));
   }
 }

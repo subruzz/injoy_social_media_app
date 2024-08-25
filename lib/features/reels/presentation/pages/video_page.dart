@@ -13,11 +13,15 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
+import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
+import 'package:social_media_app/core/widgets/common/cached_image.dart';
+import 'package:social_media_app/core/widgets/each_post/post_top_section/widgets/post_option_button.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_bar_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/reels_explore/reels_explore_cubit.dart';
 import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_comment_button.dart';
 import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_like_button.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_my_reels/get_my_reels_cubit.dart';
 import 'package:social_media_app/features/reels/domain/usecases/get_reels.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../core/const/assets/app_assets.dart';
@@ -30,6 +34,7 @@ import '../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../core/services/app_cache/cache_manager.dart';
 import '../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../../core/widgets/common/expandable_text.dart';
+import '../../../../core/widgets/each_post/post_content_section/widgets/post_hashtag.dart';
 import '../../../../core/widgets/helper/follow_unfollow_helper.dart';
 import '../../../../core/widgets/common/user_profile.dart';
 import '../bloc/reels/reels_cubit.dart';
@@ -44,6 +49,7 @@ class VideoReelPage extends StatefulWidget {
       this.short,
       this.onCommentClick,
       this.vdoController,
+      this.isMyShorts = false,
       this.onPause});
   final List<PostEntity>? reels;
   final void Function(PostEntity)? onCommentClick;
@@ -52,6 +58,7 @@ class VideoReelPage extends StatefulWidget {
   final bool showOne;
   final int index;
   final PostEntity? short;
+  final bool isMyShorts;
   final void Function(void Function())? onPause;
 
   @override
@@ -79,68 +86,89 @@ class _VideoReelPageState extends State<VideoReelPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: widget.short != null && widget.showOne
-          ? VideoPlayerWidget(
-              reel: widget.short!,
-              onCommentClick: widget.onCommentClick,
+      body: widget.isMyShorts
+          ? BlocConsumer<GetMyReelsCubit, GetMyReelsState>(
+              listener: (context, state) {
+                if (state is GetUserShortsSuccess && state.myShorts.isEmpty) {
+                  Navigator.pop(context);
+                }
+              },
+              builder: (context, state) {
+                if (state is GetUserShortsSuccess) {
+                  return ReelsPageView(
+                      onCommentClick: widget.onCommentClick,
+                      controller: _pageController,
+                      reels: state.myShorts,
+                      onChaged: (index) {
+                        currentPage = index;
+                      });
+                }
+                return const EmptyDisplay();
+              },
             )
-          : widget.reels != null
-              ? ReelsPageView(
+          : widget.short != null && widget.showOne
+              ? VideoPlayerWidget(
+                  reel: widget.short!,
                   onCommentClick: widget.onCommentClick,
-                  controller: _pageController,
-                  reels: widget.reels!,
-                  onChaged: (index) {
-                    currentPage = index;
-                  })
-              : widget.short != null
-                  ? BlocProvider(
-                      create: (context) => ReelsExploreCubit(
-                          serviceLocator<GetReelsUseCase>(), widget.short!)
-                        ..getReels(context.read<AppUserBloc>().appUser.id,
-                            widget.short!.postId),
-                      child: BlocBuilder<ReelsExploreCubit, ReelsExploreState>(
-                        builder: (context, state) {
-                          if (state.reels.isNotEmpty) {
-                            return ReelsPageView(
-                                vdoController: widget.vdoController,
-                                onCommentClick: widget.onCommentClick,
-                                controller: _pageController,
-                                reels: state.reels,
-                                onChaged: (index) {
-                                  currentPage = index;
-                                });
-                          }
+                )
+              : widget.reels != null
+                  ? ReelsPageView(
+                      onCommentClick: widget.onCommentClick,
+                      controller: _pageController,
+                      reels: widget.reels!,
+                      onChaged: (index) {
+                        currentPage = index;
+                      })
+                  : widget.short != null
+                      ? BlocProvider(
+                          create: (context) => ReelsExploreCubit(
+                              serviceLocator<GetReelsUseCase>(), widget.short!)
+                            ..getReels(context.read<AppUserBloc>().appUser.id,
+                                widget.short!.postId),
+                          child:
+                              BlocBuilder<ReelsExploreCubit, ReelsExploreState>(
+                            builder: (context, state) {
+                              if (state.reels.isNotEmpty) {
+                                return ReelsPageView(
+                                    vdoController: widget.vdoController,
+                                    onCommentClick: widget.onCommentClick,
+                                    controller: _pageController,
+                                    reels: state.reels,
+                                    onChaged: (index) {
+                                      currentPage = index;
+                                    });
+                              }
 
-                          return loadingWidget();
-                        },
-                      ),
-                    )
-                  : BlocBuilder<ReelsCubit, ReelsState>(
-                      builder: (context, state) {
-                        if (state is ReelsFailure) {
-                          return const AppErrorGif();
-                        }
-                        if (state is ReelsSuccess) {
-                          return ReelsPageView(
-                              onPause: widget.onPause,
-                              isItFromBottomBar: widget.isItFromBottomBar,
-                              vdoController: widget.vdoController,
-                              onCommentClick: widget.onCommentClick,
-                              controller: _pageController,
-                              reels: state.reels,
-                              onChaged: (index) {
-                                if (index == state.reels.length - 1 &&
-                                    state.lastDocument != null) {
-                                  context
-                                      .read<ReelsCubit>()
-                                      .getReels('i', isInitialLoad: false);
-                                }
-                                currentPage = index;
-                              });
-                        }
-                        return loadingWidget();
-                      },
-                    ),
+                              return loadingWidget();
+                            },
+                          ),
+                        )
+                      : BlocBuilder<ReelsCubit, ReelsState>(
+                          builder: (context, state) {
+                            if (state is ReelsFailure) {
+                              return const AppErrorGif();
+                            }
+                            if (state is ReelsSuccess) {
+                              return ReelsPageView(
+                                  onPause: widget.onPause,
+                                  isItFromBottomBar: widget.isItFromBottomBar,
+                                  vdoController: widget.vdoController,
+                                  onCommentClick: widget.onCommentClick,
+                                  controller: _pageController,
+                                  reels: state.reels,
+                                  onChaged: (index) {
+                                    if (index == state.reels.length - 1 &&
+                                        state.lastDocument != null) {
+                                      context
+                                          .read<ReelsCubit>()
+                                          .getReels('i', isInitialLoad: false);
+                                    }
+                                    currentPage = index;
+                                  });
+                            }
+                            return loadingWidget();
+                          },
+                        ),
     );
   }
 }
@@ -184,15 +212,16 @@ Widget loadingWidget() {
 }
 
 class ReelsPageView extends StatelessWidget {
-  const ReelsPageView(
-      {super.key,
-      required this.controller,
-      required this.reels,
-      required this.onChaged,
-      this.isItFromBottomBar = false,
-      this.onCommentClick,
-      this.vdoController,
-      this.onPause});
+  const ReelsPageView({
+    super.key,
+    required this.controller,
+    required this.reels,
+    required this.onChaged,
+    this.isItFromBottomBar = false,
+    this.onCommentClick,
+    this.vdoController,
+    this.onPause,
+  });
   final PageController controller;
   final bool isItFromBottomBar;
   final void Function(void Function())? onPause;
@@ -213,6 +242,8 @@ class ReelsPageView extends StatelessWidget {
       },
       itemBuilder: (context, index) {
         return VideoPlayerWidget(
+          currentIndex: index,
+          pageController: controller,
           onPause: onPause,
           isItFromBottomBar: isItFromBottomBar,
           vdoController: vdoController,
@@ -235,7 +266,8 @@ class VideoPlayerWidget extends StatefulWidget {
   final bool isItFromBottomBar;
   final bool onlyVdo;
   final void Function(void Function())? onPause;
-
+  final PageController? pageController;
+  final int? currentIndex;
   const VideoPlayerWidget({
     super.key,
     this.vdo,
@@ -247,6 +279,8 @@ class VideoPlayerWidget extends StatefulWidget {
     this.onTap,
     this.vdoController,
     this.onPause,
+    this.pageController,
+    this.currentIndex,
   });
 
   @override
@@ -425,16 +459,22 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
             child: Stack(
               alignment: Alignment.center, // Aligns the play icon to the center
               children: [
-                !_videoInitialized
-                    ? const Center(
-                        child: CircularLoadingGrey(),
+                !_videoInitialized && widget.reel != null
+                    ? Center(
+                        child: SizedBox(
+                            height: double.infinity,
+                            width: double.infinity,
+                            child: CachedImage(
+                              img: widget.reel!.extra ?? '',
+                              fit: BoxFit.contain,
+                            )),
                       )
                     : widget.vdo != null
                         ? AspectRatio(
                             aspectRatio: _controller.value.aspectRatio,
                             child: VideoPlayer(_controller))
                         : VideoPlayer(_controller),
-                if (!_isPlaying)
+                if (!_isPlaying && _videoInitialized)
                   const Icon(
                     Icons.play_arrow,
                     size: 50.0,
@@ -464,6 +504,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             CircularUserProfile(
                                 size: 22, profile: widget.reel!.userProfileUrl),
@@ -495,9 +536,16 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                         AppSizedBox.sizedBox10H,
                         Column(
                           children: [
-                            ExpandableText(
-                                text: widget.reel!.description ?? '',
-                                trimLines: 2)
+                            if (widget.reel!.description != null)
+                              ExpandableText(
+                                  otherW: widget.reel!.hashtags.isEmpty
+                                      ? null
+                                      : PostHashtag(
+                                          hashtags: widget.reel!.hashtags),
+                                  text: widget.reel!.description ?? '',
+                                  trimLines: 2),
+                            if (widget.reel!.description == null)
+                              PostHashtag(hashtags: widget.reel!.hashtags),
                           ],
                         )
                       ],
@@ -506,7 +554,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                 if (!widget.onlyVdo && widget.reel != null)
                   Positioned(
                     right: 10,
-                    bottom: 200.h,
+                    bottom: 160.h,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -516,13 +564,24 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                           post: widget.reel!,
                           isReel: true,
                         ),
+
                         AppSizedBox.sizedBox20H,
                         PostCommentButton(
                           onCommentClick: widget.onCommentClick,
                           post: widget.reel!,
                           isReel: true,
                         ),
-                        // Share Button
+                        AppSizedBox.sizedBox20H,
+
+                        if (widget.reel != null &&
+                            widget.pageController != null &&
+                            widget.currentIndex != null)
+                          PostOptionButton(
+                              isMyPost: widget.reel!.creatorUid == me.id,
+                              isShorts: true,
+                              post: widget.reel!,
+                              currentPostIndex: widget.currentIndex!,
+                              pagecontroller: widget.pageController!)
                       ],
                     ),
                   ),
@@ -545,7 +604,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                               _controller.value.duration
                                   .videoFormatedDuration()),
                         ],
-                      ))
+                      )),
               ],
             ),
           ),

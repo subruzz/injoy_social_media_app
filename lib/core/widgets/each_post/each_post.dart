@@ -42,7 +42,6 @@ class EachPost extends StatefulWidget {
 
 class _EachPostState extends State<EachPost> {
   final _postPageController = PageController();
-  bool _isAnimating = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -124,9 +123,7 @@ class _EachPostState extends State<EachPost> {
                   child: SocialActions(
                     isCommentOff: widget.currentPost.isCommentOff,
                     likeAnim: () {
-                      setState(() {
-                        _isAnimating = true;
-                      });
+                 
                     },
                     post: widget.currentPost,
                   )),
