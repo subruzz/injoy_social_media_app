@@ -125,7 +125,17 @@
   "comments_subtitle": "Pauses the notification of post comments",
   "messages": "Message",
   "messages_subtitle": "Pauses the notification when a new message arrives",
-  "subscription_details": "Your subscription details"
+  "subscription_details": "Your subscription details",
+  "your_premium_plan": "Your Premium Plan",
+  "current_plan": "Current Plan: ",
+  "plan_end_on": "Plan End Date:",
+  "plan_purchased_on": "Plan Purchased On:",
+  "subscription_status": "Subscription Status:",
+  "turning_it_off_prevent_seeing_last_seen": "Turning it off will also prevent you from seeing others' last seen status.",
+  "change_settings_error": "An unknown error occurred while changing the settings.",
+  "clear_history_message": "Clearing your history will remove your messages from your view only. Other people will still be able to see the messages you've sent.",
+  "back": "back"
+
 
 
 }

@@ -41,3 +41,28 @@ extension DateTimeOnStatusView on DateTime {
     }
   }
 }
+
+extension DateTimeFormatter on DateTime {
+  String toFormattedDate() {
+    final months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+
+    String month = months[this.month - 1];
+    String day = this.day.toString();
+    String year = this.year.toString();
+
+    return '$month $day, $year';
+  }
+}

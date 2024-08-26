@@ -30,10 +30,12 @@ class AppUser extends Equatable {
   final bool onlineStatus;
   final List<String> posts;
   final int viewedSetupIndex;
+   bool showLastSeen;
   final List<String> savedPosts;
   AppUser({
     required this.id,
     this.viewedSetupIndex = 0,
+    required this.showLastSeen,
     required this.notificationPreferences,
     required this.email,
     required this.savedPosts,
@@ -68,6 +70,7 @@ class AppUser extends Equatable {
         fullName,
         userName,
         dob,
+        showLastSeen,
         phoneNumber,
         occupation,
         about,
@@ -97,6 +100,7 @@ class AppUser extends Equatable {
     String? fullName,
     String? userName,
     String? dob,
+    bool? showLastSeen,
     String? phoneNumber,
     String? occupation,
     String? about,
@@ -133,6 +137,7 @@ class AppUser extends Equatable {
       profilePic: profilePic ?? this.profilePic,
       location: location ?? this.location,
       lastSeen: lastSeen ?? this.lastSeen,
+      showLastSeen: showLastSeen ?? this.showLastSeen,
       notificationPreferences:
           notificationPreferences ?? this.notificationPreferences,
       visitedUserCount: visitedUserCount ?? this.visitedUserCount,

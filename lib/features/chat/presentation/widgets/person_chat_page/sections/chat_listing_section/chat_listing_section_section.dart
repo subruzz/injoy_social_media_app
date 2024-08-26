@@ -1,11 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/app_error_gif.dart';
 import 'package:social_media_app/core/common_empty_holder.dart';
-import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
-import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
@@ -28,27 +28,49 @@ class ChatListingSectionSection extends StatelessWidget {
     required this.myid,
     this.onmessageDateChange,
     required this.getMessageCubit,
+    required this.selectedMessages,
+    required this.focusNode,
   });
-
+  final FocusNode focusNode;
   final VoidCallback goToBottom;
   final ScrollController scrollController;
   final Function(MessageEntity) onSwipe;
   final String myid;
   final Function(String)? onmessageDateChange;
   final GetMessageCubit getMessageCubit;
+  final ValueNotifier<List<MessageEntity>> selectedMessages;
+  void addToDeletedList(MessageEntity message) {
+    final isSelected =
+        selectedMessages.value.any((msg) => msg.messageId == message.messageId);
+
+    if (isSelected) {
+      selectedMessages.value.remove(message);
+    } else {
+      selectedMessages.value.add(message);
+    }
+
+    selectedMessages.value = List.from(selectedMessages.value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: BlocConsumer<GetMessageCubit, GetMessageState>(
+        buildWhen: (previous, current) =>
+            current.loading ||
+            !current.loading ||
+            previous.messages.length != current.messages.length,
         bloc: getMessageCubit,
         listener: (context, state) {
           if (state.messages.isNotEmpty) {
+            log('camer here');
             WidgetsBinding.instance.addPostFrameCallback((_) {
               goToBottom();
             });
           }
         },
         builder: (context, state) {
+          log('state of messate is ${state.loading}');
           if (state.errorMessage != null) {
             return const Center(child: AppErrorGif());
           }
@@ -89,6 +111,7 @@ class ChatListingSectionSection extends StatelessWidget {
                   ...messages.map((message) {
                     return SwipeTo(
                       onRightSwipe: (details) {
+                        focusNode.requestFocus();
                         final state = getMessageCubit.state;
                         context.read<MessageCubit>().replyClicked(
                               otherUserState: state,
@@ -100,37 +123,39 @@ class ChatListingSectionSection extends StatelessWidget {
                             );
                       },
                       child: ChatItem(
-                        onTap: message.messageType ==
-                                    MessageTypeConst.photoMessage ||
-                                message.messageType ==
-                                    MessageTypeConst.photoMessage
-                            ? () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => MediaGalleryView(
-                                      messages: state.messages,
-                                      initialIndex: index,
-                                    ),
-                                  ),
-                                );
-                              }
-                            : null,
+                        selectedMessages: selectedMessages,
+                        onTap: () {
+                          if (message.senderUid != myid) return;
+                          focusNode.unfocus();
+                          if (selectedMessages.value.isNotEmpty) {
+                            return addToDeletedList(message);
+                          }
+                          if (message.messageType ==
+                                  MessageTypeConst.photoMessage ||
+                              message.messageType ==
+                                  MessageTypeConst.photoMessage) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => MediaGalleryView(
+                                  messages: state.messages,
+                                  initialIndex: index,
+                                ),
+                              ),
+                            );
+                          }
+                        },
                         messageItem: message,
                         isShowTick: message.senderUid == myid,
                         isMe: message.senderUid == myid,
                         onLongPress: () {
+                          if (message.senderUid != myid) return;
+
+                          focusNode.unfocus();
+
                           if (message.senderUid == myid) {
                             HapticFeedback.heavyImpact();
-                            AppInfoDialog.showInfoDialog(
-                              context: context,
-                              subtitle: AppIngoMsg.deleteMessage,
-                              callBack: () {
-                                context.read<MessageCubit>().deleteMessage(
-                                    messageState: getMessageCubit.state,
-                                    messages: [message]);
-                              },
-                              buttonText: AppUiStringConst.delete,
-                            );
+
+                            addToDeletedList(message);
                           }
                         },
                       ),

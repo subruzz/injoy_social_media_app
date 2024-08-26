@@ -58,37 +58,34 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final me = context.read<AppUserBloc>().appUser;
-    return BlocProvider(
-      create: (context) => serviceLocator<NotificationCubit>()
-        ..getMynotifications(myId: context.read<AppUserBloc>().appUser.id),
-      child: Scaffold(
-        floatingActionButton:isThatMobile? FloatingButton(
-          l10n: l10n!,
-        ):null,
-        body: RefreshIndicator(
-          onRefresh: () async {
-            if (context.mounted) {
-              context.read<FollowingPostFeedBloc>().add(
-                  FollowingPostFeedGetEvent(
-                      following: me.following, uId: me.id, isFirst: true));
-              context
-                  .read<GetAllStatusBloc>()
-                  .add(GetAllstatusesEvent(uId: me.id));
-            }
-          },
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              if (Responsive.isMobile(context)) const HomeTopBar(),
-              SliverPadding(
-                padding: AppPadding.onlyTopExtraSmall,
-                sliver: const SliverToBoxAdapter(
-                  child: UserStatus(),
-                ),
+    return Scaffold(
+      floatingActionButton: isThatMobile
+          ? FloatingButton(
+              l10n: l10n!,
+            )
+          : null,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          if (context.mounted) {
+            context.read<FollowingPostFeedBloc>().add(FollowingPostFeedGetEvent(
+                following: me.following, uId: me.id, isFirst: true));
+            context
+                .read<GetAllStatusBloc>()
+                .add(GetAllstatusesEvent(uId: me.id));
+          }
+        },
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            if (Responsive.isMobile(context)) const HomeTopBar(),
+            SliverPadding(
+              padding: AppPadding.onlyTopExtraSmall,
+              sliver: const SliverToBoxAdapter(
+                child: UserStatus(),
               ),
-              const FollowingPostTabView()
-            ],
-          ),
+            ),
+            const FollowingPostTabView()
+          ],
         ),
       ),
     );

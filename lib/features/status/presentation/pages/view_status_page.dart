@@ -60,7 +60,6 @@ class _MoreStoriesState extends State<ViewStatusPage> {
   @override
   void dispose() {
     _currentStoryIndex.dispose();
-    _statuses.clear();
     _playPauseStatus.dispose();
     _statusViewCubit.close();
     _deleteStatus.close();
@@ -160,17 +159,16 @@ class _MoreStoriesState extends State<ViewStatusPage> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(3)),
                             context: context,
-                            isScrollControlled:
-                                true, // Ensures the bottom sheet respects the height of DraggableScrollableSheet
+                            isScrollControlled: true,
                             builder: (context) {
                               return DraggableScrollableSheet(
-                                initialChildSize: .3, minChildSize: 0.3,
+                                initialChildSize: .3,
+                                minChildSize: 0.3,
                                 maxChildSize: getBottomSheetHeight(
                                     _statuses[_currentStoryIndex.value]
                                         .viewers
                                         .length),
-                                expand:
-                                    false, // Set to false to allow the bottom sheet to have a fixed height
+                                expand: false,
                                 builder: (context, scrollController) {
                                   return StatusViewersWidgt(
                                       key: ValueKey(_currentStoryIndex.value),

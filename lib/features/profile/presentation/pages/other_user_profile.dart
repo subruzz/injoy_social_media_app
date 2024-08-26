@@ -7,7 +7,6 @@ import 'package:social_media_app/features/profile/presentation/bloc/other_user/g
 import 'package:social_media_app/features/profile/presentation/bloc/other_user/get_other_user_reels/get_other_user_shorts_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_user/other_profile/other_profile_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_page_wrapper.dart';
-import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 
 class OtherUserProfilePage extends StatefulWidget {
@@ -25,6 +24,7 @@ class _OtherUserProfilePageState extends State<OtherUserProfilePage> {
   @override
   void initState() {
     super.initState();
+    if (widget.user.id == context.read<AppUserBloc>().appUser.id) return;
     serviceLocator<FirebaseHelper>().addTheVisitedUser(
         visitedUserId: widget.user.id,
         myId: context.read<AppUserBloc>().appUser.id);

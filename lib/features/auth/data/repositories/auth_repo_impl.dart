@@ -115,6 +115,12 @@ class AuthRepositoryImpl implements AuthRepository {
     // TODO: implement verifyPassword
     throw UnimplementedError();
   }
+  
+  @override
+  Future<Either<Failure, Unit>> logout(String userId) {
+    // TODO: implement logout
+    throw UnimplementedError();
+  }
 
   
 }

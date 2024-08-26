@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
@@ -46,10 +45,17 @@ class StatusFeedRemoteDatasourceimpl implements StatusFeedRemoteDatasource {
           .where(FirebaseFieldConst.uId, isEqualTo: uid)
           .where(FirebaseFieldConst.createdAt, isGreaterThan: cutoffTimestamp)
           .orderBy(FirebaseFieldConst.createdAt, descending: false);
-      return statuses.snapshots().map((status) => status.docs
-          .map((doc) => SingleStatusEntity.fromJson(doc.data()))
-          .toList());
+    return statuses.snapshots().map((snapshot) {
+  log('Snapshot emitted with ${snapshot.docs.length} documents');
+  return snapshot.docs.map((doc) {
+    final status = SingleStatusEntity.fromJson(doc.data());
+    log('Parsed status: ${status.statusId}, created at: ${status.createdAt}');
+    return status;
+  }).toList();
+});
+
     } catch (e) {
+      log('exception while getting personal status in the datasource ${e.toString()}');
       throw MainException(
           errorMsg: AppErrorMessages.myStatusFetchFailed,
           details: e.toString());

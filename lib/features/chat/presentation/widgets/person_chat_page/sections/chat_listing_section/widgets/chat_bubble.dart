@@ -21,12 +21,12 @@ class ChatBubble extends StatelessWidget {
   final MessageEntity messageItem;
   final bool isMe;
   final bool isShowTick;
-
+  final Color backgroundColor;
   const ChatBubble({
     super.key,
     required this.messageItem,
     required this.isMe,
-    required this.isShowTick,
+    required this.isShowTick, required this.backgroundColor,
   });
   Gradient? _getGradient() {
     if (isMe) {
@@ -71,19 +71,19 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (messageItem.messageType == MessageTypeConst.photoMessage ||
-            messageItem.messageType == MessageTypeConst.videoMessage) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ViewMedia(
-              initialIndex: 0,
-              isThatVdo:
-                  messageItem.messageType == MessageTypeConst.videoMessage,
-              assets: [messageItem.assetLink!],
-            ),
-          ));
-        }
-      },
+      // onTap: () {
+      //   if (messageItem.messageType == MessageTypeConst.photoMessage ||
+      //       messageItem.messageType == MessageTypeConst.videoMessage) {
+      //     Navigator.of(context).push(MaterialPageRoute(
+      //       builder: (context) => ViewMedia(
+      //         initialIndex: 0,
+      //         isThatVdo:
+      //             messageItem.messageType == MessageTypeConst.videoMessage,
+      //         assets: [messageItem.assetLink!],
+      //       ),
+      //     ));
+      //   }
+      // },
       child: Container(
         width: messageItem.repliedTo != null ? double.infinity : null,
         margin: messageItem.repliedTo == null

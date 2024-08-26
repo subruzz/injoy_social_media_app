@@ -31,13 +31,6 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
       : _firestore = firestore,
         _firebaseStorage = firebaseStorage;
 
-  String combineIds(String id1, String id2) {
-    List<String> ids = [id1, id2];
-    ids.sort(); // Sort IDs alphabetically or numerically
-
-    return ids.join('_'); // Combine IDs with an underscore separator
-  }
-
   @override
   Future<void> sendMessage(ChatModel chat, List<MessageEntity> messages) async {
     final time = FieldValue.serverTimestamp();
@@ -174,6 +167,21 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
     }
   }
 
+  String _getMessageTypeFromString(String messageType) {
+    switch (messageType) {
+      case 'photoMessage':
+        return '📷 Photo';
+      case 'videoMessage':
+        return '📸 Video';
+      case 'audioMessage':
+        return '🎵 Audio';
+      case 'gifMessage':
+        return 'GIF';
+      default:
+        return '';
+    }
+  }
+
   @override
   Future<void> deleteChat(String myId) async {
     try {
@@ -199,6 +207,7 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   @override
   Future<void> deleteMessage(List<MessageEntity> messages) async {
     try {
+      log('delete method for chat called $messages');
       for (var message in messages) {
         final myMessagesRef = _firestore
             .collection('users')
@@ -219,11 +228,20 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
         // Check if assetLink is not null before attempting to delete
         if (message.assetLink != null) {
           try {
-            await FirebaseStorage.instance
-                .refFromURL(message.assetLink!)
-                .delete();
+            final ref = FirebaseStorage.instance.refFromURL(message.assetLink!);
+
+            // Check if the file exists by getting its metadata
+            await ref.getMetadata();
+
+            // If metadata retrieval is successful, delete the file
+            await ref.delete();
           } catch (e) {
-            throw const MainException();
+            if (e is FirebaseException && e.code == 'object-not-found') {
+              log('File does not exist, no need to delete.');
+            } else {
+              log('Error deleting message: ${e.toString()}');
+              throw const MainException(); // Re-throw your custom exception
+            }
           }
         }
 
@@ -239,9 +257,54 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
             throw const MainException();
           }
         });
+
+        final chatRef = _firestore
+            .collection('users')
+            .doc(message.senderUid)
+            .collection('myChat')
+            .doc(message.recipientUid);
+        final otherChatRef = _firestore
+            .collection('users')
+            .doc(message.recipientUid)
+            .collection('myChat')
+            .doc(message.senderUid);
+
+        final previousMessagesQuery = await _firestore
+            .collection('users')
+            .doc(message.senderUid)
+            .collection('myChat')
+            .doc(message.recipientUid)
+            .collection('messages')
+            .orderBy('createdAt', descending: true)
+            .limit(1)
+            .get();
+
+        if (previousMessagesQuery.docs.isNotEmpty) {
+          String lastMsg = _getMessageTypeFromString(
+              previousMessagesQuery.docs.first['messageType']);
+
+          await chatRef.update({
+            'recentTextMessage': lastMsg.isEmpty
+                ? previousMessagesQuery.docs.first['message']
+                : lastMsg
+          });
+
+          await otherChatRef.update({
+            'recentTextMessage': lastMsg.isEmpty
+                ? previousMessagesQuery.docs.first['message']
+                : lastMsg
+          });
+        } else {
+          // No messages left, so set recentTextMessage to an empty string
+          await chatRef.update(
+              { 'recentTextMessage': ''});
+
+          await otherChatRef.update(
+              { 'recentTextMessage': ''});
+        }
       }
     } catch (e) {
-      print('Error deleting messages: $e');
+      log('Error deleting messages: $e');
       throw const MainException();
     }
   }
@@ -303,15 +366,17 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   @override
   Future<void> seenMessageUpdate(
       String sendorId, String recieverId, String messageId) async {
-    // try {
-    //   final combinedId = combineIds(sendorId, recieverId);
-    //   final messagesRef = _firestore
-    //       .collection(FirebaseCollectionConst.messages)
-    //       .doc(combinedId)
-    //       .collection('oneToOneMessages');
-    //   await messagesRef.doc(messageId).update({'isSeen': true});
-    // } catch (e) {
-    //   throw const MainException();
-    // }
+    try {
+      final messagesRef = _firestore
+          .collection(FirebaseCollectionConst.users)
+          .doc(recieverId)
+          .collection(FirebaseCollectionConst.myChat)
+          .doc(sendorId)
+          .collection('messages');
+
+      await messagesRef.doc(messageId).update({'isSeen': true});
+    } catch (e) {
+      throw const MainException();
+    }
   }
 }

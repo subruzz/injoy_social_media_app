@@ -10,6 +10,7 @@ import 'package:social_media_app/features/ai_chat/data/repostiory/ai_chat_repo_i
 import 'package:social_media_app/features/ai_chat/domain/repository/ai_chat_repository.dart';
 import 'package:social_media_app/features/ai_chat/domain/usecases/generate_ai_message.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
+import 'package:social_media_app/features/auth/domain/usecases/logout_user.dart';
 import 'package:social_media_app/features/media_picker/data/repository/asset_repository_impl.dart';
 import 'package:social_media_app/features/media_picker/domain/repository/asset_repository.dart';
 import 'package:social_media_app/features/media_picker/data/datasource/local/asset_local_datasource.dart';
@@ -38,7 +39,7 @@ import 'package:social_media_app/features/call/presentation/call_history/call_hi
 import 'package:social_media_app/features/chat/data/datasource/chat_remote_datasource.dart';
 import 'package:social_media_app/features/chat/data/repositories/chat_repository_impl.dart';
 import 'package:social_media_app/features/chat/domain/repositories/chat_repository.dart';
-import 'package:social_media_app/features/chat/domain/usecases/delete_chat_usecase.dart';
+import 'package:social_media_app/features/settings/domain/usecases/delete_chat_usecase.dart';
 import 'package:social_media_app/features/chat/domain/usecases/delete_message_usecase.dart';
 import 'package:social_media_app/features/chat/domain/usecases/get_my_chats_usecase.dart';
 import 'package:social_media_app/features/chat/domain/usecases/get_single_user_message_usecase.dart';
@@ -290,7 +291,9 @@ void _initAuth() {
     ..registerFactory(
       () => ForgotPasswordBloc(serviceLocator()),
     )
-    ..registerLazySingleton(() => AuthBloc(serviceLocator(), serviceLocator()));
+    ..registerFactory(() => LogoutUserUseCase(serviceLocator()))
+    ..registerLazySingleton(
+        () => AuthBloc(serviceLocator(), serviceLocator(), serviceLocator()));
 }
 
 void _initProfile() {
@@ -537,7 +540,8 @@ void _chat() {
         firebaseStorage: FirebaseStorage.instance))
     ..registerFactory<ChatRepository>(
         () => ChatRepositoryImpl(chatRemoteDatasource: serviceLocator()))
-    ..registerFactory(() => DeleteChatUsecase(chatRepository: serviceLocator()))
+    ..registerFactory(
+        () => DeleteChatUsecase(settingsRepository: serviceLocator()))
     ..registerFactory(
         () => DeleteMessageUsecase(chatRepository: serviceLocator()))
     ..registerFactory(() => GetMyChatsUsecase(chatRepository: serviceLocator()))
@@ -642,7 +646,7 @@ void _settingsAndActivity() {
         () => SettingRepoImpl(settingsDatasource: serviceLocator()))
     ..registerFactory(() =>
         EditNotificationPreferenceUseCase(settingsRepository: serviceLocator()))
-    ..registerFactory(() => SettingsCubit(serviceLocator()))
+    ..registerFactory(() => SettingsCubit(serviceLocator(), serviceLocator()))
     ..registerFactory<LibraryDataSource>(() =>
         LibraryDataSourceImpl(firebaseFirestore: FirebaseFirestore.instance))
     ..registerFactory<LibraryRepostory>(

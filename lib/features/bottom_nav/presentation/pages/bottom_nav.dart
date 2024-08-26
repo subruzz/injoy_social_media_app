@@ -97,12 +97,11 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
     final user = context.read<AppUserBloc>().appUser;
     final bottomBar = context.read<BottomBarCubit>();
     return PopScope(
-      canPop: _currentPage == 0 && bottomBar.state.canPopFromTheExplore,
+      canPop: _currentPage == 0,
       onPopInvoked: (didPop) {
-        if (!bottomBar.state.canPopFromTheExplore) return;
+        // if (!bottomBar.state.canPopFromTheExplore) return;
 
         if (!didPop) {
-          context.read<BottomBarCubit>().changeIndex(0);
           setState(() {
             _currentPage = 0;
           });

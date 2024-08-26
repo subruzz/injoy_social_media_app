@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
+import 'package:social_media_app/features/settings/domain/usecases/delete_chat_usecase.dart';
 import 'package:social_media_app/features/settings/domain/usecases/edit_notification_preference.dart';
 
 import '../../../domain/entity/ui_entity/enums.dart';
@@ -9,7 +10,9 @@ part 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
   final EditNotificationPreferenceUseCase _editNotificationPreferenceUseCase;
-  SettingsCubit(this._editNotificationPreferenceUseCase)
+  final DeleteChatUsecase _deleteChatUsecase;
+  SettingsCubit(
+      this._editNotificationPreferenceUseCase, this._deleteChatUsecase)
       : super(SettingsInitial());
   void editNotificationPreference(
       {required NotificationPreferences notificatonPreferernce,
@@ -87,5 +90,12 @@ class SettingsCubit extends Cubit<SettingsState> {
         errorMsg: failure.message,
       ));
     }, (sucess) => emit(NotifiationPreferenceSuccess()));
+  }
+
+  void clearAllChats(String myId) async {
+    emit(ClearChatLoading());
+    final res = await _deleteChatUsecase(DeleteChatUsecaseParams(myId: myId));
+    res.fold((failure) => emit(ClearChatFailed()),
+        (success) => emit(ClearChatSuccess()));
   }
 }

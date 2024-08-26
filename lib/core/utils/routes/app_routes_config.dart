@@ -16,8 +16,11 @@ import 'package:social_media_app/features/notification/presentation/pages/cubit/
 import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:social_media_app/features/post/presentation/pages/create_post_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
+import 'package:social_media_app/features/premium_subscription/presentation/pages/premium_subscripti_builder.dart';
+import 'package:social_media_app/features/premium_subscription/presentation/pages/premium_subscription_details_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/date_of_birth_page.dart';
+import 'package:social_media_app/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/interest_selection_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/other_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
@@ -150,6 +153,8 @@ class MyAppRouter {
 
       case MyAppRouteConst.settingAndActivityPage:
         return AppPageTransitions.rightToLeft(const SettingsAndActivityPage());
+      case MyAppRouteConst.editProfilePage:
+        return AppPageTransitions.rightToLeft(const EditProfilePage());
       case MyAppRouteConst.aiChatPage:
         return AppPageTransitions.fade(const AiChatPage());
       case MyAppRouteConst.accountSettingsPage:
@@ -159,7 +164,11 @@ class MyAppRouter {
         return AppPageTransitions.rightToLeft(AccountSettingsPage(
           myId: userId,
         ));
-
+      case MyAppRouteConst.premiumSubscriptionDetailsPage:
+        return AppPageTransitions.rightToLeft(
+            const PremiumSubscriptionDetailsPage());
+      case MyAppRouteConst.premiumPage:
+        return AppPageTransitions.rightToLeft(const PremiumSubscriptiBuilder());
       // case MyAppRouteConst.personaChatRoute:
       //   return MaterialPageRoute(builder: (_) => const PersonalChatBuilder());
       case MyAppRouteConst.userVisitedListingRoute:

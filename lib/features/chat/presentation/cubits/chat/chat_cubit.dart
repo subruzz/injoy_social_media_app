@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
-import 'package:social_media_app/features/chat/domain/usecases/delete_chat_usecase.dart';
+import 'package:social_media_app/features/settings/domain/usecases/delete_chat_usecase.dart';
 import 'package:social_media_app/features/chat/domain/usecases/get_my_chats_usecase.dart';
 
 import '../../../../../core/errors/failure.dart';

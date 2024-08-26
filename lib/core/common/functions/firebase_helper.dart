@@ -117,20 +117,20 @@ class FirebaseHelper {
   }
 
   Future<void> deleteUnWantedStatus(String myId) async {
-    final statusCollection =
-        _firestore.collection(FirebaseCollectionConst.statuses);
+    // final statusCollection =
+    //     _firestore.collection(FirebaseCollectionConst.statuses);
 
-    final cutoffTimestamp = cutOffTime;
+    // final cutoffTimestamp = cutOffTime;
 
-    ///returning the list of statuses of current user from status collection using
-    ///the user id
-    final statuses = await statusCollection
-        .where(FirebaseFieldConst.uId, isEqualTo: myId)
-        .where(FirebaseFieldConst.createdAt, isLessThan: cutoffTimestamp)
-        .get();
-    for (var status in statuses.docs) {
-      await status.reference.delete();
-    }
+    // ///returning the list of statuses of current user from status collection using
+    // ///the user id
+    // final statuses = await statusCollection
+    //     .where(FirebaseFieldConst.uId, isEqualTo: myId)
+    //     .where(FirebaseFieldConst.createdAt, isLessThan: cutoffTimestamp)
+    //     .get();
+    // for (var status in statuses.docs) {
+    //   await status.reference.delete();
+    // }
   }
 
   Future<void> createNotification(
@@ -235,5 +235,10 @@ class FirebaseHelper {
     } catch (e) {
       throw const MainException();
     }
+  }
+
+  Future<void> updateUserLastSeen(String uId, bool val) async {
+    final userRef = _firestore.collection('users').doc(uId);
+    await userRef.update({'showLastSeen': val});
   }
 }

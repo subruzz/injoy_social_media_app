@@ -106,6 +106,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
 
       AppUserModel userModel = AppUserModel(
         savedPosts: const [],
+        showLastSeen: true,
         notificationPreferences: NotificationPreferences(),
         visitedUserCount: 0,
         id: userCredential.user!.uid,
@@ -196,6 +197,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           .collection(FirebaseCollectionConst.users)
           .doc(user.uid);
       AppUserModel userModel = AppUserModel(
+        showLastSeen: true,
         savedPosts: const [],
         notificationPreferences: NotificationPreferences(),
         visitedUserCount: 0,

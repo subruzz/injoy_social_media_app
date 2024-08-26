@@ -11,6 +11,7 @@ class ChatModel extends ChatEntity {
       required super.recentTextMessage,
       required super.createdAt,
       super.recipientProfile,
+      required super.lastMessageId,
       super.senderName,
       super.senderProfile,
       super.otherUserName,
@@ -22,6 +23,7 @@ class ChatModel extends ChatEntity {
     final snap = snapshot.data() as Map<String, dynamic>;
     log('time is ${snap['createdAt']}');
     return ChatModel(
+      lastMessageId: snap['lastMessageId'],
       lastSenderId: snap['lastSenderId'],
       recentTextMessage: snap['recentTextMessage'],
       otherUserProfile: snap['otherUserProfile'],
@@ -41,10 +43,12 @@ class ChatModel extends ChatEntity {
         "senderUid": senderUid,
         "otherUserProfile": otherUserProfile,
         "createdAt": time,
+        'lastMessageId': lastMessageId,
         'lastSenderId': lastSenderId
       };
   factory ChatModel.fromChatEntity(ChatEntity entity) {
     return ChatModel(
+      lastMessageId: entity.lastMessageId,
       senderName: entity.senderName,
       lastSenderId: entity.lastSenderId,
       senderProfile: entity.senderProfile,
@@ -67,11 +71,13 @@ class ChatModel extends ChatEntity {
     Timestamp? createdAt,
     String? senderProfile,
     String? otherUserProfile,
+    String? lastMessageId,
     String? otherUserName,
     String? recipientProfile,
     int? totalUnReadMessages,
   }) {
     return ChatModel(
+      lastMessageId: lastMessageId ?? this.lastMessageId,
       lastSenderId: lastSenderId ?? this.lastSenderId,
       otherUserName: otherUserName ?? this.otherUserName,
       otherUserProfile: otherUserProfile ?? this.otherUserProfile,

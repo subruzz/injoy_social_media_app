@@ -98,7 +98,9 @@ class MessageCubit extends Cubit<MessageState> {
     // the reply state may be lost. This ensures that the loading state does not
     // interfere with or overwrite the current reply state.
     emit(MessageLoading());
+    final lastMessageId = IdGenerator.generateUniqueId();
     final newChat = ChatEntity(
+        lastMessageId: lastMessageId,
         lastSenderId: _appUserBloc.appUser.id,
         senderName: _appUserBloc.appUser.userName,
         senderProfile: _appUserBloc.appUser.profilePic,
@@ -137,7 +139,9 @@ class MessageCubit extends Cubit<MessageState> {
                 ? MessageTypeConst.photoMessage
                 : MessageTypeConst.videoMessage,
             isSeen: false,
-            messageId: IdGenerator.generateUniqueId());
+            messageId: assets == selectedAssets.length - 1
+                ? lastMessageId
+                : IdGenerator.generateUniqueId());
         multipleMessages.add(newMessage);
       }
     } else {
@@ -158,7 +162,7 @@ class MessageCubit extends Cubit<MessageState> {
           recipientUid: otherUser.id,
           messageType: messageType ?? MessageTypeConst.textMessage,
           isSeen: false,
-          messageId: IdGenerator.generateUniqueId());
+          messageId: lastMessageId);
     }
     // await PushNotificiationServices.sendNotificationToUser('');
     final res = await _sendMessageUseCase(SendMessageUseCaseParams(
@@ -211,7 +215,9 @@ class MessageCubit extends Cubit<MessageState> {
     final MessageReplyClicked? replyState = messageReplyNotifier.value;
 
     log('called');
+    String lastMessageId = IdGenerator.generateUniqueId();
     final newChat = ChatEntity(
+        lastMessageId: lastMessageId,
         lastSenderId: _appUserBloc.appUser.id,
         senderName: _appUserBloc.appUser.userName,
         senderProfile: _appUserBloc.appUser.profilePic,

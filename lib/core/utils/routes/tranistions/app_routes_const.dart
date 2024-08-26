@@ -28,4 +28,8 @@ class MyAppRouteConst {
   static const String notificationSettingsPage = 'notificationSettingsPage';
   static const String likedOrSavedPostsPage = 'likedOrSavedPostsPage';
   static const String aiChatPage = 'aiChatPage';
+  static const String editProfilePage = 'editProfilePage';
+  static const String premiumSubscriptionDetailsPage =
+      'premiumSubscriptionDetailsPage';
+  static const String premiumPage = 'premiumPage';
 }

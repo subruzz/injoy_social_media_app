@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/const/languages/app_languages.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import '../../common/shared_providers/cubit/app_language/app_language_cubit.dart';
@@ -17,7 +18,7 @@ class AppInfoDialog {
       String? title,
       bool dismissable = false,
       String? subtitle,
-      String closeText = 'Back',
+      String? closeText,
       bool pop = true,
       Widget? buttonChild,
       String? buttonText}) {
@@ -46,7 +47,7 @@ class AppInfoDialog {
           actions: [
             TextButton(
               child: Text(
-                closeText,
+                closeText ?? AppLocalizations.of(context)!.back,
                 style: TextStyle(color: AppDarkColor().primaryText),
               ),
               onPressed: () {

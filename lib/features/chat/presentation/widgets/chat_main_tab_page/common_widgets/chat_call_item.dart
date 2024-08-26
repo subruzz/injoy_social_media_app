@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/extensions/time_ago.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
@@ -67,7 +66,7 @@ class ChatCallItem extends StatelessWidget {
               maxLines: 1,
             ),
           ),
-          if (!isThatTabOrDeskTop)
+          if (!isThatTabOrDeskTop && chat?.recentTextMessage.isEmpty == false)
             CustomText(
               style: Theme.of(context)
                   .textTheme

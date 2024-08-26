@@ -14,12 +14,14 @@ class ChatEntity extends Equatable {
   final String? recipientProfile;
   final num? totalUnReadMessages;
   final String lastSenderId;
+  final String lastMessageId;
   const ChatEntity(
       {required this.senderUid,
       required this.recipientUid,
       this.senderName,
       required this.lastSenderId,
       this.recipientName,
+      required this.lastMessageId,
       required this.recentTextMessage,
       required this.createdAt,
       this.senderProfile,
@@ -39,6 +41,7 @@ class ChatEntity extends Equatable {
         createdAt,
         recipientProfile,
         totalUnReadMessages,
+        lastMessageId,
         lastSenderId
       ];
 }

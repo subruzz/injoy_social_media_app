@@ -23,4 +23,14 @@ class SettingRepoImpl implements SettingsRepository {
       return left(Failure(e.errorMsg));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> clearAllChats(String myId) async {
+    try {
+      await _settingsDatasource.clearAllChats(myId);
+      return right(unit);
+    } catch (e) {
+      return left(Failure());
+    }
+  }
 }

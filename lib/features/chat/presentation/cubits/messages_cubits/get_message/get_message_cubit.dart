@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -39,6 +40,7 @@ class GetMessageCubit extends Cubit<GetMessageState> {
             getPersonalChats(senderId: userId, recipientId: otherUserId);
           }
           final userStatus = UserStatusInfo(
+              showOnline: appUserModel.showLastSeen,
               isOnline: appUserModel.onlineStatus,
               userPic: appUserModel.profilePic,
               userName: appUserModel.userName ?? '',
@@ -65,12 +67,9 @@ class GetMessageCubit extends Cubit<GetMessageState> {
   }) async {
     emit(state.copyWith(
       loading: true,
-      messages: [],
-      errorMessage: null,
     ));
 
     final streamRes = _getSingleUserMessageUsecase.call(senderId, recipientId);
-
     // Subscribe to the new stream
     _messageSubscription = streamRes.listen(
       (either) {
@@ -79,11 +78,14 @@ class GetMessageCubit extends Cubit<GetMessageState> {
             emit(state.copyWith(loading: false, errorMessage: failure.message));
           },
           (messages) {
+            log('camer here to get messages');
+
             emit(state.copyWith(
               loading: false,
               messages: messages,
               errorMessage: null,
             ));
+            log('new state is $state');
           },
         );
       },
@@ -108,14 +110,16 @@ class UserStatusInfo extends Equatable {
   final String userName;
 
   final bool isOnline;
-
+  final bool showOnline;
   final Timestamp? lastSeen;
   final String? userPic;
   const UserStatusInfo(
       {required this.userName,
       this.userPic,
+      required this.showOnline,
       required this.isOnline,
       required this.lastSeen});
   @override
-  List<Object?> get props => [userName, userPic, isOnline, lastSeen];
+  List<Object?> get props =>
+      [showOnline, userName, userPic, isOnline, lastSeen];
 }

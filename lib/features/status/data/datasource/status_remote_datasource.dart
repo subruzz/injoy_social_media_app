@@ -3,8 +3,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:social_media_app/core/common/entities/status_entity.dart';
-import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_field_const.dart';

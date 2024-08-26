@@ -12,6 +12,7 @@ import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/common/custom_divider.dart';
 import 'package:social_media_app/core/widgets/common/premium_badge.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
+import 'package:social_media_app/features/premium_subscription/presentation/pages/premium_subscription_details_page.dart';
 
 import '../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../../core/const/languages/app_languages.dart';
@@ -77,19 +78,10 @@ class SettingsAndActivityPage extends StatelessWidget {
           ),
           SettingsListTile(
             onTap: () {
-              !appuser.hasPremium
-                  ? Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PremiumSubscriptiBuilder(),
-                      ))
-                  : () {};
-              // appuser.hasPremium
-              //     ? Navigator.pushNamed(
-              //         context,
-              //         MyAppRouteConst.userVisitedListingRoute,
-              //       )
-              //     : AppDialogsCommon.noPremium(context);
+              appuser.hasPremium
+                  ? Navigator.pushNamed(
+                      context, MyAppRouteConst.premiumSubscriptionDetailsPage)
+                  : Navigator.pushNamed(context, MyAppRouteConst.premiumPage);
             },
             text: appuser.hasPremium
                 ? l10n.subscription_details

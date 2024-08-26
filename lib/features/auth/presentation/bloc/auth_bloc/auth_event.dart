@@ -17,3 +17,9 @@ final class UpdateCurrentUserEvent extends AuthEvent {
 final class UpdateCurrentUserSignOutEvent extends AuthEvent {}
 
 final class EnsureUserModelExistsEvent extends AuthEvent {}
+
+final class LogoutUser extends AuthEvent {
+  final String uId;
+
+  const LogoutUser({required this.uId});
+}

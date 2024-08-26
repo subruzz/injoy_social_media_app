@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
@@ -27,6 +29,12 @@ class MyStatusViewState extends State<MyStatusView> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,6 +75,9 @@ class MyStatusViewState extends State<MyStatusView> {
                       ),
                       child: GestureDetector(
                           onTap: () {
+                            if (state is GetMyStatusSuccess) {
+                              log('state isthis $state and length of the items is ${state.myStatus.length}');
+                            }
                             if (state is GetMyStatusSuccess &&
                                 state.myStatus.isNotEmpty) {
                               Navigator.pushNamed(

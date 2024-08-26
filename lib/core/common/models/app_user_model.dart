@@ -9,6 +9,7 @@ class AppUserModel extends AppUser {
     super.fullName,
     required super.savedPosts,
     super.userName,
+    required super.showLastSeen,
     super.dob,
     super.lastSeen,
     required super.visitedUserCount,
@@ -74,6 +75,7 @@ class AppUserModel extends AppUser {
 
   factory AppUserModel.fromJson(Map<String, dynamic> json) {
     return AppUserModel(
+      showLastSeen: json['showLastSeen'] ?? true,
       savedPosts: List<String>.from(json['savedPosts'] ?? []),
       token: json['token'] ?? '',
       lastSeen: json['lastSeen'],
@@ -113,6 +115,7 @@ class AppUserModel extends AppUser {
       'savedPosts': savedPosts,
       'viewedSetupIndex': viewedSetupIndex,
       'id': id,
+      'showLastSeen': showLastSeen,
       'onlineStatus': onlineStatus,
       'email': email,
       'notificationPreferences': notificationPreferences.toMap(),

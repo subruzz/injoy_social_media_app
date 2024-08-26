@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/utils/routes/page_transitions.dart';
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
-import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/common/custom_divider.dart';
-import 'package:social_media_app/core/widgets/dialog/general_dialog_for_web.dart';
 import 'package:social_media_app/features/profile/presentation/pages/username_check_page.dart';
-import 'package:social_media_app/features/settings/domain/entity/ui_entity/ui_consts.dart';
-import 'package:social_media_app/features/settings/presentation/pages/reset_password_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';
-
-import '../../domain/entity/ui_entity/enums.dart';
 
 class AccountSettingsPage extends StatelessWidget {
   const AccountSettingsPage({super.key, required this.myId});
@@ -34,8 +28,8 @@ class AccountSettingsPage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => UsernameCheckPage(
+                    AppPageTransitions.rightToLeft(
+                      UsernameCheckPage(
                         userid: myId,
                         isEdit: true,
                       ),

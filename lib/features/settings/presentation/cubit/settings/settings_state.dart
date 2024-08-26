@@ -30,3 +30,9 @@ final class ChangePasswordError extends SettingsState {
 }
 
 final class ChangeEmailSuccess extends SettingsState {}
+
+final class ClearChatLoading extends SettingsState {}
+
+final class ClearChatSuccess extends SettingsState {}
+
+final class ClearChatFailed extends SettingsState {}

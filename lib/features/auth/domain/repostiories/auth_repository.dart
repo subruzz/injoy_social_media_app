@@ -10,6 +10,8 @@ abstract interface class AuthRepository {
   Future<Either<Failure, Unit>> forgotPassword(String email);
   Future<Either<Failure, AppUser>> verifyPassword(
       String code, String newPassword);
+
   Future<Either<Failure, AppUser>> getCurrentUser();
   Future<Either<Failure, String>> getCurrentUserId();
+  Future<Either<Failure, Unit>> logout(String userId);
 }

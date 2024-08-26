@@ -6,5 +6,5 @@ abstract interface class SettingsRepository {
   Future<Either<Failure, Unit>> updateNotificationField(
       {required String myId,
       required NotificationPreferences notificationPreference});
+  Future<Either<Failure, Unit>> clearAllChats(String myId);
 }
-

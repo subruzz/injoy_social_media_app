@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
@@ -41,18 +40,30 @@ class _PersonChatPageState extends State<PersonChatPage> {
       _scrollController.animateTo(
         bottomOffset,
         duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInCirc,
+        curve: Curves.fastOutSlowIn,
       );
     }
   }
 
+  final ValueNotifier<List<MessageEntity>> _selectedMessages =
+      ValueNotifier([]);
+
   final _getMessageCubit = serviceLocator<GetMessageCubit>();
   final FocusNode _focusNode = FocusNode();
+  @override
+  void dispose() {
+    _textMsgController.dispose();
+    _toggleButton.dispose();
+    _showAttachWindow.dispose();
+    _scrollController.dispose();
+    _selectedMessages.dispose();
+    _getMessageCubit.close();
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
-    log('otherUserId is ${widget.otherUserId}');
-
     super.initState();
     _getMessageCubit.setRecipientMessageUserDetails(
         widget.myId, widget.otherUserId);
@@ -65,14 +76,11 @@ class _PersonChatPageState extends State<PersonChatPage> {
 
   @override
   Widget build(BuildContext context) {
-  
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom();
-    });
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       // top bar section ----> (online status ,name..)
       appBar: PersonalPageTopBar(
+        selectedMessages: _selectedMessages,
         getMessageCubit: _getMessageCubit,
       ),
       body: GestureDetector(
@@ -104,6 +112,8 @@ class _PersonChatPageState extends State<PersonChatPage> {
               children: [
                 //messages listing
                 ChatListingSectionSection(
+                    focusNode: _focusNode,
+                    selectedMessages: _selectedMessages,
                     getMessageCubit: _getMessageCubit,
                     onmessageDateChange: _handleDateChange,
                     myid: widget.myId,

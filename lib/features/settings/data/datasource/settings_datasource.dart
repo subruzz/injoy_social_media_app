@@ -7,6 +7,8 @@ abstract interface class SettingsDatasource {
   Future<void> updateNotificationField(
       {required String myId,
       required NotificationPreferences notificationPreference});
+
+  Future<void> clearAllChats(String myId);
 }
 
 class SettingsDatasourceImpl implements SettingsDatasource {
@@ -22,10 +24,34 @@ class SettingsDatasourceImpl implements SettingsDatasource {
         _firebaseFirestore.collection(FirebaseCollectionConst.users);
 
     try {
-   
       await userRef
           .doc(myId)
           .update({'notificationPreferences': notificationPreference.toMap()});
+    } catch (e) {
+      throw const MainException();
+    }
+  }
+
+  @override
+  Future<void> clearAllChats(String myId) async {
+    try {
+      final chatRef = await _firebaseFirestore
+          .collection(FirebaseCollectionConst.users)
+          .doc(myId)
+          .collection(FirebaseCollectionConst.myChat)
+          .get();
+      final batch = _firebaseFirestore.batch();
+
+      // Delete each document in the sub-collection
+      for (var doc in chatRef.docs) {
+        final chatDoc = doc.reference;
+        final messagesOfThisCht = await chatDoc.collection('messages').get();
+        for (var msg in messagesOfThisCht.docs) {
+          batch.delete(msg.reference);
+        }
+        await chatDoc.update({'recentTextMessage': ''});
+      }
+      await batch.commit();
     } catch (e) {
       throw const MainException();
     }

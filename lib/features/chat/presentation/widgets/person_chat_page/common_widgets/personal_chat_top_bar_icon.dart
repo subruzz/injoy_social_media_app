@@ -15,13 +15,9 @@ class PersonalChatTopBarIcon extends StatelessWidget {
         GestureDetector(
             onTap: onPressed,
             child: CustomSvgIcon(
-                assetPath: _chatPageTopBarIcons[index],
-                width: 22,
-                height: index == 0
-                    ? 20
-                    : index == 2
-                        ? 22
-                        : 24)),
+              assetPath: _chatPageTopBarIcons[index],
+              width: 22,
+            )),
         AppSizedBox.sizedBox15W,
       ],
     );
@@ -29,7 +25,6 @@ class PersonalChatTopBarIcon extends StatelessWidget {
 }
 
 const List<String> _chatPageTopBarIcons = [
-  AppAssetsConst.call,
-  AppAssetsConst.video,
+  AppAssetsConst.delete,
   AppAssetsConst.moreIcon
 ];

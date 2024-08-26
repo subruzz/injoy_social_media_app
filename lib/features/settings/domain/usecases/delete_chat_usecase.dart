@@ -1,17 +1,17 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
-import 'package:social_media_app/features/chat/domain/repositories/chat_repository.dart';
+import 'package:social_media_app/features/settings/domain/repository/settings_repository.dart';
 
 class DeleteChatUsecase implements UseCase<Unit, DeleteChatUsecaseParams> {
-  final ChatRepository _chatRepository;
+  final SettingsRepository _settingsRepository;
 
-  DeleteChatUsecase({required ChatRepository chatRepository})
-      : _chatRepository = chatRepository;
+  DeleteChatUsecase({required SettingsRepository settingsRepository})
+      : _settingsRepository = settingsRepository;
 
   @override
   Future<Either<Failure, Unit>> call(DeleteChatUsecaseParams params) async {
-    return await _chatRepository.deleteChat(
+    return await _settingsRepository.clearAllChats(
       params.myId,
     );
   }

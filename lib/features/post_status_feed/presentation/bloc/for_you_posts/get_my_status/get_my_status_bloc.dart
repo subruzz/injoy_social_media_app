@@ -6,7 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/features/post_status_feed/domain/usecases/get_my_status.dart';
-
 part 'get_my_status_event.dart';
 part 'get_my_status_state.dart';
 
@@ -21,15 +20,17 @@ class GetMyStatusBloc extends Bloc<GetMyStatusEvent, GetMyStatusState> {
   FutureOr<void> _getMystatuses(
       GetAllMystatusesEvent event, Emitter<GetMyStatusState> emit) async {
     try {
-      log('this called');
-
+      emit(GetMyStatusLoading());
       final streamRes = _getMyStatusUseCase.call(event.uId);
       await for (var value in streamRes) {
+        log('value came in the bloc for status');
         emit(GetMyStatusSuccess(myStatus: value));
       }
     } on SocketException {
       emit(GetMyStatusFailure());
     } catch (e) {
+      log('exception while getting personal status in the bloc stream ${e.toString()}');
+
       emit(GetMyStatusFailure());
     }
   }
