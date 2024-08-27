@@ -7,10 +7,13 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:record/record.dart';
+import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/services/app_interal/app_internal_service.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/utils/other/get_last_message.dart';
 import 'package:social_media_app/core/utils/other/id_generator.dart';
+import 'package:social_media_app/features/chat/data/model/message_model.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/domain/usecases/delete_message_usecase.dart';
@@ -20,6 +23,9 @@ import 'package:social_media_app/features/chat/presentation/cubits/messages_cubi
 import 'package:social_media_app/core/services/assets/asset_model.dart';
 
 import '../../../../../../core/common/entities/user_entity.dart';
+import '../../../../../../core/utils/di/init_dependecies.dart';
+import '../../../../../notification/domain/entities/customnotifcation.dart';
+import '../../../../../settings/domain/entity/ui_entity/enums.dart';
 import '../../../../domain/entities/message_reply_entity.dart';
 
 part 'message_state.dart';
@@ -119,7 +125,7 @@ class MessageCubit extends Cubit<MessageState> {
         selectedAssets.length == captions.length) {
       for (int assets = 0; assets < selectedAssets.length; assets++) {
         log('correct${selectedAssets[assets]}');
-        final newMessage = MessageEntity(
+        newMessge = MessageEntity(
             isDeleted: false,
             createdAt: null,
             isItReply: replyState != null,
@@ -142,7 +148,7 @@ class MessageCubit extends Cubit<MessageState> {
             messageId: assets == selectedAssets.length - 1
                 ? lastMessageId
                 : IdGenerator.generateUniqueId());
-        multipleMessages.add(newMessage);
+        multipleMessages.add(newMessge);
       }
     } else {
       newMessge = MessageEntity(
@@ -171,6 +177,26 @@ class MessageCubit extends Cubit<MessageState> {
     res.fold((failure) => emit(MessageFailure(errorMsg: failure.message)),
         (success) {
       emit(MessageSuccess());
+      if (otherUser.token.isEmpty) return;
+      serviceLocator<FirebaseHelper>().createNotification(
+        streamTokenFromMsg: otherUser.token,
+        notificationPreferenceType: NotificationPreferenceEnum.messages,
+        notification: CustomNotification(
+          notificationId: IdGenerator.generateUniqueId(),
+          text:
+              "Send you a message \n${getRecentTextMessage(MessageModel.fromMessageEntity(newMessge!))}",
+          time: Timestamp.now(),
+          senderId: _appUserBloc.appUser.id,
+          uniqueId: otherUser.id,
+          receiverId: otherUser.id,
+          isThatLike: false,
+          isThatPost: false,
+          personalUserName: _appUserBloc.appUser.userName ?? '',
+          personalProfileImageUrl: _appUserBloc.appUser.profilePic,
+          notificationType: NotificationType.chat,
+          senderName: _appUserBloc.appUser.userName ?? '',
+        ),
+      );
     });
     // initialState();
   }
@@ -183,13 +209,17 @@ class MessageCubit extends Cubit<MessageState> {
     final res = await _deleteMessageUsecase(
         DeleteMessageUsecaseParams(messages: messages));
     res.fold((failure) => emit(MessageFailure(errorMsg: failure.message)),
-        (success) {});
+        (success) {
+      emit(DeleteMessageSuccess());
+    });
   }
 
   void voiceRecordingStarted() async {
+    final res = await initAudioRecord(audioRecorder: _audioRecorder);
+
+    if (!res) return;
     emit(VoiceMessageStarted());
 
-    await initAudioRecord(audioRecorder: _audioRecorder);
     _elapsedSeconds = 0;
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -256,7 +286,27 @@ class MessageCubit extends Cubit<MessageState> {
     final res = await _sendMessageUseCase(
         SendMessageUseCaseParams(chat: newChat, message: [newMessage]));
     res.fold((failure) => emit(MessageFailure(errorMsg: failure.message)),
-        (success) {});
+        (success) {
+      if (otherUser.token.isEmpty) return;
+      serviceLocator<FirebaseHelper>().createNotification(
+        streamTokenFromMsg: otherUser.token,
+        notificationPreferenceType: NotificationPreferenceEnum.messages,
+        notification: CustomNotification(
+          notificationId: IdGenerator.generateUniqueId(),
+          text: "Send you a message 🎵 Audio ",
+          time: Timestamp.now(),
+          senderId: _appUserBloc.appUser.id,
+          uniqueId: otherUser.id,
+          receiverId: otherUser.id,
+          isThatLike: false,
+          isThatPost: false,
+          personalUserName: _appUserBloc.appUser.userName ?? '',
+          personalProfileImageUrl: _appUserBloc.appUser.profilePic,
+          notificationType: NotificationType.post,
+          senderName: _appUserBloc.appUser.userName ?? '',
+        ),
+      );
+    });
   }
 
   // void seeMessage({required String messageId}) async {

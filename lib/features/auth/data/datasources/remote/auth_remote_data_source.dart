@@ -10,6 +10,8 @@ import 'package:social_media_app/core/const/fireabase_const/firebase_collection.
 import 'package:social_media_app/core/errors/firebase_auth_errors.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
+import 'package:social_media_app/core/utils/shared_preference/chat_wallapaper.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
 import '../../../../../core/const/enums/location_enum.dart';
@@ -330,6 +332,7 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         _firebaseStorage.collection('users').doc(uid).update({'token': ''});
 
         await AppLanguageSP.clearLocale();
+        await ChatWallapaperSp.clearChatWallapaper();
       }
     } catch (e) {
       throw const MainException();

@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
 import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/other/get_last_message.dart';
 import 'package:social_media_app/features/chat/data/model/chat_model.dart';
 import 'package:social_media_app/features/chat/data/model/message_model.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
@@ -51,7 +52,7 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
         await addToChat(
             transaction,
             chat.copyWith(
-              recentTextMessage: _getRecentTextMessage(
+              recentTextMessage: getRecentTextMessage(
                   MessageModel.fromMessageEntity(messages.last)),
             ),
             time,
@@ -152,20 +153,7 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
     }
   }
 
-  String _getRecentTextMessage(MessageModel message) {
-    switch (message.messageType) {
-      case MessageTypeConst.photoMessage:
-        return '📷 Photo';
-      case MessageTypeConst.videoMessage:
-        return '📸 Video';
-      case MessageTypeConst.audioMessage:
-        return '🎵 Audio';
-      case MessageTypeConst.gifMessage:
-        return 'GIF';
-      default:
-        return message.message ?? '';
-    }
-  }
+  
 
   String _getMessageTypeFromString(String messageType) {
     switch (messageType) {

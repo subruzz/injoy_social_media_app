@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart ' as http;
@@ -49,8 +50,14 @@ class DeviceNotification {
     });
   }
 
-  static void tokenRefresh() {
-    _firebaseMessaging.onTokenRefresh.listen((value) async {});
+  static void tokenRefresh(String myId) {
+    _firebaseMessaging.onTokenRefresh.listen((value) async {
+      log('device token changed');
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(myId)
+          .update({'token': value});
+    });
   }
 
   static Future<String?> getAccessToken() async {
@@ -96,7 +103,7 @@ class DeviceNotification {
     }
 
     PushNotification detail = PushNotification(
-      title: notification.senderName,
+      title: notification.senderName ?? "",
       body: notification.text,
       deviceToken: deviceToken,
       notificationRoute: notificationRoute,

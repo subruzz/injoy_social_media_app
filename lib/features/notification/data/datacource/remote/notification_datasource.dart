@@ -1,10 +1,11 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 
@@ -150,11 +151,25 @@ class NotificationDatasourceImple implements NotificationDatasource {
         .collection('notifications')
         .orderBy('time', descending: true);
     log('my id is $myId');
-    return notificationRef.snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        log('data is ${doc.data()}');
-        return CustomNotification.fromJson(doc.data());
-      }).toList();
+
+    return notificationRef.snapshots().asyncMap((snapshot) async {
+      final notifications = await Future.wait(snapshot.docs.map((doc) async {
+        final notificationData = doc.data();
+        CustomNotification customNotification =
+            CustomNotification.fromJson(notificationData);
+
+        // Fetch the partial user details using the userId from the notification
+        final partialUser = await serviceLocator<FirebaseHelper>()
+            .getUserPartialDetails(customNotification.senderId);
+
+        customNotification = customNotification.copyWith(
+            senderName: partialUser?.userName,
+            personalProfileImageUrl: partialUser?.profilePic);
+        // Add the PartialUser data to the CustomNotification
+        return customNotification;
+      }).toList());
+
+      return notifications;
     });
   }
 

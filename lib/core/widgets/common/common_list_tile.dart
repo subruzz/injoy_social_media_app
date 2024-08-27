@@ -12,12 +12,13 @@ class CommonListTile extends StatelessWidget {
       this.iconSize = 20,
       this.noPadding = false,
       this.extraColor,
-      required this.text,
+      this.text,
       this.subtitle,
       this.removePaddingRight = false,
       this.leading,
       this.titileStyle,
-      this.subTitleSize});
+      this.subTitleSize,
+      this.leadingW});
   final double iconSize;
   final Widget? trailing;
   final String? subtitle;
@@ -29,6 +30,7 @@ class CommonListTile extends StatelessWidget {
   final Color? extraColor;
   final TextStyle? titileStyle;
   final bool showTrail;
+  final Widget? leadingW;
   final bool removePaddingRight;
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,7 @@ class CommonListTile extends StatelessWidget {
                       color: extraColor,
                       fontSize: isThatTabOrDeskTop ? 20 : null),
             )
-          : null,
+          : leadingW,
       trailing: showTrail
           ? trailing ??
               const Icon(

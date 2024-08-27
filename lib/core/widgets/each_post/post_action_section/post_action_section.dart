@@ -46,7 +46,7 @@ class SocialActions extends StatelessWidget {
                   // Comments
                   if (!isCommentOff) PostCommentButton(post: post),
                   if (!isCommentOff) AppSizedBox.sizedBox20W,
-                  const PostSendButton()
+                  // const PostSendButton()
                 ],
               ),
             ],

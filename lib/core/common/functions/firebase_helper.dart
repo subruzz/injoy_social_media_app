@@ -135,9 +135,14 @@ class FirebaseHelper {
 
   Future<void> createNotification(
       {required CustomNotification notification,
-      required NotificationPreferenceEnum notificationPreferenceType}) async {
+      required NotificationPreferenceEnum notificationPreferenceType,
+      String streamTokenFromMsg = ''}) async {
     try {
       log('called notiication thing');
+      if (streamTokenFromMsg.isNotEmpty) {
+        return await DeviceNotification.sendNotificationToUser(
+            deviceToken: streamTokenFromMsg, notification: notification);
+      }
       AppUserModel? user = await getUserDetailsFuture(notification.receiverId);
       if (user == null) return;
       String token = user.token;

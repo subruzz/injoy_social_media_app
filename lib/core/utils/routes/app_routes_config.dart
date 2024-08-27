@@ -35,6 +35,7 @@ import 'package:social_media_app/features/status/presentation/pages/view_status_
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/pages/user_visited_listing_page.dart';
 import 'package:social_media_app/splash_screen.dart';
 
+import '../../../features/explore/domain/entities/explore_search_location.dart';
 import '../../common/entities/single_status_entity.dart';
 import '../../common/entities/status_entity.dart';
 import '../../const/enums/media_picker_type.dart';
@@ -83,6 +84,23 @@ class MyAppRouter {
         return MaterialPageRoute(
           builder: (_) =>
               InterestSelectionPage(alreadySelectedInterests: interest),
+        );
+      case MyAppRouteConst.hashtagOrLocationPost:
+        final Map<String, dynamic> args =
+            settings.arguments as Map<String, dynamic>;
+        final String tagOrLocation = args['tagOrLocation'] as String;
+        final bool isLoc = args['isLoc'] as bool? ?? false;
+        final int? postCount = args['postCount'] as int?;
+        final ExploreLocationSearchEntity? loc =
+            args['loc'] as ExploreLocationSearchEntity?;
+
+        return MaterialPageRoute(
+          builder: (_) => ViewTagOrLocationPosts(
+            tagOrLocation: tagOrLocation,
+            isLoc: isLoc,
+            postCount: postCount,
+            loc: loc,
+          ),
         );
 
       case MyAppRouteConst.locationPageRoute:

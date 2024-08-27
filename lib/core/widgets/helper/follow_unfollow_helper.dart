@@ -35,7 +35,7 @@ class FollowUnfollowHelper extends StatelessWidget {
     return CustomButton(
         borderColor: wantWhiteBorder ? Colors.white : null,
         color: color,
-        width: isFromCard ? 100 : null,
+        width: isFromCard ? 120 : null,
         height: isFromCard ? 40 : 35,
         radius: noRad ? AppBorderRadius.small : null,
         child: BlocBuilder<FollowunfollowCubit, FollowunfollowState>(
@@ -48,7 +48,7 @@ class FollowUnfollowHelper extends StatelessWidget {
                     : l10n!.follow,
                 style: AppTextTheme.getResponsiveTextTheme(context)
                     .bodySmall
-                    ?.copyWith(  color: AppDarkColor().primaryText));
+                    ?.copyWith(color: AppDarkColor().primaryText));
           },
         ),
         onClick: () {

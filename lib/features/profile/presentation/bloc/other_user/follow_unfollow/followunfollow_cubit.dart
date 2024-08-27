@@ -178,12 +178,14 @@ import 'package:social_media_app/features/profile/domain/usecases/other_user/fol
 import 'package:social_media_app/features/profile/domain/usecases/other_user/unfollow_user.dart';
 import 'package:social_media_app/features/settings/domain/entity/ui_entity/enums.dart';
 
+import '../../../../../../core/common/functions/firebase_helper.dart';
+import '../../../../../../core/utils/di/init_dependecies.dart';
+
 part 'followunfollow_state.dart';
 
 class FollowunfollowCubit extends Cubit<FollowunfollowState> {
   final FollowUserUseCase _followUserUseCase;
   final UnfollowUserUseCase _unfollowUserUseCase;
-  final NotificationCubit _notificationCubit;
   final AppUserBloc appUserBloc;
 
   // Map to store debouncers for each user
@@ -193,7 +195,6 @@ class FollowunfollowCubit extends Cubit<FollowunfollowState> {
     this._followUserUseCase,
     this._unfollowUserUseCase,
     this.appUserBloc,
-    this._notificationCubit,
   ) : super(FollowunfollowInitial());
 
   void followUnfollowAction({
@@ -263,7 +264,7 @@ class FollowunfollowCubit extends Cubit<FollowunfollowState> {
         );
       });
 
-      _notificationCubit.createNotification(
+      serviceLocator<FirebaseHelper>().createNotification(
         notificationPreferenceType: NotificationPreferenceEnum.follow,
         notification: CustomNotification(
           notificationId: IdGenerator.generateUniqueId(),
@@ -321,7 +322,7 @@ class FollowunfollowCubit extends Cubit<FollowunfollowState> {
         );
       });
 
-      _notificationCubit.deleteNotification(
+      serviceLocator<FirebaseHelper>().deleteNotification(
         notificationCheck: NotificationCheck(
           receiverId: otherId,
           senderId: myid,

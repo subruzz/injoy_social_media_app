@@ -30,7 +30,6 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     DeviceNotification.requestPermission();
-    DeviceNotification.tokenRefresh();
 
     // PushNotificiationServices.init();
     _controller = AnimationController(

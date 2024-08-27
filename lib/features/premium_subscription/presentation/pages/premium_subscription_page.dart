@@ -4,6 +4,7 @@ import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/common/overlay_loading_holder.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_bar_builder.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/bloc/premium_subscription_bloc.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/pages/widgets/premium_buy_button.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/pages/widgets/premium_card_list.dart';
@@ -27,7 +28,7 @@ class PremiumSubscriptionPage extends StatelessWidget {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const BottonNavWithAnimatedIcons(),
+                  builder: (context) => const BottomBarBuilder(),
                 ),
                 (route) => false,
               );

@@ -51,6 +51,9 @@ class OtherUserPosts extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GetOtherUserPostsCubit, GetOtherUserPostsState>(
       builder: (context, state) {
+        if(state is GetOtherUserPostsError){
+            return NoPostsMessage(userName: addAtSymbol(userName));
+        }
         if (state is GetOtherUserPostsSuccess) {
           if (state.userPosts.isEmpty) {
             return NoPostsMessage(userName: addAtSymbol(userName));

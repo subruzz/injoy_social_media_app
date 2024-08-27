@@ -16,61 +16,66 @@ import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
+import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
 import '../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../../core/const/languages/app_languages.dart';
 import '../../../../core/utils/app_related/open_email.dart';
+import '../../../../core/utils/routes/page_transitions.dart';
 import '../../../../core/widgets/dialog/app_info_dialog.dart';
 import '../../../../core/widgets/dialog/dialogs.dart';
+import '../../../profile/presentation/pages/username_check_page.dart';
 
 class SettingsAndActivityPage extends StatelessWidget {
   const SettingsAndActivityPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
+    final l10n = context.l10n!;
     final appuser = context.read<AppUserBloc>().appUser;
 
-    return Scaffold(
-      appBar: AppCustomAppbar(
-        titleSize: AppLanguages.isMalayalamLocale(context) ? 16 : null,
-        title: l10n!.settings_and_activity,
-      ),
-      body: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthFailure) {
-            Messenger.showSnackBar(
-                message:
-                    'An error occured while logging out ,please try again!');
-          }
-          if (state is AuthNotLoggedIn) {
-            context.read<AiChatCubit>().init();
-            context.read<AppLanguageCubit>().setInitial();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const LoginPage(),
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthFailure) {
+          Messenger.showSnackBar(message: l10n.logoutError);
+        }
+        if (state is AuthNotLoggedIn) {
+          context.read<AiChatCubit>().init();
+          context.read<AppLanguageCubit>().setInitial();
+          context.read<ChatWallapaperCubit>().init();
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginPage(),
+            ),
+            (route) => false,
+          );
+        }
+      },
+      builder: (context, state) {
+        return Stack(
+          children: [
+            Scaffold(
+              appBar: AppCustomAppbar(
+                titleSize: AppLanguages.isMalayalamLocale(context) ? 16 : null,
+                title: l10n.settings_and_activity,
               ),
-              (route) => false,
-            );
-          }
-        },
-        builder: (context, state) {
-          return Stack(
-            children: [
-              ListView(
+              body: ListView(
                 children: [
                   SettingsListTile(
-                    subSize: 12,
-                    iconSize: 27,
-                    asset: AppAssetsConst.accountsettings,
-                    text: l10n.account,
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, MyAppRouteConst.accountSettingsPage,
-                          arguments: {'userId': appuser.id});
-                    },
-                    subT: l10n.change_username_delete_account,
-                  ),
+                      iconSize: 24,
+                      asset: AppAssetsConst.person,
+                      text: l10n.change_username,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          AppPageTransitions.rightToLeft(
+                            UsernameCheckPage(
+                              userid: appuser.id,
+                              isEdit: true,
+                            ),
+                          ),
+                        );
+                      }),
                   const CustomDivider(
                     thickness: 3,
                   ),
@@ -184,7 +189,9 @@ class SettingsAndActivityPage extends StatelessWidget {
                     showTrail: false,
                     onTap: () {
                       AppInfoDialog.showInfoDialog(
+                        title: l10n.areYouSure,
                         context: context,
+                        buttonText: l10n.logOut,
                         callBack: () {
                           context.read<AuthBloc>().add(LogoutUser(
                               uId: context.read<AppUserBloc>().appUser.id));
@@ -217,11 +224,11 @@ class SettingsAndActivityPage extends StatelessWidget {
                   // ),
                 ],
               ),
-              if (state is AuthLoading) const OverlayLoadingHolder()
-            ],
-          );
-        },
-      ),
+            ),
+            if (state is AuthLoading) const OverlayLoadingHolder()
+          ],
+        );
+      },
     );
   }
 }

@@ -56,13 +56,13 @@ class NotificationPage extends StatelessWidget {
                       asset: AppAssetsConst.nonoti),
                 );
               }
-              log('notification is ${state.notifications}');
               return CustomAppPadding(
                 child: ListView.builder(
                   itemCount: state.notifications.length,
                   itemBuilder: (context, index) {
                     final notification = state.notifications[index];
                     return NotificationCard(
+                      notificatonCubit: notificationCubit,
                       notification: notification,
                     );
                   },
@@ -77,10 +77,11 @@ class NotificationPage extends StatelessWidget {
 
 class NotificationCard extends StatelessWidget {
   final CustomNotification notification;
-
+  final NotificationCubit notificatonCubit;
   const NotificationCard({
     super.key,
     required this.notification,
+    required this.notificatonCubit,
   });
 
   @override
@@ -105,10 +106,10 @@ class NotificationCard extends StatelessWidget {
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        context.read<NotificationCubit>().deleteMynotification(
-              myId: context.read<AppUserBloc>().appUser.id,
-              notificationId: notification.notificationId,
-            );
+        notificatonCubit.deleteMynotification(
+          myId: context.read<AppUserBloc>().appUser.id,
+          notificationId: notification.notificationId,
+        );
       },
       child: Padding(
         padding: AppPadding.onlyTopSmall,

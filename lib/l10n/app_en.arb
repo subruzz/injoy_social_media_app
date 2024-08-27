@@ -134,7 +134,15 @@
   "turning_it_off_prevent_seeing_last_seen": "Turning it off will also prevent you from seeing others' last seen status.",
   "change_settings_error": "An unknown error occurred while changing the settings.",
   "clear_history_message": "Clearing your history will remove your messages from your view only. Other people will still be able to see the messages you've sent.",
-  "back": "back"
+  "back": "back",
+  "cannotDeleteMessage": "Cannot delete message(s) older than 30 minutes.",
+  "logoutError": "An error occurred while logging out, please try again!",
+  "changeUsername": "Change your username.",
+  "chooseUsername": "Choose a username for your profile. You can change it at any time.",
+  "usernameAdded": "Username added.",
+  "editYourProfile": "Edit Your Profile",
+  "update": "Update",
+  "profileUpdated": "Your profile has been updated."
 
 
 

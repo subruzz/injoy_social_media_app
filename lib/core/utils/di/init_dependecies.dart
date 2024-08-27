@@ -329,7 +329,7 @@ void _initProfile() {
     ..registerFactory(
         () => UnfollowUserUseCase(userProfileRepository: serviceLocator()))
     ..registerFactory(() => FollowunfollowCubit(
-        serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()))
+        serviceLocator(), serviceLocator(), serviceLocator(),))
     ..registerFactory(() => GetOtherUserPostsCubit(serviceLocator()))
     ..registerFactory(
         () => GetFollowingListUseCase(userDatRepository: serviceLocator()))

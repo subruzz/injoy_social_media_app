@@ -22,8 +22,8 @@ class PostHashtag extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(
                       context,
-                      MyAppRouteConst.hashtagPostsRoute,
-                      arguments: {'hashTagName': tag},
+                      MyAppRouteConst.hashtagOrLocationPost,
+                      arguments: {'tagOrLocation': tag},
                     );
                   },
                   child: Text(

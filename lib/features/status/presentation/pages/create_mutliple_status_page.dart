@@ -43,7 +43,6 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
     super.initState();
 
     if (widget.getMessageCubit != null) {
-      print('not null');
       _messageCubit = serviceLocator<MessageCubit>();
     }
     _selectedAssets.value = widget.assets;
@@ -75,7 +74,6 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    log('log is ${_messageCubit}');
     return Scaffold(
       appBar: StatusAppBar(
         isChat: widget.isChat,

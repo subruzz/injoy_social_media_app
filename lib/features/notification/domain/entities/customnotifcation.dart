@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:social_media_app/core/enum_to_string.dart';
 
 enum NotificationType {
   post,
@@ -50,8 +49,9 @@ class CustomNotification extends NotificationCheck {
   String personalUserName;
   String? postImageUrl;
   String? personalProfileImageUrl;
-  String senderName;
+  String? senderName;
   final String notificationId;
+
   CustomNotification({
     required this.text,
     required super.senderId,
@@ -67,7 +67,7 @@ class CustomNotification extends NotificationCheck {
     required this.personalUserName,
     this.notificationUid = "",
     this.personalProfileImageUrl,
-    required this.senderName,
+    this.senderName,
   });
 
   factory CustomNotification.fromJson(Map<String, dynamic> json) {
@@ -95,15 +95,48 @@ class CustomNotification extends NotificationCheck {
         'notificationType': notificationType.toJson(),
         "time": FieldValue.serverTimestamp(),
         "receiverId": receiverId,
-        "personalUserName": personalUserName,
-        "postImageUrl": postImageUrl,
-        "personalProfileImageUrl": personalProfileImageUrl,
         "uniqueId": uniqueId,
         'postId': postId,
         "isThatLike": isThatLike,
         'notificationId': notificationId,
         "isThatPost": isThatPost,
         "senderId": senderId,
-        "senderName": senderName,
       };
+
+  // Implementing copyWith method
+  CustomNotification copyWith({
+    String? notificationUid,
+    String? text,
+    Timestamp? time,
+    String? personalUserName,
+    String? postImageUrl,
+    String? personalProfileImageUrl,
+    String? senderName,
+    String? notificationId,
+    String? senderId,
+    String? uniqueId,
+    NotificationType? notificationType,
+    String? receiverId,
+    bool? isThatPost,
+    bool? isThatLike,
+    String? postId,
+  }) {
+    return CustomNotification(
+      notificationUid: notificationUid ?? this.notificationUid,
+      text: text ?? this.text,
+      time: time ?? this.time,
+      personalUserName: personalUserName ?? this.personalUserName,
+      postImageUrl: postImageUrl ?? this.postImageUrl,
+      personalProfileImageUrl: personalProfileImageUrl ?? this.personalProfileImageUrl,
+      senderName: senderName ?? this.senderName,
+      notificationId: notificationId ?? this.notificationId,
+      senderId: senderId ?? this.senderId,
+      uniqueId: uniqueId ?? this.uniqueId,
+      notificationType: notificationType ?? this.notificationType,
+      receiverId: receiverId ?? this.receiverId,
+      isThatPost: isThatPost ?? this.isThatPost,
+      isThatLike: isThatLike ?? this.isThatLike,
+      postId: postId ?? this.postId,
+    );
+  }
 }

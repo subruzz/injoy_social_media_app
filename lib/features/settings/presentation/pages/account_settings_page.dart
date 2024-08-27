@@ -21,21 +21,7 @@ class AccountSettingsPage extends StatelessWidget {
         body: CustomAppPadding(
             child: ListView(
           children: [
-            SettingsListTile(
-                iconSize: 24,
-                asset: AppAssetsConst.person,
-                text: l10n.change_username,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    AppPageTransitions.rightToLeft(
-                      UsernameCheckPage(
-                        userid: myId,
-                        isEdit: true,
-                      ),
-                    ),
-                  );
-                }),
+                       
             const CustomDivider(
               thickness: 3,
             ),

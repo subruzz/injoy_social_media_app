@@ -3,15 +3,21 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
+import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/services/assets/asset_services.dart';
 
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
+import 'package:social_media_app/core/widgets/common/premium_badge.dart';
 import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
+import 'package:social_media_app/core/widgets/dialog/dialogs.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
@@ -45,6 +51,7 @@ class PostOptionsBottomShett {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             CommonListTile(
+              showTrail: false,
               leading: AppAssetsConst.share,
               text: l10n!.share,
               onTap: () {},
@@ -52,11 +59,20 @@ class PostOptionsBottomShett {
             ),
             if (!isMyPost) ...[
               CommonListTile(
+                showTrail: false,
                 leading: AppAssetsConst.download,
-                text: l10n.downloadMedia,
+                leadingW: Row(
+                  children: [
+                    CustomText(text: l10n.downloadMedia),
+                    AppSizedBox.sizedBox10W,
+                    const PremiumBadge()
+                  ],
+                ),
                 onTap: () {
+                  if (!context.read<AppUserBloc>().appUser.hasPremium) {
+                    return AppDialogsCommon.noPremium(context);
+                  }
                   Navigator.pop(context);
-
                   isShorts
                       ? AssetServices.saveVideo(
                           videoUrl: post.postImageUrl[postImageUrlIndex])
@@ -90,10 +106,17 @@ class PostOptionsBottomShett {
                 ListTile(
                   leading: Icon(Icons.edit_outlined,
                       color: AppDarkColor().iconPrimaryColor),
-                  title: Text(l10n.edit),
+                  title: Row(
+                    children: [
+                      CustomText(text: l10n.edit),
+                      AppSizedBox.sizedBox10W,
+                      const PremiumBadge()
+                    ],
+                  ),
                   onTap: () {
-                    Navigator.pop(context);
-
+                    if (!context.read<AppUserBloc>().appUser.hasPremium) {
+                      return AppDialogsCommon.noPremium(context);
+                    }
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => EditPostPage(
                         post: post,
@@ -153,6 +176,7 @@ class PostOptionsBottomShett {
             ],
             if (!isMyPost)
               CommonListTile(
+                showTrail: false,
                 text: l10n.aboutThisAccount,
                 leading: AppAssetsConst.user,
                 onTap: () {

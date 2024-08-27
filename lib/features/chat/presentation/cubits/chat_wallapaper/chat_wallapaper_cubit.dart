@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:social_media_app/core/utils/shared_preference/chat_wallapaper.dart';
 
 part 'chat_wallapaper_state.dart';
 
@@ -13,23 +14,19 @@ class ChatWallapaperCubit extends Cubit<ChatWallapaperState> {
 
   void storechatWallapaper(File file) async {
     emit(ChatWallapaperLoading());
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString(chatWallapaper, file.path);
+
+    final res = await ChatWallapaperSp.storechatWallapaper(file);
+    if (res) {
       emit(ChatWallapaperStored());
       emit(ChatWallapaperSuccess(wallapaperPath: file.path));
-      log('Stored new wallpaper');
-    } catch (e) {
-      log('Exception: $e');
+    } else {
       emit(ChatWallapaperError());
     }
   }
 
   void getChatWallapaper() async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? chatImage = prefs.getString(chatWallapaper);
-      log('image file is $chatImage');
+      final chatImage = await ChatWallapaperSp.getChatWallapaper();
 
       if (chatImage == null) {
         emit(ChatWallapaperError());
@@ -41,5 +38,9 @@ class ChatWallapaperCubit extends Cubit<ChatWallapaperState> {
       log(e.toString());
       emit(ChatWallapaperError());
     }
+  }
+  void init()
+  {
+    emit(ChatWallapaperInitial());
   }
 }

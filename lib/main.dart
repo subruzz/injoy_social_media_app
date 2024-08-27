@@ -63,12 +63,12 @@ void main() async {
   // });
   //terminated
 
-  // final RemoteMessage? message =
-  //     await FirebaseMessaging.instance.getInitialMessage();
+  final RemoteMessage? message =
+      await FirebaseMessaging.instance.getInitialMessage();
 
-  // if (message != null) {
-  //   Future.delayed(Duration.zero);
-  // }
+  if (message != null) {
+    Future.delayed(Duration.zero);
+  }
 
   await initDependencies();
 

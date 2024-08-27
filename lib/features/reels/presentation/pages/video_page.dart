@@ -26,6 +26,7 @@ import 'package:social_media_app/features/reels/domain/usecases/get_reels.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../core/const/assets/app_assets.dart';
 import '../../../../core/theme/widget_themes/text_theme.dart';
+import '../../../../core/utils/routes/tranistions/app_routes_const.dart';
 import '../../../../core/widgets/app_related/app_svg.dart';
 import '../../../../core/widgets/common/add_at_symbol.dart';
 import '../../../../core/widgets/common/app_error_gif.dart';
@@ -506,8 +507,23 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            CircularUserProfile(
-                                size: 22, profile: widget.reel!.userProfileUrl),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, MyAppRouteConst.otherUserProfile,
+                                    arguments: {
+                                      'user': PartialUser(
+                                          id: widget.reel!.creatorUid,
+                                          userName: widget.reel!.userFullName,
+                                          fullName: widget.reel!.userFullName,
+                                          profilePic:
+                                              widget.reel!.userProfileUrl)
+                                    });
+                              },
+                              child: CircularUserProfile(
+                                  size: 22,
+                                  profile: widget.reel!.userProfileUrl),
+                            ),
                             AppSizedBox.sizedBox10W,
                             Expanded(
                               child: CustomText(
@@ -572,16 +588,6 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                           isReel: true,
                         ),
                         AppSizedBox.sizedBox20H,
-
-                        if (widget.reel != null &&
-                            widget.pageController != null &&
-                            widget.currentIndex != null)
-                          PostOptionButton(
-                              isMyPost: widget.reel!.creatorUid == me.id,
-                              isShorts: true,
-                              post: widget.reel!,
-                              currentPostIndex: widget.currentIndex!,
-                              pagecontroller: widget.pageController!)
                       ],
                     ),
                   ),

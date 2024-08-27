@@ -9,8 +9,6 @@ import 'package:social_media_app/features/post_status_feed/presentation/bloc/fol
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/floating_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_top_bar_section/home_top_bar.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_status_section/user_status.dart';
-import '../../../../core/utils/di/init_dependecies.dart';
-import '../../../notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import '../bloc/get_all_statsus/get_all_status_bloc.dart';
 import '../widgets/sections/home_tab_bar_section/widgets/following_post_tab_view.dart';
 

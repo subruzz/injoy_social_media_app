@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/utils/other/id_generator.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:social_media_app/features/post/domain/usecases/comment/create_co
 import 'package:social_media_app/features/post/domain/usecases/comment/delete_comment.dart';
 import 'package:social_media_app/features/post/domain/usecases/comment/update_comment.dart';
 
+import '../../../../../../core/utils/di/init_dependecies.dart';
 import '../../../../../settings/domain/entity/ui_entity/enums.dart';
 
 part 'comment_basic_state.dart';
@@ -20,7 +22,6 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
   final CreateCommentUsecase _createCommentUsecase;
   final UpdateCommentUseCase _updateCommentUseCase;
   final DeleteCommentUseCase _deleteCommentUseCase;
-  final NotificationCubit _notificationCubit;
 
   CommentBasicCubit({
     required CreateCommentUsecase createCommentUsecase,
@@ -30,7 +31,6 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
   })  : _createCommentUsecase = createCommentUsecase,
         _updateCommentUseCase = updateCommentUseCase,
         _deleteCommentUseCase = deleteCommentUseCase,
-        _notificationCubit = notificationCubit,
         super(CommentBasicInitial());
 
   void addComment(
@@ -59,7 +59,8 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
     res.fold((failure) => emit(CommentError(error: failure.message)),
         (success) {
       emit(CommentAddedSuccess());
-      _notificationCubit.createNotification(
+      if (creatorId == user.id) return;
+      serviceLocator<FirebaseHelper>().createNotification(
         notificationPreferenceType: NotificationPreferenceEnum.comments,
         notification: CustomNotification(
           notificationId: IdGenerator.generateUniqueId(),
@@ -89,12 +90,12 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
     emit(CommentLoading());
 
     final res = await _deleteCommentUseCase(DeleteCommentUseCaseParams(
-        postId: postId, commentId: commentId, isReel:isReel));
+        postId: postId, commentId: commentId, isReel: isReel));
     res.fold((failure) => emit(CommentError(error: failure.message)),
         (success) {
       emit(CommentDeletedSuccess());
 
-      _notificationCubit.deleteNotification(
+      serviceLocator<FirebaseHelper>().deleteNotification(
         notificationCheck: NotificationCheck(
           receiverId: otherId,
           senderId: myId,

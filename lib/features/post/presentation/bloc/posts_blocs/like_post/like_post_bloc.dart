@@ -24,8 +24,9 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
   final Debouncer _debouncer =
       Debouncer(delay: const Duration(milliseconds: 300));
   LikePostBloc(
-      this._likePostsUseCase, this._unlikePostsUseCase, )
-      : super(LikePostInitial()) {
+    this._likePostsUseCase,
+    this._unlikePostsUseCase,
+  ) : super(LikePostInitial()) {
     on<LikePostEvent>((event, emit) {
       emit(LikePostLoading());
     });
@@ -44,7 +45,7 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
       if (event.otherUserId == event.user.id) return;
       if (_debouncer.isRunning()) _debouncer.cancel();
       _debouncer.run(() {
-        serviceLocator<FirebaseHelper>() .createNotification(
+        serviceLocator<FirebaseHelper>().createNotification(
           notificationPreferenceType: NotificationPreferenceEnum.likes,
           notification: CustomNotification(
             notificationId: IdGenerator.generateUniqueId(),

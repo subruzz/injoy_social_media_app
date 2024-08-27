@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/const/languages/app_languages.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/utils/shared_preference/app_language.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
@@ -54,6 +57,7 @@ class _CreateUsernamePageState extends State<UsernameCheckPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n!;
     return Scaffold(
       appBar: AppCustomAppbar(
         showLeading: true,
@@ -71,16 +75,22 @@ class _CreateUsernamePageState extends State<UsernameCheckPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Create a username',
+                    Text(
+                        widget.isEdit
+                            ? l10n.changeUsername
+                            : 'Create a username',
                         style: Theme.of(context)
                             .textTheme
                             .displayMedium
                             ?.copyWith(
-                                fontSize: isThatMobile ? null : 20,
+                                fontSize:
+                                    AppLanguages.isMalayalamLocale(context)
+                                        ? 20
+                                        : 25,
                                 fontWeight: FontWeight.w700)),
                     AppSizedBox.sizedBox5H,
                     Text(
-                      "Choose a username for your profile. You can change it later if you want.",
+                      l10n.chooseUsername,
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium
@@ -100,7 +110,7 @@ class _CreateUsernamePageState extends State<UsernameCheckPage> {
                           appuser.add(UpdateUserModelEvent(
                               userModel: appuser.appUser
                                   .copyWith(userName: usernameState.userName)));
-                          Messenger.showSnackBar(message: 'Username changed');
+                          Messenger.showSnackBar(message: l10n.usernameAdded);
                           Navigator.pop(context);
                         }
                         if (usernameState is UserNameAvailableState) {
@@ -143,7 +153,7 @@ class _CreateUsernamePageState extends State<UsernameCheckPage> {
                           child: usernameState is AddUserNameLoading
                               ? const CircularLoading()
                               : Text(
-                                  'Next',
+                                  widget.isEdit ? l10n.change_username : 'Next',
                                   style: isThatMobile
                                       ? null
                                       : const TextStyle(fontSize: 14),

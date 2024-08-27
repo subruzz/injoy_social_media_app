@@ -8,6 +8,8 @@ import 'package:social_media_app/features/profile/presentation/bloc/user_data/ge
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/user_profile_tab_section/widgets/media_grid.dart';
 
 import '../../../../../../../core/common/entities/user_entity.dart';
+import '../../../../../../../core/widgets/common/add_at_symbol.dart';
+import '../../../others_profile/other_user_no_post_msg.dart';
 
 class MyShortsTab extends StatelessWidget {
   const MyShortsTab({super.key, required this.appUser});
@@ -54,7 +56,7 @@ class OtherUserShortsTab extends StatelessWidget {
             child: CircularLoadingGrey(),
           );
         } else if (state is GetOtherUserShortsError) {
-          return const AppErrorGif();
+          return const NoPostsMessage(userName: '');
         } else if (state is GetOtherUserShortsSuccess) {
           if (state.myShorts.isEmpty) {
             return const Center(

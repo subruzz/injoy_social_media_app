@@ -90,7 +90,8 @@ class ChatCallItem extends StatelessWidget {
                           ?.copyWith(fontSize: isThatTabOrDeskTop ? 14 : null)),
                 ),
                 if (chat!.lastSenderId !=
-                    context.read<AppUserBloc>().appUser.id)
+                        context.read<AppUserBloc>().appUser.id &&
+                    chat!.recentTextMessage.isNotEmpty)
                   DecoratedBox(
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,

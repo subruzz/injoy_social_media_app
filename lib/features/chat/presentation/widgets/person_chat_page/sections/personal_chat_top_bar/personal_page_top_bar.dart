@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +5,7 @@ import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
+import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/const/extensions/time_ago.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
@@ -14,10 +13,10 @@ import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/common/user_profile.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/common_widgets/personal_chat_top_bar_icon.dart';
-
 import '../../../../../../../core/widgets/dialog/app_info_dialog.dart';
 import '../../../../../domain/entities/message_entity.dart';
 
@@ -28,8 +27,10 @@ class PersonalPageTopBar extends StatelessWidget
     required this.getMessageCubit,
     required this.selectedMessages,
   });
+
   final GetMessageCubit getMessageCubit;
   final ValueNotifier<List<MessageEntity>> selectedMessages;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -38,7 +39,6 @@ class PersonalPageTopBar extends StatelessWidget
         bloc: getMessageCubit,
         selector: (state) => state.statusInfo,
         builder: (context, user) {
-          log('rebiot');
           if (user != null) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -84,21 +84,47 @@ class PersonalPageTopBar extends StatelessWidget
           builder: (context, value, child) {
             return value.isEmpty
                 ? const EmptyDisplay()
-                : PersonalChatTopBarIcon(
-                    onPressed: () {
-                      AppInfoDialog.showInfoDialog(
-                        context: context,
-                        subtitle: AppIngoMsg.deleteMessage,
-                        callBack: () {
-                          log('deleting message');
-                          context.read<MessageCubit>().deleteMessage(
-                              messageState: getMessageCubit.state,
-                              messages: selectedMessages.value);
-                        },
-                        buttonText: AppUiStringConst.delete,
-                      );
+                : BlocListener<MessageCubit, MessageState>(
+                    listener: (context, state) {
+                      if (state is DeleteMessageSuccess) {
+                        selectedMessages.value = [];
+                      }
                     },
-                    index: 0);
+                    child: PersonalChatTopBarIcon(
+                      onPressed: () {
+                        // Check if any message is older than 30 minutes
+                        bool canDelete = true;
+                        final now = DateTime.now();
+                        for (var message in selectedMessages.value) {
+                          final difference =
+                              now.difference(message.createdAt!.toDate());
+                          if (difference.inMinutes > 30) {
+                            canDelete = false;
+                            break;
+                          }
+                        }
+
+                        if (canDelete) {
+                          AppInfoDialog.showInfoDialog(
+                            context: context,
+                            subtitle: AppIngoMsg.deleteMessage,
+                            callBack: () {
+                              context.read<MessageCubit>().deleteMessage(
+                                  messageState: getMessageCubit.state,
+                                  messages: selectedMessages.value);
+                            },
+                            buttonText: AppUiStringConst.delete,
+                          );
+                        } else {
+                          // Show a snackbar indicating the message cannot be deleted
+                          Messenger.showSnackBar(
+                              message: AppLocalizations.of(context)!
+                                  .cannotDeleteMessage);
+                        }
+                      },
+                      index: 0,
+                    ),
+                  );
           },
         ),
         PersonalChatTopBarIcon(onPressed: () {}, index: 1),

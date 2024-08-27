@@ -15,6 +15,7 @@ import 'package:social_media_app/features/bottom_nav/presentation/web/videos_pag
 import 'package:social_media_app/features/bottom_nav/presentation/widgets/bottom_bar_items.dart';
 import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_page.dart';
 import 'package:social_media_app/features/explore/presentation/pages/explore_page_builder.dart';
+import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_my_reels/get_my_reels_cubit.dart';
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
@@ -70,6 +71,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
   void initState() {
     serviceLocator<FirebaseHelper>()
         .deleteUnWantedStatus(context.read<AppUserBloc>().appUser.id);
+    DeviceNotification.tokenRefresh(context.read<AppUserBloc>().appUser.id);
 
     WidgetsBinding.instance.addObserver(this);
     super.initState();

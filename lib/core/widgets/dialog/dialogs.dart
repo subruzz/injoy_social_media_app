@@ -11,6 +11,8 @@ class AppDialogsCommon {
             'Unlock this feature with a premium subscription for an enhanced experience.',
         context: context,
         callBack: () {
+          Navigator.pop(context);
+
           Navigator.push(
               context,
               MaterialPageRoute(

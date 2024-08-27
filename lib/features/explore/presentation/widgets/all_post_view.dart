@@ -34,11 +34,10 @@ class AllPostView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    log('these are ${showOnlyOne}and $post');
     final me = context.read<AppUserBloc>().appUser;
     return Scaffold(
         appBar: AppCustomAppbar(
-          title: isMyposts ? l10n!.my_posts : l10n!.explore,
+          title: l10n!.posts,
         ),
         body: (post != null && showOnlyOne)
             ? EachPost(currentPost: post!)
