@@ -23,18 +23,9 @@ class MyStatusView extends StatefulWidget {
 }
 
 class MyStatusViewState extends State<MyStatusView> {
-  bool isAnimating = false;
-  AnimationController? _animationController;
-
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _animationController?.dispose();
-    super.dispose();
   }
 
   @override
@@ -46,74 +37,59 @@ class MyStatusViewState extends State<MyStatusView> {
           padding: AppPadding.only(left: 25, right: 18),
           child: Column(
             children: [
-              AnimatedLoadingBorder(
-                cornerRadius: 50,
-                borderColor: AppDarkColor().statusborder,
-                borderWidth: 10,
-                controller: (animationController) {
-                  _animationController = animationController;
-                  if (isAnimating) {
-                    _animationController?.repeat();
-                  } else {
-                    _animationController?.stop();
-                  }
-                },
-                child: Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    CustomPaint(
-                      painter: StatusDottedBordersWidget(
-                        isLoading: isAnimating,
-                        numberOfStories: state is GetMyStatusSuccess
-                            ? state.myStatus.length
-                            : 0,
-                        isMe: true,
-                        spaceLength: 6,
-                        images:
-                            state is GetMyStatusSuccess ? state.myStatus : [],
-                        uid: user.id,
-                      ),
-                      child: GestureDetector(
-                          onTap: () {
-                            if (state is GetMyStatusSuccess) {
-                              log('state isthis $state and length of the items is ${state.myStatus.length}');
-                            }
-                            if (state is GetMyStatusSuccess &&
-                                state.myStatus.isNotEmpty) {
-                              Navigator.pushNamed(
-                                  context, MyAppRouteConst.viewStatusRoute,
-                                  arguments: {
-                                    'isMe': true,
-                                    'index': 0,
-                                    'myStatuses': state.myStatus
-                                  });
-                            } else {
-                              Navigator.pushNamed(
-                                  context, MyAppRouteConst.statusCreationRoute);
-                            }
-                          },
-                          child: Hero(
-                              tag: user.id,
-                              child: BlocBuilder<AppUserBloc, AppUserState>(
-                                buildWhen: (previous, current) {
-                                  if (previous is AppUserLoggedIn &&
-                                      current is AppUserLoggedIn) {
-                                    return (previous.user.profilePic !=
-                                        current.user.profilePic);
-                                  }
-                                  return false;
-                                },
-                                builder: (context, state) {
-                                  return state is AppUserLoggedIn
-                                      ? CircularUserProfile(
-                                          profile: state.user.profilePic)
-                                      : const EmptyDisplay();
-                                },
-                              ))),
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CustomPaint(
+                    painter: StatusDottedBordersWidget(
+                      numberOfStories: state is GetMyStatusSuccess
+                          ? state.myStatus.length
+                          : 0,
+                      isMe: true,
+                      spaceLength: 6,
+                      images: state is GetMyStatusSuccess ? state.myStatus : [],
+                      uid: user.id,
                     ),
-                    if (!isAnimating) const CreateStatusButton()
-                  ],
-                ),
+                    child: GestureDetector(
+                        onTap: () {
+                          if (state is GetMyStatusSuccess) {
+                            log('state isthis $state and length of the items is ${state.myStatus.length}');
+                          }
+                          if (state is GetMyStatusSuccess &&
+                              state.myStatus.isNotEmpty) {
+                            Navigator.pushNamed(
+                                context, MyAppRouteConst.viewStatusRoute,
+                                arguments: {
+                                  'isMe': true,
+                                  'index': 0,
+                                  'myStatuses': state.myStatus
+                                });
+                          } else {
+                            Navigator.pushNamed(
+                                context, MyAppRouteConst.statusCreationRoute);
+                          }
+                        },
+                        child: Hero(
+                            tag: user.id,
+                            child: BlocBuilder<AppUserBloc, AppUserState>(
+                              buildWhen: (previous, current) {
+                                if (previous is AppUserLoggedIn &&
+                                    current is AppUserLoggedIn) {
+                                  return (previous.user.profilePic !=
+                                      current.user.profilePic);
+                                }
+                                return false;
+                              },
+                              builder: (context, state) {
+                                return state is AppUserLoggedIn
+                                    ? CircularUserProfile(
+                                        profile: state.user.profilePic)
+                                    : const EmptyDisplay();
+                              },
+                            ))),
+                  ),
+                  const CreateStatusButton()
+                ],
               ),
               AppSizedBox.sizedBox5H,
               const Text(

@@ -14,6 +14,7 @@ import 'package:social_media_app/features/settings/domain/entity/notification_pr
 
 import '../../../../../core/const/enums/location_enum.dart';
 import '../../../../../core/const/enums/premium_type.dart';
+import '../../../../../core/utils/shared_preference/app_language.dart';
 
 abstract interface class AuthRemoteDataSource {
   Future<AppUserModel> login(String email, String password);
@@ -327,6 +328,8 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           await GoogleSignIn().disconnect();
         }
         _firebaseStorage.collection('users').doc(uid).update({'token': ''});
+
+        await AppLanguageSP.clearLocale();
       }
     } catch (e) {
       throw const MainException();

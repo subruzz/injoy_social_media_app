@@ -7,8 +7,11 @@ import 'package:social_media_app/features/profile/presentation/bloc/other_user/g
 import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_my_reels/get_my_reels_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/user_profile_tab_section/widgets/media_grid.dart';
 
+import '../../../../../../../core/common/entities/user_entity.dart';
+
 class MyShortsTab extends StatelessWidget {
-  const MyShortsTab({super.key});
+  const MyShortsTab({super.key, required this.appUser});
+  final AppUser appUser;
 
   @override
   Widget build(BuildContext context) {

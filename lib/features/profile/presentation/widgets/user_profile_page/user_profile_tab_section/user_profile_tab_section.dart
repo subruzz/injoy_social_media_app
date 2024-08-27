@@ -4,6 +4,7 @@ import 'package:social_media_app/features/profile/presentation/widgets/user_prof
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/user_profile_tab_section/widgets/media_tab.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/user_profile_tab_section/widgets/user_tab.dart';
 
+import '../../../../../../core/common/entities/user_entity.dart';
 import '../../../../../../core/const/extensions/localization.dart';
 
 class UserProfileTabSection extends StatelessWidget {
@@ -11,10 +12,13 @@ class UserProfileTabSection extends StatelessWidget {
       {super.key,
       required this.localizations,
       required this.isMe,
-      this.userName});
+      this.userName,
+      required this.appUser});
   final AppLocalizations localizations;
   final bool isMe;
   final String? userName;
+  final AppUser appUser;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,11 +35,17 @@ class UserProfileTabSection extends StatelessWidget {
           child: TabBarView(
             children: [
               isMe
-                  ? const MypostsTab()
+                  ? MypostsTab(
+                      appUser: appUser,
+                    )
                   : OtherUserPosts(
                       userName: userName,
                     ),
-              isMe ? const MyShortsTab() : const OtherUserShortsTab()
+              isMe
+                  ? MyShortsTab(
+                      appUser: appUser,
+                    )
+                  : const OtherUserShortsTab()
             ],
           ),
         )

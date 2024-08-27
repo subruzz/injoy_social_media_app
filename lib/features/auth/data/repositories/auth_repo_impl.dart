@@ -115,12 +115,14 @@ class AuthRepositoryImpl implements AuthRepository {
     // TODO: implement verifyPassword
     throw UnimplementedError();
   }
-  
-  @override
-  Future<Either<Failure, Unit>> logout(String userId) {
-    // TODO: implement logout
-    throw UnimplementedError();
-  }
 
-  
+  @override
+  Future<Either<Failure, Unit>> logout(String userId) async {
+    try {
+      await _remoteDataSource.signOut(userId);
+      return right(unit);
+    } catch (e) {
+      return Left(Failure());
+    }
+  }
 }

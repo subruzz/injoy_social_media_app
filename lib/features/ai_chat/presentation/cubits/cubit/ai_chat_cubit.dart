@@ -64,4 +64,8 @@ class AiChatCubit extends Cubit<AiChatState> {
       },
     );
   }
+
+  void init() {
+    emit(const AiChatState());
+  }
 }

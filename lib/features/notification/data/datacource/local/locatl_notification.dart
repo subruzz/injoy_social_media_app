@@ -18,7 +18,7 @@ class LocatlNotification {
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   static Future<void> initLocalNotification() async {
     const androidInitSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/launcher_icon');
     // const iosInitSettings = DarwinInitializationSettings();
     const initSettings = InitializationSettings(android: androidInitSettings);
     _flutterLocalNotificationsPlugin
@@ -35,11 +35,18 @@ class LocatlNotification {
     AndroidNotificationChannel channel = const AndroidNotificationChannel(
         '1', 'Channel_name',
         importance: Importance.max);
-
+    BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+      message.notification!.body.toString(),
+      htmlFormatBigText: true,
+      contentTitle: message.notification!.title.toString(),
+      htmlFormatContentTitle: true,
+    );
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(channel.id, channel.name,
             channelDescription: 'desc',
+            sound: const RawResourceAndroidNotificationSound('notification'),
             importance: Importance.high,
+            styleInformation: bigTextStyleInformation,
             priority: Priority.high,
             ticker: 'ticker');
     NotificationDetails notificationDetails =

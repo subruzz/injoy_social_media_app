@@ -28,4 +28,8 @@ class GetMyReelsCubit extends Cubit<GetMyReelsState> {
 
     emit(GetUserShortsSuccess(myShorts: updatedUserPosts));
   }
+
+  void init() {
+    emit(GetMyReelsInitial());
+  }
 }

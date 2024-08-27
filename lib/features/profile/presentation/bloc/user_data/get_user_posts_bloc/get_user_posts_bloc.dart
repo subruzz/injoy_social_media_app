@@ -21,6 +21,9 @@ class GetUserPostsBloc extends Bloc<GetUserPostsEvent, GetUserPostsState> {
     on<GetUserPostsrequestedEvent>(_getUserPostsrequestedEvent);
     on<GetUserPostsAterPostUpdate>(_getUserPostsAterPostUpdate);
     on<GetPostAfterDelete>(_getPostAfterDelete);
+    on<Init>(
+      (event, emit) => emit(GetUserPostsInitial()),
+    );
   }
 
   FutureOr<void> _getUserPostsrequestedEvent(

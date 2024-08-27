@@ -87,7 +87,7 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
     for (var controller in _controllers) {
       controller?.dispose();
     }
-
+    log('bottom nav disposed');
     super.dispose();
   }
 

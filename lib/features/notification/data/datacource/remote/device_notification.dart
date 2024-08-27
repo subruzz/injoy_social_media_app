@@ -78,7 +78,6 @@ class DeviceNotification {
   static sendNotificationToUser(
       {required String deviceToken,
       required CustomNotification notification}) async {
-    print('this called');
     String notificationRoute;
     String routeParameterId;
     switch (notification.notificationType) {

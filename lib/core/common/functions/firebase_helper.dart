@@ -117,20 +117,20 @@ class FirebaseHelper {
   }
 
   Future<void> deleteUnWantedStatus(String myId) async {
-    // final statusCollection =
-    //     _firestore.collection(FirebaseCollectionConst.statuses);
+    final statusCollection =
+        _firestore.collection(FirebaseCollectionConst.statuses);
 
-    // final cutoffTimestamp = cutOffTime;
+    final cutoffTimestamp = cutOffTime;
 
-    // ///returning the list of statuses of current user from status collection using
-    // ///the user id
-    // final statuses = await statusCollection
-    //     .where(FirebaseFieldConst.uId, isEqualTo: myId)
-    //     .where(FirebaseFieldConst.createdAt, isLessThan: cutoffTimestamp)
-    //     .get();
-    // for (var status in statuses.docs) {
-    //   await status.reference.delete();
-    // }
+    ///returning the list of statuses of current user from status collection using
+    ///the user id
+    final statuses = await statusCollection
+        .where(FirebaseFieldConst.uId, isEqualTo: myId)
+        .where(FirebaseFieldConst.createdAt, isLessThan: cutoffTimestamp)
+        .get();
+    for (var status in statuses.docs) {
+      await status.reference.delete();
+    }
   }
 
   Future<void> createNotification(
@@ -141,8 +141,6 @@ class FirebaseHelper {
       AppUserModel? user = await getUserDetailsFuture(notification.receiverId);
       if (user == null) return;
       String token = user.token;
-      log(token);
-      log(user.notificationPreferences.isNotificationPaused.toString());
 
       if (user.notificationPreferences.isNotificationPaused) {
         return;
@@ -181,6 +179,49 @@ class FirebaseHelper {
     } catch (e) {
       log('error is this from the notification${e.toString()}');
       throw const MainException();
+    }
+  }
+
+  Future<void> deleteNotification(
+      {required NotificationCheck notificationCheck}) async {
+    final notificationRef = _firestore
+        .collection(FirebaseCollectionConst.users)
+        .doc(notificationCheck.receiverId)
+        .collection('notifications');
+    QuerySnapshot<Map<String, dynamic>> getDoc;
+
+    if (notificationCheck.notificationType == NotificationType.post &&
+        notificationCheck.isThatLike) {
+      getDoc = await notificationRef
+          .where("isThatLike", isEqualTo: notificationCheck.isThatLike)
+          .where("isThatPost", isEqualTo: notificationCheck.isThatPost)
+          .where("senderId", isEqualTo: notificationCheck.senderId)
+          .where("uniqueId", isEqualTo: notificationCheck.uniqueId)
+          .get();
+      for (final doc in getDoc.docs) {
+        notificationRef.doc(doc.id).delete();
+      }
+    } else if (notificationCheck.notificationType == NotificationType.profile) {
+      log('camer here');
+      getDoc = await notificationRef
+          .where("senderId", isEqualTo: notificationCheck.senderId)
+          .where("uniqueId", isEqualTo: notificationCheck.uniqueId)
+          .get();
+      for (final doc in getDoc.docs) {
+        notificationRef.doc(doc.id).delete();
+      }
+    } else if (notificationCheck.notificationType == NotificationType.post &&
+        !notificationCheck.isThatLike) {
+      getDoc = await notificationRef
+          .where("isThatLike", isEqualTo: notificationCheck.isThatLike)
+          .where("isThatPost", isEqualTo: notificationCheck.isThatPost)
+          .where("senderId", isEqualTo: notificationCheck.senderId)
+          .where("uniqueId", isEqualTo: notificationCheck.uniqueId)
+          .where('postId', isEqualTo: notificationCheck.postId)
+          .get();
+      for (final doc in getDoc.docs) {
+        notificationRef.doc(doc.id).delete();
+      }
     }
   }
 

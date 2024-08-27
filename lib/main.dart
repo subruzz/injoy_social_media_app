@@ -11,6 +11,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:social_media_app/bloc_observer.dart';
+import 'package:social_media_app/core/common/shared_providers/cubit/connectivity_cubit.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
@@ -30,6 +32,8 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+  Bloc.observer = SimpleBlocObserver();
+
   await dotenv.load(fileName: '.env');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -91,27 +95,36 @@ class MyApp extends StatelessWidget {
           child: Builder(builder: (ctx) {
             return BlocBuilder<AppLanguageCubit, AppLanguageState>(
               builder: (ctx, state) {
-                return MaterialApp(
-                  locale: state.locale,
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: const [
-                    Locale('en'),
-                    Locale('ml'),
-                  ],
-                  navigatorKey: navigatorKey,
+                return BlocListener<ConnectivityCubit, ConnectivityState>(
+                  listener: (context, state) {
+                    if (state is ConnectivityNotConnected) {
+                      _showNoConnectionDialog();
+                    } else {
+                      _dismissNoConnectionDialog();
+                    }
+                  },
+                  child: MaterialApp(
+                    locale: state.locale,
+                    localizationsDelegates: const [
+                      AppLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: const [
+                      Locale('en'),
+                      Locale('ml'),
+                    ],
+                    navigatorKey: navigatorKey,
 
-                  debugShowCheckedModeBanner: false,
-                  scaffoldMessengerKey: Messenger.scaffoldKey,
-                  onGenerateRoute: MyAppRouter(isAuth: false).generateRoute,
-                  initialRoute: '/',
-                  title: 'First Method',
-                  // You can use the library anywhere in the app even in theme
-                  theme: AppDarkTheme.darkTheme,
+                    debugShowCheckedModeBanner: false,
+                    scaffoldMessengerKey: Messenger.scaffoldKey,
+                    onGenerateRoute: MyAppRouter(isAuth: false).generateRoute,
+                    initialRoute: '/',
+                    title: 'First Method',
+                    // You can use the library anywhere in the app even in theme
+                    theme: AppDarkTheme.darkTheme,
+                  ),
                 );
               },
             );
@@ -119,6 +132,36 @@ class MyApp extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _dismissNoConnectionDialog() {
+    if (navigatorKey.currentState?.canPop() ?? false) {
+      navigatorKey.currentState?.pop();
+    }
+  }
+
+  void _showNoConnectionDialog() {
+    final context = navigatorKey.currentState?.overlay?.context;
+    if (context != null) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            title: const Text('No Connection'),
+            content: const Text(
+                'You are not connected to the internet.\nPlease connect to the internet to dismiss this dialogue'),
+            actions: [
+              TextButton(
+                onPressed: () {},
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }
 

@@ -1,14 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/common/premium_badge.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_my_reels/get_my_reels_cubit.dart';
+import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/others_profile/other_user_details.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/top_bar_section/top_bar_section.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/user_basic_details_section/user_basic_detail_section.dart';
 import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';
+import '../../../../core/common/models/partial_user_model.dart';
 import '../../../../core/const/app_config/app_sizedbox.dart';
 import '../../../../core/theme/color/app_colors.dart';
 import '../../../../core/widgets/dialog/app_info_dialog.dart';
@@ -16,18 +20,41 @@ import '../../../premium_subscription/presentation/pages/premium_subscripti_buil
 import '../widgets/user_profile_page/user_profile_tab_section/user_profile_tab_section.dart';
 import '../widgets/user_profile_page/user_social_action_details_section/user_social_action_details_section.dart';
 
-class ProfilePageWrapper extends StatelessWidget {
+class ProfilePageWrapper extends StatefulWidget {
   const ProfilePageWrapper({super.key, this.userName, this.isMe = true});
   final String? userName;
   final bool isMe;
+
+  @override
+  State<ProfilePageWrapper> createState() => _ProfilePageWrapperState();
+}
+
+class _ProfilePageWrapperState extends State<ProfilePageWrapper> {
+  late AppUser user;
+  @override
+  void initState() {
+    user = context.read<AppUserBloc>().appUser;
+    if (widget.isMe) {
+      final partialUser = PartialUser(
+          id: user.id,
+          userName: user.userName,
+          fullName: user.fullName,
+          profilePic: user.profilePic);
+      context
+          .read<GetUserPostsBloc>()
+          .add(GetUserPostsrequestedEvent(user: partialUser));
+      context.read<GetMyReelsCubit>().getMyReels(partialUser);
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = context.read<AppUserBloc>().appUser;
     final l10n = context.l10n;
     return Scaffold(
       appBar: ProfilePageTopBarSection(
-        userName: userName,
-        isMe: userName == null,
+        userName: widget.userName,
+        isMe: widget.userName == null,
         localization: l10n,
       ),
       body: Center(
@@ -41,7 +68,7 @@ class ProfilePageWrapper extends StatelessWidget {
                       delegate: SliverChildListDelegate([
                     Column(
                       children: [
-                        isMe
+                        widget.isMe
                             ? Column(
                                 children: [
                                   const MyProfileBasicDetails(),
@@ -59,7 +86,8 @@ class ProfilePageWrapper extends StatelessWidget {
                 ];
               },
               body: UserProfileTabSection(
-                isMe: isMe,
+                appUser: user,
+                isMe: widget.isMe,
                 localizations: l10n!,
               ),
             ),
@@ -139,17 +167,13 @@ class CustomBottomSheet {
                 isPremium: true,
                 icon: Icons.people_alt_outlined,
                 text: localization.seeWhoVisitedMe,
-                onTap: () {
-                 
-                },
+                onTap: () {},
               ),
               CustomListTile(
                 isPremium: true,
                 icon: Icons.language,
                 text: localization.changeAppLanguage,
                 onTap: () {
-                  
-
                   AppInfoDialog.showInfoDialog(
                       title: 'Premium Feature',
                       subtitle:

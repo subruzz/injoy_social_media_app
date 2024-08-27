@@ -27,3 +27,5 @@ final class GetUserPostsAterPostUpdate extends GetUserPostsEvent {
   const GetUserPostsAterPostUpdate(
       {required this.index, required this.updatedPost});
 }
+
+final class Init extends GetUserPostsEvent {}

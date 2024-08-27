@@ -387,7 +387,7 @@ void _post() {
     ..registerFactory(
         () => UnlikePostsUseCase(postRepository: serviceLocator()))
     ..registerFactory(() =>
-        LikePostBloc(serviceLocator(), serviceLocator(), serviceLocator()))
+        LikePostBloc(serviceLocator(), serviceLocator(),))
     ..registerFactory(() => SelectTagsCubit())
     ..registerFactory(() => SavePostUseCase(postRepository: serviceLocator()))
     ..registerFactory(() => SavePostCubit(serviceLocator()));

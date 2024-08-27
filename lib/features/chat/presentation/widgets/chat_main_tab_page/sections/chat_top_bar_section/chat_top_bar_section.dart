@@ -21,15 +21,15 @@ class ChatTopBarSection extends StatelessWidget implements PreferredSizeWidget {
               ?.copyWith(fontSize: isThatTabOrDeskTop ? 18 : null),
         ),
       ),
-      actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ReelsPage(),
-            ));
-          },
-        ),
+      actions: const <Widget>[
+        // IconButton(
+        //   icon: const Icon(Icons.search),
+        //   onPressed: () {
+        //     Navigator.of(context).push(MaterialPageRoute(
+        //       builder: (context) => ReelsPage(),
+        //     ));
+        //   },
+        // ),
       ],
     );
   }
