@@ -10,7 +10,6 @@ import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/logi
 import 'package:social_media_app/features/auth/presentation/pages/web/auth_web.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_choosing_text.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_form.dart';
-import 'package:social_media_app/features/auth/presentation/widgets/auth/google_auth.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/login/forgot_password_text.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/login/login_button.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/shared/separating_divider.dart';
@@ -88,9 +87,9 @@ class _BuildauthColumn extends StatelessWidget {
             emailController: emailController,
             passwordController: passWordController),
         AppSizedBox.sizedBox10H,
-        const SeparatingDivider(),
+        if (isThatMobile) const SeparatingDivider(),
         AppSizedBox.sizedBox10H,
-        const GoogleAuthBuilder(),
+        if (isThatMobile) const GoogleAuthBuilder(),
         AppSizedBox.sizedBox5H,
         if (isThatMobile)
           const AuthChoosingText(

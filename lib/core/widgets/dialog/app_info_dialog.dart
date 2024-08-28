@@ -5,6 +5,8 @@ import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/const/languages/app_languages.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 import '../../common/shared_providers/cubit/app_language/app_language_cubit.dart';
 
 class AppInfoDialog {
@@ -27,7 +29,10 @@ class AppInfoDialog {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          insetPadding: AppPadding.extraLarge,
+          insetPadding: isThatDeskTop
+              ? EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * .3)
+              : EdgeInsets.symmetric(horizontal: isThatTab ? 200 : 20),
           backgroundColor:
               backgroundColor ?? AppDarkColor().secondaryBackground,
           content: SingleChildScrollView(
@@ -54,8 +59,9 @@ class AppInfoDialog {
                 Navigator.of(context).pop();
               },
             ),
-            ElevatedButton(
-                onPressed: () {
+            CustomButton(
+                width: null,
+                onClick: () {
                   if (pop) Navigator.pop(context);
                   callBack();
                 },
@@ -63,7 +69,7 @@ class AppInfoDialog {
                     ? Text(
                         buttonText,
                       )
-                    : buttonChild),
+                    : buttonChild!),
           ],
         );
       },
@@ -145,8 +151,8 @@ class _LanguageSelectionDialogState extends State<LanguageSelectionDialog> {
             Navigator.of(context).pop();
           },
         ),
-        ElevatedButton(
-          onPressed: () {
+        CustomButton(
+          onClick: () {
             context.read<AppLanguageCubit>().changeLanguage(
                 Locale(_selectedLanguage == 'Malayalam' ? 'ml' : 'en'));
 

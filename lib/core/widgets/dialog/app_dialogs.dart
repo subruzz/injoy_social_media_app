@@ -3,6 +3,7 @@ import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 import 'package:social_media_app/core/widgets/common/user_profile.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/common/ai_profile.dart';
@@ -25,6 +26,10 @@ class AppInfoOnlyDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetPadding: isThatDeskTop
+          ? EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * .3)
+          : EdgeInsets.symmetric(horizontal: isThatTab ? 200 : 20),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),

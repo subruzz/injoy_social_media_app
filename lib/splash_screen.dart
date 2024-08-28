@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
@@ -29,8 +30,9 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    DeviceNotification.requestPermission();
-
+    if (isThatMobile) {
+      DeviceNotification.requestPermission();
+    }
     // PushNotificiationServices.init();
     _controller = AnimationController(
       duration: const Duration(seconds: 2),

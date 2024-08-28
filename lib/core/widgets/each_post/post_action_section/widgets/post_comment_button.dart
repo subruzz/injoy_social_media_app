@@ -105,7 +105,7 @@ class PostComment extends StatelessWidget {
             onCommentClick!(post);
             return;
           }
-          if (isThatTabOrDeskTop) {
+          if (!isThatMobile) {
             Navigator.of(context).push(HeroDialogRoute(
               builder: (context) => PopupContainerWeb(
                 isShorts: isReel,

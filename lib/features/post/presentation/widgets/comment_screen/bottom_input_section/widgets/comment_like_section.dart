@@ -51,11 +51,11 @@ class _CommentLikeSectionState extends State<CommentLikeSection> {
                 ? Icon(
                     color: AppDarkColor().iconSecondarycolor,
                     Icons.favorite_border_outlined,
-                    size: isThatTabOrDeskTop ? 20 : 20.w,
+                    size: !isThatMobile ? 20 : 20.w,
                   )
                 : Icon(
                     Icons.favorite,
-                    size: isThatTabOrDeskTop ? 20 : 20.w,
+                    size: !isThatMobile ? 20 : 20.w,
                     color: AppDarkColor().iconSoftColor,
                   ),
           ),
@@ -63,7 +63,7 @@ class _CommentLikeSectionState extends State<CommentLikeSection> {
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
-                  ?.copyWith(fontSize: isThatTabOrDeskTop ? 12 : null)),
+                  ?.copyWith(fontSize: !isThatMobile ? 12 : null)),
         ],
       ),
     );

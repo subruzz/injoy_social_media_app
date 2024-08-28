@@ -8,6 +8,10 @@ import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/login_bloc/login_bloc.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
+import 'package:social_media_app/features/bottom_nav/presentation/web/web_layout.dart';
+
+import '../../../../../core/utils/responsive/responsive_helper.dart';
+import '../../../../bottom_nav/presentation/pages/bottom_bar_builder.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton(
@@ -30,10 +34,12 @@ class LoginButton extends StatelessWidget {
           }
           if (state is LoginSuccess) {
             if (state.user.fullName != null) {
-              Navigator.pushReplacementNamed(
-                context,
-                MyAppRouteConst.bottomNavRoute,
-              );
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => const Responsive(
+                    mobile: BottomBarBuilder(),
+                    tablet: WebLayout(),
+                    desktop: WebLayout()),
+              ));
             } else {
               Navigator.pushReplacementNamed(
                 context,
@@ -49,7 +55,8 @@ class LoginButton extends StatelessWidget {
           }
           return CustomText(
               text: 'Log In',
-              style: AppTextTheme.getResponsiveTextTheme(context).labelMedium
+              style: AppTextTheme.getResponsiveTextTheme(context)
+                  .labelMedium
                   ?.copyWith(fontSize: isThatTabOrDeskTop ? 16 : null));
         },
       ),

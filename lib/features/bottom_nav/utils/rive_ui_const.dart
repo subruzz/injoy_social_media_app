@@ -13,7 +13,7 @@ List<Widget> getScreens(
       exploreFocusNode: focusNodeForExplore,
     ),
     isWeb
-        ? const VideosPageWeb()
+        ? const AiChatPage()
         : VideoReelPage(
             vdoController: vdoController,
             isItFromBottomBar: true,

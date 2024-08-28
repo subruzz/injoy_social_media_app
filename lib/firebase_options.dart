@@ -48,7 +48,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBjdDYlhNFoWlaA3g7GPqJWQOztZVnJtik',
-    appId: '1:803278246806:web:98b6fa1f6744239e2a03b7',
+    appId: '1:803278246806:web:7461ee2953d28b122a03b7',
     messagingSenderId: '803278246806',
     projectId: 'socialmediaapp-58c5c',
     authDomain: 'socialmediaapp-58c5c.firebaseapp.com',
@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAoMU_lqqWSVq-vdxAg3PXOi8F3BcpCm6g',
-    appId: '1:803278246806:android:08bd4c18ab84f1992a03b7',
+    appId: '1:803278246806:android:f644b61a093ed0cb2a03b7',
     messagingSenderId: '803278246806',
     projectId: 'socialmediaapp-58c5c',
     databaseURL: 'https://socialmediaapp-58c5c-default-rtdb.asia-southeast1.firebasedatabase.app',

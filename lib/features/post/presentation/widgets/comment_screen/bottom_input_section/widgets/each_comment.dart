@@ -39,7 +39,7 @@ class EachComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: isThatTabOrDeskTop
+      padding: !isThatMobile
           ? const EdgeInsets.symmetric(horizontal: 5, vertical: 8)
           : AppPadding.symmetric(vertical: 15, horizontal: 5),
       child: GestureDetector(
@@ -111,16 +111,14 @@ class EachComment extends StatelessWidget {
                                             .textTheme
                                             .titleMedium
                                             ?.copyWith(
-                                                fontSize: isThatTabOrDeskTop
-                                                    ? 15
-                                                    : null)
+                                                fontSize:
+                                                    !isThatMobile ? 15 : null)
                                         : Theme.of(context)
                                             .textTheme
                                             .labelMedium
                                             ?.copyWith(
-                                                fontSize: isThatTabOrDeskTop
-                                                    ? 12
-                                                    : null),
+                                                fontSize:
+                                                    !isThatMobile ? 12 : null),
                                   ),
                                 ),
                                 AppSizedBox.sizedBox15W,
@@ -130,9 +128,8 @@ class EachComment extends StatelessWidget {
                                           .textTheme
                                           .labelMedium
                                           ?.copyWith(
-                                              fontSize: isThatTabOrDeskTop
-                                                  ? 12
-                                                  : null),
+                                              fontSize:
+                                                  !isThatMobile ? 12 : null),
                                       '${comment.createdAt.toDate().timeAgo()} ${comment.isEdited ? '(edited)' : ''}'),
                                 ),
                               ],

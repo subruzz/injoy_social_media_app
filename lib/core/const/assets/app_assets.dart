@@ -21,6 +21,7 @@ class AppAssetsConst {
   static const String terms = 'assets/svgs/terms.svg';
   static const String premium = 'assets/svgs/premium.svg';
   static const String logout = 'assets/svgs/logout.svg';
+  static const String aichat = 'assets/svgs/ai_chat.svg';
 
   static const String chat = 'assets/svgs/chat.svg';
   static const String add = 'assets/svgs/add_circle.svg';

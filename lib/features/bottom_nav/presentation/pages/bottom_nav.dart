@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rive/rive.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
-import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_event.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/features/ai_chat/presentation/pages/ai_chat_page.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/cubit/bottom_bar_cubit.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/web/chat_web.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/web/videos_page_web.dart';
@@ -17,15 +18,16 @@ import 'package:social_media_app/features/chat/presentation/pages/chat_main_tab_
 import 'package:social_media_app/features/explore/presentation/pages/explore_page_builder.dart';
 import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/pages/home.dart';
-import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_my_reels/get_my_reels_cubit.dart';
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 import 'package:social_media_app/features/reels/presentation/bloc/reels/reels_cubit.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../core/common/entities/user_entity.dart';
+import '../../../../core/utils/routes/tranistions/hero_dialog.dart';
 import '../../../../core/widgets/helper_packages/lazy_indexted_stack.dart';
 import '../../../chat/presentation/cubits/chat/chat_cubit.dart';
 import '../../../explore/presentation/blocs/explore_user/explore_user_cubit.dart';
+import '../../../popup_new_post.dart';
 import '../../../post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import '../../../profile/presentation/pages/profile_page_wrapper.dart';
 import '../../../post_status_feed/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
@@ -119,6 +121,13 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
             bottomNavigationBar: Builder(builder: (context) {
               return BottomBarItems(
                   animateToIcon: (index) {
+                    if (!isThatMobile && index == 2) {
+                      _currentPage = index;
+
+                      Navigator.of(context).push(HeroDialogRoute(
+                          builder: (context) => const PopupNewPostWeb()));
+                      return;
+                    }
                     animateTheIcon(index);
                     if (index == 2 && _currentPage == 2) {
                       log('refresh the reels');

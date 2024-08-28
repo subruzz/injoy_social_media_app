@@ -4,6 +4,8 @@ import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/services/app_interal/haptic_feedback.dart';
@@ -18,29 +20,32 @@ class FloatingButton extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        const AiChatButton(),
+        if (isThatMobile || Responsive.isMobile(context)) const AiChatButton(),
         AppSizedBox.sizedBox15H,
-        SpeedDial(
-          onOpen: () {
-            HapticFeedbackHelper().heavyImpact();
-          },
-          heroTag: 'heroTag1',
-          overlayOpacity: .5,
-          icon: Icons.add,
-          activeIcon: Icons.close,
-          children: [
-            _getHomeFloatingPopupButton(
-                context: context,
-                name: l10n.shorts,
-                type: MediaPickerType.reels),
-            _getHomeFloatingPopupButton(
-                context: context,
-                name: l10n.status,
-                type: MediaPickerType.status),
-            _getHomeFloatingPopupButton(
-                context: context, name: l10n.post, type: MediaPickerType.post),
-          ],
-        ),
+        if (isThatMobile)
+          SpeedDial(
+            onOpen: () {
+              HapticFeedbackHelper().heavyImpact();
+            },
+            heroTag: 'heroTag1',
+            overlayOpacity: .5,
+            icon: Icons.add,
+            activeIcon: Icons.close,
+            children: [
+              _getHomeFloatingPopupButton(
+                  context: context,
+                  name: l10n.shorts,
+                  type: MediaPickerType.reels),
+              _getHomeFloatingPopupButton(
+                  context: context,
+                  name: l10n.status,
+                  type: MediaPickerType.status),
+              _getHomeFloatingPopupButton(
+                  context: context,
+                  name: l10n.post,
+                  type: MediaPickerType.post),
+            ],
+          ),
       ],
     );
   }

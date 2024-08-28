@@ -7,6 +7,7 @@ import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app
 import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/common/common_text_button.dart';
+import 'package:social_media_app/core/widgets/web/web_width_helper.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/index.dart';
 
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/profile_form.dart';
@@ -55,29 +56,31 @@ class _AddProfilePageState extends State<AddProfilePage> {
       appBar: AppCustomAppbar(
         title: 'Fill Your Profile',
         actions: [
-          Padding(
-            padding: AppPadding.onlyRightSmall,
-            child: CommonTextButton(
-              text: 'Skip',
-              onPressed: () {},
-            ),
-          )
+          // Padding(
+          //   padding: AppPadding.onlyRightSmall,
+          //   child: CommonTextButton(
+          //     text: 'Skip',
+          //     onPressed: () {},
+          //   ),
+          // )
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: CustomAppPadding(
-        child: SingleChildScrollView(
-          child: ProfileForm(
-            onPress: () {
-              _profileCompleted(context);
-            },
-            formKey: _formKey,
-            nameController: _nameController,
-            phoneNoController: _phoneNoController,
-            occupationController: _occupationController,
-            aboutController: _aboutController,
-            dobController: _dobController,
-            selectImage: _userProfile,
+      body: WebWidthHelper(
+        child: CustomAppPadding(
+          child: SingleChildScrollView(
+            child: ProfileForm(
+              onPress: () {
+                _profileCompleted(context);
+              },
+              formKey: _formKey,
+              nameController: _nameController,
+              phoneNoController: _phoneNoController,
+              occupationController: _occupationController,
+              aboutController: _aboutController,
+              dobController: _dobController,
+              selectImage: _userProfile,
+            ),
           ),
         ),
       ),

@@ -87,9 +87,9 @@ class _SignupColumn extends StatelessWidget {
             emailController: emailController,
             passwordController: passWordController),
         AppSizedBox.sizedBox10H,
-        const SeparatingDivider(),
+        if (isThatMobile) const SeparatingDivider(),
         AppSizedBox.sizedBox10H,
-        const GoogleAuthBuilder(),
+        if (isThatMobile) const GoogleAuthBuilder(),
         if (isThatMobile) const AuthChoosingText()
       ],
     );

@@ -1,4 +1,4 @@
-package com.example.social_media_app
+package com.connectify.injoy
 
 import android.os.Bundle
 import io.flutter.embedding.android.FlutterFragmentActivity

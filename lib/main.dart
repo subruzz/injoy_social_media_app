@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:developer';
 
-import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -27,52 +27,58 @@ import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
-  Bloc.observer = SimpleBlocObserver();
+void main() {
+  runZonedGuarded(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
+      Bloc.observer = SimpleBlocObserver();
 
-  await dotenv.load(fileName: '.env');
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+      await dotenv.load(fileName: '.env');
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+
+      if (!kIsWeb) {
+        Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
+        await Stripe.instance.applySettings();
+        await LocatlNotification.initLocalNotification();
+        DeviceNotification.deviceNotificationInit();
+        FirebaseMessaging.onBackgroundMessage(firebaseBackgroundNotification);
+      }
+      // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      //   if (message.notification != null) {
+      //     String payload = jsonEncode(message.data);
+
+      //     log('taped message');
+      //     Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
+      //       builder: (context) => OtherUserProfilePage(
+      //           otherUserId: 'q0BZNmIL4IdfNMPb2FqYzqYYZb63', userName: 'subru'),
+      //     )); // arguments: message is NotificationResponse? );
+      //   }
+      // });
+      //terminated
+
+      final RemoteMessage? message =
+          await FirebaseMessaging.instance.getInitialMessage();
+
+      if (message != null) {
+        Future.delayed(Duration.zero);
+      }
+
+      await initDependencies();
+
+      runApp(MyApp(navigatorKey: navigatorKey));
+    },
+    (error, stackTrace) {
+      // Handle the error and stack trace here
+      // For example, you could log the error to an error reporting service
+      print('Caught error: $error');
+      print('Stack trace: $stackTrace');
+    },
   );
-  await FirebaseAppCheck.instance.activate(
-    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
-    androidProvider: AndroidProvider.debug,
-    appleProvider: AppleProvider.appAttest,
-  );
-  if (!kIsWeb) {
-    Stripe.publishableKey = dotenv.env['STRIPE_PUBLISH_KEY']!;
-    await Stripe.instance.applySettings();
-    await LocatlNotification.initLocalNotification();
-    DeviceNotification.deviceNotificationInit();
-    FirebaseMessaging.onBackgroundMessage(firebaseBackgroundNotification);
-  }
-  // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-  //   if (message.notification != null) {
-  //     String payload = jsonEncode(message.data);
-
-  //     log('taped message');
-  //     Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
-  //       builder: (context) => OtherUserProfilePage(
-  //           otherUserId: 'q0BZNmIL4IdfNMPb2FqYzqYYZb63', userName: 'subru'),
-  //     )); // arguments: message is NotificationResponse? );
-  //   }
-  // });
-  //terminated
-
-  final RemoteMessage? message =
-      await FirebaseMessaging.instance.getInitialMessage();
-
-  if (message != null) {
-    Future.delayed(Duration.zero);
-  }
-
-  await initDependencies();
-
-  runApp(MyApp(navigatorKey: navigatorKey));
 }
 
 class MyApp extends StatelessWidget {
@@ -84,9 +90,7 @@ class MyApp extends StatelessWidget {
     _defineThePlatform(context);
     log(isThatTabOrDeskTop.toString());
     return ScreenUtilInit(
-      designSize: Responsive.isDesktop(context)
-          ? const Size(729, 1536)
-          : const Size(360, 784),
+      designSize: !isThatMobile ? const Size(729, 1536) : const Size(360, 784),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, child) {

@@ -41,7 +41,7 @@ class CustomButtonWithIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
-      height: isThatTabOrDeskTop ? 37 : 37.w,
+      height: !isThatMobile ? 37 : 37.w,
       child: ElevatedButton.icon(
         style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
             backgroundColor: WidgetStatePropertyAll(color),
@@ -61,7 +61,9 @@ class CustomButtonWithIcon extends StatelessWidget {
         label: Text(title,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 color: textColor,
-                fontSize:isThatTabOrDeskTop?fontSize: fontSize?.sp)), // Display child widget as label
+                fontSize: !isThatMobile 
+                    ? fontSize
+                    : fontSize?.sp)), // Display child widget as label
       ),
     );
   }

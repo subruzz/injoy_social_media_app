@@ -17,12 +17,16 @@ import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_c
 import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
+import 'package:social_media_app/features/settings/presentation/pages/chat_settings_page.dart';
+import 'package:social_media_app/features/who_visited_premium_feature/presentation/pages/user_visited_listing_page.dart';
 import '../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../../core/const/languages/app_languages.dart';
 import '../../../../core/utils/app_related/open_email.dart';
+import '../../../../core/utils/responsive/constants.dart';
 import '../../../../core/utils/routes/page_transitions.dart';
 import '../../../../core/widgets/dialog/app_info_dialog.dart';
 import '../../../../core/widgets/dialog/dialogs.dart';
+import '../../../../core/widgets/dialog/general_dialog_for_web.dart';
 import '../../../profile/presentation/pages/username_check_page.dart';
 
 class SettingsAndActivityPage extends StatelessWidget {
@@ -66,6 +70,14 @@ class SettingsAndActivityPage extends StatelessWidget {
                       asset: AppAssetsConst.person,
                       text: l10n.change_username,
                       onTap: () {
+                        if (isThatTabOrDeskTop) {
+                          return GeneralDialogForWeb.showSideDialog(
+                              context: context,
+                              child: UsernameCheckPage(
+                                userid: appuser.id,
+                                isEdit: true,
+                              ));
+                        }
                         Navigator.push(
                           context,
                           AppPageTransitions.rightToLeft(
@@ -100,30 +112,36 @@ class SettingsAndActivityPage extends StatelessWidget {
                   const CustomDivider(
                     thickness: 3,
                   ),
+
                   SettingsItemHeading(
                     text: l10n.premium_features,
                     isItPremium: true,
                   ),
+                  if (isThatMobile)
+                    SettingsListTile(
+                      onTap: () {
+                        appuser.hasPremium
+                            ? Navigator.pushNamed(context,
+                                MyAppRouteConst.premiumSubscriptionDetailsPage)
+                            : Navigator.pushNamed(
+                                context, MyAppRouteConst.premiumPage);
+                      },
+                      text: appuser.hasPremium
+                          ? l10n.subscription_details
+                          : l10n.getPremium,
+                      asset: AppAssetsConst.premium,
+                    ),
                   SettingsListTile(
                     onTap: () {
                       appuser.hasPremium
-                          ? Navigator.pushNamed(context,
-                              MyAppRouteConst.premiumSubscriptionDetailsPage)
-                          : Navigator.pushNamed(
-                              context, MyAppRouteConst.premiumPage);
-                    },
-                    text: appuser.hasPremium
-                        ? l10n.subscription_details
-                        : l10n.getPremium,
-                    asset: AppAssetsConst.premium,
-                  ),
-                  SettingsListTile(
-                    onTap: () {
-                      appuser.hasPremium
-                          ? Navigator.pushNamed(
-                              context,
-                              MyAppRouteConst.userVisitedListingRoute,
-                            )
+                          ? isThatTabOrDeskTop
+                              ? GeneralDialogForWeb.showSideDialog(
+                                  context: context,
+                                  child: const UserVisitedListingPage())
+                              : Navigator.pushNamed(
+                                  context,
+                                  MyAppRouteConst.userVisitedListingRoute,
+                                )
                           : AppDialogsCommon.noPremium(context);
                     },
                     text: l10n.seeWhoVisitedMe,
@@ -149,16 +167,20 @@ class SettingsAndActivityPage extends StatelessWidget {
                     thickness: 3,
                   ),
                   SettingsItemHeading(text: l10n.settings),
-                  SettingsListTile(
-                      text: l10n.notifications,
-                      asset: AppAssetsConst.noti2,
-                      onTap: () => Navigator.pushNamed(
-                          context, MyAppRouteConst.notificationSettingsPage)),
+                  if (isThatMobile)
+                    SettingsListTile(
+                        text: l10n.notifications,
+                        asset: AppAssetsConst.noti2,
+                        onTap: () => Navigator.pushNamed(
+                            context, MyAppRouteConst.notificationSettingsPage)),
                   SettingsListTile(
                       text: l10n.chat,
                       asset: AppAssetsConst.chat,
-                      onTap: () => Navigator.pushNamed(
-                          context, MyAppRouteConst.chatSettingPage)),
+                      onTap: () => isThatTabOrDeskTop
+                          ? GeneralDialogForWeb.showSideDialog(
+                              context: context, child: const ChatSettingsPage())
+                          : Navigator.pushNamed(
+                              context, MyAppRouteConst.chatSettingPage)),
                   const CustomDivider(
                     thickness: 3,
                   ),

@@ -4,6 +4,7 @@ import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';
 
 import '../../../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../../../../core/const/app_config/app_padding.dart';
@@ -68,6 +69,11 @@ class ProfilePageTopBarSection extends StatelessWidget
             padding: AppPadding.onlyRightMedium,
             child: GestureDetector(
                 onTap: () {
+                  if (isThatTabOrDeskTop) {
+                    return GeneralDialogForWeb.showSideDialog(
+                        context: context,
+                        child: const SettingsAndActivityPage());
+                  }
                   Navigator.pushNamed(
                       context, MyAppRouteConst.settingAndActivityPage);
                 },

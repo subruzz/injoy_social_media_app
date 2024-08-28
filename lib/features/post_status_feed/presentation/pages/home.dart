@@ -57,11 +57,11 @@ class _HomePageState extends State<HomePage> {
     final l10n = context.l10n;
     final me = context.read<AppUserBloc>().appUser;
     return Scaffold(
-      floatingActionButton: isThatMobile
-          ? FloatingButton(
+      floatingActionButton: 
+          FloatingButton(
               l10n: l10n!,
-            )
-          : null,
+            ),
+         
       body: RefreshIndicator(
         onRefresh: () async {
           if (context.mounted) {

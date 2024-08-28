@@ -1,4 +1,4 @@
-package com.example.social_media_app
+package com.connectify.injoy
 
 import android.content.Context
 import android.widget.Toast

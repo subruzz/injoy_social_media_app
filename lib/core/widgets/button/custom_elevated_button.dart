@@ -35,14 +35,14 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: isThatTabOrDeskTop ? width : width?.w,
-      height: isThatTabOrDeskTop ? 40 : height?.h,
+      width: !isThatMobile  ? width : width?.w,
+      height: !isThatMobile  ? 40 : height?.h,
       child: ElevatedButton(
           style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
               backgroundColor: WidgetStatePropertyAll(color),
               shape: WidgetStatePropertyAll(
                 RoundedRectangleBorder(
-                  borderRadius: isThatTabOrDeskTop
+                  borderRadius: !isThatMobile 
                       ?  buttonOrTextFieldRadius
                       : radius ?? AppBorderRadius.small,
                   side: BorderSide(

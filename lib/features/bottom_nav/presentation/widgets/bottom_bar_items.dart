@@ -52,7 +52,7 @@ class BottomBarItems extends StatelessWidget {
                     width: 36,
                     child: Opacity(
                       opacity: currentPage == index ? 1 : 0.5,
-                      child: RiveAnimation.asset(
+                      child:  RiveAnimation.asset(
                         riveIcon.src,
                         artboard: riveIcon.artboard,
                         onInit: (artboard) {

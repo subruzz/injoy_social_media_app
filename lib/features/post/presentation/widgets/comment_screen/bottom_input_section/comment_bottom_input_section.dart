@@ -39,7 +39,7 @@ class CommentBottomInputSection extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: Container(
-        height: isThatTabOrDeskTop ? 60 : 90.h,
+        height: !isThatMobile ? 60 : 90.h,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         color: AppDarkColor().secondaryBackground,
         child: Column(

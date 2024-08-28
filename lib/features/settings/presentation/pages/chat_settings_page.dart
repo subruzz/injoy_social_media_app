@@ -4,6 +4,7 @@ import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/overlay_loading_holder.dart';
 import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
@@ -55,16 +56,17 @@ class ChatSettingsPage extends StatelessWidget {
             children: [
               CustomAppPadding(
                 child: ListView(children: [
-                  CommonListTile(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        MyAppRouteConst.mediaPickerRoute,
-                        arguments: {'pickerType': MediaPickerType.wallapaper},
-                      );
-                    },
-                    text: l10n.changeChatBackground,
-                  ),
+                  if (isThatMobile)
+                    CommonListTile(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          MyAppRouteConst.mediaPickerRoute,
+                          arguments: {'pickerType': MediaPickerType.wallapaper},
+                        );
+                      },
+                      text: l10n.changeChatBackground,
+                    ),
                   const CustomDivider(),
                   CommonListTile(
                     onTap: () {

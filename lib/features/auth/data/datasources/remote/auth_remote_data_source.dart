@@ -10,6 +10,7 @@ import 'package:social_media_app/core/const/fireabase_const/firebase_collection.
 import 'package:social_media_app/core/errors/firebase_auth_errors.dart';
 import 'package:social_media_app/core/errors/exception.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/shared_preference/chat_wallapaper.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
@@ -192,8 +193,11 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
           errorMsg: AppErrorMessages.signUpFailed,
         );
       }
-      final fcm = FirebaseMessaging.instance;
-      final token = await fcm.getToken();
+      String? token = '';
+      if (isThatMobile) {
+        final fcm = FirebaseMessaging.instance;
+        token = await fcm.getToken();
+      }
 
       //adding user details to firebasedb
       final userDocRef = _firebaseStorage

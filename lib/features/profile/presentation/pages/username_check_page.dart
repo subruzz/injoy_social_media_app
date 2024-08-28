@@ -17,10 +17,15 @@ import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/common/overlay_loading_holder.dart';
+import 'package:social_media_app/core/widgets/web/web_width_helper.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_name_cubit/user_name_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/index.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/add_profile/index.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+
+import '../../../../core/utils/responsive/responsive_helper.dart';
+import '../../../bottom_nav/presentation/pages/bottom_bar_builder.dart';
+import '../../../bottom_nav/presentation/web/web_layout.dart';
 
 class UsernameCheckPage extends StatefulWidget {
   const UsernameCheckPage(
@@ -62,115 +67,128 @@ class _CreateUsernamePageState extends State<UsernameCheckPage> {
       appBar: AppCustomAppbar(
         showLeading: true,
       ),
-      body: BlocConsumer<ProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is CompleteProfileSetupSuceess) {
-            Navigator.pushNamed(context, MyAppRouteConst.bottomNavRoute);
-          }
-        },
-        builder: (context, state) {
-          return Stack(
-            children: [
-              CustomAppPadding(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                        widget.isEdit
-                            ? l10n.changeUsername
-                            : 'Create a username',
+      body: WebWidthHelper(
+        child: BlocConsumer<ProfileBloc, ProfileState>(
+          listener: (context, state) {
+            if (state is CompleteProfileSetupSuceess) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => const Responsive(
+                    mobile: BottomBarBuilder(),
+                    tablet: WebLayout(),
+                    desktop: WebLayout()),
+              ));
+            }
+          },
+          builder: (context, state) {
+            return Stack(
+              children: [
+                CustomAppPadding(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          widget.isEdit
+                              ? l10n.changeUsername
+                              : 'Create a username',
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium
+                              ?.copyWith(
+                                  fontSize:
+                                      AppLanguages.isMalayalamLocale(context)
+                                          ? 20
+                                          : 25,
+                                  fontWeight: FontWeight.w700)),
+                      AppSizedBox.sizedBox5H,
+                      Text(
+                        l10n.chooseUsername,
                         style: Theme.of(context)
                             .textTheme
-                            .displayMedium
-                            ?.copyWith(
-                                fontSize:
-                                    AppLanguages.isMalayalamLocale(context)
-                                        ? 20
-                                        : 25,
-                                fontWeight: FontWeight.w700)),
-                    AppSizedBox.sizedBox5H,
-                    Text(
-                      l10n.chooseUsername,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontSize: isThatMobile ? null : 14),
-                    ),
-                    AppSizedBox.sizedBox15H,
-                    UserNameCheckField(
-                        userNameController: _usernameController,
-                        debouncer: _debouncer,
-                        userNameCubit: _userNameCubit),
-                    AppSizedBox.sizedBox15H,
-                    BlocConsumer(
-                      bloc: _userNameCubit,
-                      listener: (context, usernameState) {
-                        if (usernameState is AddUserNameSuccess) {
-                          final appuser = context.read<AppUserBloc>();
-                          appuser.add(UpdateUserModelEvent(
-                              userModel: appuser.appUser
-                                  .copyWith(userName: usernameState.userName)));
-                          Messenger.showSnackBar(message: l10n.usernameAdded);
-                          Navigator.pop(context);
-                        }
-                        if (usernameState is UserNameAvailableState) {
-                          // Optionally show a success message or perform an action
-                        }
-                      },
-                      buildWhen: (previous, current) =>
-                          current is UserNameAvailableState ||
-                          current is UserNameNotAvailableState ||
-                          current is UserNameCheckInitial ||
-                          current is AddUserNameLoading,
-                      builder: (context, usernameState) {
-                        return CustomButton(
-                          color: usernameState is UserNameAvailableState
-                              ? null
-                              : const Color.fromARGB(255, 240, 114, 133),
-                          onClick: () {
-                            if (usernameState is! UserNameAvailableState ||
-                                usernameState is UserNamecheckingLoading ||
-                                _debouncer.isRunning()) {
-                              return;
-                            }
-                            if (widget.isEdit) {
-                              if (appUser?.userName ==
-                                  _usernameController.text) {
+                            .bodyMedium
+                            ?.copyWith(fontSize: isThatMobile ? null : 14),
+                      ),
+                      AppSizedBox.sizedBox15H,
+                      UserNameCheckField(
+                          userNameController: _usernameController,
+                          debouncer: _debouncer,
+                          userNameCubit: _userNameCubit),
+                      AppSizedBox.sizedBox15H,
+                      BlocConsumer(
+                        bloc: _userNameCubit,
+                        listener: (context, usernameState) {
+                          if (usernameState is AddUserNameSuccess) {
+                            final appuser = context.read<AppUserBloc>();
+                            appuser.add(UpdateUserModelEvent(
+                                userModel: appuser.appUser.copyWith(
+                                    userName: usernameState.userName)));
+                            Messenger.showSnackBar(message: l10n.usernameAdded);
+                            Navigator.pop(context);
+                          }
+                          if (usernameState is UserNameAvailableState) {
+                            // Optionally show a success message or perform an action
+                          }
+                        },
+                        buildWhen: (previous, current) =>
+                            current is UserNameAvailableState ||
+                            current is UserNameNotAvailableState ||
+                            current is UserNameCheckInitial ||
+                            current is AddUserNameLoading,
+                        builder: (context, usernameState) {
+                          return CustomButton(
+                            color: usernameState is UserNameAvailableState
+                                ? null
+                                : const Color.fromARGB(255, 240, 114, 133),
+                            onClick: () {
+                              if (usernameState is! UserNameAvailableState ||
+                                  usernameState is UserNamecheckingLoading ||
+                                  _debouncer.isRunning()) {
                                 return;
                               }
-                              _userNameCubit.setUserName(
-                                  _usernameController.text.trim(),
-                                  widget.userid);
-                              return;
-                            }
+                              if (widget.isEdit) {
+                                if (appUser?.userName ==
+                                    _usernameController.text) {
+                                  return;
+                                }
+                                _userNameCubit.setUserName(
+                                    _usernameController.text.trim(),
+                                    widget.userid);
+                                return;
+                              }
 
-                            context.read<ProfileBloc>().add(
-                                CompleteProfileSetup(
-                                    uid: context.read<AppUserBloc>().appUser.id,
-                                    userName: _usernameController.text.trim()));
-                          },
-                          radius: AppBorderRadius.small,
-                          child: usernameState is AddUserNameLoading
-                              ? const CircularLoading()
-                              : Text(
-                                  widget.isEdit ? l10n.change_username : 'Next',
-                                  style: isThatMobile
-                                      ? null
-                                      : const TextStyle(fontSize: 14),
-                                ),
-                        );
-                      },
-                    )
-                  ],
+                              context.read<ProfileBloc>().add(
+                                  CompleteProfileSetup(
+                                      uid: context
+                                          .read<AppUserBloc>()
+                                          .appUser
+                                          .id,
+                                      userName:
+                                          _usernameController.text.trim()));
+                            },
+                            radius: AppBorderRadius.small,
+                            child: usernameState is AddUserNameLoading
+                                ? const CircularLoading()
+                                : Text(
+                                    widget.isEdit
+                                        ? l10n.change_username
+                                        : 'Next',
+                                    style: isThatMobile
+                                        ? null
+                                        : const TextStyle(fontSize: 14),
+                                  ),
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              if (state is CompleteProfileSetupLoading)
-                const OverlayLoadingHolder(
-                  wantLoadingGif: true,
-                )
-            ],
-          );
-        },
+                if (state is CompleteProfileSetupLoading)
+                  const OverlayLoadingHolder(
+                    wantLoadingGif: true,
+                  )
+              ],
+            );
+          },
+        ),
       ),
     );
   }

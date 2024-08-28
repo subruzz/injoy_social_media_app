@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 
 import '../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
@@ -25,8 +26,8 @@ class AiChatButton extends StatelessWidget {
         Navigator.pushNamed(context, MyAppRouteConst.aiChatPage);
       },
       child: Container(
-        width: 40.w,
-        height: 40.h,
+        width: isThatMobile ? 40.w : 40,
+        height: isThatMobile ? 40.h:40,
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
           gradient: LinearGradient(

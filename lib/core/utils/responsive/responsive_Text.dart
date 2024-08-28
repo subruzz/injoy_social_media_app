@@ -7,11 +7,10 @@ class ResponsiveText {
 
   static TextStyle getResponsiveTextStyle(
       BuildContext context, TextStyle baseStyle) {
-    double fontSize = isThatTabOrDeskTop
-        ? baseStyle.fontSize ?? 14
-        : baseStyle.fontSize ?? 14.sp;
+    double fontSize =
+        !isThatMobile ? baseStyle.fontSize ?? 14 : baseStyle.fontSize ?? 14.sp;
 
-    if (isThatTabOrDeskTop) {
+    if (!isThatMobile) {
       fontSize = fontSize * 1.2;
     } else if (isThatTab) {
       fontSize = fontSize * 1.1;
@@ -19,8 +18,6 @@ class ResponsiveText {
       fontSize = fontSize;
     }
 
-    return baseStyle.copyWith(
-        fontSize:
-            isThatTabOrDeskTop || isThatBtwMobAndTab ? fontSize : fontSize.sp);
+    return baseStyle.copyWith(fontSize: !isThatMobile ? fontSize : fontSize.sp);
   }
 }

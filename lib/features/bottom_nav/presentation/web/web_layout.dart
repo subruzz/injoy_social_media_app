@@ -105,10 +105,28 @@ class _WebLayoutState extends State<WebLayout> {
                         child: ListView(
                           padding: EdgeInsets.zero,
                           children: [
-                            DrawerHeader(
-                                child: showTheExtraSide || isThatTab
-                                    ? Image.asset(AppAssetsConst.applogo)
-                                    : const AppTopBarTextWithPremium()),
+                            Builder(
+                              builder: (context) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    if (context.mounted) {
+                                      context.read<FollowingPostFeedBloc>().add(
+                                          FollowingPostFeedGetEvent(
+                                              following: user.following,
+                                              uId: user.id,
+                                              isFirst: true));
+                                      context
+                                          .read<GetAllStatusBloc>()
+                                          .add(GetAllstatusesEvent(uId: user.id));
+                                    }
+                                  },
+                                  child: DrawerHeader(
+                                      child: showTheExtraSide || isThatTab
+                                          ? Image.asset(AppAssetsConst.applogo)
+                                          : const AppTopBarTextWithPremium()),
+                                );
+                              }
+                            ),
                             WebLayoutDrawwer(
                                 showText: !showTheExtraSide,
                                 changePage: () {
@@ -130,8 +148,8 @@ class _WebLayoutState extends State<WebLayout> {
                                 changePage: () {
                                   changePage(2);
                                 },
-                                text: 'Shorts',
-                                asset: AppAssetsConst.shorts),
+                                text: 'Ai Chat',
+                                asset: AppAssetsConst.aichat),
                             AppSizedBox.sizedBox30H,
                             WebLayoutDrawwer(
                                 showText: !showTheExtraSide,
@@ -198,7 +216,7 @@ class _WebLayoutState extends State<WebLayout> {
               Flexible(
                 flex: 7,
                 child: WebWidthHelper(
-                    width: _currentIndex == 3 || _currentIndex == 2
+                    width: _currentIndex == 3
                         ? double.infinity
                         : _currentIndex == 1
                             ? 700
