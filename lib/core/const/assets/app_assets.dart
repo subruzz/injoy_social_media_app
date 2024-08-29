@@ -50,6 +50,8 @@ class AppAssetsConst {
   static const String explore = 'assets/svgs/explore.svg';
   static const String send2 = 'assets/svgs/send2.svg';
   static const String photos = 'assets/svgs/photos.svg';
+  static const String block = 'assets/svgs/block.svg';
+  static const String clear = 'assets/svgs/clear.svg';
 
   // PNGs
   static const String profileIcon = 'assets/images/profile.png';

@@ -34,6 +34,22 @@ class FirebaseHelper {
     });
   }
 
+  Stream<bool?> getIsBlockedByMeStream(String myId, String chatId) {
+    return _firestore
+        .collection(FirebaseCollectionConst.users)
+        .doc(myId)
+        .collection(FirebaseCollectionConst.myChat)
+        .doc(chatId)
+        .snapshots()
+        .map((snapshot) {
+      if (snapshot.exists && snapshot.data() != null) {
+        return snapshot.data()?['isBlockedByMe'] as bool?;
+      } else {
+        return null;
+      }
+    });
+  }
+
   // Method to get user details as a future
   Future<AppUserModel?> getUserDetailsFuture(String userId) async {
     final doc = await _firestore

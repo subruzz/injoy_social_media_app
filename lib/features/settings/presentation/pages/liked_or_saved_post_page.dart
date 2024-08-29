@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
@@ -39,6 +41,7 @@ class LikedOrSavedPostPage extends StatelessWidget {
               return const AppErrorGif();
             }
             if (state is LikedOrSavedPostsSuccess) {
+              log('liked or another post length is ${state.likedOrSavedPosts.length}');
               if (state.likedOrSavedPosts.isEmpty) {
                 return NoPostHolder(
                   text:

@@ -9,6 +9,7 @@ import 'package:social_media_app/features/premium_subscription/domain/entities/p
 import 'package:social_media_app/features/premium_subscription/domain/usecases/create_payment_intent.dart';
 import 'package:social_media_app/features/premium_subscription/domain/usecases/setup_stripe_for_payment.dart';
 
+import '../../../../core/common/entities/user_entity.dart';
 import '../../../../core/const/enums/premium_type.dart';
 
 part 'premium_subscription_event.dart';
@@ -45,11 +46,12 @@ class PremiumSubscriptionBloc
       final success = state as PremiumSubscriptionIntentSuccess;
       final stripeRes = await _setupStripeForPaymentUseCase(
           SetupStripeForPaymentUseCaseParams(
-            premType: event.premiumSubType,
+              premType: event.premiumSubType,
               paymentIntent: success.paymentIntent));
       stripeRes.fold(
           (failure) => emit(PremiumSubscriptionFailure(failure.message)),
-          (success) => emit(PremiumSubscriptionCompleted()));
+          (success) =>
+              emit(PremiumSubscriptionCompleted(userPremium: success)));
     }
   }
 

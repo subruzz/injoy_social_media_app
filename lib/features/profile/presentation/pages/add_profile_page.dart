@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +28,8 @@ class _AddProfilePageState extends State<AddProfilePage> {
   final _dobController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final bool isValid = false;
-  final ValueNotifier<File?> _userProfile = ValueNotifier(null);
+  final ValueNotifier<(File?, Uint8List?)> _userProfile =
+      ValueNotifier((null, null));
   @override
   void dispose() {
     _nameController.dispose();
@@ -44,7 +46,8 @@ class _AddProfilePageState extends State<AddProfilePage> {
           phoneNumber: _phoneNoController.text.trim(),
           occupation: _occupationController.text.trim(),
           about: _aboutController.text.trim(),
-          profilePic: _userProfile.value,
+          profilePic: _userProfile.value.$1,
+          webImage: _userProfile.value.$2,
           dob: _dobController.text.trim(),
           uid: context.read<AppUserBloc>().appUser.id));
     }
@@ -55,18 +58,10 @@ class _AddProfilePageState extends State<AddProfilePage> {
     return Scaffold(
       appBar: AppCustomAppbar(
         title: 'Fill Your Profile',
-        actions: [
-          // Padding(
-          //   padding: AppPadding.onlyRightSmall,
-          //   child: CommonTextButton(
-          //     text: 'Skip',
-          //     onPressed: () {},
-          //   ),
-          // )
-        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: WebWidthHelper(
+        btwMobAndTab: true,
         child: CustomAppPadding(
           child: SingleChildScrollView(
             child: ProfileForm(

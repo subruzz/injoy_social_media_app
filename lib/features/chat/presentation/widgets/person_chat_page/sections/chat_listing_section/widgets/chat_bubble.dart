@@ -16,6 +16,7 @@ import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 
 import '../../../../../../../../core/const/chat_const/chat_const.dart';
+import '../../../../../../../../core/widgets/common/video_playing_widget.dart';
 
 class ChatBubble extends StatelessWidget {
   final MessageEntity messageItem;
@@ -137,12 +138,12 @@ class TimestampAndTickWidget extends StatelessWidget {
                     fontSize: isThatTabOrDeskTop ? 12 : null),
           ),
         AppSizedBox.sizedBox5W,
-        if (isShowTick)
-          Icon(
-            messageItem.isSeen ? Icons.done_all : Icons.done,
-            size: isThatTabOrDeskTop ? 16 : 16.w,
-            color: Colors.white,
-          ),
+        // if (isShowTick)
+        //   Icon(
+        //     messageItem.isSeen ? Icons.done_all : Icons.done,
+        //     size: isThatTabOrDeskTop ? 16 : 16.w,
+        //     color: Colors.white,
+        //   ),
       ],
     );
   }

@@ -95,7 +95,7 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
           ? BlocConsumer(
               listener: (context, state) {
                 if (state is MessageSuccess) {
-                  Messenger.showSnackBar(message: l10n!.statusPostedSuccess);
+                  Messenger.showSnackBar(message: l10n!.media_send_success);
                   for (int i = 0; i < 2; i++) {
                     Navigator.pop(context);
                   }

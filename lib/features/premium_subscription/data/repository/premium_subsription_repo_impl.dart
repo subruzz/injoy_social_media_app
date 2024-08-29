@@ -7,6 +7,7 @@ import 'package:social_media_app/features/premium_subscription/data/datasource/p
 import 'package:social_media_app/features/premium_subscription/domain/entities/payment_intent_basic.dart';
 import 'package:social_media_app/features/premium_subscription/domain/repositories/premium_subscription_repository.dart';
 
+import '../../../../core/common/entities/user_entity.dart';
 import '../../../../core/const/enums/location_enum.dart';
 import '../../../../core/const/enums/premium_type.dart';
 
@@ -34,27 +35,28 @@ class PremiumSubsriptionRepoImpl implements PremiumSubscriptionRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> setUpStripeToCompletePayment(
+  Future<Either<Failure, UserPremium>> setUpStripeToCompletePayment(
       {required PaymentIntentBasic paymentIntent,
       required PremiumSubType premType}) async {
     try {
-      await _premiumSubscriptionDatasource.setUpStripeToCompletePayment(
-          premType: premType, paymentIntent: paymentIntent);
-      return right(unit);
+      final res =
+          await _premiumSubscriptionDatasource.setUpStripeToCompletePayment(
+              premType: premType, paymentIntent: paymentIntent);
+      return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> upateUserPremiumStatus(
+  Future<Either<Failure, UserPremium>> upateUserPremiumStatus(
       {required bool hasPremium,
       required String userId,
       required PremiumSubType premType}) async {
     try {
-      await _premiumSubscriptionDatasource.updateUserPremiumStatus(
+      final res = await _premiumSubscriptionDatasource.updateUserPremiumStatus(
           hasPremium: hasPremium, userId: userId, premType: premType);
-      return right(unit);
+      return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
     }

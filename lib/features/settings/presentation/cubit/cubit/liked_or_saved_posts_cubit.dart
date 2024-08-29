@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
@@ -30,5 +32,11 @@ class LikedOrSavedPostsCubit extends Cubit<LikedOrSavedPostsState> {
 
     res.fold((failure) => emit(LikedOrSavedPostsFailure()),
         (sucess) => emit(LikedOrSavedPostsSuccess(likedOrSavedPosts: sucess)));
+  }
+
+  @override
+  Future<void> close() {
+    log('closing the like or saved post cubit');
+    return super.close();
   }
 }

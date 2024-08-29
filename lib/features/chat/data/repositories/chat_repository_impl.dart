@@ -16,9 +16,10 @@ class ChatRepositoryImpl implements ChatRepository {
   ChatRepositoryImpl({required ChatRemoteDatasource chatRemoteDatasource})
       : _chatRemoteDatasource = chatRemoteDatasource;
   @override
-  Future<Either<Failure, Unit>> deleteChat(String myid) async {
+  Future<Either<Failure, Unit>> deleteChat(
+      String myid, String otherUserId) async {
     try {
-      await _chatRemoteDatasource.deleteChat(myid);
+      await _chatRemoteDatasource.deleteChat(myid, otherUserId);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
@@ -85,6 +86,18 @@ class ChatRepositoryImpl implements ChatRepository {
       final ChatModel chatModel = ChatModel.fromChatEntity(chat);
       // final MessageModel messageModel = MessageModel.fromMessageEntity(message);
       await _chatRemoteDatasource.sendMessage(chatModel, message);
+      return right(unit);
+    } on MainException catch (e) {
+      return left(Failure(e.errorMsg));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> blockAndUnblockChat(
+      String myId, String otherUserId, bool isBlock) async {
+    try {
+      await _chatRemoteDatasource.blockAndUnblockChat(
+          myId, otherUserId, isBlock);
       return right(unit);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));

@@ -19,9 +19,7 @@ class AppUserModel extends AppUser {
     super.about,
     super.profilePic,
     required super.token,
-    super.location,
-    super.latitude,
-    super.longitude,
+  
     required super.followersCount,
     required super.followingCount,
     // super.followers,
@@ -29,7 +27,6 @@ class AppUserModel extends AppUser {
     super.userPrem,
     super.posts,
     required super.notificationPreferences,
-    super.interests,
     super.viewedSetupIndex,
   });
 
@@ -94,18 +91,13 @@ class AppUserModel extends AppUser {
       occupation: json['occupation'],
       about: json['about'],
       profilePic: json['profilePic'],
-      location: json['location'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
+
       notificationPreferences: NotificationPreferences.fromMap(
           json['notificationPreferences'] ?? {}),
       // followers: List<String>.from(json['followers'] ?? []),
       following: List<String>.from(json['following'] ?? []),
       posts: List<String>.from(json['posts'] ?? []),
-      interests: List<String>.from(json['interests'] ?? []),
-      userPrem: json['userPremium'] != null
-          ? UserPremium.fromJson(json['userPremium'])
-          : null,
+     
     );
   }
 
@@ -127,16 +119,13 @@ class AppUserModel extends AppUser {
       'occupation': occupation,
       'about': about,
       'profilePic': profilePic,
-      'location': location,
       'visitedUserCount': visitedUserCount,
-      'latitude': latitude,
-      'longitude': longitude,
+   
       'followersCount': followersCount,
       'followingCount': followingCount,
       // 'followers': followers,
       'following': following,
       'posts': posts,
-      'interests': interests,
     };
   }
 }

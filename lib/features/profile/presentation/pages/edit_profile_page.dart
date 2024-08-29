@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +37,8 @@ class _AddProfilePageState extends State<EditProfilePage> {
   String? _profileImage;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final ValueNotifier<File?> _userProfile = ValueNotifier(null);
+  final ValueNotifier<(File?, Uint8List?)> _userProfile =
+      ValueNotifier((null, null));
   late AppUser appUser;
   @override
   void initState() {
@@ -132,7 +134,8 @@ class _AddProfilePageState extends State<EditProfilePage> {
                                           occupation:
                                               _occupationController.text.trim(),
                                           about: _aboutController.text.trim(),
-                                          profilePic: _userProfile.value,
+                                          profilePic: _userProfile.value.$1,
+                                          webImg: _userProfile.value.$2,
                                           uid: appUser.id,
                                         ));
                                   }

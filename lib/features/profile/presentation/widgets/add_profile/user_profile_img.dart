@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +11,7 @@ import '../../../../../core/widgets/common/user_profile.dart';
 
 class UserProfileImg extends StatelessWidget {
   const UserProfileImg({super.key, required this.userProfile, this.profilePic});
-  final ValueNotifier<File?> userProfile;
+  final ValueNotifier<(File?, Uint8List?)> userProfile;
   final String? profilePic;
   @override
   Widget build(BuildContext context) {
@@ -21,8 +22,10 @@ class UserProfileImg extends StatelessWidget {
           builder: (context, value, child) {
             return CircularUserProfile(
               size: 70,
-              fileImg: value,
-              profile: value == null ? profilePic : null,
+              memoryImage: !isThatMobile&&value.$2 != null,
+              webImg: !isThatMobile ? value.$2 : null,
+              fileImg: isThatMobile ? value.$1 : null,
+              profile: value.$1 == null &&value.$2 == null ? profilePic : null,
             );
           },
         ),
@@ -41,9 +44,15 @@ class UserProfileImg extends StatelessWidget {
           bottom: 0,
           child: GestureDetector(
               onTap: () async {
-                final img = await AssetServices.pickOneImage();
-                if (img == null) return;
-                userProfile.value = img;
+                if (isThatMobile) {
+                  final img = await AssetServices.pickOneImage();
+                  if (img == null) return;
+                  userProfile.value = (img, null);
+                } else {
+                  final img = await AssetServices.pickSingleImageAsBytes();
+                  if (img == null) return;
+                  userProfile.value = (null, img);
+                }
               },
               child: const EditProfileIcon()),
         ),

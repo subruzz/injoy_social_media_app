@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
@@ -8,7 +9,6 @@ import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_event.dart';
 import 'package:social_media_app/features/profile/domain/entities/user_profile.dart';
 import 'package:social_media_app/features/profile/domain/usecases/profile_usecases/add_interest.dart';
-import 'package:social_media_app/features/profile/domain/usecases/profile_usecases/check_username_exist.dart';
 import 'package:social_media_app/features/profile/domain/usecases/profile_usecases/create_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/index.dart';
 // import 'package:stream_transform/stream_transform.dart';
@@ -39,6 +39,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   String? _about;
   String? _occupation;
   File? _fileImg;
+  Uint8List? _webImg;
   List<String> _interest = [];
 
   FutureOr<void> _onDateOfBirthSelected(
@@ -51,11 +52,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   FutureOr<void> _onUserDetailsSet(
       ProfileSetUpUserDetailsEvent event, Emitter<ProfileState> emit) async {
     emit(ProfileSetUpLoading());
+
     _fileImg = event.profilePic;
     _fullName = event.fullName;
     _phoneNum = event.phoneNumber;
     _dob = event.dob;
     _about = event.about;
+    _webImg = event.webImage;
     _occupation = event.occupation;
     emit(ProfileSetupSuccess());
   }
@@ -93,6 +96,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   FutureOr<void> _completeProfileSetup(
       CompleteProfileSetup event, Emitter<ProfileState> emit) async {
     emit(CompleteProfileSetupLoading());
+
     final UserProfile userProfile = UserProfile(
         fullName: _fullName,
         dob: _dob,
@@ -109,6 +113,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         isEdit: false,
         appUser: userProfile,
         uid: event.uid,
+        webImage: _webImg,
         profilePic: _fileImg));
     res.fold((failure) {
       log('error occured in bloc');
@@ -141,6 +146,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         isEdit: true,
         appUser: userProfile,
         uid: event.uid,
+        webImage: _webImg,
         profilePic: event.profilePic));
     res.fold((failure) {
       log('error occured in bloc');

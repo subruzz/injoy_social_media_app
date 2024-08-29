@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
@@ -18,10 +19,13 @@ class ProfileSetUpUserDetailsEvent extends ProfileEvent {
   final String? occupation;
   final String? about;
   final File? profilePic;
+  final Uint8List? webImage;
+
   final String uid;
   const ProfileSetUpUserDetailsEvent({
     required this.fullName,
     required this.dob,
+    required this.webImage,
     required this.phoneNumber,
     required this.occupation,
     required this.about,
@@ -87,10 +91,11 @@ class UpdateProfilEvent extends ProfileEvent {
   final File? profilePic;
   final String uid;
   final UserLocation? location;
-
+  final Uint8List? webImg;
   const UpdateProfilEvent(
       {required this.fullName,
       this.userProfil,
+      this.webImg,
       required this.phoneNumber,
       required this.occupation,
       required this.about,

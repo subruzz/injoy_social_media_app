@@ -22,6 +22,7 @@ import 'package:social_media_app/features/who_visited_premium_feature/presentati
 import '../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import '../../../../core/const/languages/app_languages.dart';
 import '../../../../core/utils/app_related/open_email.dart';
+import '../../../../core/utils/app_related/share_app.dart';
 import '../../../../core/utils/responsive/constants.dart';
 import '../../../../core/utils/routes/page_transitions.dart';
 import '../../../../core/widgets/dialog/app_info_dialog.dart';
@@ -185,6 +186,11 @@ class SettingsAndActivityPage extends StatelessWidget {
                     thickness: 3,
                   ),
                   SettingsItemHeading(text: l10n.more_info_and_support),
+                  SettingsListTile(
+                      iconSize: 23,
+                      text: l10n.share,
+                      asset: AppAssetsConst.share,
+                      onTap: shareApp),
                   SettingsListTile(
                       iconSize: 23,
                       text: l10n.help,

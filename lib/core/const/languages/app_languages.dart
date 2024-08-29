@@ -6,7 +6,13 @@ import '../../common/shared_providers/cubit/app_language/app_language_cubit.dart
 class AppLanguages {
   static const ml = Locale('ml');
   static const en = Locale('en');
+  static const hi = Locale('hi');
+
   static bool isMalayalamLocale(BuildContext context) {
     return context.read<AppLanguageCubit>().state.locale == ml;
+  }
+
+  static bool isHindiLocale(BuildContext context) {
+    return context.read<AppLanguageCubit>().state.locale == hi;
   }
 }

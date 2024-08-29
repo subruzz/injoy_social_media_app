@@ -20,6 +20,8 @@ class GetMessageCubit extends Cubit<GetMessageState> {
   StreamSubscription<Either<Failure, List<MessageEntity>>>?
       _messageSubscription;
   StreamSubscription<AppUser>? _userSubscription;
+  StreamSubscription<bool?>? _blockChatStream;
+
   bool _loadchat = true;
 
   GetMessageCubit(this._getSingleUserMessageUsecase)
@@ -33,7 +35,6 @@ class GetMessageCubit extends Cubit<GetMessageState> {
       final userDetailsStream =
           serviceLocator<FirebaseHelper>().getUserDetailsStream(otherUserId);
 
-      // Listen to the stream
       _userSubscription = userDetailsStream.listen(
         (appUserModel) {
           if (_loadchat) {
@@ -56,6 +57,13 @@ class GetMessageCubit extends Cubit<GetMessageState> {
           emit(state.copyWith(loading: false, errorMessage: 'User not found'));
         },
       );
+      final blockChatStatus = serviceLocator<FirebaseHelper>()
+          .getIsBlockedByMeStream(userId, otherUserId);
+      _blockChatStream = blockChatStatus.listen((value) {
+        log('value is $value');
+        emit(state.copyWith(
+            statusInfo: state.statusInfo?.copyWith(isBlockedByMe: value)));
+      });
     } catch (e) {
       emit(state.copyWith(loading: false, errorMessage: 'User not found'));
     }
@@ -102,24 +110,54 @@ class GetMessageCubit extends Cubit<GetMessageState> {
   Future<void> close() {
     _messageSubscription?.cancel();
     _userSubscription?.cancel();
+    _blockChatStream?.cancel();
     return super.close();
   }
 }
 
 class UserStatusInfo extends Equatable {
   final String userName;
-
   final bool isOnline;
   final bool showOnline;
   final Timestamp? lastSeen;
   final String? userPic;
-  const UserStatusInfo(
-      {required this.userName,
-      this.userPic,
-      required this.showOnline,
-      required this.isOnline,
-      required this.lastSeen});
+  final bool? isBlockedByMe;
+
+  const UserStatusInfo({
+    required this.userName,
+    this.userPic,
+    this.isBlockedByMe,
+    required this.showOnline,
+    required this.isOnline,
+    required this.lastSeen,
+  });
+
+  // CopyWith method
+  UserStatusInfo copyWith({
+    String? userName,
+    bool? isOnline,
+    bool? showOnline,
+    Timestamp? lastSeen,
+    String? userPic,
+    bool? isBlockedByMe,
+  }) {
+    return UserStatusInfo(
+      userName: userName ?? this.userName,
+      isOnline: isOnline ?? this.isOnline,
+      showOnline: showOnline ?? this.showOnline,
+      lastSeen: lastSeen ?? this.lastSeen,
+      userPic: userPic ?? this.userPic,
+      isBlockedByMe: isBlockedByMe ?? this.isBlockedByMe,
+    );
+  }
+
   @override
-  List<Object?> get props =>
-      [showOnline, userName, userPic, isOnline, lastSeen];
+  List<Object?> get props => [
+        showOnline,
+        userName,
+        userPic,
+        isOnline,
+        lastSeen,
+        isBlockedByMe,
+      ];
 }

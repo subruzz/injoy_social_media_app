@@ -17,10 +17,10 @@ import '../../../../core/const/enums/premium_type.dart';
 
 abstract interface class PremiumSubscriptionDatasource {
   Future<PaymentIntentBasic> createPaymentIntent(PremiumSubType premType);
-  Future<void> setUpStripeToCompletePayment(
+  Future<UserPremium> setUpStripeToCompletePayment(
       {required PaymentIntentBasic paymentIntent,
       required PremiumSubType premType});
-  Future<void> updateUserPremiumStatus(
+  Future<UserPremium> updateUserPremiumStatus(
       {required bool hasPremium,
       required String userId,
       required PremiumSubType premType});
@@ -90,7 +90,7 @@ class PremiumSubscriptionDatasourceImpl
   }
 
   @override
-  Future<void> setUpStripeToCompletePayment(
+  Future<UserPremium> setUpStripeToCompletePayment(
       {required PaymentIntentBasic paymentIntent,
       required PremiumSubType premType}) async {
     try {
@@ -106,7 +106,7 @@ class PremiumSubscriptionDatasourceImpl
                   paymentIntent.paymentIntentClientSecret,
               merchantDisplayName: 'I N J O Y PREMIUM'));
       await Stripe.instance.presentPaymentSheet();
-      updateUserPremiumStatus(
+      return await updateUserPremiumStatus(
           hasPremium: true, userId: userId, premType: premType);
     } catch (e) {
       log('stripe error ${e.toString()}');
@@ -115,20 +115,18 @@ class PremiumSubscriptionDatasourceImpl
   }
 
   @override
-  Future<void> updateUserPremiumStatus({
+  Future<UserPremium> updateUserPremiumStatus({
     required bool hasPremium,
     required String userId,
     required PremiumSubType premType,
   }) async {
     final userRef = FirebaseFirestore.instance.collection('users');
     try {
-      await userRef.doc(userId).update({
-        'hasPremium': hasPremium,
-        'userPremium': {
-          'premType': premType.toJson(),
-          'purchasedAt': FieldValue.serverTimestamp(),
-        },
-      });
+      final userPremModel =
+          UserPremium(premType: premType, purchasedAt: Timestamp.now());
+      await userRef.doc(userId).update(
+          {'hasPremium': hasPremium, 'userPremium': userPremModel.toJson()});
+      return userPremModel;
     } catch (e) {
       throw const MainException(errorMsg: 'Payment failed, Please try again!');
     }

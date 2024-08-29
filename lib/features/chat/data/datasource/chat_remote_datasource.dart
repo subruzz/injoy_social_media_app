@@ -18,8 +18,9 @@ abstract interface class ChatRemoteDatasource {
   Future<void> deleteMessage(List<MessageEntity> messages);
   Future<void> seenMessageUpdate(
       String sendorId, String recieverId, String messageId);
-
-  Future<void> deleteChat(String myId);
+  Future<void> blockAndUnblockChat(
+      String myId, String otherUserId, bool isBlock);
+  Future<void> deleteChat(String myId, String otherUserId);
 }
 
 class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
@@ -153,8 +154,6 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
     }
   }
 
-  
-
   String _getMessageTypeFromString(String messageType) {
     switch (messageType) {
       case 'photoMessage':
@@ -171,24 +170,30 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
   }
 
   @override
-  Future<void> deleteChat(String myId) async {
+  Future<void> deleteChat(String myId, String otherUserId) async {
     try {
-      final userRef = _firestore
+      final chatRef = _firestore
           .collection(FirebaseCollectionConst.users)
           .doc(myId)
-          .collection(FirebaseCollectionConst.myChat);
+          .collection(FirebaseCollectionConst.myChat)
+          .doc(otherUserId);
+      final messagesRef = chatRef.collection(FirebaseCollectionConst.messages);
+
       final batch = _firestore.batch();
 
-      // Fetch all documents in the sub-collection
-      final snapshot = await userRef.get();
+      // Fetch all documents (messages) in the sub-collection
+      final snapshot = await messagesRef.get();
 
-      // Delete each document in the sub-collection
+      // Delete each document (message) in the sub-collection
       for (var doc in snapshot.docs) {
         batch.delete(doc.reference);
       }
+
+      // Commit the batch deletion
       await batch.commit();
+      await chatRef.update({'recentTextMessage': ''});
     } catch (e) {
-      throw const MainException();
+      throw const MainException(); // Handle any exceptions that occur
     }
   }
 
@@ -284,11 +289,9 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
           });
         } else {
           // No messages left, so set recentTextMessage to an empty string
-          await chatRef.update(
-              { 'recentTextMessage': ''});
+          await chatRef.update({'recentTextMessage': ''});
 
-          await otherChatRef.update(
-              { 'recentTextMessage': ''});
+          await otherChatRef.update({'recentTextMessage': ''});
         }
       }
     } catch (e) {
@@ -341,7 +344,7 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
 
       Reference ref = _firebaseStorage.ref().child('chatImages').child(path);
 
-      UploadTask task = ref.child(id).putFile(assetPath.selectedFile!);
+      UploadTask task = ref.child(id).putFile(assetPath.selectedFile);
       TaskSnapshot snapshot = await task;
 
       String downloadUrl = await snapshot.ref.getDownloadURL();
@@ -363,6 +366,33 @@ class ChatRemoteDatasourceImpl implements ChatRemoteDatasource {
           .collection('messages');
 
       await messagesRef.doc(messageId).update({'isSeen': true});
+    } catch (e) {
+      throw const MainException();
+    }
+  }
+
+  @override
+  Future<void> blockAndUnblockChat(
+      String myId, String otherUserId, bool isBlock) async {
+    try {
+      final myChatRef = _firestore
+          .collection(FirebaseCollectionConst.users)
+          .doc(myId)
+          .collection(FirebaseCollectionConst.myChat)
+          .doc(otherUserId);
+
+      final otherChatRef = _firestore
+          .collection(FirebaseCollectionConst.users)
+          .doc(otherUserId)
+          .collection(FirebaseCollectionConst.myChat)
+          .doc(myId);
+      if (isBlock) {
+        await myChatRef.update({'isBlockedByMe': true});
+        await otherChatRef.update({'isBlockedByMe': false});
+      } else {
+        await myChatRef.update({'isBlockedByMe': null});
+        await otherChatRef.update({'isBlockedByMe': null});
+      }
     } catch (e) {
       throw const MainException();
     }

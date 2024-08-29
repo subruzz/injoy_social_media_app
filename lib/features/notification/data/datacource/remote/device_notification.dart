@@ -10,6 +10,8 @@ import 'package:social_media_app/features/notification/data/datacource/local/loc
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 import 'package:social_media_app/features/notification/domain/entities/push_notification.dart';
 
+import '../../../../../core/const/app_secrets/service.dart';
+
 class DeviceNotification {
   static final _firebaseMessaging = FirebaseMessaging.instance;
 
@@ -61,20 +63,17 @@ class DeviceNotification {
   }
 
   static Future<String?> getAccessToken() async {
-    final serviceAccountJson = dotenv.env['SERVICE_ACCOUNT_JSON'];
-    if (serviceAccountJson == null) return null;
-    final serviceAccount = jsonDecode(serviceAccountJson);
     List<String> scopes = [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/firebase.database",
       "https://www.googleapis.com/auth/firebase.messaging"
     ];
     http.Client client = await auth.clientViaServiceAccount(
-        auth.ServiceAccountCredentials.fromJson(serviceAccount), scopes);
+        auth.ServiceAccountCredentials.fromJson(serviceAccountSecret), scopes);
     //get access token
     auth.AccessCredentials credentials =
         await auth.obtainAccessCredentialsViaServiceAccount(
-            auth.ServiceAccountCredentials.fromJson(serviceAccount),
+            auth.ServiceAccountCredentials.fromJson(serviceAccountSecret),
             scopes,
             client);
 

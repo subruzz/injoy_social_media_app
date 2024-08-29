@@ -5,14 +5,17 @@ import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/app_msg/app_info_msg.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
+import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/const/extensions/time_ago.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
+import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/core/widgets/common/user_profile.dart';
+import 'package:social_media_app/core/widgets/dialog/popup_menu.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
@@ -127,11 +130,68 @@ class PersonalPageTopBar extends StatelessWidget
                   );
           },
         ),
-        PersonalChatTopBarIcon(onPressed: () {}, index: 1),
+        ReusablePopupMenuButton<String>(
+          icon: const Icon(Icons.more_vert),
+          items: [
+            // if (getMessageCubit.state.statusInfo?.isBlockedByMe == null ||
+            //     getMessageCubit.state.statusInfo?.isBlockedByMe == true)
+            //   PopupMenuItem(
+            //     onTap: () {
+            //       context.read<MessageCubit>().blockOrUnblockThisChat(
+            //           isBlock: true, messageState: getMessageCubit.state);
+            //     },
+            //     child: ChatActionWidget(
+            //         asset: AppAssetsConst.block,
+            //         text:
+            //             getMessageCubit.state.statusInfo?.isBlockedByMe == true
+            //                 ? 'Unblock'
+            //                 : AppLocalizations.of(context)!.block),
+            //   ),
+            PopupMenuItem(
+              onTap: () {
+                AppInfoDialog.showInfoDialog(
+                    context: context,
+                    title: 'Clear Chat?',
+                    buttonText: 'Clear',
+                    subtitle:
+                        'This will only clear chat history from your side',
+                    callBack: () {
+                      context
+                          .read<MessageCubit>()
+                          .clearChat(getMessageCubit.state);
+                    });
+              },
+              child: ChatActionWidget(
+                  asset: AppAssetsConst.clear,
+                  text: AppLocalizations.of(context)!.clear_chat),
+            ),
+          ],
+        )
       ],
     );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class ChatActionWidget extends StatelessWidget {
+  const ChatActionWidget(
+      {super.key, this.size = 24, required this.asset, required this.text});
+  final String asset;
+  final String text;
+  final double size;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        CustomSvgIcon(
+          assetPath: asset,
+          height: size,
+        ),
+        AppSizedBox.sizedBox10W,
+        CustomText(text: text)
+      ],
+    );
+  }
 }

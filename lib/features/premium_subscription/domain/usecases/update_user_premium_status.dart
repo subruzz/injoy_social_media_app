@@ -3,11 +3,11 @@ import 'package:social_media_app/core/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/premium_subscription/domain/repositories/premium_subscription_repository.dart';
 
-import '../../../../core/const/enums/location_enum.dart';
+import '../../../../core/common/entities/user_entity.dart';
 import '../../../../core/const/enums/premium_type.dart';
 
 class UpdateUserPremiumStatusUseCase
-    implements UseCase<Unit, UpdateUserPremiumStatusUseCaseParams> {
+    implements UseCase<UserPremium, UpdateUserPremiumStatusUseCaseParams> {
   final PremiumSubscriptionRepository _premiumSubscriptionRepository;
 
   UpdateUserPremiumStatusUseCase(
@@ -15,7 +15,7 @@ class UpdateUserPremiumStatusUseCase
       : _premiumSubscriptionRepository = premiumSubscriptionRepository;
 
   @override
-  Future<Either<Failure, Unit>> call(
+  Future<Either<Failure, UserPremium>> call(
       UpdateUserPremiumStatusUseCaseParams params) async {
     return await _premiumSubscriptionRepository.upateUserPremiumStatus(
         hasPremium: params.hasPremium,

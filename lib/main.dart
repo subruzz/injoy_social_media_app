@@ -34,7 +34,7 @@ void main() {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
       ]);
-      Bloc.observer = SimpleBlocObserver();
+      // Bloc.observer = SimpleBlocObserver();
 
       await dotenv.load(fileName: '.env');
       await Firebase.initializeApp(
@@ -72,12 +72,7 @@ void main() {
 
       runApp(MyApp(navigatorKey: navigatorKey));
     },
-    (error, stackTrace) {
-      // Handle the error and stack trace here
-      // For example, you could log the error to an error reporting service
-      print('Caught error: $error');
-      print('Stack trace: $stackTrace');
-    },
+    (error, stackTrace) {},
   );
 }
 
@@ -118,6 +113,7 @@ class MyApp extends StatelessWidget {
                     supportedLocales: const [
                       Locale('en'),
                       Locale('ml'),
+                       Locale('hi'), // Hindi
                     ],
                     navigatorKey: navigatorKey,
 
@@ -180,6 +176,7 @@ _defineThePlatform(BuildContext context) {
   isThatDeskTop = width >= 1100;
   isThatBtwMobAndTab = width >= 500 && width < 800;
   isThatMobile =
-      platform == TargetPlatform.iOS || platform == TargetPlatform.android;
+      (platform == TargetPlatform.iOS || platform == TargetPlatform.android) &&
+          !kIsWeb;
   isThatAndroid = platform == TargetPlatform.android;
 }

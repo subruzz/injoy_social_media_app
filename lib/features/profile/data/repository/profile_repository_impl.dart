@@ -1,4 +1,6 @@
+
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
@@ -32,17 +34,18 @@ class UserProfileRepositoryImpl implements UserProfileRepository {
   Future<Either<Failure, AppUser>> createUserProfile(
       {required UserProfile user,
       File? profilePic,
+      Uint8List? webImage,
       required String uid,
       required bool isEdit}) async {
     try {
       final userProfileModel = UserProfileModel.fromUserProfile(user);
 
       final res = await _userProfileDataSource.createUserProfile(
-        userProfile: userProfileModel,
-        uid: uid,
-        file: profilePic,
-        isEdit: isEdit
-      );
+          webImage: webImage,
+          userProfile: userProfileModel,
+          uid: uid,
+          file: profilePic,
+          isEdit: isEdit);
       return right(res);
     } on MainException catch (e) {
       return left(Failure(e.errorMsg, e.details));

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
-import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/each_post/post_content_section/post_content_section.dart';
 import 'package:social_media_app/core/widgets/each_post/post_image_section.dart/widgets/post_multiple_images.dart';
 import 'package:social_media_app/core/widgets/each_post/post_top_section/post_top_details.dart';
 import 'package:social_media_app/features/post/presentation/pages/comment_screen.dart';
-import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 
 import '../../../../core/const/app_config/web_design_const.dart';
+import '../../../../core/widgets/common/video_playing_widget.dart';
 
 class PopupContainerWeb extends StatefulWidget {
   const PopupContainerWeb({
@@ -68,6 +67,7 @@ class _PopupContainerWebState extends State<PopupContainerWeb> {
                         Flexible(
                           flex: 2,
                           child: Stack(
+                          
                             children: [
                               Container(
                                 height: double.infinity,

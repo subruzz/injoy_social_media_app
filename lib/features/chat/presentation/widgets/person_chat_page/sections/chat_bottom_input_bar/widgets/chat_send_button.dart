@@ -45,8 +45,8 @@ class ChatSendButton extends StatelessWidget {
                     : 5.w,
             child: GestureDetector(
               onLongPressEnd: (details) {
+                log('on long press end called');
                 if (kIsWeb) return;
-                if (!toggleButton.value) return;
 
                 context
                     .read<MessageCubit>()

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/widgets/common/cached_image.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
-import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
+import 'package:social_media_app/core/widgets/common/video_playing_widget.dart';
 import 'package:video_player/video_player.dart';
 
 class CustomPageView extends StatelessWidget {
@@ -32,8 +32,8 @@ class CustomPageView extends StatelessWidget {
       itemBuilder: (context, index) {
         return images != null
             ? images![index].mediaType == MediaType.photo
-                ? Image.file(images![index].selectedFile!)
-                : VideoWidget(videoFile: images![index].selectedFile!)
+                ? Image.file(images![index].selectedFile)
+                : VideoWidget(videoFile: images![index].selectedFile)
             : isThatVdo
                 ? Center(
                   child: VideoPlayerWidget(

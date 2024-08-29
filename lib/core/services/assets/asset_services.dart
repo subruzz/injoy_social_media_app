@@ -43,6 +43,16 @@ class AssetServices {
     return resultToBytes;
   }
 
+  static Future<Uint8List?> pickSingleImageAsBytes() async {
+    final result =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 30);
+    if (result == null) {
+      return null;
+    }
+    final bytes = await result.readAsBytes();
+    return bytes;
+  }
+
   static Future<File?> compressImage(File file, String targetPath) async {
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
@@ -143,41 +153,43 @@ class AssetServices {
         file.deleteSync();
       }
 
-     resp.listen(
-  (List<int> data) {
-    file.writeAsBytesSync(data, mode: FileMode.append);
-  },
-  onDone: () async {
-    if (await file.exists()) {
-      log('File size: ${await file.length()}');
-      
-      // Verify the file before saving
-      if (await file.length() > 0) {
-        await checkRequest(() async {
-          final AssetEntity? asset = await PhotoManager.editor.saveVideo(file, title: name);
-          log('saved asset: $asset');
-          if (asset == null) {
-            ToastService.showToast('Failed to save video.');
-          }
-        });
-      } else {
-        log('File is empty or corrupted.');
-        ToastService.showToast('Failed to download video, file is corrupted.');
-      }
-    } else {
-      log('File does not exist.');
-      ToastService.showToast('Failed to download video, file does not exist.');
-    }
-    client.close();
-  },
-  onError: (e) {
-    ToastService.showToast('Error during download: $e');
-    log('Error during download: $e');
-    client.close();
-  },
-  cancelOnError: true,
-);
+      resp.listen(
+        (List<int> data) {
+          file.writeAsBytesSync(data, mode: FileMode.append);
+        },
+        onDone: () async {
+          if (await file.exists()) {
+            log('File size: ${await file.length()}');
 
+            // Verify the file before saving
+            if (await file.length() > 0) {
+              await checkRequest(() async {
+                final AssetEntity? asset =
+                    await PhotoManager.editor.saveVideo(file, title: name);
+                log('saved asset: $asset');
+                if (asset == null) {
+                  ToastService.showToast('Failed to save video.');
+                }
+              });
+            } else {
+              log('File is empty or corrupted.');
+              ToastService.showToast(
+                  'Failed to download video, file is corrupted.');
+            }
+          } else {
+            log('File does not exist.');
+            ToastService.showToast(
+                'Failed to download video, file does not exist.');
+          }
+          client.close();
+        },
+        onError: (e) {
+          ToastService.showToast('Error during download: $e');
+          log('Error during download: $e');
+          client.close();
+        },
+        cancelOnError: true,
+      );
     } catch (e) {
       ToastService.showToast(
           'There was an error downloading the media, please try again!');

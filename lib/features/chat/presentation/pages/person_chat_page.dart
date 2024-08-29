@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
+import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
@@ -85,6 +86,8 @@ class _PersonChatPageState extends State<PersonChatPage> {
       ),
       body: GestureDetector(
         onTap: () {
+          _focusNode.unfocus();
+
           _showAttachWindow.value = false;
         },
         child: Stack(
@@ -123,24 +126,49 @@ class _PersonChatPageState extends State<PersonChatPage> {
                     goToBottom: _scrollToBottom,
                     scrollController: _scrollController),
                 //input field for creating chat
-                ChatInputBarSection(
-                    getMessageCubit: _getMessageCubit,
-                    focusNode: _focusNode,
-                    messageController: _textMsgController,
-                    showAttachWindow: _showAttachWindow,
-                    sendMessage: () {
-                      _sendTextMsg();
-                    },
-                    toggleButton: _toggleButton),
+                BlocBuilder<GetMessageCubit, GetMessageState>(
+                  buildWhen: (previous, current) =>
+                      current.statusInfo?.isBlockedByMe == true ||
+                      current.statusInfo?.isBlockedByMe == false ||
+                      current.statusInfo?.isBlockedByMe == null,
+                  bloc: _getMessageCubit,
+                  builder: (context, state) {
+                    log('stat is f ths ${state.statusInfo?.isBlockedByMe}');
+                    return state.statusInfo?.isBlockedByMe == null
+                        ? ChatInputBarSection(
+                            getMessageCubit: _getMessageCubit,
+                            focusNode: _focusNode,
+                            messageController: _textMsgController,
+                            showAttachWindow: _showAttachWindow,
+                            sendMessage: () {
+                              _sendTextMsg();
+                            },
+                            toggleButton: _toggleButton)
+                        : state.statusInfo?.isBlockedByMe == true
+                            ? Text('You have blocked this user.')
+                            : Text('You have been blocked by this user.');
+                  },
+                ),
               ],
             ),
-            ChatSendButton(
-              getMessageState: _getMessageCubit,
-              toggleButton: _toggleButton,
-              sendMessage: () {
-                _sendTextMsg();
+            BlocBuilder<GetMessageCubit, GetMessageState>(
+              buildWhen: (previous, current) =>
+                  current.statusInfo?.isBlockedByMe == true ||
+                  current.statusInfo?.isBlockedByMe == false ||
+                  current.statusInfo?.isBlockedByMe == null,
+              bloc: _getMessageCubit,
+              builder: (context, state) {
+                return state.statusInfo?.isBlockedByMe == null
+                    ? ChatSendButton(
+                        getMessageState: _getMessageCubit,
+                        toggleButton: _toggleButton,
+                        sendMessage: () {
+                          _sendTextMsg();
+                        },
+                        messageController: _textMsgController,
+                      )
+                    : const EmptyDisplay();
               },
-              messageController: _textMsgController,
             ),
             // Align(
             //   alignment: Alignment.topCenter,

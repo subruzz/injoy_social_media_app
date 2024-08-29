@@ -4,11 +4,12 @@ import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/premium_subscription/domain/entities/payment_intent_basic.dart';
 import 'package:social_media_app/features/premium_subscription/domain/repositories/premium_subscription_repository.dart';
 
+import '../../../../core/common/entities/user_entity.dart';
 import '../../../../core/const/enums/location_enum.dart';
 import '../../../../core/const/enums/premium_type.dart';
 
 class SetupStripeForPaymentUseCase
-    implements UseCase<Unit, SetupStripeForPaymentUseCaseParams> {
+    implements UseCase<UserPremium, SetupStripeForPaymentUseCaseParams> {
   final PremiumSubscriptionRepository _premiumSubscriptionRepository;
 
   SetupStripeForPaymentUseCase(
@@ -16,7 +17,7 @@ class SetupStripeForPaymentUseCase
       : _premiumSubscriptionRepository = premiumSubscriptionRepository;
 
   @override
-  Future<Either<Failure, Unit>> call(
+  Future<Either<Failure, UserPremium>> call(
       SetupStripeForPaymentUseCaseParams params) async {
     return await _premiumSubscriptionRepository.setUpStripeToCompletePayment(
         paymentIntent: params.paymentIntent, premType: params.premType);

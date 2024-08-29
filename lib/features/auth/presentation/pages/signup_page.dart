@@ -36,6 +36,8 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+
     return BlocProvider(
       create: (context) => serviceLocator<SignupBloc>(),
       child: Scaffold(
@@ -44,7 +46,7 @@ class _SignupPageState extends State<SignupPage> {
         ),
         body: CustomAppPadding(
           child: CustomScrollableContent(
-              child: isThatTabOrDeskTop
+              child: width > 650
                   ? AuthForWeb(
                       isLogin: false,
                       child: _SignupColumn(

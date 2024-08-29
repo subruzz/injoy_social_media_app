@@ -88,7 +88,7 @@ class LanguageSelectionDialog extends StatefulWidget {
     required this.onLanguageSelected,
     this.title,
     this.closeText = 'Close',
-    this.okText = 'Change ',
+    this.okText = 'Change',
   });
 
   @override
@@ -99,10 +99,14 @@ class LanguageSelectionDialog extends StatefulWidget {
 class _LanguageSelectionDialogState extends State<LanguageSelectionDialog> {
   String _selectedLanguage = '';
   final List<String> languages = ['English', 'Malayalam', 'Hindi'];
+
   @override
   void initState() {
-    _selectedLanguage =
-        AppLanguages.isMalayalamLocale(context) ? 'Malayalam' : 'English';
+    _selectedLanguage = AppLanguages.isMalayalamLocale(context)
+        ? 'Malayalam'
+        : AppLanguages.isHindiLocale(context)
+            ? 'Hindi'
+            : 'English';
     super.initState();
   }
 
@@ -153,9 +157,16 @@ class _LanguageSelectionDialogState extends State<LanguageSelectionDialog> {
         ),
         CustomButton(
           onClick: () {
-            context.read<AppLanguageCubit>().changeLanguage(
-                Locale(_selectedLanguage == 'Malayalam' ? 'ml' : 'en'));
+            Locale newLocale;
+            if (_selectedLanguage == 'Malayalam') {
+              newLocale = Locale('ml');
+            } else if (_selectedLanguage == 'Hindi') {
+              newLocale = Locale('hi');
+            } else {
+              newLocale = Locale('en');
+            }
 
+            context.read<AppLanguageCubit>().changeLanguage(newLocale);
             Navigator.of(context).pop();
           },
           child: Text(widget.okText),

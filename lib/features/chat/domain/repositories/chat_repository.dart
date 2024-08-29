@@ -13,6 +13,7 @@ abstract class ChatRepository {
   Future<Either<Failure, Unit>> deleteMessage(List<MessageEntity> messages);
   Future<Either<Failure, Unit>> seenMessageUpdate(
       String sendorId, String recieverId, String messageId);
-
-  Future<Either<Failure, Unit>> deleteChat(String myid);
+  Future<Either<Failure,Unit>> blockAndUnblockChat(
+      String myId, String otherUserId, bool isBlock);
+  Future<Either<Failure, Unit>> deleteChat(String myid,String otherUserId);
 }

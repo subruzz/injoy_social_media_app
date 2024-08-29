@@ -29,15 +29,16 @@ class GetUserPostsBloc extends Bloc<GetUserPostsEvent, GetUserPostsState> {
   FutureOr<void> _getUserPostsrequestedEvent(
       GetUserPostsrequestedEvent event, Emitter<GetUserPostsState> emit) async {
     emit(GetUserPostsLoading());
-    log('Requested for user posts');
     final result =
         await _getUserPostsUseCase(GetUserPostsUseCaseParams(user: event.user));
-    log('user pots are $result');
-    result.fold(
-        ((failure) => emit(GetUserPostsError(errorMsg: failure.message))),
-        (success) => emit(GetUserPostsSuccess(
-              userPosts: success,
-            )));
+    result
+        .fold(((failure) => emit(GetUserPostsError(errorMsg: failure.message))),
+            (success) {
+      emit(GetUserPostsSuccess(
+        userPosts: success,
+      ));
+      log('user pots are ${success.length}');
+    });
   }
 
   FutureOr<void> _getUserPostsAterPostUpdate(

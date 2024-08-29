@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,7 @@ class ProfileForm extends StatelessWidget {
   final TextEditingController occupationController;
   final TextEditingController aboutController;
   final TextEditingController dobController;
-  final ValueNotifier<File?> selectImage;
+  final ValueNotifier<(File?, Uint8List?)> selectImage;
   final VoidCallback onPress;
   // final TextEditingController locationController;
   const ProfileForm({

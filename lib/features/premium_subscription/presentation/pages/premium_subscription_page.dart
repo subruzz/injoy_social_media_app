@@ -25,6 +25,7 @@ class PremiumSubscriptionPage extends StatelessWidget {
           listener: (context, state) {
             if (state is PremiumSubscriptionCompleted) {
               context.read<AppUserBloc>().appUser.hasPremium = true;
+              context.read<AppUserBloc>().appUser.userPrem = state.userPremium;
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(

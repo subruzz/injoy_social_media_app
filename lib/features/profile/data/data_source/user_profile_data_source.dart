@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -17,8 +18,10 @@ abstract interface class UserProfileDataSource {
       {required UserProfileModel userProfile,
       required String uid,
       File? file,
+      Uint8List? webImage,
       required bool isEdit});
-  Future<String> uploadUserImage(File profileImage, String uid);
+  Future<String?> uploadUserImage(
+      File? profileImag, Uint8List? webImg, String uid);
   Future<bool> checkUserNameExist(String userName);
   Future<void> editInterest(List<String> interests, String uid);
 }
@@ -36,14 +39,17 @@ class UserProfileDataSourceImpl implements UserProfileDataSource {
   Future<AppUser> createUserProfile(
       {required UserProfileModel userProfile,
       required String uid,
+      Uint8List? webImage,
       File? file,
       required bool isEdit}) async {
     try {
       String? userImage;
       //if user profile is selected uploading to firebase storage
-      if (file != null) {
-        userImage = await uploadUserImage(file, uid);
-        //updating the model with new userimage;
+
+      userImage = await uploadUserImage(file, webImage, uid);
+
+      //updating the model with new userimage;
+      if (userImage != null) {
         userProfile = userProfile.copyWith(profilePic: userImage);
       }
       //updating the user details inthe firebase
@@ -101,14 +107,17 @@ class UserProfileDataSourceImpl implements UserProfileDataSource {
   }
 
   @override
-  Future<String> uploadUserImage(File profileImag, String uid) async {
+  Future<String?> uploadUserImage(
+      File? profileImag, Uint8List? webImg, String uid) async {
     try {
+      if (profileImag == null && webImg == null) return null;
       //geting the ref to profile using user id
       Reference ref = _firebaseStorage
           .ref()
           .child(FirebaseFirestoreConst.userImages)
           .child(uid);
-      UploadTask task = ref.putFile(profileImag);
+      UploadTask task =
+          webImg != null ? ref.putData(webImg) : ref.putFile(profileImag!);
       TaskSnapshot snapshot = await task;
       String downloadUrl = await snapshot.ref.getDownloadURL();
       //return the download url

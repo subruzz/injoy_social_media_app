@@ -6,9 +6,7 @@ import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
 import 'package:social_media_app/core/const/languages/app_languages.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
-import 'package:social_media_app/core/utils/shared_preference/app_language.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
-import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_event.dart';
 import 'package:social_media_app/core/utils/other/debouncer.dart';
@@ -68,15 +66,20 @@ class _CreateUsernamePageState extends State<UsernameCheckPage> {
         showLeading: true,
       ),
       body: WebWidthHelper(
+        btwMobAndTab: true,
         child: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
             if (state is CompleteProfileSetupSuceess) {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => const Responsive(
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const Responsive(
                     mobile: BottomBarBuilder(),
                     tablet: WebLayout(),
-                    desktop: WebLayout()),
-              ));
+                    desktop: WebLayout(),
+                  ),
+                ),
+                (route) => false, 
+              );
             }
           },
           builder: (context, state) {

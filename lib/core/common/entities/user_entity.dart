@@ -10,27 +10,24 @@ class AppUser extends Equatable {
   bool hasPremium;
   final String? fullName;
   String? userName;
-  final UserPremium? userPrem;
+   UserPremium? userPrem;
   final String? dob;
   final String? phoneNumber;
   final String? occupation;
   final String? about;
   final String? profilePic;
-  final String? location;
   final Timestamp? lastSeen;
   final NotificationPreferences notificationPreferences;
   final int visitedUserCount;
   final String token;
-  final double? latitude;
-  final double? longitude;
+
   int followersCount;
   int followingCount;
   final List<String> following;
-  final List<String> interests;
   final bool onlineStatus;
   final List<String> posts;
   final int viewedSetupIndex;
-   bool showLastSeen;
+  bool showLastSeen;
   final List<String> savedPosts;
   AppUser({
     required this.id,
@@ -52,14 +49,10 @@ class AppUser extends Equatable {
     this.occupation,
     this.about,
     this.profilePic,
-    this.location,
-    this.latitude,
-    this.longitude,
     required this.visitedUserCount,
     required this.token,
     this.following = const [],
     this.posts = const [],
-    this.interests = const [],
   });
 
   @override
@@ -75,21 +68,17 @@ class AppUser extends Equatable {
         occupation,
         about,
         profilePic,
-        location,
         userPrem,
         lastSeen,
         notificationPreferences,
         visitedUserCount,
         token,
-        latitude,
-        longitude,
         followersCount,
         followingCount,
         onlineStatus,
         viewedSetupIndex,
         ...savedPosts,
         ...following,
-        ...interests,
         ...posts,
       ];
 
@@ -135,19 +124,15 @@ class AppUser extends Equatable {
       occupation: occupation ?? this.occupation,
       about: about ?? this.about,
       profilePic: profilePic ?? this.profilePic,
-      location: location ?? this.location,
       lastSeen: lastSeen ?? this.lastSeen,
       showLastSeen: showLastSeen ?? this.showLastSeen,
       notificationPreferences:
           notificationPreferences ?? this.notificationPreferences,
       visitedUserCount: visitedUserCount ?? this.visitedUserCount,
       token: token ?? this.token,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
       followersCount: followersCount ?? this.followersCount,
       followingCount: followingCount ?? this.followingCount,
       following: following ?? this.following,
-      interests: interests ?? this.interests,
       onlineStatus: onlineStatus ?? this.onlineStatus,
       posts: posts ?? this.posts,
       viewedSetupIndex: viewedSetupIndex ?? this.viewedSetupIndex,
@@ -165,7 +150,7 @@ class UserPremium extends Equatable {
   Map<String, dynamic> toJson() {
     return {
       'premType': premType.toJson(),
-      'purchasedAt': purchasedAt,
+      'purchasedAt': FieldValue.serverTimestamp(),
     };
   }
 

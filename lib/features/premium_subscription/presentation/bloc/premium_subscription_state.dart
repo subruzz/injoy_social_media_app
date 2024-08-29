@@ -11,7 +11,11 @@ class PremiumSubscriptionInitial extends PremiumSubscriptionState {}
 
 class PremiumSubscriptionLoading extends PremiumSubscriptionState {}
 
-class PremiumSubscriptionCompleted extends PremiumSubscriptionState {}
+class PremiumSubscriptionCompleted extends PremiumSubscriptionState {
+  final UserPremium userPremium;
+
+  const PremiumSubscriptionCompleted({required this.userPremium});
+}
 
 class PremiumSubscriptionIntentSuccess extends PremiumSubscriptionState {
   final PaymentIntentBasic paymentIntent;

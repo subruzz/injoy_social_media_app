@@ -133,10 +133,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         fullName: me.fullName,
                         profilePic: me.profilePic)));
               }
-              Navigator.popUntil(
-                context,
-                (route) => route.isFirst,
-              );
+              if (widget.isReel) {
+                for (int i = 0; i < 2; i++) {
+                  Navigator.pop(context);
+                }
+              } else {
+                for (int i = 0; i <= 2; i++) {
+                  Navigator.pop(context);
+                }
+              }
 
               Messenger.showSnackBar(message: l10n.postAddedSuccess);
             }
@@ -147,7 +152,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   
                     PostInputSection(
                       l10n: l10n,
                       descriptionController: _descriptionController,

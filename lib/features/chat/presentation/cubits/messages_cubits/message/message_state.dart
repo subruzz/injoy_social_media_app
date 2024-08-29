@@ -64,4 +64,11 @@ final class MessageReplyClicked extends MessageState {
 }
 
 final class MessageReplyRemoved extends MessageState {}
+
 final class DeleteMessageSuccess extends MessageState {}
+
+final class ChatBlockLoading extends MessageState {}
+
+final class ChatBlockSuccess extends MessageState {}
+
+final class ChatBlockError extends MessageState {}

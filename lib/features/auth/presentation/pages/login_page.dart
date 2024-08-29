@@ -38,10 +38,11 @@ class _LoginScreenState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return BlocProvider(
       create: (context) => serviceLocator<LoginBloc>(),
       child: Scaffold(
-        body: Responsive.deskTopAndTab(context)
+        body: width>650
             ? CustomScrollableContent(
                 child: AuthForWeb(
                     child: _BuildauthColumn(
@@ -81,7 +82,7 @@ class _BuildauthColumn extends StatelessWidget {
           passwordController: passWordController,
         ),
         AppSizedBox.sizedBox10H,
-        const ForgotPasswordText(),
+        // const ForgotPasswordText(),
         LoginButton(
             formKey: formKey,
             emailController: emailController,

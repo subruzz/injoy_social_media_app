@@ -142,7 +142,12 @@
   "usernameAdded": "Username added.",
   "editYourProfile": "Edit Your Profile",
   "update": "Update",
-  "profileUpdated": "Your profile has been updated."
+  "profileUpdated": "Your profile has been updated.",
+  "clear_chat": "Clear Chat",
+  "block": "Block",
+  "media_send_error": "Could not send media files, try again",
+  "media_send_success": "Successfully sent media files"
+
 
 
 

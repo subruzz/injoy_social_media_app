@@ -15,6 +15,7 @@ class ChatModel extends ChatEntity {
       super.senderName,
       super.senderProfile,
       super.otherUserName,
+      super.isBlockedByMe,
       required super.lastSenderId,
       super.otherUserProfile,
       super.totalUnReadMessages});
@@ -23,6 +24,7 @@ class ChatModel extends ChatEntity {
     final snap = snapshot.data() as Map<String, dynamic>;
     log('time is ${snap['createdAt']}');
     return ChatModel(
+      isBlockedByMe: snap['isBlockedByMe'],
       lastMessageId: snap['lastMessageId'],
       lastSenderId: snap['lastSenderId'],
       recentTextMessage: snap['recentTextMessage'],
@@ -48,6 +50,7 @@ class ChatModel extends ChatEntity {
       };
   factory ChatModel.fromChatEntity(ChatEntity entity) {
     return ChatModel(
+      isBlockedByMe: entity.isBlockedByMe,
       lastMessageId: entity.lastMessageId,
       senderName: entity.senderName,
       lastSenderId: entity.lastSenderId,
@@ -63,6 +66,7 @@ class ChatModel extends ChatEntity {
   }
   ChatModel copyWith({
     String? senderUid,
+    bool? isBlockedByMe,
     String? recipientUid,
     String? senderName,
     String? lastSenderId,
@@ -77,6 +81,7 @@ class ChatModel extends ChatEntity {
     int? totalUnReadMessages,
   }) {
     return ChatModel(
+      isBlockedByMe: isBlockedByMe ?? this.isBlockedByMe,
       lastMessageId: lastMessageId ?? this.lastMessageId,
       lastSenderId: lastSenderId ?? this.lastSenderId,
       otherUserName: otherUserName ?? this.otherUserName,

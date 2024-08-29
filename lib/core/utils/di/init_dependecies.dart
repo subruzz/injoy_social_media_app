@@ -11,6 +11,7 @@ import 'package:social_media_app/features/ai_chat/domain/repository/ai_chat_repo
 import 'package:social_media_app/features/ai_chat/domain/usecases/generate_ai_message.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
 import 'package:social_media_app/features/auth/domain/usecases/logout_user.dart';
+import 'package:social_media_app/features/chat/domain/usecases/block_unblock_chat.dart';
 import 'package:social_media_app/features/media_picker/data/repository/asset_repository_impl.dart';
 import 'package:social_media_app/features/media_picker/domain/repository/asset_repository.dart';
 import 'package:social_media_app/features/media_picker/data/datasource/local/asset_local_datasource.dart';
@@ -197,6 +198,7 @@ import 'package:social_media_app/features/who_visited_premium_feature/domain/use
 import 'package:social_media_app/features/who_visited_premium_feature/domain/usecases/get_all_visited_user.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
 
+import '../../../features/chat/domain/usecases/delete_single_chat.dart';
 import '../../../features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import '../../../features/notification/data/datacource/remote/notification_datasource.dart';
 import '../../../features/profile/domain/usecases/user_data_usecases/get_my_liked_posts.dart';
@@ -329,7 +331,10 @@ void _initProfile() {
     ..registerFactory(
         () => UnfollowUserUseCase(userProfileRepository: serviceLocator()))
     ..registerFactory(() => FollowunfollowCubit(
-        serviceLocator(), serviceLocator(), serviceLocator(),))
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ))
     ..registerFactory(() => GetOtherUserPostsCubit(serviceLocator()))
     ..registerFactory(
         () => GetFollowingListUseCase(userDatRepository: serviceLocator()))
@@ -386,8 +391,10 @@ void _post() {
     ..registerFactory(() => LikePostsUseCase(postRepository: serviceLocator()))
     ..registerFactory(
         () => UnlikePostsUseCase(postRepository: serviceLocator()))
-    ..registerFactory(() =>
-        LikePostBloc(serviceLocator(), serviceLocator(),))
+    ..registerFactory(() => LikePostBloc(
+          serviceLocator(),
+          serviceLocator(),
+        ))
     ..registerFactory(() => SelectTagsCubit())
     ..registerFactory(() => SavePostUseCase(postRepository: serviceLocator()))
     ..registerFactory(() => SavePostCubit(serviceLocator()));
@@ -554,13 +561,13 @@ void _chat() {
     // ..registerFactory(() =>
     //     MessageInfoStoreCubit(id: serviceLocator<AppUserBloc>().appUser.id))
     // ..registerFactory(()=>RecieverChatInfoCubit())
+    ..registerFactory(
+        () => DeleteSingleChatUseCase(chatRepository: serviceLocator()))
+    ..registerFactory(
+        () => BlockUnblockChatUseCase(chatRepository: serviceLocator()))
     ..registerFactory(() => GetMessageCubit(serviceLocator()))
-    ..registerFactory(() => MessageCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-        ))
+    ..registerFactory(() => MessageCubit(serviceLocator(), serviceLocator(),
+        serviceLocator(), serviceLocator(), serviceLocator(),serviceLocator()))
     // ..registerFactory(
     //     () => MessageAttributeBloc(serviceLocator(), serviceLocator()))
     ..registerFactory(() => ChatCubit(serviceLocator(), serviceLocator()));

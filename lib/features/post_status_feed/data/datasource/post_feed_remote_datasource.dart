@@ -41,8 +41,7 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
           .where('creatorUid', isNotEqualTo: userId)
           .where('creatorUid', whereIn: following)
           .where('isThatvdo', isEqualTo: false)
-          .orderBy('createAt', descending: true)
-          .limit(limit);
+          .orderBy('createAt', descending: true);
 
       if (lastDoc != null) {
         // postsQuery = postsQuery.startAfterDocument(lastDoc);
@@ -100,60 +99,56 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
   Future<List<PostModel>> fetchSuggestedPosts(AppUser user) async {
     final postCollection = _firestore.collection('posts');
 
-    try {
-      List<dynamic> interests = user.interests;
-      double? userLat = user.latitude;
-      double? userLon = user.longitude;
+    return [];
+    //   List<Future<QuerySnapshot>> queryFutures = [];
 
-      List<Future<QuerySnapshot>> queryFutures = [];
+    //   if (userLat != null && userLon != null) {
+    //     double latRange = 50 / 111; // Roughly 50km in latitude degrees
+    //     double lonRange = 50 /
+    //         (111 *
+    //             math.cos(userLat * (math.pi / 180))); // Adjusted for longitude
 
-      if (userLat != null && userLon != null) {
-        double latRange = 50 / 111; // Roughly 50km in latitude degrees
-        double lonRange = 50 /
-            (111 *
-                math.cos(userLat * (math.pi / 180))); // Adjusted for longitude
+    //     Query latitudeQuery = postCollection
+    //         .where('latitude', isGreaterThanOrEqualTo: userLat - latRange)
+    //         .where('latitude', isLessThanOrEqualTo: userLat + latRange)
+    //         .where('longitude', isGreaterThanOrEqualTo: userLon - lonRange)
+    //         .where('longitude', isLessThanOrEqualTo: userLon + lonRange);
 
-        Query latitudeQuery = postCollection
-            .where('latitude', isGreaterThanOrEqualTo: userLat - latRange)
-            .where('latitude', isLessThanOrEqualTo: userLat + latRange)
-            .where('longitude', isGreaterThanOrEqualTo: userLon - lonRange)
-            .where('longitude', isLessThanOrEqualTo: userLon + lonRange);
+    //     queryFutures.add(latitudeQuery.get());
+    //   }
 
-        queryFutures.add(latitudeQuery.get());
-      }
+    //   if (interests.isNotEmpty) {
+    //     Query hashtagQuery =
+    //         postCollection.where('hashtags', arrayContainsAny: interests);
 
-      if (interests.isNotEmpty) {
-        Query hashtagQuery =
-            postCollection.where('hashtags', arrayContainsAny: interests);
+    //     queryFutures.add(hashtagQuery.get());
+    //   }
 
-        queryFutures.add(hashtagQuery.get());
-      }
+    //   List<QuerySnapshot> queryResults = await Future.wait(queryFutures);
 
-      List<QuerySnapshot> queryResults = await Future.wait(queryFutures);
+    //   Map<String, PostModel> uniquePosts = {};
+    //   for (var querySnapshot in queryResults) {
+    //     for (var doc in querySnapshot.docs) {
+    //       // Fetch user details for each post
+    //       final userDoc =
+    //           await _firestore.collection('users').doc(doc['creatorUid']).get();
+    //       if (!userDoc.exists) continue;
 
-      Map<String, PostModel> uniquePosts = {};
-      for (var querySnapshot in queryResults) {
-        for (var doc in querySnapshot.docs) {
-          // Fetch user details for each post
-          final userDoc =
-              await _firestore.collection('users').doc(doc['creatorUid']).get();
-          if (!userDoc.exists) continue;
+    //       final PartialUser postUser = PartialUser.fromJson(userDoc.data()!);
+    //       final currentPost =
+    //           PostModel.fromJson(doc.data() as Map<String, dynamic>, postUser);
+    //       uniquePosts[doc.id] = currentPost;
+    //     }
+    //   }
 
-          final PartialUser postUser = PartialUser.fromJson(userDoc.data()!);
-          final currentPost =
-              PostModel.fromJson(doc.data() as Map<String, dynamic>, postUser);
-          uniquePosts[doc.id] = currentPost;
-        }
-      }
+    //   List<PostModel> suggestedPosts = uniquePosts.values.toList();
 
-      List<PostModel> suggestedPosts = uniquePosts.values.toList();
-
-      return suggestedPosts;
-    } catch (e) {
-      // Log or handle the error as needed
-      throw const MainException(
-          errorMsg: AppErrorMessages.forYouPostFetchError);
-    }
+    //   return suggestedPosts;
+    // } catch (e) {
+    //   // Log or handle the error as needed
+    //   throw const MainException(
+    //       errorMsg: AppErrorMessages.forYouPostFetchError);
+    // }
   }
 
   @override

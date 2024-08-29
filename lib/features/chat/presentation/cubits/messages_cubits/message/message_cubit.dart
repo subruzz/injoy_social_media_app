@@ -16,11 +16,14 @@ import 'package:social_media_app/core/utils/other/id_generator.dart';
 import 'package:social_media_app/features/chat/data/model/message_model.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
+import 'package:social_media_app/features/chat/domain/usecases/block_unblock_chat.dart';
 import 'package:social_media_app/features/chat/domain/usecases/delete_message_usecase.dart';
+import 'package:social_media_app/features/chat/domain/usecases/delete_single_chat.dart';
 import 'package:social_media_app/features/chat/domain/usecases/seen_message_update_usecase.dart';
 import 'package:social_media_app/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
+import 'package:social_media_app/features/settings/domain/usecases/delete_chat_usecase.dart';
 
 import '../../../../../../core/common/entities/user_entity.dart';
 import '../../../../../../core/utils/di/init_dependecies.dart';
@@ -35,6 +38,8 @@ class MessageCubit extends Cubit<MessageState> {
   final SendMessageUseCase _sendMessageUseCase;
   final DeleteMessageUsecase _deleteMessageUsecase;
   final SeenMessageUpdateUsecase _seenMessageUpdateUsecase;
+  final BlockUnblockChatUseCase _blockUnblockChatUseCase;
+  final DeleteSingleChatUseCase _deleteChatUsecase;
   Timer? _timer;
   int _elapsedSeconds = 0;
   final _audioRecorder = AudioRecorder();
@@ -49,8 +54,13 @@ class MessageCubit extends Cubit<MessageState> {
 
   MessageReplyEntity _messageReply = MessageReplyEntity();
   MessageReplyEntity get getMessageReply => _messageReply;
-  MessageCubit(this._sendMessageUseCase, this._deleteMessageUsecase,
-      this._seenMessageUpdateUsecase, this._appUserBloc)
+  MessageCubit(
+      this._sendMessageUseCase,
+      this._deleteMessageUsecase,
+      this._seenMessageUpdateUsecase,
+      this._appUserBloc,
+      this._blockUnblockChatUseCase,
+      this._deleteChatUsecase)
       : super(MessageInitial());
   void replyClicked(
       {required bool isMe,
@@ -83,6 +93,38 @@ class MessageCubit extends Cubit<MessageState> {
   void initialState() {
     messageReplyNotifier.value = null;
     emit(MessageInitial());
+  }
+
+  void clearChat(GetMessageState messageState) async {
+    if (messageState.otherUser == null) {
+      log('null');
+      return;
+    }
+    final otherUser = messageState.otherUser!;
+    emit(ChatBlockLoading());
+    final res = await _deleteChatUsecase(DeleteSingleChatUseCaseParams(
+        myId: _appUserBloc.appUser.id, otherUserId: otherUser.id));
+
+    res.fold((failure) => emit(ChatBlockError()),
+        (success) => emit(ChatBlockSuccess()));
+  }
+
+  void blockOrUnblockThisChat(
+      {required GetMessageState messageState, required bool isBlock}) async {
+    if (messageState.otherUser == null) {
+      log('null');
+      return;
+    }
+    final otherUser = messageState.otherUser!;
+
+    emit(ChatBlockLoading());
+    final res = await _blockUnblockChatUseCase(BlockUnblockChatUseCaseParams(
+        myId: _appUserBloc.appUser.id,
+        otherUserId: otherUser.id,
+        isBlock: isBlock));
+
+    res.fold((failure) => emit(ChatBlockError()),
+        (success) => emit(ChatBlockSuccess()));
   }
 
   Future<void> sendMessage({
@@ -317,4 +359,10 @@ class MessageCubit extends Cubit<MessageState> {
   //   res.fold((failure) => emit(MessageFailure(errorMsg: failure.message)),
   //       (success) {});
   // }
+  @override
+  Future<void> close() {
+    _timer?.cancel();
+    _audioRecorder.dispose();
+    return super.close();
+  }
 }

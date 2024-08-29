@@ -7,10 +7,12 @@ class WebWidthHelper extends StatelessWidget {
       this.width = 500,
       this.noWidth = false,
       this.isCentre = true,
+      this.btwMobAndTab = false,
       required this.child});
   final double width;
   final Widget child;
   final bool isCentre;
+  final bool btwMobAndTab;
   final bool noWidth;
   @override
   Widget build(BuildContext context) {
@@ -19,9 +21,11 @@ class WebWidthHelper extends StatelessWidget {
             child: SizedBox(
               width: noWidth
                   ? null
-                  : isThatTabOrDeskTop
+                  : btwMobAndTab
                       ? width
-                      : null,
+                      : isThatTabOrDeskTop
+                          ? width
+                          : null,
               child: child,
             ),
           )
