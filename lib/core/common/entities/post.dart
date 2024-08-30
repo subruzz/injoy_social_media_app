@@ -21,26 +21,28 @@ class PostEntity extends Equatable {
   final double? longitude;
   final String? location;
   final String? extra;
-  PostEntity(
-      {required this.postId,
-      this.isThatvdo = false,
-      required this.isEdited,
-      required this.likesCount,
-      this.extra,
-      required this.isCommentOff,
-      required this.creatorUid,
-      required this.userFullName,
-      this.latitude,
-      this.location,
-      this.longitude,
-      required this.username,
-      this.description,
-      required this.postImageUrl,
-      required this.likes,
-      required this.totalComments,
-      required this.createAt,
-      this.userProfileUrl,
-      required this.hashtags});
+
+  PostEntity({
+    required this.postId,
+    this.isThatvdo = false,
+    required this.isEdited,
+    required this.likesCount,
+    this.extra,
+    required this.isCommentOff,
+    required this.creatorUid,
+    required this.userFullName,
+    this.latitude,
+    this.location,
+    this.longitude,
+    required this.username,
+    this.description,
+    required this.postImageUrl,
+    required this.likes,
+    required this.totalComments,
+    required this.createAt,
+    this.userProfileUrl,
+    required this.hashtags,
+  });
 
   @override
   List<Object?> get props => [
@@ -59,6 +61,30 @@ class PostEntity extends Equatable {
         location,
         longitude,
         isCommentOff,
-        isEdited
+        isEdited,
       ];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'postId': postId,
+      'creatorUid': creatorUid,
+      'username': username,
+      'userFullName': userFullName,
+      'postImageUrl': postImageUrl,
+      'likes': likes,
+      'isCommentOff': isCommentOff,
+      'description': description,
+      'likesCount': likesCount,
+      'totalComments': totalComments,
+      'createAt': createAt,
+      'isThatvdo': isThatvdo,
+      'isEdited': isEdited,
+      'userProfileUrl': userProfileUrl,
+      'hashtags': hashtags,
+      'latitude': latitude,
+      'longitude': longitude,
+      'location': location,
+      'extra': extra,
+    };
+  }
 }

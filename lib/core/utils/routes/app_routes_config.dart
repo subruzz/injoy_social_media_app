@@ -8,7 +8,6 @@ import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_b
 import 'package:social_media_app/features/media_picker/presenation/pages/custom_media_picker_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/auth/presentation/pages/signup_page.dart';
-import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_nav.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/explore/presentation/pages/view_tag_or_location_posts.dart';
 import 'package:social_media_app/features/location/presentation/pages/location_asking_page_builder.dart';

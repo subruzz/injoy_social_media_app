@@ -151,13 +151,16 @@ class FirebaseHelper {
 
   Future<void> createNotification(
       {required CustomNotification notification,
+      required PartialUser? partialUser,
       required NotificationPreferenceEnum notificationPreferenceType,
       String streamTokenFromMsg = ''}) async {
     try {
       log('called notiication thing');
       if (streamTokenFromMsg.isNotEmpty) {
         return await DeviceNotification.sendNotificationToUser(
-            deviceToken: streamTokenFromMsg, notification: notification);
+            user: partialUser,
+            deviceToken: streamTokenFromMsg,
+            notification: notification);
       }
       AppUserModel? user = await getUserDetailsFuture(notification.receiverId);
       if (user == null) return;
@@ -194,7 +197,7 @@ class FirebaseHelper {
 
       if (token.isNotEmpty) {
         await DeviceNotification.sendNotificationToUser(
-            deviceToken: token, notification: notification);
+            user: partialUser, deviceToken: token, notification: notification);
         await _createNotification(notification);
       }
     } catch (e) {

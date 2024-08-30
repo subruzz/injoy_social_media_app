@@ -46,6 +46,7 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
       if (_debouncer.isRunning()) _debouncer.cancel();
       _debouncer.run(() {
         serviceLocator<FirebaseHelper>().createNotification(
+          partialUser: null,
           notificationPreferenceType: NotificationPreferenceEnum.likes,
           notification: CustomNotification(
             notificationId: IdGenerator.generateUniqueId(),

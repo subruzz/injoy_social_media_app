@@ -99,7 +99,6 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
   @override
   Widget build(BuildContext context) {
     final user = context.read<AppUserBloc>().appUser;
-    final bottomBar = context.read<BottomBarCubit>();
     return PopScope(
       canPop: _currentPage == 0,
       onPopInvoked: (didPop) {

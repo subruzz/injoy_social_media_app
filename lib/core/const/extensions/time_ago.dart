@@ -64,31 +64,38 @@ extension CustomDateFormat on DateTime {
 extension TimeAgoOnlineStatus on DateTime {
   String onlineStatus() {
     final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final yesterday = DateTime(now.year, now.month, now.day - 1);
-    final lastSeenThreshold =
-        now.subtract(const Duration(minutes: 5)); // Adjust threshold as needed
+    final duration = now.difference(this);
 
-    if (isAfter(today) && isBefore(lastSeenThreshold)) {
-      // If the user was seen within the last 5 minutes
-      return 'Online now';
-    } else if (isAfter(today)) {
-      // If the user was seen today but not within the last 5 minutes
-      final hourStr = hour < 10 ? '0$hour' : hour.toString();
-      final minuteStr = minute < 10 ? '0$minute' : minute.toString();
-      return 'Last seen today at $hourStr:$minuteStr';
-    } else if (isAfter(yesterday) && isBefore(today)) {
-      // If the user was seen yesterday
-      final hourStr = hour < 10 ? '0$hour' : hour.toString();
-      final minuteStr = minute < 10 ? '0$minute' : minute.toString();
-      return 'Last seen yesterday at $hourStr:$minuteStr';
+    if (duration.inMinutes < 1) {
+      return 'Just now';
+    } else if (duration.inMinutes < 60) {
+      return '${duration.inMinutes} minute${duration.inMinutes > 1 ? 's' : ''} ago';
+    } else if (duration.inHours < 24) {
+      return '${duration.inHours} hour${duration.inHours > 1 ? 's' : ''} ago';
+    } else if (duration.inDays < 2) {
+      return 'Yesterday at ${_formatTime(this)}';
+    } else if (duration.inDays < 7) {
+      return '${duration.inDays} day${duration.inDays > 1 ? 's' : ''} ago';
     } else {
-      // For dates older than yesterday
-      final monthStr = _monthToString(month);
-      final dayStr = day < 10 ? '0$day' : day.toString();
-      final yearStr = year.toString();
-      return 'Last seen $monthStr $dayStr, $yearStr';
+      return _formatFullDate(this);
     }
+  }
+
+  String _formatTime(DateTime dateTime) {
+    final hourStr =
+        dateTime.hour < 10 ? '0${dateTime.hour}' : dateTime.hour.toString();
+    final minuteStr = dateTime.minute < 10
+        ? '0${dateTime.minute}'
+        : dateTime.minute.toString();
+    return '$hourStr:$minuteStr';
+  }
+
+  String _formatFullDate(DateTime dateTime) {
+    final monthStr = _monthToString(dateTime.month);
+    final dayStr =
+        dateTime.day < 10 ? '0${dateTime.day}' : dateTime.day.toString();
+    final yearStr = dateTime.year.toString();
+    return 'Last seen $monthStr $dayStr, $yearStr';
   }
 
   String _monthToString(int month) {

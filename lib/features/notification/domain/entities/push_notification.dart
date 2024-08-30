@@ -1,17 +1,22 @@
+import 'dart:convert';
+
+import 'package:social_media_app/core/common/entities/post.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
+
+import '../../../../core/common/models/post_model.dart';
+
 class PushNotification {
   String body;
   String title;
   String deviceToken;
-  String routeParameterId;
-  String notificationRoute;
-  String userCallingId;
+  final PostEntity? post;
+  final PartialUser? user;
   PushNotification({
     required this.body,
     required this.title,
     required this.deviceToken,
-    this.userCallingId = '',
-    required this.routeParameterId,
-    required this.notificationRoute,
+    this.post,
+    this.user,
   });
 
   Map<String, dynamic> toMap() => {
@@ -25,11 +30,8 @@ class PushNotification {
             'notification': {'channel_id': '1'}
           },
           'data': <String, dynamic>{
-            // 'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-            'route': notificationRoute,
-            'routeParameterId': routeParameterId,
-            'userCallingId': userCallingId,
-            // 'isThatGroupChat': isThatGroupChat,
+            if (post != null) 'post': jsonEncode(post!.toJson()),
+            if (user != null) 'user': jsonEncode(user!.toJson()),
           },
         }
       };

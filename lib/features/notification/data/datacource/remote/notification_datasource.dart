@@ -69,7 +69,7 @@ class NotificationDatasourceImple implements NotificationDatasource {
 
       if (token.isNotEmpty) {
         await DeviceNotification.sendNotificationToUser(
-            deviceToken: token, notification: notification);
+            user: null, deviceToken: token, notification: notification);
         await _createNotification(notification);
       }
     } catch (e) {

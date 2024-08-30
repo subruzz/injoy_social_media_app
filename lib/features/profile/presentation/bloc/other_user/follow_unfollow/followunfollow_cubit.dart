@@ -169,6 +169,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/utils/other/id_generator.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
@@ -265,6 +266,11 @@ class FollowunfollowCubit extends Cubit<FollowunfollowState> {
       });
 
       serviceLocator<FirebaseHelper>().createNotification(
+        partialUser: PartialUser(
+            id: user.id,
+            userName: user.userName,
+            profilePic: user.profilePic,
+            fullName: user.fullName),
         notificationPreferenceType: NotificationPreferenceEnum.follow,
         notification: CustomNotification(
           notificationId: IdGenerator.generateUniqueId(),

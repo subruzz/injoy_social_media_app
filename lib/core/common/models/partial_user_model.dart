@@ -5,6 +5,7 @@ class PartialUser extends Equatable {
   final String? userName;
   final String? fullName;
   final String? profilePic;
+
   const PartialUser({
     required this.id,
     this.userName,
@@ -22,5 +23,14 @@ class PartialUser extends Equatable {
       fullName: json['fullName'],
       profilePic: json['profilePic'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userName': userName,
+      'fullName': fullName,
+      'profilePic': profilePic,
+    };
   }
 }

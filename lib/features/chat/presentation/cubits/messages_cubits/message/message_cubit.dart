@@ -221,6 +221,7 @@ class MessageCubit extends Cubit<MessageState> {
       emit(MessageSuccess());
       if (otherUser.token.isEmpty) return;
       serviceLocator<FirebaseHelper>().createNotification(
+        partialUser: null,
         streamTokenFromMsg: otherUser.token,
         notificationPreferenceType: NotificationPreferenceEnum.messages,
         notification: CustomNotification(
@@ -331,6 +332,7 @@ class MessageCubit extends Cubit<MessageState> {
         (success) {
       if (otherUser.token.isEmpty) return;
       serviceLocator<FirebaseHelper>().createNotification(
+        partialUser: null,
         streamTokenFromMsg: otherUser.token,
         notificationPreferenceType: NotificationPreferenceEnum.messages,
         notification: CustomNotification(
