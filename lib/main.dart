@@ -12,6 +12,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+
 import 'package:social_media_app/core/common/shared_providers/cubit/connectivity_cubit.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
@@ -55,10 +56,7 @@ void main() {
       });
 
       //terminated
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        DeviceNotification.handleTerminatedNotification();
-      });
-
+    
       await initDependencies();
 
       runApp(MyApp(navigatorKey: navigatorKey));

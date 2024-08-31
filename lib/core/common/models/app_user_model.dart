@@ -19,7 +19,6 @@ class AppUserModel extends AppUser {
     super.about,
     super.profilePic,
     required super.token,
-  
     required super.followersCount,
     required super.followingCount,
     // super.followers,
@@ -91,13 +90,14 @@ class AppUserModel extends AppUser {
       occupation: json['occupation'],
       about: json['about'],
       profilePic: json['profilePic'],
-
+      userPrem: json['userPremium'] != null
+          ? UserPremium.fromJson(json['userPremium'])
+          : null,
       notificationPreferences: NotificationPreferences.fromMap(
           json['notificationPreferences'] ?? {}),
       // followers: List<String>.from(json['followers'] ?? []),
       following: List<String>.from(json['following'] ?? []),
       posts: List<String>.from(json['posts'] ?? []),
-     
     );
   }
 
@@ -120,7 +120,7 @@ class AppUserModel extends AppUser {
       'about': about,
       'profilePic': profilePic,
       'visitedUserCount': visitedUserCount,
-   
+
       'followersCount': followersCount,
       'followingCount': followingCount,
       // 'followers': followers,

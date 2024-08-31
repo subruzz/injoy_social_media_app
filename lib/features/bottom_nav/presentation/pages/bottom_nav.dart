@@ -71,6 +71,10 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
   void Function()? pauseReelsVideo;
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DeviceNotification.handleTerminatedNotification();
+    });
+
     serviceLocator<FirebaseHelper>()
         .deleteUnWantedStatus(context.read<AppUserBloc>().appUser.id);
     DeviceNotification.tokenRefresh(context.read<AppUserBloc>().appUser.id);
