@@ -12,11 +12,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:social_media_app/bloc_observer.dart';
-import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/cubit/connectivity_cubit.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
-import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/providers.dart';
 import 'package:social_media_app/core/utils/routes/app_routes_config.dart';
@@ -24,8 +21,6 @@ import 'package:social_media_app/core/common/shared_providers/cubit/app_language
 import 'package:social_media_app/core/theme/app_theme.dart';
 import 'package:social_media_app/features/notification/data/datacource/local/locatl_notification.dart';
 import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
-import 'package:social_media_app/features/profile/presentation/pages/other_user_profile.dart';
-import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';
 import 'package:social_media_app/firebase_options.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -55,29 +50,14 @@ void main() {
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
         if (message.notification != null) {
           log('Tapped message and payload is ${message.notification!.body.toString()}');
-
-          if (message.data.containsKey('user')) {
-            // Convert the user JSON string into a PartialUser object
-            final userJson = jsonDecode(message.data['user']);
-            final partialUser = PartialUser.fromJson(userJson);
-
-            Navigator.of(navigatorKey.currentState!.context).push(
-              MaterialPageRoute(
-                builder: (context) => OtherUserProfilePage(user: partialUser),
-              ),
-            );
-          }
+          DeviceNotification.handleNotificationNavigation(message.data);
         }
       });
 
       //terminated
-
-      final RemoteMessage? message =
-          await FirebaseMessaging.instance.getInitialMessage();
-
-      if (message != null) {
-        Future.delayed(Duration.zero);
-      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        DeviceNotification.handleTerminatedNotification();
+      });
 
       await initDependencies();
 

@@ -12,8 +12,10 @@ final class LikePostClickEvent extends LikePostEvent {
   final AppUser user;
   final String otherUserId;
   final bool isReel;
+  final PostEntity post;
 
   const LikePostClickEvent({
+    required this.post,
     required this.user,
     this.isReel = false,
     required this.postId,

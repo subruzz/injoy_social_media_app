@@ -3,20 +3,21 @@ import 'dart:convert';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 
-import '../../../../core/common/models/post_model.dart';
-
 class PushNotification {
   String body;
   String title;
   String deviceToken;
-  final PostEntity? post;
+  final ({String postId, String? commentId, bool isThatVdo})? post;
   final PartialUser? user;
+  final ({String myId, String otherUserId})? chatNotification;
+
   PushNotification({
     required this.body,
     required this.title,
+    required this.chatNotification,
     required this.deviceToken,
-    this.post,
-    this.user,
+    required this.post,
+    required this.user,
   });
 
   Map<String, dynamic> toMap() => {
@@ -30,8 +31,18 @@ class PushNotification {
             'notification': {'channel_id': '1'}
           },
           'data': <String, dynamic>{
-            if (post != null) 'post': jsonEncode(post!.toJson()),
+            if (post != null)
+              'post': jsonEncode({
+                'isThatVdo': post!.isThatVdo,
+                'postId': post!.postId,
+                'openComment': post!.commentId,
+              }),
             if (user != null) 'user': jsonEncode(user!.toJson()),
+            if (chatNotification != null)
+              'chatNotification': jsonEncode({
+                'myId': chatNotification!.myId,
+                'otherUserId': chatNotification!.otherUserId,
+              }),
           },
         }
       };

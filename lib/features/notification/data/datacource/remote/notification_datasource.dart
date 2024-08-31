@@ -28,9 +28,10 @@ class NotificationDatasourceImple implements NotificationDatasource {
   NotificationDatasourceImple({required FirebaseFirestore firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore;
   @override
-  Future<void> createNotification(
-      {required CustomNotification notification,
-      required NotificationPreferenceEnum notificationPreferenceType}) async {
+  Future<void> createNotification({
+    required CustomNotification notification,
+    required NotificationPreferenceEnum notificationPreferenceType,
+  }) async {
     try {
       log('called');
       AppUserModel user = await getUserInfo(notification.receiverId);
@@ -69,7 +70,11 @@ class NotificationDatasourceImple implements NotificationDatasource {
 
       if (token.isNotEmpty) {
         await DeviceNotification.sendNotificationToUser(
-            user: null, deviceToken: token, notification: notification);
+            chatNotification: null,
+            post: null,
+            user: null,
+            deviceToken: token,
+            notification: notification);
         await _createNotification(notification);
       }
     } catch (e) {

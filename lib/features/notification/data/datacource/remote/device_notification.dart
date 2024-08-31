@@ -16,6 +16,10 @@ import 'package:social_media_app/features/settings/presentation/pages/settings_a
 import 'package:social_media_app/main.dart';
 
 import '../../../../../core/const/app_secrets/service.dart';
+import '../../../../chat/presentation/pages/personal_chat_builder.dart';
+import '../../../../explore/presentation/widgets/all_post_view.dart';
+import '../../../../profile/presentation/pages/other_user_profile.dart';
+import '../../../../reels/presentation/pages/video_page.dart';
 
 class DeviceNotification {
   static final _firebaseMessaging = FirebaseMessaging.instance;
@@ -45,9 +49,6 @@ class DeviceNotification {
       log('  palyload is ${message.data}');
 
       if (message.notification != null) {
-
-
-
         LocatlNotification.showNotification(
             message); // LocalNotificationService.showNotification(
         //     title: message.notification!.title ?? '',
@@ -65,6 +66,70 @@ class DeviceNotification {
           .doc(myId)
           .update({'token': value});
     });
+  }
+
+  static Future<void> handleTerminatedNotification() async {
+    final RemoteMessage? message =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    if (message != null) {
+      log('App opened from terminated state by a notification');
+      Future.delayed(Duration.zero, () {
+        handleNotificationNavigation(message.data);
+      });
+    }
+  }
+
+  static void handleNotificationNavigation(Map<String, dynamic> data) {
+    if (data.containsKey('user')) {
+      final userJson = data['user'];
+      final Map<String, dynamic> userMap = jsonDecode(userJson);
+      final user = PartialUser.fromJson(userMap);
+      Navigator.of(navigatorKey.currentState!.context).push(
+        MaterialPageRoute(
+          builder: (context) => OtherUserProfilePage(user: user),
+        ),
+      );
+    } else if (data.containsKey('post')) {
+      final postJson = data['post'];
+      final Map<String, dynamic> postMap = jsonDecode(postJson);
+      final String? postId = postMap['postId'];
+      final bool? isThatVdo = postMap['isThatVdo'];
+      if (postId == null || isThatVdo == null) return;
+
+      if (isThatVdo) {
+        Navigator.of(navigatorKey.currentState!.context).push(
+          MaterialPageRoute(
+            builder: (context) => VideoReelPage(
+              postId: postId,
+              showOne: true,
+            ),
+          ),
+        );
+      } else {
+        Navigator.of(navigatorKey.currentState!.context).push(
+          MaterialPageRoute(
+            builder: (context) => AllPostView(
+              initialIndex: 0,
+              postId: postId,
+              showOnlyOne: true,
+            ),
+          ),
+        );
+      }
+    } else if (data.containsKey('chatNotification')) {
+      final postJson = data['chatNotification'];
+      final Map<String, dynamic> postMap = jsonDecode(postJson);
+      final String otherUserId = postMap['myId']; // Adjust key as necessary
+
+      Navigator.of(navigatorKey.currentState!.context).push(
+        MaterialPageRoute(
+          builder: (context) => PersonalChatBuilder(otherUserId: otherUserId),
+        ),
+      );
+    } else {
+      log('Unknown notification type');
+    }
   }
 
   static Future<String?> getAccessToken() async {
@@ -89,7 +154,16 @@ class DeviceNotification {
   static sendNotificationToUser(
       {required String deviceToken,
       required PartialUser? user,
-      required CustomNotification notification}) async {
+      required CustomNotification notification,
+      required ({
+        String myId,
+        String otherUserId,
+      })? chatNotification,
+      required ({
+        String postId,
+        String? commentId,
+        bool isThatVdo
+      })? post}) async {
     String notificationRoute;
     String routeParameterId;
     switch (notification.notificationType) {
@@ -108,6 +182,8 @@ class DeviceNotification {
     }
 
     PushNotification detail = PushNotification(
+        chatNotification: chatNotification,
+        post: post,
         title: notification.senderName ?? "",
         body: notification.text,
         deviceToken: deviceToken,

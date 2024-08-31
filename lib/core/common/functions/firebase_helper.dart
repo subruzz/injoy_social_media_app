@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
@@ -152,12 +153,19 @@ class FirebaseHelper {
   Future<void> createNotification(
       {required CustomNotification notification,
       required PartialUser? partialUser,
+      required ({
+        String myId,
+        String otherUserId,
+      })? chatNotification,
+      required ({String postId, String? commentId, bool isThatVdo})? post,
       required NotificationPreferenceEnum notificationPreferenceType,
       String streamTokenFromMsg = ''}) async {
     try {
       log('called notiication thing');
       if (streamTokenFromMsg.isNotEmpty) {
         return await DeviceNotification.sendNotificationToUser(
+            post: post,
+            chatNotification: chatNotification,
             user: partialUser,
             deviceToken: streamTokenFromMsg,
             notification: notification);
@@ -197,7 +205,11 @@ class FirebaseHelper {
 
       if (token.isNotEmpty) {
         await DeviceNotification.sendNotificationToUser(
-            user: partialUser, deviceToken: token, notification: notification);
+            chatNotification: chatNotification,
+            post: post,
+            user: partialUser,
+            deviceToken: token,
+            notification: notification);
         await _createNotification(notification);
       }
     } catch (e) {
@@ -305,5 +317,27 @@ class FirebaseHelper {
   Future<void> updateUserLastSeen(String uId, bool val) async {
     final userRef = _firestore.collection('users').doc(uId);
     await userRef.update({'showLastSeen': val});
+  }
+
+  Future<PostEntity?> fetchSinglePostById({
+    required PartialUser user,
+    required String postId,
+  }) async {
+    final postCollection = _firestore.collection(FirebaseCollectionConst.posts);
+
+    try {
+      final postDoc = await postCollection.doc(postId).get();
+
+      if (!postDoc.exists) {
+        return null; // Post not found
+      }
+
+      final postData = postDoc.data()!;
+      final post = PostModel.fromJson(postData, user);
+
+      return post;
+    } catch (e) {
+      throw const MainException();
+    }
   }
 }

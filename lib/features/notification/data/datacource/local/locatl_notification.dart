@@ -4,16 +4,13 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-import '../../../../../core/common/entities/post.dart';
-import '../../../../../core/common/models/partial_user_model.dart';
+import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
 import '../../../../../main.dart';
-import '../../../../profile/presentation/pages/other_user_profile.dart';
 import '../../../../settings/presentation/pages/settings_actvity_page.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseBackgroundNotification(RemoteMessage message) async {
-  String payload = jsonEncode(message.data);
+  // String payload = jsonEncode(message.data);
 
   // if (message.notification != null) {
   //   LocatlNotification.showNotification(message);
@@ -42,33 +39,9 @@ class LocatlNotification {
     final payload = response.payload;
     if (payload != null && payload.isNotEmpty) {
       log('Foreground message tap, payload: $payload');
-
       try {
         final Map<String, dynamic> data = jsonDecode(payload);
-
-        if (data.containsKey('user')) {
-          // Decode the inner JSON string
-          final userJson = data['user'];
-          final Map<String, dynamic> userMap = jsonDecode(userJson);
-          final user = PartialUser.fromJson(userMap);
-          Navigator.of(navigatorKey.currentState!.context).push(
-            MaterialPageRoute(
-              builder: (context) => OtherUserProfilePage(user: user),
-            ),
-          );
-        } else if (data.containsKey('post')) {
-          // // Decode the inner JSON string
-          // final postJson = data['post'];
-          // final Map<String, dynamic> postMap = jsonDecode(postJson);
-          // final post = PostEntity.fromJson(postMap);
-          // Navigator.of(navigatorKey.currentState!.context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => PostDetailPage(post: post),
-          //   ),
-          // );
-        } else {
-          log('Unknown notification data');
-        }
+        DeviceNotification.handleNotificationNavigation(data);
       } catch (e) {
         log('Error decoding payload: $e');
       }

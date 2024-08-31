@@ -39,7 +39,7 @@ class AssetLocalSourceImpl implements AssetLocalSource {
             maxHeight: 10000,
             minWidth: 100,
             minHeight: 100,
-            ignoreSize: false,
+            ignoreSize: true,
           ),
         ),
         videoOption: const FilterOption(

@@ -266,6 +266,8 @@ class FollowunfollowCubit extends Cubit<FollowunfollowState> {
       });
 
       serviceLocator<FirebaseHelper>().createNotification(
+        post: null,
+        chatNotification: null,
         partialUser: PartialUser(
             id: user.id,
             userName: user.userName,

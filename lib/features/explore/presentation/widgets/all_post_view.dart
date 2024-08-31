@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/common/functions/firebase_helper.dart';
+import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/extensions/localization.dart';
@@ -25,12 +27,14 @@ class AllPostView extends StatelessWidget {
       this.isMyposts = false,
       this.showOnlyOne = false,
       this.post,
-      required this.posts});
+      this.postId,
+      this.posts = const []});
   final int initialIndex;
   final List<PostEntity> posts;
   final PostEntity? post;
   final bool isMyposts;
   final bool showOnlyOne;
+  final String? postId;
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -39,36 +43,59 @@ class AllPostView extends StatelessWidget {
         appBar: AppCustomAppbar(
           title: l10n!.posts,
         ),
-        body: (post != null && showOnlyOne)
-            ? EachPost(currentPost: post!)
-            : post != null
-                ? PostSuggestionFromPost(
-                    post: post!,
-                    userId: me.id,
-                    l10n: l10n,
-                  )
-                : isMyposts
-                    ? BlocConsumer<GetUserPostsBloc, GetUserPostsState>(
-                        builder: (context, state) {
-                          if (state is GetUserPostsSuccess) {
-                            if (state.userPosts.isEmpty) {
-                              NoPostHolder(text: l10n.no_posts_found);
-                            }
-                            return AllPostListView(
-                                initialIndex: initialIndex,
-                                posts: state.userPosts);
-                          }
-                          return const EmptyDisplay();
-                        },
-                        listener: (context, state) {
-                          if (state is GetUserPostsSuccess &&
-                              state.userPosts.isEmpty) {
-                            Navigator.pop(context);
-                          }
-                        },
+        body: postId != null && showOnlyOne
+            ? FutureBuilder<PostEntity?>(
+                future: serviceLocator<FirebaseHelper>().fetchSinglePostById(
+                    user: PartialUser(
+                        id: me.id,
+                        profilePic: me.profilePic,
+                        userName: me.userName,
+                        fullName: me.fullName),
+                    postId: postId!),
+                builder: (BuildContext context,
+                    AsyncSnapshot<PostEntity?> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData) {
+                    return Center(child: Text('Post not found'));
+                  } else {
+                    final post = snapshot.data!;
+                    return EachPost(currentPost: post);
+                  }
+                },
+              )
+            : (post != null && showOnlyOne)
+                ? EachPost(currentPost: post!)
+                : post != null
+                    ? PostSuggestionFromPost(
+                        post: post!,
+                        userId: me.id,
+                        l10n: l10n,
                       )
-                    : AllPostListView(
-                        initialIndex: initialIndex, posts: posts));
+                    : isMyposts
+                        ? BlocConsumer<GetUserPostsBloc, GetUserPostsState>(
+                            builder: (context, state) {
+                              if (state is GetUserPostsSuccess) {
+                                if (state.userPosts.isEmpty) {
+                                  NoPostHolder(text: l10n.no_posts_found);
+                                }
+                                return AllPostListView(
+                                    initialIndex: initialIndex,
+                                    posts: state.userPosts);
+                              }
+                              return const EmptyDisplay();
+                            },
+                            listener: (context, state) {
+                              if (state is GetUserPostsSuccess &&
+                                  state.userPosts.isEmpty) {
+                                Navigator.pop(context);
+                              }
+                            },
+                          )
+                        : AllPostListView(
+                            initialIndex: initialIndex, posts: posts));
   }
 }
 

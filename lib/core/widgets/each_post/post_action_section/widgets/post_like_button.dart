@@ -78,6 +78,7 @@ class PostLike extends StatelessWidget {
             // likeAnim();
             post.likes.add(me.id);
             context.read<LikePostBloc>().add(LikePostClickEvent(
+                post: post,
                 isReel: isReel,
                 user: me,
                 postId: post.postId,

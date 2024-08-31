@@ -61,6 +61,8 @@ class CommentBasicCubit extends Cubit<CommentBasicState> {
       emit(CommentAddedSuccess());
       if (creatorId == user.id) return;
       serviceLocator<FirebaseHelper>().createNotification(
+        chatNotification: null,
+        post: (postId: postId, commentId: null, isThatVdo: isReel),
         partialUser: null,
         notificationPreferenceType: NotificationPreferenceEnum.comments,
         notification: CustomNotification(

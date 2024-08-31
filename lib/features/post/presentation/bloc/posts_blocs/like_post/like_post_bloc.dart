@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/utils/di/init_dependecies.dart';
@@ -46,6 +47,12 @@ class LikePostBloc extends Bloc<LikePostEvent, LikePostState> {
       if (_debouncer.isRunning()) _debouncer.cancel();
       _debouncer.run(() {
         serviceLocator<FirebaseHelper>().createNotification(
+          post: (
+            postId: event.postId,
+            commentId: null,
+            isThatVdo: event.post.isThatvdo
+          ),
+          chatNotification: null,
           partialUser: null,
           notificationPreferenceType: NotificationPreferenceEnum.likes,
           notification: CustomNotification(

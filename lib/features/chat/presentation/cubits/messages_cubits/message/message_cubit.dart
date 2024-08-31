@@ -221,6 +221,11 @@ class MessageCubit extends Cubit<MessageState> {
       emit(MessageSuccess());
       if (otherUser.token.isEmpty) return;
       serviceLocator<FirebaseHelper>().createNotification(
+        chatNotification: (
+          myId: _appUserBloc.appUser.id,
+          otherUserId: otherUser.id
+        ),
+        post: null,
         partialUser: null,
         streamTokenFromMsg: otherUser.token,
         notificationPreferenceType: NotificationPreferenceEnum.messages,
@@ -332,6 +337,11 @@ class MessageCubit extends Cubit<MessageState> {
         (success) {
       if (otherUser.token.isEmpty) return;
       serviceLocator<FirebaseHelper>().createNotification(
+        chatNotification: (
+          myId: _appUserBloc.appUser.id,
+          otherUserId: otherUser.id
+        ),
+        post: null,
         partialUser: null,
         streamTokenFromMsg: otherUser.token,
         notificationPreferenceType: NotificationPreferenceEnum.messages,
