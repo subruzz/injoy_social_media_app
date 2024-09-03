@@ -14,6 +14,7 @@ import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
 import 'package:social_media_app/core/widgets/app_related/common_text.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/widgets/each_post/post_content_section/widgets/post_hashtag.dart';
+import 'package:social_media_app/core/widgets/each_post/post_top_section/widgets/post_option_button.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../features/bottom_nav/presentation/cubit/bottom_bar_cubit.dart';
@@ -363,6 +364,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                             isReel: true,
                           ),
                           AppSizedBox.sizedBox20H,
+                          // if (widget.pageController != null)
+                          //   PostOptionButton(
+                          //       isShorts: true,
+                          //       post: widget.reel!,
+                          //       currentPostIndex: widget.currentIndex ?? 0,
+                          //       pagecontroller: widget.pageController!)
                         ],
                       ),
                     ),

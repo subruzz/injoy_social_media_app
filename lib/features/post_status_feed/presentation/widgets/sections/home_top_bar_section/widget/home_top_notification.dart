@@ -9,6 +9,7 @@ import '../../../../../../../core/const/app_config/app_padding.dart';
 import '../../../../../../../core/const/assets/app_assets.dart';
 import '../../../../../../../core/theme/color/app_colors.dart';
 import '../../../../../../../core/widgets/app_related/app_svg.dart';
+import '../../../../../../../core/widgets/dialog/app_dialogs.dart';
 import '../../../../../../notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 
 class HomeTopNotification extends StatefulWidget {
@@ -38,6 +39,11 @@ class _HomeTopNotificationState extends State<HomeTopNotification> {
             children: [
               CustomSvgIcon(
                 onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => ErrorPopup(),
+                  );
+                  return;
                   Navigator.pushNamed(context, MyAppRouteConst.notificationPage,
                       arguments: {'notificationcubit': _notificationCubit});
                 },

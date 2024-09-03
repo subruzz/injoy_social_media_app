@@ -78,6 +78,7 @@ flutter:
     - assets/gifs/
     - assets/icons/
     - assets/svgs/
+    - assets/lotties/
     - .env
 
   fonts:

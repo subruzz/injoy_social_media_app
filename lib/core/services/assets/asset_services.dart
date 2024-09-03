@@ -65,6 +65,8 @@ class AssetServices {
 
   //to save images to gallery
   static Future<void> saveImageWithPath({required String imageUrl}) async {
+    log('save image called');
+
     ToastService.showToast('Media will be downloaded shortly...');
     try {
       final HttpClient client = HttpClient();
@@ -133,72 +135,57 @@ class AssetServices {
   }
 
   static Future<void> saveVideo({required String videoUrl}) async {
-    ToastService.showToast('Media will be downloaded shortly...');
+    log('save video called');
     final HttpClient client = HttpClient();
+    HttpClientRequest? req;
+    HttpClientResponse? resp;
 
     try {
-      final HttpClientRequest req = await client.getUrl(Uri.parse(videoUrl));
-      final HttpClientResponse resp = await req.close();
+      req = await client.getUrl(Uri.parse(videoUrl));
+      resp = await req.close();
 
-      final String name = videoName(videoUrl: videoUrl);
+      final String name = videoName(videoUrl);
+
       final Directory tmpDir = await getTemporaryDirectory();
       final File file = File('${tmpDir.path}/$name');
 
-      // Ensure directory exists
-      if (!file.parent.existsSync()) {
-        file.parent.createSync(recursive: true);
-      }
-
+      // Delete the file if it already exists
       if (file.existsSync()) {
         file.deleteSync();
       }
 
+      // Write the file content from the response
       resp.listen(
         (List<int> data) {
+          log('listening download of asset video');
           file.writeAsBytesSync(data, mode: FileMode.append);
         },
         onDone: () async {
-          if (await file.exists()) {
-            log('File size: ${await file.length()}');
-
-            // Verify the file before saving
-            if (await file.length() > 0) {
-              await checkRequest(() async {
-                final AssetEntity? asset =
-                    await PhotoManager.editor.saveVideo(file, title: name);
-                log('saved asset: $asset');
-                if (asset == null) {
-                  ToastService.showToast('Failed to save video.');
-                }
-              });
-            } else {
-              log('File is empty or corrupted.');
-              ToastService.showToast(
-                  'Failed to download video, file is corrupted.');
-            }
-          } else {
-            log('File does not exist.');
-            ToastService.showToast(
-                'Failed to download video, file does not exist.');
+          try {
+            await checkRequest(() async {
+              final AssetEntity? asset =
+                  await PhotoManager.editor.saveVideo(file, title: name);
+              log('saved asset: $asset');
+            });
+          } catch (e) {
+            log('Failed to save video to gallery: $e');
+          } finally {
+            client.close();
           }
-          client.close();
         },
         onError: (e) {
-          ToastService.showToast('Error during download: $e');
-          log('Error during download: $e');
+          log('Error while downloading video: $e');
           client.close();
         },
         cancelOnError: true,
       );
     } catch (e) {
-      ToastService.showToast(
-          'There was an error downloading the media, please try again!');
-      log('Error initiating download: $e');
+      log('Failed to download video: $e');
       client.close();
     }
   }
 
-  static String videoName({required String videoUrl}) {
+  static String videoName(String videoUrl) {
     final String extName =
         Uri.parse(videoUrl).pathSegments.last.split('.').last;
     final int name = DateTime.now().microsecondsSinceEpoch ~/

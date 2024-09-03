@@ -69,4 +69,5 @@ class AppAssetsConst {
   // JSON (Lottie files)
   static const String location = 'assets/images/location_lottie.json';
   static const String noChatHolder = 'assets/images/no_chat.json';
+  static const String nointernet = 'assets/lotties/no_internet.json';
 }
