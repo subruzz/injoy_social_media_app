@@ -44,3 +44,4 @@ app.*.map.json
 # Environment variables
 .env
 lib/core/const/app_secrets/
+lib/firebase_options.dart
