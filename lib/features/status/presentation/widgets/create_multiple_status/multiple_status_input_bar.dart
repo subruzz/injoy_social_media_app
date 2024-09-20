@@ -10,7 +10,7 @@ import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 
 import '../../../../../core/const/enums/message_type.dart';
-import '../../../../../core/const/extensions/localization.dart';
+import '../../../../../core/utils/extensions/localization.dart';
 import '../../../../chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 
 class MultipleStatusInputBar extends StatelessWidget {

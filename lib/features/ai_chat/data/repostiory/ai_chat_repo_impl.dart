@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/features/ai_chat/data/datasource/ai_chat_datasource.dart';
 import 'package:social_media_app/features/ai_chat/domain/enitity/ai_chat_entity.dart';
 import 'package:social_media_app/features/ai_chat/domain/repository/ai_chat_repository.dart';

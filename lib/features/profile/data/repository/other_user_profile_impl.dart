@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/features/profile/data/data_source/other_user_data_source.dart';
 import 'package:social_media_app/features/profile/domain/repository/other_user_repository.dart';
 

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -14,16 +13,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'package:social_media_app/core/common/shared_providers/cubit/connectivity_cubit.dart';
+import 'package:social_media_app/core/utils/di/di.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
-import 'package:social_media_app/core/providers.dart';
+import 'package:social_media_app/core/common/shared_providers/providers.dart';
 import 'package:social_media_app/core/utils/routes/app_routes_config.dart';
 import 'package:social_media_app/core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
 import 'package:social_media_app/core/theme/app_theme.dart';
 import 'package:social_media_app/features/notification/data/datacource/local/locatl_notification.dart';
 import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
 import 'package:social_media_app/firebase_options.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();

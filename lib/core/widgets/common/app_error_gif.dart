@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 
 class AppErrorGif extends StatelessWidget {
   const AppErrorGif({super.key});

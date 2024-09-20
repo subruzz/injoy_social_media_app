@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/features/chat/data/datasource/chat_remote_datasource.dart';
 import 'package:social_media_app/features/chat/data/model/chat_model.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';

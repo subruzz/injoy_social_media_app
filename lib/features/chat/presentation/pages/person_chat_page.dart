@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
-import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
+import 'package:social_media_app/core/widgets/common/empty_display.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
@@ -12,7 +12,7 @@ import 'package:social_media_app/features/chat/presentation/widgets/person_chat_
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_bottom_input_bar/widgets/chat_send_button.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/chat_listing_section_section.dart';
 
-import '../../../../core/utils/di/init_dependecies.dart';
+import '../../../../core/utils/di/di.dart';
 import '../cubits/messages_cubits/message/message_cubit.dart';
 import '../widgets/person_chat_page/sections/personal_chat_top_bar/personal_page_top_bar.dart';
 

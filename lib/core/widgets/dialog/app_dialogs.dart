@@ -3,7 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 import 'package:social_media_app/core/widgets/common/user_profile.dart';

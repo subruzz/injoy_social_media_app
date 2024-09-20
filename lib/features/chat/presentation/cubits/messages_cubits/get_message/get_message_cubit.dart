@@ -8,9 +8,9 @@ import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 
-import '../../../../../../core/errors/failure.dart';
+import '../../../../../../core/utils/errors/failure.dart';
 import '../../../../../../core/common/functions/firebase_helper.dart';
-import '../../../../../../core/utils/di/init_dependecies.dart';
+import '../../../../../../core/utils/di/di.dart';
 import '../../../../domain/usecases/get_single_user_message_usecase.dart';
 
 part 'get_message_state.dart';

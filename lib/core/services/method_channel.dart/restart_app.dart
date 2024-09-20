@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-
+//! not used in the app
 /// `Restart` class provides a method to restart a Flutter application.
 ///
 /// It uses the Flutter platform channels to communicate with the platform-specific code.

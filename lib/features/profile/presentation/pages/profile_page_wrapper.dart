@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/common/premium_badge.dart';
 import 'package:social_media_app/features/auth/presentation/pages/login_page.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_my_reels/get_my_reels_cubit.dart';

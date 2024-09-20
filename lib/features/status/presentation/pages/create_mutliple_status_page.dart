@@ -1,9 +1,7 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/common/overlay_loading_holder.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
@@ -13,6 +11,7 @@ import 'package:social_media_app/features/status/presentation/widgets/common/sta
 import 'package:social_media_app/features/status/presentation/widgets/create_multiple_status/multiple_status_input_bar.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets.dart';
 import 'package:social_media_app/core/widgets/media_picker/widgets/selected_assets_indicator.dart';
+import '../../../../core/utils/di/di.dart';
 import '../../../../core/widgets/messenger/messenger.dart';
 import '../../../media_picker/presenation/pages/crop_image_page.dart';
 

@@ -3,9 +3,10 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+
+import '../../../../core/utils/di/di.dart';
 
 abstract class UserDataDatasource {
   Future<List<PostModel>> getAllPostsByUser(PartialUser user);

@@ -12,7 +12,7 @@ import '../../../features/notification/data/datacource/remote/device_notificatio
 import '../../../features/notification/domain/entities/customnotifcation.dart';
 import '../../../features/settings/domain/entity/ui_entity/enums.dart';
 import '../../const/fireabase_const/firebase_field_const.dart';
-import '../../errors/exception.dart';
+import '../../utils/errors/exception.dart';
 
 class FirebaseHelper {
   final FirebaseFirestore _firestore;

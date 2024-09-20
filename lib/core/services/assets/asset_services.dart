@@ -10,9 +10,13 @@ import 'package:photo_manager/platform_utils.dart';
 
 import '../method_channel.dart/app_toast.dart';
 
+/// A service class for managing image and video assets.
 class AssetServices {
   static final ImagePicker _picker = ImagePicker();
 
+  /// Picks a single image from the gallery with a specified image quality.
+  ///
+  /// Returns a [File] object of the picked image or `null` if no image is selected.
   static Future<File?> pickOneImage() async {
     final result =
         await _picker.pickImage(source: ImageSource.gallery, imageQuality: 40);
@@ -20,6 +24,9 @@ class AssetServices {
     return File(result.path);
   }
 
+  /// Picks multiple images from the gallery with a specified image quality.
+  ///
+  /// Returns a list of [File] objects for the picked images, or an empty list if none are selected.
   static Future<List<File?>> pickMultipleImages() async {
     final result = await _picker.pickMultiImage(limit: 3, imageQuality: 30);
     final List<File?> resultToFile = [];
@@ -29,6 +36,9 @@ class AssetServices {
     return resultToFile;
   }
 
+  /// Picks multiple images from the gallery and returns them as byte data.
+  ///
+  /// Returns a list of [Uint8List] containing the byte data of the picked images, or `null` if none are selected.
   static Future<List<Uint8List>?> pickMultipleImagesAsBytes() async {
     final result = await _picker.pickMultiImage(limit: 3, imageQuality: 30);
     final List<Uint8List> resultToBytes = [];
@@ -43,6 +53,9 @@ class AssetServices {
     return resultToBytes;
   }
 
+  /// Picks a single image from the gallery and returns it as byte data.
+  ///
+  /// Returns the byte data of the picked image as [Uint8List], or `null` if no image is selected.
   static Future<Uint8List?> pickSingleImageAsBytes() async {
     final result =
         await _picker.pickImage(source: ImageSource.gallery, imageQuality: 30);
@@ -53,6 +66,9 @@ class AssetServices {
     return bytes;
   }
 
+  /// Compresses an image file to a specified target path with a defined quality.
+  ///
+  /// Returns the compressed [File] object or `null` if the compression fails.
   static Future<File?> compressImage(File file, String targetPath) async {
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
@@ -63,7 +79,10 @@ class AssetServices {
     return File(result.path);
   }
 
-  //to save images to gallery
+  /// Saves an image from a URL to the device's gallery.
+  ///
+  /// Displays a toast message indicating that the media will be downloaded.
+  /// Logs success or error messages based on the download outcome.
   static Future<void> saveImageWithPath({required String imageUrl}) async {
     log('save image called');
 
@@ -99,6 +118,9 @@ class AssetServices {
     }
   }
 
+  /// Checks for permission to access the device's photo library.
+  ///
+  /// Calls the [onAuth] function if permission is granted.
   static Future<void> checkRequest(void Function() onAuth) async {
     final state = await PhotoManager.requestPermissionExtend(
       requestOption: const PermissionRequestOption(
@@ -111,6 +133,9 @@ class AssetServices {
     onAuth();
   }
 
+  /// Retrieves the path to download images, creating a unique file name.
+  ///
+  /// Returns the full file path as a [String].
   static Future<String> downloadPath() async {
     final int name = DateTime.now().microsecondsSinceEpoch ~/
         Duration.microsecondsPerMillisecond;
@@ -134,6 +159,9 @@ class AssetServices {
     return '$dir/$name.jpg';
   }
 
+  /// Saves a video from a URL to the device's gallery.
+  ///
+  /// Logs the process and handles errors during the download.
   static Future<void> saveVideo({required String videoUrl}) async {
     log('save video called');
     final HttpClient client = HttpClient();
@@ -185,6 +213,9 @@ class AssetServices {
     }
   }
 
+  /// Generates a name for the video based on its URL and the current timestamp.
+  ///
+  /// Returns the generated name as a [String].
   static String videoName(String videoUrl) {
     final String extName =
         Uri.parse(videoUrl).pathSegments.last.split('.').last;

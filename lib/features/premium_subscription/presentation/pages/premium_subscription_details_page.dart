@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/const/extensions/datetime_to_string.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
-import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
-import 'package:social_media_app/core/widgets/app_related/common_text.dart';
+import 'package:social_media_app/core/utils/extensions/datetime_to_string.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
+import 'package:social_media_app/core/widgets/common/app_padding.dart';
+import 'package:social_media_app/core/widgets/common/common_text.dart';
 
 import '../../../../core/const/enums/premium_type.dart';
 

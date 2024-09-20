@@ -1,6 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
-import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
+import 'package:social_media_app/core/widgets/common/empty_display.dart';
 import 'package:social_media_app/core/widgets/common/page_view_indicator.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
 

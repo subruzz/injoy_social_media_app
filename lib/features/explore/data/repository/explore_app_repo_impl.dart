@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/features/explore/data/datasource/explore_app_datasource.dart';
 import 'package:social_media_app/features/explore/domain/entities/explore_search_location.dart';
 import 'package:social_media_app/features/explore/domain/repositories/explore_app_repository.dart';

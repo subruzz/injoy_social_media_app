@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/const/extensions/time_ago.dart';
+import 'package:social_media_app/core/utils/extensions/time_ago.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
-import 'package:social_media_app/core/widgets/app_related/common_text.dart';
+import 'package:social_media_app/core/widgets/common/common_text.dart';
 import 'package:social_media_app/core/widgets/common/user_profile.dart';
 import 'package:social_media_app/features/chat/domain/entities/chat_entity.dart';
 import 'package:social_media_app/features/chat/presentation/pages/personal_chat_builder.dart';

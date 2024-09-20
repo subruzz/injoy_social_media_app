@@ -3,8 +3,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:social_media_app/core/const/enums/location_enum.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/features/location/data/datasource/local/location_local_datasource.dart';
 import 'package:social_media_app/features/location/data/datasource/remote/search_location.dart';
 import 'package:social_media_app/features/location/data/models/location_search_model.dart';

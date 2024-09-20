@@ -1,4 +1,13 @@
+/// Extension for adding time-related methods to the `DateTime` class.
 extension TimeAgo on DateTime {
+  /// Returns a human-readable string representing the time elapsed since the
+  /// DateTime instance.
+  ///
+  /// For example:
+  /// - If the instance was 30 seconds ago, returns '30s'.
+  /// - If it was 5 minutes ago, returns '5m'.
+  /// - If it was 3 days ago, returns '3d'.
+  /// - If it was more than a year ago, returns 'Xy'.
   String timeAgo() {
     final now = DateTime.now();
     final difference = now.difference(this);
@@ -24,7 +33,9 @@ extension TimeAgo on DateTime {
   }
 }
 
+/// Extension for formatting DateTime instances into a 12-hour clock format.
 extension TimeFormat on DateTime {
+  /// Returns the time formatted in `hh:mm AM/PM` format.
   String to12HourFormat() {
     final hour = this.hour;
     final minute = this.minute;
@@ -35,7 +46,13 @@ extension TimeFormat on DateTime {
   }
 }
 
+/// Extension for custom date formatting for DateTime instances.
 extension CustomDateFormat on DateTime {
+  /// Returns a custom formatted string based on the date.
+  ///
+  /// - If the date is today, returns the time in 12-hour format.
+  /// - If the date was yesterday, returns 'Yesterday'.
+  /// - Otherwise, returns a short date string in `MM/DD/YYYY` format.
   String toCustomFormat() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -52,7 +69,7 @@ extension CustomDateFormat on DateTime {
     }
   }
 
-  // Helper method to convert DateTime to a short date string (e.g., "MMM dd, yyyy")
+  /// Helper method to convert DateTime to a short date string (e.g., "MM/DD/YYYY").
   String toShortDateString() {
     final year = this.year.toString();
     final month = this.month.toString().padLeft(2, '0');
@@ -61,7 +78,13 @@ extension CustomDateFormat on DateTime {
   }
 }
 
+/// Extension for displaying online status based on DateTime instances.
 extension TimeAgoOnlineStatus on DateTime {
+  /// Returns a human-readable string indicating how long ago the user was online.
+  ///
+  /// - If the user was online less than a minute ago, returns 'Just now'.
+  /// - If it was an hour ago, returns 'X hours ago'.
+  /// - If it was more than a week ago, returns a formatted date string.
   String onlineStatus() {
     final now = DateTime.now();
     final duration = now.difference(this);
@@ -82,50 +105,33 @@ extension TimeAgoOnlineStatus on DateTime {
   }
 
   String _formatTime(DateTime dateTime) {
-    final hourStr =
-        dateTime.hour < 10 ? '0${dateTime.hour}' : dateTime.hour.toString();
-    final minuteStr = dateTime.minute < 10
-        ? '0${dateTime.minute}'
-        : dateTime.minute.toString();
+    final hourStr = dateTime.hour < 10 ? '0${dateTime.hour}' : dateTime.hour.toString();
+    final minuteStr = dateTime.minute < 10 ? '0${dateTime.minute}' : dateTime.minute.toString();
     return '$hourStr:$minuteStr';
   }
 
   String _formatFullDate(DateTime dateTime) {
     final monthStr = _monthToString(dateTime.month);
-    final dayStr =
-        dateTime.day < 10 ? '0${dateTime.day}' : dateTime.day.toString();
+    final dayStr = dateTime.day < 10 ? '0${dateTime.day}' : dateTime.day.toString();
     final yearStr = dateTime.year.toString();
     return 'Last seen $monthStr $dayStr, $yearStr';
   }
 
   String _monthToString(int month) {
     switch (month) {
-      case 1:
-        return 'Jan';
-      case 2:
-        return 'Feb';
-      case 3:
-        return 'Mar';
-      case 4:
-        return 'Apr';
-      case 5:
-        return 'May';
-      case 6:
-        return 'Jun';
-      case 7:
-        return 'Jul';
-      case 8:
-        return 'Aug';
-      case 9:
-        return 'Sep';
-      case 10:
-        return 'Oct';
-      case 11:
-        return 'Nov';
-      case 12:
-        return 'Dec';
-      default:
-        return '';
+      case 1: return 'Jan';
+      case 2: return 'Feb';
+      case 3: return 'Mar';
+      case 4: return 'Apr';
+      case 5: return 'May';
+      case 6: return 'Jun';
+      case 7: return 'Jul';
+      case 8: return 'Aug';
+      case 9: return 'Sep';
+      case 10: return 'Oct';
+      case 11: return 'Nov';
+      case 12: return 'Dec';
+      default: return '';
     }
   }
 }

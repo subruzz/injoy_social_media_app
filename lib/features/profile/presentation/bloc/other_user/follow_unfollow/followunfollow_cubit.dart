@@ -171,16 +171,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
+import 'package:social_media_app/core/utils/di/di.dart';
 import 'package:social_media_app/core/utils/other/id_generator.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
-import 'package:social_media_app/features/notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:social_media_app/features/profile/domain/usecases/other_user/follow_user.dart';
 import 'package:social_media_app/features/profile/domain/usecases/other_user/unfollow_user.dart';
 import 'package:social_media_app/features/settings/domain/entity/ui_entity/enums.dart';
 
 import '../../../../../../core/common/functions/firebase_helper.dart';
-import '../../../../../../core/utils/di/init_dependecies.dart';
 
 part 'followunfollow_state.dart';
 

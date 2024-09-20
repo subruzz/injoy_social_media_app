@@ -3,7 +3,7 @@ import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/hero_dialog.dart';
-import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
+import 'package:social_media_app/core/widgets/common/app_svg.dart';
 import 'package:social_media_app/features/bottom_nav/presentation/web/popup_container_web.dart';
 import 'package:social_media_app/features/post/presentation/pages/comment_screen.dart';
 import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/social_action_text.dart';

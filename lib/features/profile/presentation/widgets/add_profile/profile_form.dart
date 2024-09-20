@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/utils/functions/date_picker.dart';
+import 'package:social_media_app/core/common/functions/date_picker.dart';
 import 'package:social_media_app/core/utils/validations/validations.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/index.dart';

@@ -26,7 +26,7 @@ import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/settings/domain/usecases/delete_chat_usecase.dart';
 
 import '../../../../../../core/common/entities/user_entity.dart';
-import '../../../../../../core/utils/di/init_dependecies.dart';
+import '../../../../../../core/utils/di/di.dart';
 import '../../../../../notification/domain/entities/customnotifcation.dart';
 import '../../../../../settings/domain/entity/ui_entity/enums.dart';
 import '../../../../domain/entities/message_reply_entity.dart';

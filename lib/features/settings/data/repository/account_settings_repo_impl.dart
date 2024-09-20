@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
-import 'package:social_media_app/core/errors/firebase_auth_errors.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/firebase_auth_errors.dart';
 import 'package:social_media_app/features/settings/data/datasource/account_settings_data_source.dart';
 import 'package:social_media_app/features/settings/domain/repository/account_settings_repository.dart';
 

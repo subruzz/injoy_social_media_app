@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/dialog/app_dialogs.dart';

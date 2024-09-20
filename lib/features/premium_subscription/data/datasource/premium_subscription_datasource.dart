@@ -9,7 +9,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/enums/location_enum.dart';
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/features/premium_subscription/domain/entities/payment_intent_basic.dart';
 import 'package:http/http.dart' as http;
 

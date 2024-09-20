@@ -4,8 +4,8 @@ import 'dart:typed_data';
 
 import 'package:fpdart/fpdart.dart';
 
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
 import 'package:social_media_app/features/post/data/datasources/remote/post_remote_datasource.dart';
 import 'package:social_media_app/features/post/domain/enitities/hash_tag.dart';

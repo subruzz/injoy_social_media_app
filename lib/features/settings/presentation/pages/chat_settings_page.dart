@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/overlay_loading_holder.dart';
 import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';
@@ -16,7 +15,8 @@ import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/features/settings/presentation/cubit/settings/settings_cubit.dart';
 
 import '../../../../core/const/enums/media_picker_type.dart';
-import '../../../../core/widgets/app_related/app_padding.dart';
+import '../../../../core/utils/di/di.dart';
+import '../../../../core/widgets/common/app_padding.dart';
 
 class ChatSettingsPage extends StatelessWidget {
   const ChatSettingsPage({super.key});

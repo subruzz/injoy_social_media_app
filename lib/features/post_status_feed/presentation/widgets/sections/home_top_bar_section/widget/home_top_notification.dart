@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 
 import '../../../../../../../core/const/app_config/app_padding.dart';
 import '../../../../../../../core/const/assets/app_assets.dart';
 import '../../../../../../../core/theme/color/app_colors.dart';
-import '../../../../../../../core/widgets/app_related/app_svg.dart';
+import '../../../../../../../core/utils/di/di.dart';
+import '../../../../../../../core/widgets/common/app_svg.dart';
 import '../../../../../../../core/widgets/dialog/app_dialogs.dart';
 import '../../../../../../notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 

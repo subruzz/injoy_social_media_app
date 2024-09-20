@@ -5,7 +5,7 @@ import 'package:social_media_app/features/profile/presentation/widgets/user_prof
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/user_profile_tab_section/widgets/user_tab.dart';
 
 import '../../../../../../core/common/entities/user_entity.dart';
-import '../../../../../../core/const/extensions/localization.dart';
+import '../../../../../../core/utils/extensions/localization.dart';
 
 class UserProfileTabSection extends StatelessWidget {
   const UserProfileTabSection(

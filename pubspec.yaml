@@ -1,4 +1,3 @@
-
 name: social_media_app
 description: "A new Flutter project."
 publish_to: "none"
@@ -8,67 +7,68 @@ version: 1.4.0+6
 environment:
   sdk: ">=3.4.3 <4.0.0"
 dependencies:
-  cached_network_image: ^3.3.1
-  change_app_package_name: ^1.3.0
-  cloud_firestore: ^5.0.0
-  connectivity_plus: ^6.0.5
-  cupertino_icons: ^1.0.6
-  equatable: ^2.0.5
-  firebase_auth: ^5.0.0
-  firebase_core: ^3.0.0
-  firebase_messaging: ^15.0.3
-  firebase_storage: ^12.0.0
+  cached_network_image: ^3.3.1 # Caching for network images to improve performance
+  change_app_package_name: ^1.3.0 # Change the app package name on the fly
+  cloud_firestore: ^5.0.0 # Cloud Firestore for database services
+  connectivity_plus: ^6.0.5 # Connectivity status (WiFi, mobile data)
+  cupertino_icons: ^1.0.6 # iOS-style icons
+  equatable: ^2.0.5 # Value equality for Dart objects
+  firebase_auth: ^5.0.0 # Authentication services from Firebase
+  firebase_core: ^3.0.0 # Core functionality for Firebase
+  firebase_messaging: ^15.0.3 # Push notifications via Firebase
+  firebase_storage: ^12.0.0 # Cloud storage for Firebase
   flutter:
-    sdk: flutter
-  flutter_animate: ^4.5.0
-  flutter_bloc: ^8.1.5
-  flutter_cache_manager: ^3.3.2
-  flutter_dotenv: ^5.1.0
-  flutter_image_compress: ^2.3.0
-  flutter_launcher_icons: ^0.13.1
-  flutter_local_notifications: ^17.2.1+2
+    sdk: flutter # Flutter framework
+  flutter_animate: ^4.5.0 # Animation library for Flutter
+  flutter_bloc: ^8.1.5 # State management using the BLoC pattern
+  flutter_cache_manager: ^3.3.2 # Manage cached files and data
+  flutter_dotenv: ^5.1.0 # Load environment variables from a .env file
+  flutter_image_compress: ^2.3.0 # Compress images before uploading
+  flutter_launcher_icons: ^0.13.1 # Custom launcher icons for Android/iOS
+  flutter_local_notifications: ^17.2.1+2 # Local notifications for Flutter
   flutter_localizations:
-    sdk: flutter
-  flutter_screenutil: ^5.9.3
-  flutter_speed_dial: ^7.0.0
-  flutter_staggered_grid_view: ^0.7.0
-  flutter_stripe: ^11.0.0
-  flutter_svg: ^2.0.10+1
-  fpdart: ^1.1.0
-  geocoding: ^3.0.0
-  geolocator: ^12.0.0
-  get_it: ^7.7.0
-  giphy_picker: ^3.0.2
-  google_sign_in: ^6.2.1
-  googleapis: ^13.2.0
-  googleapis_auth: ^1.6.0
-  http: ^1.2.2
-  image_cropper: ^7.1.0
-  image_picker: ^1.1.2
-  intl: any
-  just_audio: ^0.9.39
-  loading_animation_widget: ^1.2.1
-  lottie: ^3.1.2
-  path: ^1.9.0
-  path_provider: ^2.1.3
-  permission_handler: ^11.3.1
-  photo_manager: ^3.2.0
-  photo_manager_image_provider: ^2.1.1
-  record: ^5.1.2
-  rive: ^0.13.7
-  share_plus: ^10.0.0
-  shared_preferences: ^2.2.3
-  shimmer: ^3.0.0
-  smooth_page_indicator: ^1.1.0
-  story_view: ^0.16.5
-  swipe_to: ^1.0.6
-  url_launcher: ^6.3.0
-  uuid: ^4.4.0
-  video_player: ^2.9.1
+    sdk: flutter # Localization support for Flutter
+  flutter_screenutil: ^5.9.3 # Responsive design utilities
+  flutter_speed_dial: ^7.0.0 # Floating action button with speed dial options
+  flutter_staggered_grid_view: ^0.7.0 # Staggered grid view layout
+  flutter_stripe: ^11.0.0 # Stripe payment integration for Flutter
+  flutter_svg: ^2.0.10+1 # SVG image rendering
+  fpdart: ^1.1.0 # Functional programming utilities for Dart
+  geocoding: ^3.0.0 # Convert coordinates to human-readable addresses
+  geolocator: ^12.0.0 # Get location information
+  get_it: ^7.7.0 # Dependency injection for Flutter
+  giphy_picker: ^3.0.2 # Pick GIFs from Giphy
+  google_sign_in: ^6.2.1 # Google sign-in authentication
+  googleapis: ^13.2.0 # Access Google APIs
+  googleapis_auth: ^1.6.0 # Authentication for Google APIs
+  http: ^1.2.2 # Simplified HTTP client for Dart
+  image_cropper: ^7.1.0 # Crop images before use
+  image_picker: ^1.1.2 # Select images from gallery or camera
+  intl: any # Internationalization and localization utilities
+  just_audio: ^0.9.39 # Audio playback capabilities
+  loading_animation_widget: ^1.2.1 # Loading animations for better UX
+  lottie: ^3.1.2 # Render animations created in Adobe After Effects
+  path: ^1.9.0 # File path utilities
+  path_provider: ^2.1.3 # Find commonly used locations on the filesystem
+  permission_handler: ^11.3.1 # Request and check permissions
+  photo_manager: ^3.2.0 # Manage photos and videos from the gallery
+  photo_manager_image_provider: ^2.1.1 # Provide images from the photo manager
+  record: ^5.1.2 # Record audio
+  rive: ^0.13.7 # Rive animations for interactive designs
+  share_plus: ^10.0.0 # Share content with other apps
+  shared_preferences: ^2.2.3 # Store simple data persistently
+  shimmer: ^3.0.0 # Shimmer effect for loading states
+  smooth_page_indicator: ^1.1.0 # Page indicators for scrolling views
+  story_view: ^0.16.5 # Create story-like views
+  swipe_to: ^1.0.6 # Swipe-to-dismiss functionality
+  url_launcher: ^6.3.0 # Launch URLs in the browser or apps
+  uuid: ^4.4.0 # Generate universally unique identifiers
+  video_player: ^2.9.1 # Video playback capabilities
+
 dev_dependencies:
-  flutter_lints: ^3.0.0
+  flutter_lints: ^3.0.0 # Linting rules for Flutter projects
   flutter_test:
-    sdk: flutter
+    sdk: flutter # Flutter testing framework
 
 flutter:
   generate: true
@@ -96,6 +96,7 @@ flutter:
           weight: 800
         - asset: assets/fonts/poppins/Poppins-Black.ttf
           weight: 900 
+
 flutter_launcher_icons:
   android: "launcher_icon"
   image_path: "assets/images/app_logo.png"

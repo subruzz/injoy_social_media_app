@@ -10,7 +10,7 @@ import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_field_const.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/features/profile/data/model/user_profile_model.dart';
 
 abstract interface class UserProfileDataSource {

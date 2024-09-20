@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
+import 'package:social_media_app/core/widgets/common/app_padding.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/tag_location_item.dart';
 
 class HashtagPostsTopWidgetSection extends StatelessWidget {

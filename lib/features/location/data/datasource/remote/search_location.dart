@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/features/location/data/models/location_search_model.dart';
 
 abstract interface class SearchLocationDataSource {

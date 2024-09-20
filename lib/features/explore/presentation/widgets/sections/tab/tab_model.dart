@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
+import 'package:social_media_app/core/widgets/common/app_svg.dart';
 
 class ExploreTabIcons extends StatelessWidget {
   const ExploreTabIcons(

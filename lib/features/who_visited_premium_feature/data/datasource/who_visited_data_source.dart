@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/domain/entity/uservisit.dart';
 
 abstract interface class WhoVisitedDataSource {

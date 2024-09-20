@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+/// A utility class for creating reusable `SizedBox` widgets 
+/// with responsive height and width, using the `FlutterScreenUtil` 
+/// package for scaling.
+///
+/// This class provides static getter methods for commonly used 
+/// `SizedBox` dimensions, allowing for consistent spacing in the app.
 class AppSizedBox {
   // Private constructor to prevent direct instantiation
   AppSizedBox._();
+
   // Height SizedBoxes
   static SizedBox get sizedBox3H => SizedBox(height: 3.h);
-
   static SizedBox get sizedBox5H => SizedBox(height: 5.h);
   static SizedBox get sizedBox10H => SizedBox(height: 10.h);
   static SizedBox get sizedBox15H => SizedBox(height: 15.h);

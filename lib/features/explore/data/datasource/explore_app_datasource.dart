@@ -6,7 +6,7 @@ import 'package:social_media_app/core/common/models/hashtag_model.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/models/post_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/features/explore/data/model/explore_seearch_location_model.dart';
 
 import '../../../../core/const/app_msg/app_error_msg.dart';

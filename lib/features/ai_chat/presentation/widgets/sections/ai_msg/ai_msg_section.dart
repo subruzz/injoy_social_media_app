@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/sections/ai_msg/widgets/ai_chat_bubble.dart';
 import 'package:social_media_app/features/ai_chat/presentation/widgets/sections/ai_msg/widgets/ai_generating_shimmer.dart';
 
 import '../../../../../../core/widgets/messenger/messenger.dart';
-import '../../../../../../core/widgets/app_related/empty_display.dart';
+import '../../../../../../core/widgets/common/empty_display.dart';
 import '../ai_welcome/ai_welcome.dart';
 
 class AiMsgSection extends StatelessWidget {

@@ -6,8 +6,8 @@ import 'package:get_it/get_it.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
 
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';

@@ -7,13 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/core/utils/other/debouncer.dart';
 import 'package:social_media_app/core/utils/other/id_generator.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/like_post.dart';
 import 'package:social_media_app/features/post/domain/usecases/post/unlike_post.dart';
 
+import '../../../../../../core/utils/di/di.dart';
 import '../../../../../settings/domain/entity/ui_entity/enums.dart';
 
 part 'like_post_event.dart';

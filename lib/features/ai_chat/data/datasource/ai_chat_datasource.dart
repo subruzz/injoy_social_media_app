@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/features/ai_chat/domain/enitity/ai_chat_entity.dart';
 
 abstract interface class AiChatDatasource {

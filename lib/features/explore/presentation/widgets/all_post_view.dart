@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,17 +5,17 @@ import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
-import 'package:social_media_app/core/widgets/app_related/common_text.dart';
-import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
+import 'package:social_media_app/core/widgets/common/common_text.dart';
+import 'package:social_media_app/core/widgets/common/empty_display.dart';
 import 'package:social_media_app/features/explore/domain/usecases/get_suggested_posts_from_post.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/suggestion_from_post/suggestion_from_post_cubit.dart';
 import 'package:social_media_app/core/widgets/each_post/each_post.dart';
 import 'package:social_media_app/core/widgets/no_post_holder.dart';
 
 import '../../../../core/common/entities/post.dart';
+import '../../../../core/utils/di/di.dart';
 import '../../../../core/widgets/loading/circular_loading.dart';
 import '../../../profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
 

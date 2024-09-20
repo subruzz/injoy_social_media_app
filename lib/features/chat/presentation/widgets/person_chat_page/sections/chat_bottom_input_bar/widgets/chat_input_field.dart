@@ -4,7 +4,7 @@ import 'package:giphy_picker/giphy_picker.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
+import 'package:social_media_app/core/widgets/common/empty_display.dart';
 import 'package:social_media_app/core/widgets/textfields/custom_textform_field.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';

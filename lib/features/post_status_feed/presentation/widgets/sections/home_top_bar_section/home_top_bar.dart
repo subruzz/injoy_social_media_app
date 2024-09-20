@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/core/widgets/app_related/app_top_bar_text_with_premium.dart';
+import 'package:social_media_app/core/widgets/common/app_top_bar_text_with_premium.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_top_bar_section/widget/home_top_notification.dart';
 
 class HomeTopBar extends StatelessWidget {

@@ -4,7 +4,7 @@ import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 
 import '../../../../core/common/models/partial_user_model.dart';
-import '../../../../core/errors/failure.dart';
+import '../../../../core/utils/errors/failure.dart';
 
 abstract interface class StatusFeedRepository {
   Stream<List<StatusEntity>> getStatuses(String uId);

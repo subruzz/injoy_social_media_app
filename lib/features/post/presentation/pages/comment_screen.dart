@@ -12,7 +12,8 @@ import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/comment_bottom_input_section.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/bottom_input_section/widgets/each_comment.dart';
 import 'package:social_media_app/features/post/presentation/widgets/comment_screen/widgets/no_comment_display.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+
+import '../../../../core/utils/di/di.dart';
 
 class CommentScreen extends StatefulWidget {
   const CommentScreen(

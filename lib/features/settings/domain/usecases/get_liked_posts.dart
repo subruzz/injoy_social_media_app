@@ -3,7 +3,7 @@ import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/settings/domain/repository/library_repostory.dart';
 
-import '../../../../core/errors/failure.dart';
+import '../../../../core/utils/errors/failure.dart';
 
 class GetLikedPostsUseCase
     implements UseCase<List<PostEntity>, GetLikedPostsUseCaseParams> {

@@ -1,5 +1,5 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/features/post/domain/enitities/comment_entity.dart';
 
 abstract interface class CommentRepository {

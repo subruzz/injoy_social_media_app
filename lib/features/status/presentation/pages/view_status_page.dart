@@ -9,11 +9,11 @@ import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/const/extensions/datetime_to_string.dart';
-import 'package:social_media_app/core/partial_user_widget.dart';
+import 'package:social_media_app/core/utils/extensions/datetime_to_string.dart';
+import 'package:social_media_app/core/widgets/common/partial_user_widget.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
-import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
+import 'package:social_media_app/core/widgets/common/empty_display.dart';
 import 'package:social_media_app/core/widgets/web/web_width_helper.dart';
 import 'package:social_media_app/features/status/presentation/bloc/delete_status/delete_status_bloc.dart';
 import 'package:social_media_app/features/status/presentation/widgets/view_status/status_delete_popup.dart';
@@ -21,7 +21,7 @@ import 'package:social_media_app/features/status/presentation/widgets/view_statu
 import 'package:social_media_app/features/status/presentation/widgets/view_status/story_items.dart';
 import 'package:story_view/controller/story_controller.dart';
 
-import '../../../../core/utils/di/init_dependecies.dart';
+import '../../../../core/utils/di/di.dart';
 import '../../../../core/widgets/shimmers/partial_user_shimmer.dart';
 import '../../../post_status_feed/presentation/bloc/status_viewers/status_viewers_cubit.dart';
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:image_cropper/image_cropper.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_floating_button.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_floating_button.dart';
 import 'package:social_media_app/core/widgets/common/page_view.dart';
 import 'package:social_media_app/core/widgets/common/page_view_indicator.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
-import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
-import 'package:social_media_app/core/widgets/app_related/custom_scrollable_ontent.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
+import 'package:social_media_app/core/widgets/common/app_padding.dart';
+import 'package:social_media_app/core/widgets/common/custom_scrollable_ontent.dart';
 import 'package:social_media_app/features/auth/presentation/pages/web/auth_web.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/google_auth_builder.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/signup/signup_button.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import '../../../../core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_choosing_text.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/auth/auth_form.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/shared/separating_divider.dart';
 import 'package:social_media_app/core/widgets/welcome_msg/welcome_msg.dart';
 
+import '../../../../core/utils/di/di.dart';
 import '../bloc/signup_bloc/signup_bloc.dart';
 
 class SignupPage extends StatefulWidget {

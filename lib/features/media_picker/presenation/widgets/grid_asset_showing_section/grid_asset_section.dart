@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/enums/media_picker_type.dart';
-import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
+import 'package:social_media_app/core/widgets/common/empty_display.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/media_picker/presenation/bloc/assets_bloc/assets_bloc.dart';
 import 'package:social_media_app/features/media_picker/presenation/widgets/grid_asset_showing_section/widgets/each_assets.dart';

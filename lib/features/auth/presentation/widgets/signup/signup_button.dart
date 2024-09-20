@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
-import 'package:social_media_app/core/widgets/app_related/common_text.dart';
+import 'package:social_media_app/core/widgets/common/common_text.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/other_user/other_profile/other_profile_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/others_profile/other_user_follow_message_section.dart';

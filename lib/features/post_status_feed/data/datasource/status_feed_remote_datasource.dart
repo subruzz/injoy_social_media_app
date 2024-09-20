@@ -8,10 +8,11 @@ import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_field_const.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/core/utils/other/cut_off_time.dart';
 import 'package:social_media_app/features/status/data/models/status_model.dart';
+
+import '../../../../core/utils/di/di.dart';
 
 abstract interface class StatusFeedRemoteDatasource {
   Stream<List<StatusEntity>> getStatuses(String uid);

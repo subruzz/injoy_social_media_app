@@ -3,7 +3,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
+import 'package:social_media_app/core/widgets/common/app_svg.dart';
 
 class SingleAsset extends StatelessWidget {
   const SingleAsset(

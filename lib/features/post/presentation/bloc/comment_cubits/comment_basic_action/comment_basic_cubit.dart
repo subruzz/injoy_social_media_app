@@ -13,7 +13,7 @@ import 'package:social_media_app/features/post/domain/usecases/comment/create_co
 import 'package:social_media_app/features/post/domain/usecases/comment/delete_comment.dart';
 import 'package:social_media_app/features/post/domain/usecases/comment/update_comment.dart';
 
-import '../../../../../../core/utils/di/init_dependecies.dart';
+import '../../../../../../core/utils/di/di.dart';
 import '../../../../../settings/domain/entity/ui_entity/enums.dart';
 
 part 'comment_basic_state.dart';

@@ -5,8 +5,8 @@ import 'dart:developer';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:social_media_app/core/const/enums/location_enum.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/const/extensions/placemark.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+import 'package:social_media_app/core/utils/extensions/placemark.dart';
 
 abstract interface class LocationLocalDataSource {
   Future<LocationStatus> handleLocationPermission();

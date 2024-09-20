@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/features/settings/data/datasource/library_data_source.dart';
 
 import '../../domain/repository/library_repostory.dart';

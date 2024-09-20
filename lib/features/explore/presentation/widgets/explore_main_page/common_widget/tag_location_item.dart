@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/widgets/app_related/common_text.dart';
+import 'package:social_media_app/core/widgets/common/common_text.dart';
 
 import '../../common_widget/tag_location_symbol.dart';
 

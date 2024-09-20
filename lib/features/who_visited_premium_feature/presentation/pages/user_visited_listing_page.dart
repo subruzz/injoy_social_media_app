@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/core/widgets/common/app_error_gif.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/partial_user_widget.dart';
+import 'package:social_media_app/core/widgets/common/partial_user_widget.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/domain/entity/uservisit.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/bloc/who_visited/who_visited_bloc.dart';
+
+import '../../../../core/utils/di/di.dart';
 
 class UserVisitedListingPage extends StatelessWidget {
   const UserVisitedListingPage({super.key});

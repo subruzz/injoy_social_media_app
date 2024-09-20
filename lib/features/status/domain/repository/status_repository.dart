@@ -1,7 +1,7 @@
 
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/common/entities/status_entity.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
 

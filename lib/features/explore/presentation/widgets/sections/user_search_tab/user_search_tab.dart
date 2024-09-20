@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/features/explore/presentation/blocs/search_user/search_user_cubit.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/explore_search_loading.dart';
-import 'package:social_media_app/core/partial_user_widget.dart';
+import 'package:social_media_app/core/widgets/common/partial_user_widget.dart';
 import 'package:social_media_app/features/explore/presentation/widgets/common_widget/search_empty_error_text.dart';
 
 class UserSearchTab extends StatelessWidget {

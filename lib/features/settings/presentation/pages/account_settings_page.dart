@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/utils/routes/page_transitions.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
-import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
+import 'package:social_media_app/core/widgets/common/app_padding.dart';
 import 'package:social_media_app/core/widgets/common/custom_divider.dart';
 import 'package:social_media_app/features/profile/presentation/pages/username_check_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';

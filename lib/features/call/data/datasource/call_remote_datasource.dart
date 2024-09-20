@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/features/call/data/model/call_model.dart';
 import 'package:social_media_app/features/call/domain/entities/call_entity.dart';
 

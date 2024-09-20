@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/auth/presentation/widgets/login/forgot_password_text.dart';
 import 'package:social_media_app/features/settings/presentation/cubit/settings/settings_cubit.dart';
 
 import '../../../../core/const/app_config/app_sizedbox.dart';
-import '../../../../core/text_field_icon.dart';
+import '../../../../core/widgets/common/text_field_icon.dart';
 import '../../../../core/utils/validations/validations.dart';
 import '../../../../core/widgets/textfields/custom_textform_field.dart';
 

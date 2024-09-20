@@ -2,7 +2,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:fpdart/src/either.dart';
 
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
 import 'package:social_media_app/features/status/domain/repository/status_repository.dart';
 

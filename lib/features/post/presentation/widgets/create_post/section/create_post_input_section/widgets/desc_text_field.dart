@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../../../core/const/extensions/localization.dart';
+import '../../../../../../../../core/utils/extensions/localization.dart';
 
 class DescriptionTextfield extends StatelessWidget {
   const DescriptionTextfield(

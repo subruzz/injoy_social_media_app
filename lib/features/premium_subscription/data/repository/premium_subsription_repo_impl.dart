@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:fpdart/fpdart.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/features/premium_subscription/data/datasource/premium_subscription_datasource.dart';
 import 'package:social_media_app/features/premium_subscription/domain/entities/payment_intent_basic.dart';
 import 'package:social_media_app/features/premium_subscription/domain/repositories/premium_subscription_repository.dart';

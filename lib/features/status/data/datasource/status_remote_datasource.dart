@@ -7,11 +7,12 @@ import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_field_const.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_storage_const.dart';
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';
 import 'package:social_media_app/core/services/firebase/firebase_storage.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
+
+import '../../../../core/utils/di/di.dart';
 
 abstract interface class StatusRemoteDatasource {
   Future<void> createStatus(SingleStatusEntity singleStatus);

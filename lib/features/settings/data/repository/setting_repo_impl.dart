@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/features/settings/data/datasource/settings_datasource.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 import 'package:social_media_app/features/settings/domain/repository/settings_repository.dart';

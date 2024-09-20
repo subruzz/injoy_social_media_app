@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/widgets/app_related/empty_display.dart';
+import 'package:social_media_app/core/widgets/common/empty_display.dart';
 
-import 'package:social_media_app/core/partial_user_widget.dart';
+import 'package:social_media_app/core/widgets/common/partial_user_widget.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_followers_list/get_followers_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_following_list/get_following_list_cubit.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+
+import '../../../../core/utils/di/di.dart';
 
 class SeeFollowersFollowingPage extends StatelessWidget {
   const SeeFollowersFollowingPage({super.key, required this.initialIndex});

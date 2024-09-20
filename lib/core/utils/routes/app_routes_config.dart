@@ -76,14 +76,8 @@ class MyAppRouter {
         return MaterialPageRoute(builder: (_) => const BottomBarBuilder());
 
       case MyAppRouteConst.addProfilePage:
-        return MaterialPageRoute(builder: (_) =>const  AddProfilePage());
+        return MaterialPageRoute(builder: (_) => const AddProfilePage());
 
-      case MyAppRouteConst.interestSelectRoute:
-        final List<String>? interest = settings.arguments as List<String>?;
-        return MaterialPageRoute(
-          builder: (_) =>
-              InterestSelectionPage(alreadySelectedInterests: interest),
-        );
       case MyAppRouteConst.hashtagOrLocationPost:
         final Map<String, dynamic> args =
             settings.arguments as Map<String, dynamic>;

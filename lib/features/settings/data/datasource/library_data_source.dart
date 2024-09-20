@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/common/models/partial_user_model.dart';
 import '../../../../core/common/models/post_model.dart';
 import '../../../../core/const/fireabase_const/firebase_collection.dart';
-import '../../../../core/errors/exception.dart';
+import '../../../../core/utils/errors/exception.dart';
 
 abstract interface class LibraryDataSource {
   Future<List<PostModel>> getSavedPosts({required List<String> savedPosts});

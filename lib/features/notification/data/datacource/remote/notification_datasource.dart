@@ -4,11 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 
+import '../../../../../core/utils/di/di.dart';
 import '../../../../settings/domain/entity/ui_entity/enums.dart';
 
 abstract interface class NotificationDatasource {

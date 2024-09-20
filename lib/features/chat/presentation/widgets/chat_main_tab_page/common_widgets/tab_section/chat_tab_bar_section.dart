@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/chat_main_tab_page/sections/tab_section/widgets/chat_calls_tab.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/chat_main_tab_page/sections/tab_section/widgets/chat_message_tab.dart';
 

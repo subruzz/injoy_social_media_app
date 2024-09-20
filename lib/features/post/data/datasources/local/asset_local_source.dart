@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 abstract class AssetLocalSource {

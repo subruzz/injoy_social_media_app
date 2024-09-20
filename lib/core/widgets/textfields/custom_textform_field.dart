@@ -5,7 +5,7 @@ import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
-import 'package:social_media_app/core/widgets/app_related/app_svg.dart';
+import 'package:social_media_app/core/widgets/common/app_svg.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;

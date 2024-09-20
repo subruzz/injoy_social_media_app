@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_floating_button.dart';
-import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_floating_button.dart';
+import 'package:social_media_app/core/widgets/common/app_padding.dart';
 
 class NextButton extends StatelessWidget {
   const NextButton({super.key, required this.onpressed,required this.child});

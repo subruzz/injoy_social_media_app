@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/cubit/app_language/app_language_cubit.dart';
+import 'package:social_media_app/core/utils/di/di.dart';
 import 'package:social_media_app/features/ai_chat/presentation/cubits/cubit/ai_chat_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
 import 'package:social_media_app/features/post/presentation/bloc/comment_cubits/like_comment/like_comment_cubit.dart';
@@ -8,7 +9,6 @@ import 'package:social_media_app/features/profile/presentation/bloc/other_user/f
 import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_my_reels/get_my_reels_cubit.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
 import 'package:social_media_app/features/settings/presentation/cubit/settings/settings_cubit.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/features/auth/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
@@ -18,7 +18,7 @@ import 'package:social_media_app/features/profile/presentation/bloc/user_profile
 
 import 'package:provider/single_child_widget.dart';
 
-import 'common/shared_providers/cubit/connectivity_cubit.dart';
+import 'cubit/connectivity_cubit.dart';
 
 List<SingleChildWidget> myProviders = [
   BlocProvider(create: (context) => AppLanguageCubit()),

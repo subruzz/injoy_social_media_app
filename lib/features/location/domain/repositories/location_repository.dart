@@ -1,6 +1,6 @@
 
 import 'package:fpdart/fpdart.dart';
-import 'package:social_media_app/core/errors/failure.dart';
+import 'package:social_media_app/core/utils/errors/failure.dart';
 import 'package:social_media_app/features/location/data/models/location_search_model.dart';
 import 'package:social_media_app/features/location/domain/entities/location.dart';
 

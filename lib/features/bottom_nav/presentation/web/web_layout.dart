@@ -6,7 +6,7 @@ import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/hero_dialog.dart';
-import 'package:social_media_app/core/widgets/app_related/app_top_bar_text_with_premium.dart';
+import 'package:social_media_app/core/widgets/common/app_top_bar_text_with_premium.dart';
 import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/dialog/general_dialog_for_web.dart';
 import 'package:social_media_app/core/widgets/web/web_width_helper.dart';
@@ -15,7 +15,7 @@ import 'package:social_media_app/features/notification/presentation/pages/cubit/
 import 'package:social_media_app/features/notification/presentation/pages/notification_page.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
-import '../../../../core/utils/di/init_dependecies.dart';
+import '../../../../core/utils/di/di.dart';
 import '../../../chat/presentation/cubits/chat/chat_cubit.dart';
 import '../../../explore/presentation/blocs/explore_user/explore_user_cubit.dart';
 import '../../../popup_new_post.dart';

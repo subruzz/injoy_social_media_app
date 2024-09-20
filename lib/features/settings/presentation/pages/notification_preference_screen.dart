@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/widgets/app_related/app_padding.dart';
+import 'package:social_media_app/core/widgets/common/app_padding.dart';
 import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/common/common_switch.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';

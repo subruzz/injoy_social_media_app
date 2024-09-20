@@ -8,12 +8,12 @@ import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/services/assets/asset_services.dart';
 
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/app_related/common_text.dart';
+import 'package:social_media_app/core/widgets/common/common_text.dart';
 import 'package:social_media_app/core/widgets/common/common_list_tile.dart';
 import 'package:social_media_app/core/widgets/common/premium_badge.dart';
 import 'package:social_media_app/core/widgets/dialog/app_info_dialog.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:social_media_app/core/widgets/app_related/common_text.dart';
+import 'package:social_media_app/core/widgets/common/common_text.dart';
 
 class NoPostHolder extends StatelessWidget {
   const NoPostHolder({super.key, required this.text});

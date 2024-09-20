@@ -3,9 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/features/settings/presentation/cubit/cubit/liked_or_saved_posts_cubit.dart';
 import 'package:social_media_app/features/settings/presentation/pages/liked_or_saved_post_page.dart';
+
+import '../../../../core/utils/di/di.dart';
 
 class LikedOrSavedPostBuilder extends StatelessWidget {
   const LikedOrSavedPostBuilder({super.key, this.isLiked = true});

@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/functions/firebase_helper.dart';
-import 'package:social_media_app/core/errors/exception.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
+
+import '../../../../core/utils/di/di.dart';
 
 abstract class ReelsDataSource {
   Future<GetReelsResponse> getRandomReels(

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';
 
 import '../../../../../../core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
@@ -11,8 +11,8 @@ import '../../../../../../core/const/app_config/app_padding.dart';
 import '../../../../../../core/const/assets/app_assets.dart';
 import '../../../../../../core/theme/color/app_colors.dart';
 import '../../../../../../core/utils/routes/tranistions/app_routes_const.dart';
-import '../../../../../../core/widgets/app_related/app_padding.dart';
-import '../../../../../../core/widgets/app_related/app_svg.dart';
+import '../../../../../../core/widgets/common/app_padding.dart';
+import '../../../../../../core/widgets/common/app_svg.dart';
 import '../../../../../../core/widgets/dialog/general_dialog_for_web.dart';
 import '../../../pages/edit_profile_page.dart';
 

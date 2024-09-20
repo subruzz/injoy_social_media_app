@@ -8,7 +8,7 @@ import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'dart:io';
 
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/button/custom_elevated_button.dart';
 import 'package:social_media_app/core/widgets/common/overlay_loading_holder.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';

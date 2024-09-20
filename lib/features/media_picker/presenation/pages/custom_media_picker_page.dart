@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/const/extensions/localization.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/app_related/app_custom_appbar.dart';
+import 'package:social_media_app/core/utils/di/di.dart';
+import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
 import 'package:social_media_app/features/media_picker/presenation/bloc/album_bloc/album_bloc.dart';
 import 'package:social_media_app/features/media_picker/presenation/bloc/assets_bloc/assets_bloc.dart';
 import 'package:social_media_app/features/media_picker/presenation/bloc/cubit/asset_file_cubit.dart';
@@ -17,7 +18,6 @@ import 'package:social_media_app/features/media_picker/presenation/widgets/selec
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/features/post/presentation/pages/create_post_page.dart';
 import 'package:social_media_app/features/settings/presentation/pages/chat_wallapaper_preview_page.dart';
-import 'package:social_media_app/core/utils/di/init_dependecies.dart';
 import 'package:social_media_app/features/status/presentation/pages/create_mutliple_status_page.dart';
 
 import '../../../../core/const/enums/media_picker_type.dart';

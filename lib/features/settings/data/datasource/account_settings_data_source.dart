@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:social_media_app/core/errors/exception.dart';
+import 'package:social_media_app/core/utils/errors/exception.dart';
 
-import '../../../../core/errors/firebase_auth_errors.dart';
+import '../../../../core/utils/errors/firebase_auth_errors.dart';
 
 abstract interface class AccountSettingsDataSource {
   Future<void> changePassWord(
