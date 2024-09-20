@@ -1,4 +1,4 @@
-package com.connectify.injoy
+package com.injoyly.app
 
 import android.content.Context
 import android.graphics.Bitmap

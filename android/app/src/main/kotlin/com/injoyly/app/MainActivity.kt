@@ -1,4 +1,4 @@
-package com.connectify.injoy
+package com.injoyly.app
 
 import android.os.Bundle
 import io.flutter.embedding.android.FlutterFragmentActivity

@@ -8,34 +8,34 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:803278246806:android:f644b61a093ed0cb2a03b7",
+        "mobilesdk_app_id": "1:803278246806:android:9cdf4cfbd37699782a03b7",
         "android_client_info": {
-          "package_name": "com.connectify.injoy"
+          "package_name": "com.injoyly.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "803278246806-05k3ko3arhatt8rrrhdialvpj3pgucl5.apps.googleusercontent.com",
+          "client_id": "803278246806-cheucm4rlktf2472n2tk5pjrr7n8pgnv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.connectify.injoy",
-            "certificate_hash": "092eb2db0a34c6e8b13010ed1cf9009217011060"
-          }
-        },
-        {
-          "client_id": "803278246806-rmajl64svosi8bm3chjvo680r9vuidq2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.connectify.injoy",
+            "package_name": "com.injoyly.app",
             "certificate_hash": "6a218f6d1b34a4cfe281aef8add41f9218915739"
           }
         },
         {
-          "client_id": "803278246806-rn14gm5lbh8amjvfhjff5glasqvqechp.apps.googleusercontent.com",
+          "client_id": "803278246806-o141jkvvo51a8ae6oejgm1rmrguuvhro.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.connectify.injoy",
+            "package_name": "com.injoyly.app",
             "certificate_hash": "c422afe236e4520ef0a3c9c5e3bfef85854867ce"
+          }
+        },
+        {
+          "client_id": "803278246806-pallgpau3d2pmsm5elkrg08et3gr9bfg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.injoyly.app",
+            "certificate_hash": "092eb2db0a34c6e8b13010ed1cf9009217011060"
           }
         },
         {

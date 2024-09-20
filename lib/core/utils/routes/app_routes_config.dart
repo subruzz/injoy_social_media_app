@@ -32,9 +32,9 @@ import 'package:social_media_app/features/status/presentation/pages/create_mutli
 import 'package:social_media_app/features/status/presentation/pages/create_status_page.dart';
 import 'package:social_media_app/features/status/presentation/pages/view_status_page.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/presentation/pages/user_visited_listing_page.dart';
-import 'package:social_media_app/splash_screen.dart';
 
 import '../../../features/explore/domain/entities/explore_search_location.dart';
+import '../../../features/splash/splash_screen.dart';
 import '../../common/entities/single_status_entity.dart';
 import '../../common/entities/status_entity.dart';
 import '../../const/enums/media_picker_type.dart';
@@ -76,7 +76,7 @@ class MyAppRouter {
         return MaterialPageRoute(builder: (_) => const BottomBarBuilder());
 
       case MyAppRouteConst.addProfilePage:
-        return MaterialPageRoute(builder: (_) => AddProfilePage());
+        return MaterialPageRoute(builder: (_) =>const  AddProfilePage());
 
       case MyAppRouteConst.interestSelectRoute:
         final List<String>? interest = settings.arguments as List<String>?;

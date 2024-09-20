@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAoMU_lqqWSVq-vdxAg3PXOi8F3BcpCm6g',
-    appId: '1:803278246806:android:f644b61a093ed0cb2a03b7',
+    appId: '1:803278246806:android:9cdf4cfbd37699782a03b7',
     messagingSenderId: '803278246806',
     projectId: 'socialmediaapp-58c5c',
     databaseURL: 'https://socialmediaapp-58c5c-default-rtdb.asia-southeast1.firebasedatabase.app',
