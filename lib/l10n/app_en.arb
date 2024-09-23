@@ -146,7 +146,9 @@
   "clear_chat": "Clear Chat",
   "block": "Block",
   "media_send_error": "Could not send media files, try again",
-  "media_send_success": "Successfully sent media files"
+  "media_send_success": "Successfully sent media files",
+  "feature_under_development": "This feature is currently under development. Stay tuned for updates!"
+
 
 
 

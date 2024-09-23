@@ -10,8 +10,8 @@ import 'package:social_media_app/core/widgets/common/app_bar_common_icon.dart';
 import 'package:social_media_app/core/widgets/common/empty_display.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/create_post/create_post_bloc.dart';
-import '../core/common/models/partial_user_model.dart';
-import 'profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
+import '../../core/common/models/partial_user_model.dart';
+import '../profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
 
 class PopupNewPostWeb extends StatefulWidget {
   const PopupNewPostWeb({super.key});

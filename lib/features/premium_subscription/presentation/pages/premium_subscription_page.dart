@@ -8,7 +8,6 @@ import 'package:social_media_app/features/bottom_nav/presentation/pages/bottom_b
 import 'package:social_media_app/features/premium_subscription/presentation/bloc/premium_subscription_bloc.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/pages/widgets/premium_buy_button.dart';
 import 'package:social_media_app/features/premium_subscription/presentation/pages/widgets/premium_card_list.dart';
-import '../../../bottom_nav/presentation/pages/bottom_nav.dart';
 
 class PremiumSubscriptionPage extends StatelessWidget {
   const PremiumSubscriptionPage({super.key});
@@ -18,7 +17,6 @@ class PremiumSubscriptionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppCustomAppbar(
         title: 'Choose Your Plan',
-        showLeading: true,
       ),
       body: CustomAppPadding(
         child: BlocConsumer<PremiumSubscriptionBloc, PremiumSubscriptionState>(

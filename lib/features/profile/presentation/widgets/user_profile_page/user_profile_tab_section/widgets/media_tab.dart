@@ -5,7 +5,7 @@ import 'package:social_media_app/core/widgets/common/empty_display.dart';
 
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
-import 'package:social_media_app/features/profile/presentation/widgets/no_post_placeholder.dart';
+import 'package:social_media_app/features/profile/presentation/widgets/no_personal_post.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/others_profile/other_user_no_post_msg.dart';
 import 'package:social_media_app/features/profile/presentation/widgets/user_profile_page/user_profile_tab_section/widgets/media_grid.dart';
 import '../../../../../../../core/widgets/common/add_at_symbol.dart';
@@ -30,7 +30,7 @@ class MypostsTab extends StatelessWidget {
           return Text(state.errorMsg);
         } else if (state is GetUserPostsSuccess) {
           if (state.userPosts.isEmpty) {
-            return const NoPostsPlaceholder();
+            return const NoPersonalPostWidget();
           }
           return MediaGrid(
             medias: state.userPosts,
@@ -51,8 +51,8 @@ class OtherUserPosts extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GetOtherUserPostsCubit, GetOtherUserPostsState>(
       builder: (context, state) {
-        if(state is GetOtherUserPostsError){
-            return NoPostsMessage(userName: addAtSymbol(userName));
+        if (state is GetOtherUserPostsError) {
+          return NoPostsMessage(userName: addAtSymbol(userName));
         }
         if (state is GetOtherUserPostsSuccess) {
           if (state.userPosts.isEmpty) {

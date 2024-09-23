@@ -45,7 +45,9 @@ class UserProfileTabSection extends StatelessWidget {
                   ? MyShortsTab(
                       appUser: appUser,
                     )
-                  : const OtherUserShortsTab()
+                  : OtherUserShortsTab(
+                      userName: userName,
+                    )
             ],
           ),
         )

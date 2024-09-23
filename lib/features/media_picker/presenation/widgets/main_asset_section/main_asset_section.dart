@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
+import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 
 class MainAssetSection extends StatelessWidget {
   const MainAssetSection({super.key, required this.mainAsset});
@@ -25,9 +27,23 @@ class MainAssetSection extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: AppBorderRadius.large,
                       child: AssetEntityImage(
+                        errorBuilder: (context, error, stackTrace) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            Navigator.pop(context);
+
+                            Messenger.showSnackBar(
+                                message:
+                                    'Oops Something went wrong!, please try again!');
+                          });
+                          return const Center(
+                            child: Icon(
+                              Icons.dangerous,
+                              color: Colors.red,
+                            ),
+                          );
+                        },
                         value,
                         isOriginal: false,
-                        thumbnailSize: const ThumbnailSize.square(500),
                         fit: BoxFit.cover,
                         width: double.infinity,
                       ),

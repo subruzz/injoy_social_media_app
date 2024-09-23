@@ -18,7 +18,7 @@ class AssetFileCubit extends Cubit<AssetFileState> {
         selectedAssetData.add(fileData);
       }
     } catch (e) {
-      emit(AssetFileError());
+      return emit(AssetFileError());
     }
     emit(AssetFileSuccess(
       selectedImages: SelectedImagesDetails(

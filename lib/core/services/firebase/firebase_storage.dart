@@ -49,7 +49,7 @@ class FirebaseStorageService {
       // Upload selected assets.
       if (isPhoto) {
         for (var asset in assets) {
-          final res = await uploadSingleAsset(asset: asset.selectedFile!, reference: reference);
+          final res = await uploadSingleAsset(asset: asset.selectedFile, reference: reference);
           if (res == null) {
             continue;
           }
@@ -60,7 +60,7 @@ class FirebaseStorageService {
         // Handle video uploads and thumbnails.
         if (needThumbnail) {
           final thumbnailLocal = await VideoThumbnail.thumbnailFile(
-            video: assets.first.selectedFile!.path,
+            video: assets.first.selectedFile.path,
             imageFormat: ImageFormat.PNG,
             timeMs: 1000,
             maxHeight: 300,

@@ -6,13 +6,10 @@ import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/utils/extensions/time_ago.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
-import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/widgets/common/common_text.dart';
 import 'package:social_media_app/core/widgets/common/user_profile.dart';
 import 'package:social_media_app/core/widgets/dialog/general_dialog_for_web.dart';
-import 'package:social_media_app/core/widgets/each_post/post_action_section/post_action_section.dart';
-import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_like_button.dart';
 import 'package:social_media_app/core/widgets/each_post/post_top_section/widgets/post_option_button.dart';
 import 'package:social_media_app/features/profile/presentation/pages/other_user_profile.dart';
 

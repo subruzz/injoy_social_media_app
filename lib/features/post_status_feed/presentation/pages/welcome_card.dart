@@ -1,6 +1,6 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
+import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/welcome_card/common_widgets/welcome_card_msg.dart';
 import '../widgets/welcome_card/common_widgets/welcome_user_card.dart';
 
@@ -24,7 +24,6 @@ class _WelcomeCardState extends State<WelcomeCard> {
         Expanded(
           child: PageView.builder(
             onPageChanged: (index) {
-              log('index is $index');
               _indexNotifier.value = index;
             },
             physics: const BouncingScrollPhysics(),
@@ -44,7 +43,8 @@ class _WelcomeCardState extends State<WelcomeCard> {
                       child: ValueListenableBuilder<int>(
                         valueListenable: _indexNotifier,
                         builder: (context, currentIndex, _) {
-                          if (currentIndex < widget.allUsers.length - 1) {
+                          if (currentIndex < widget.allUsers.length - 1 &&
+                              !isThatMobile) {
                             return IconButton(
                               onPressed: () {
                                 pageController.animateToPage(
@@ -70,7 +70,7 @@ class _WelcomeCardState extends State<WelcomeCard> {
                       child: ValueListenableBuilder<int>(
                         valueListenable: _indexNotifier,
                         builder: (context, currentIndex, _) {
-                          if (currentIndex > 0) {
+                          if (currentIndex > 0 && !isThatMobile) {
                             return IconButton(
                               onPressed: () {
                                 pageController.animateToPage(

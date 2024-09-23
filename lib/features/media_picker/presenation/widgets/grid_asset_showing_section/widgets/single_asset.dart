@@ -30,8 +30,15 @@ class SingleAsset extends StatelessWidget {
                 children: [
                   AssetEntityImage(
                     assetEntity,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Center(
+                        child: Icon(
+                          Icons.dangerous,
+                          color: Colors.red,
+                        ),
+                      );
+                    },
                     isOriginal: false,
-                    thumbnailSize: const ThumbnailSize.square(250),
                     fit: BoxFit.cover,
                   ),
                   const Positioned(
@@ -45,8 +52,15 @@ class SingleAsset extends StatelessWidget {
               )
             : AssetEntityImage(
                 assetEntity,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Icon(
+                      Icons.dangerous,
+                      color: Colors.red,
+                    ),
+                  );
+                },
                 isOriginal: false,
-                thumbnailSize: const ThumbnailSize.square(250),
                 fit: BoxFit.cover,
               ),
       ),

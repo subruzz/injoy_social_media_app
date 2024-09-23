@@ -1,13 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
-import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
+import 'package:social_media_app/core/services/method_channel.dart/app_toast.dart';
 import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/services/assets/asset_services.dart';
@@ -54,7 +52,9 @@ class PostOptionsBottomShett {
               showTrail: false,
               leading: AppAssetsConst.share,
               text: l10n!.share,
-              onTap: () {},
+              onTap: () {
+                ToastService.showToast(l10n.feature_under_development);
+              },
               iconSize: 23,
             ),
             if (!isMyPost) ...[
@@ -81,25 +81,6 @@ class PostOptionsBottomShett {
                 },
                 iconSize: 23,
               ),
-
-              // ListTile(
-              //   leading: Icon(Icons.hide_source_outlined,
-              //       color: AppDarkColor().iconPrimaryColor),
-              //   title: const Text('Don\'t show post from this user'),
-              //   onTap: () {
-              //     Navigator.pop(context);
-              //     onHideUser?.call();
-              //   },
-              // ),
-              // ListTile(
-              //   leading: Icon(Icons.favorite,
-              //       color: AppDarkColor().iconPrimaryColor),
-              //   title: const Text('Add to favorite'),
-              //   onTap: () {
-              //     Navigator.pop(context);
-              //     onAddToFavorite?.call();
-              //   },
-              // ),
             ],
             if (isMyPost) ...[
               if (!isShorts)
@@ -143,8 +124,6 @@ class PostOptionsBottomShett {
                       buttonChild:
                           BlocConsumer<CreatePostBloc, CreatePostState>(
                         builder: (context, state) {
-                          log('post stat eis $state');
-
                           if (state is PostDeletionLoading) {
                             return const CircularLoading();
                           }
@@ -152,9 +131,6 @@ class PostOptionsBottomShett {
                         },
                         listener: (context, state) {
                           if (state is PostDeletionSuccess) {
-                            log('post stat esuccessis $state');
-
-                            log('post deleted successfully');
                             isShorts
                                 ? context
                                     .read<GetMyReelsCubit>()

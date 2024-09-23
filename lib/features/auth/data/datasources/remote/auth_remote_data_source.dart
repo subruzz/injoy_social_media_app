@@ -1,9 +1,9 @@
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
@@ -12,10 +12,8 @@ import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/core/common/models/app_user_model.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/shared_preference/chat_wallapaper.dart';
-import 'package:social_media_app/features/chat/presentation/cubits/chat_wallapaper/chat_wallapaper_cubit.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
-import '../../../../../core/const/enums/location_enum.dart';
 import '../../../../../core/const/enums/premium_type.dart';
 import '../../../../../core/utils/shared_preference/app_language.dart';
 
@@ -60,28 +58,35 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<AppUserModel> googleSignIn() async {
-    log('came here');
     try {
       if (GoogleSignIn().currentUser != null) {
-        log('came here');
       }
 
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
       if (googleUser == null) {
-        log('user is null');
         throw const MainException(
             errorMsg: AppErrorMessages.googleSignInCancelled,
             details: AppErrorMessages.googleSigninCancelledDetails);
       }
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      // Obtain the auth details f request
+      GoogleSignInAuthentication? googleSignInAuthentication =
+          await (await GoogleSignIn(
+        scopes: ["profile", "email"],
+      ).signIn())
+              ?.authentication;
+      if (googleSignInAuthentication == null) {
+      
+        throw const MainException(
+            errorMsg: AppErrorMessages.googleSignInCancelled,
+            details: AppErrorMessages.googleSigninCancelledDetails);
+      }
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
       );
 
       // Once signed in, return the UserCredential
@@ -129,13 +134,12 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
         );
       });
       return userModel;
-    } on MainException {
+    } on MainException catch (_) {
       rethrow;
     } on FirebaseAuthException catch (e) {
-      log(e.toString());
       throw AuthError.from(e);
     } catch (e) {
-      log(e.toString());
+      
       throw const MainException(errorMsg: AppErrorMessages.googleSignInFailed);
     }
   }
@@ -222,7 +226,6 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
 
       return userModel;
     } on FirebaseAuthException catch (e) {
-      log('error from here', error: e);
       throw AuthError.from(e);
     } catch (e) {
       //delete the user only if it was created but not added in the firebase
@@ -292,7 +295,6 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
       }
       return user;
     } catch (e) {
-      log('erro eudf ${e.toString()}');
       throw const MainException();
     }
   }
@@ -316,7 +318,6 @@ class AuthremoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       await _firebaseAuth.currentUser?.delete();
     } catch (e) {
-      log('error : ${e.toString()}');
       throw MainException(errorMsg: e.toString());
     }
   }

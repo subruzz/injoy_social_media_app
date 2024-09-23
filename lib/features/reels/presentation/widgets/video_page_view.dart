@@ -13,7 +13,7 @@ class VideoPageView extends StatelessWidget {
     this.isItFromBottomBar = false,
     this.onCommentClick,
     this.vdoController,
-    this.onPause,
+    this.onPause,this.isItMine=false,
   });
   final PageController controller;
   final bool isItFromBottomBar;
@@ -23,7 +23,7 @@ class VideoPageView extends StatelessWidget {
   final void Function(int) onChaged;
   final void Function(PostEntity)? onCommentClick;
   final VideoPlayerController? vdoController;
-
+final bool isItMine;
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
@@ -35,6 +35,7 @@ class VideoPageView extends StatelessWidget {
       },
       itemBuilder: (context, index) {
         return VideoPlayerWidget(
+          isItMine: isItMine,
           currentIndex: index,
           pageController: controller,
           onPause: onPause,

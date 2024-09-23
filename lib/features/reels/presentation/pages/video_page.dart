@@ -74,6 +74,7 @@ class _VideoReelPageState extends State<VideoReelPage> {
               builder: (context, state) {
                 if (state is GetUserShortsSuccess) {
                   return VideoPageView(
+                      isItMine: true,
                       onCommentClick: widget.onCommentClick,
                       controller: _pageController,
                       reels: state.myShorts,
@@ -96,11 +97,11 @@ class _VideoReelPageState extends State<VideoReelPage> {
                   builder: (BuildContext context,
                       AsyncSnapshot<PostEntity?> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Center(child: Text('Error: ${snapshot.error}'));
                     } else if (!snapshot.hasData) {
-                      return Center(child: Text('Post not found'));
+                      return const Center(child: Text('Post not found'));
                     } else {
                       final post = snapshot.data!;
                       return VideoPlayerWidget(

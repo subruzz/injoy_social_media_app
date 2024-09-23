@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
@@ -60,13 +58,16 @@ class _SplashScreenState extends State<SplashScreen>
                   tablet: WebLayout(),
                   desktop: WebLayout()),
             ));
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              DeviceNotification.handleTerminatedNotification();
+            });
           }
           if (state is AuthLoggedInButProfileNotSet) {
             Navigator.pushReplacementNamed(
               context,
               MyAppRouteConst.addProfilePage,
             );
-          }
+          } 
         },
         child: Center(
           child: Stack(
@@ -79,13 +80,10 @@ class _SplashScreenState extends State<SplashScreen>
                 height: 120,
                 width: 120,
               ),
-              
             ],
           ),
         ),
       ),
     );
   }
-
 }
-

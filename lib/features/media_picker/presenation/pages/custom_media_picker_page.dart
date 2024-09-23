@@ -7,6 +7,7 @@ import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/di/di.dart';
 import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
+import 'package:social_media_app/core/widgets/messenger/messenger.dart';
 import 'package:social_media_app/features/media_picker/presenation/bloc/album_bloc/album_bloc.dart';
 import 'package:social_media_app/features/media_picker/presenation/bloc/assets_bloc/assets_bloc.dart';
 import 'package:social_media_app/features/media_picker/presenation/bloc/cubit/asset_file_cubit.dart';
@@ -119,6 +120,11 @@ class _CustomMediaPickerPageState extends State<CustomMediaPickerPage> {
                 : null,
             body: BlocConsumer<AssetFileCubit, AssetFileState>(
               listener: (context, state) {
+                if (state is AssetFileError) {
+                  Messenger.showSnackBar(
+                      message: 'Something went wrong, Please try again!');
+                  Navigator.pop(context);
+                }
                 if (state is AssetFileSuccess) {
                   if (widget.pickerType == MediaPickerType.wallapaper) {
                     Navigator.of(context).push(MaterialPageRoute(

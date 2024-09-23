@@ -3,11 +3,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/widgets/common/app_custom_appbar.dart';
 import 'package:social_media_app/core/widgets/common/app_padding.dart';
-import 'package:social_media_app/core/widgets/common/common_text_button.dart';
 import 'package:social_media_app/core/widgets/web/web_width_helper.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/index.dart';
 
@@ -59,7 +57,6 @@ class _AddProfilePageState extends State<AddProfilePage> {
       appBar: AppCustomAppbar(
         title: 'Fill Your Profile',
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: WebWidthHelper(
         btwMobAndTab: true,
         child: CustomAppPadding(

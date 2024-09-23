@@ -18,7 +18,7 @@ import 'package:social_media_app/features/post_status_feed/presentation/bloc/get
 import '../../../../core/utils/di/di.dart';
 import '../../../chat/presentation/cubits/chat/chat_cubit.dart';
 import '../../../explore/presentation/blocs/explore_user/explore_user_cubit.dart';
-import '../../../popup_new_post.dart';
+import '../../../web/popup_new_post.dart';
 import '../../../post_status_feed/presentation/bloc/for_you_posts/get_my_status/get_my_status_bloc.dart';
 import '../../../reels/presentation/bloc/reels/reels_cubit.dart';
 

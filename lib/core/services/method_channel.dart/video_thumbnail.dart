@@ -24,7 +24,7 @@ class VideoThumbnail {
       ImageFormat imageFormat = ImageFormat.PNG,
       int maxHeight = 0,
       int maxWidth = 0,
-      int timeMs = 0,
+      int timeMs = 10000,
       int quality = 10}) async {
     assert(video.isNotEmpty);
     if (video.isEmpty) return null;

@@ -55,7 +55,7 @@ void main() {
       });
 
       //terminated
-    
+
       await initDependencies();
 
       runApp(MyApp(navigatorKey: navigatorKey));
@@ -134,8 +134,8 @@ class MyApp extends StatelessWidget {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => WillPopScope(
-          onWillPop: () async => false,
+        builder: (context) => PopScope(
+          canPop: false, 
           child: AlertDialog(
             title: const Text('No Connection'),
             content: const Text(

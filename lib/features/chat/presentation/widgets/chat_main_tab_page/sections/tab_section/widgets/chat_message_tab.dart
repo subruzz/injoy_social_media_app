@@ -5,7 +5,7 @@ import 'package:social_media_app/core/widgets/common/app_error_gif.dart';
 import 'package:social_media_app/core/widgets/common/common_empty_holder.dart';
 import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/widgets/common/empty_display.dart';
-import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
+import 'package:social_media_app/core/widgets/shimmers/chat_item_shimmer.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/chat/chat_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/chat_main_tab_page/common_widgets/chat_call_item.dart';
 
@@ -24,13 +24,14 @@ class ChatMessageTabView extends StatelessWidget {
         }
         if (state is ChatLoading) {
           return const Center(
-            child: CircularLoadingGrey(),
+            child:ChatCallItemShimmer(),
           );
         }
         if (state is ChatLoaded) {
           if (state.chatItems.isEmpty) {
             return const Center(
               child: CommonEmptyHolder(
+                showLottie: true,
                 asset: AppAssetsConst.noChatHolder,
                 message: 'No chats found',
               ),
@@ -40,7 +41,7 @@ class ChatMessageTabView extends StatelessWidget {
             itemCount: state.chatItems.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: EdgeInsets.only(bottom:  isThatTabOrDeskTop ? 10.0 : 0),
+                padding: EdgeInsets.only(bottom: isThatTabOrDeskTop ? 10.0 : 0),
                 child: ChatCallItem(
                   openChat: openChat,
                   otherUserId: state.chatItems[index].senderUid,

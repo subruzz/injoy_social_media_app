@@ -26,7 +26,7 @@ import '../../../../core/utils/routes/tranistions/hero_dialog.dart';
 import '../../../../core/utils/helper_packages/lazy_indexted_stack.dart';
 import '../../../chat/presentation/cubits/chat/chat_cubit.dart';
 import '../../../explore/presentation/blocs/explore_user/explore_user_cubit.dart';
-import '../../../popup_new_post.dart';
+import '../../../web/popup_new_post.dart';
 import '../../../post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import '../../../profile/presentation/pages/profile_page_wrapper.dart';
 import '../../../post_status_feed/presentation/bloc/get_all_statsus/get_all_status_bloc.dart';
@@ -66,14 +66,10 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
   }
 
   List<Widget> _pages = [];
-  final FocusNode? _focusNodeForExplore = FocusNode();
+  final FocusNode _focusNodeForExplore = FocusNode();
   void Function()? pauseReelsVideo;
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      DeviceNotification.handleTerminatedNotification();
-    });
-
     serviceLocator<FirebaseHelper>()
         .deleteUnWantedStatus(context.read<AppUserBloc>().appUser.id);
     DeviceNotification.tokenRefresh(context.read<AppUserBloc>().appUser.id);
@@ -137,8 +133,8 @@ class _BottonNavWithAnimatedIconsState extends State<BottonNavWithAnimatedIcons>
                     }
                     setState(() {
                       context.read<BottomBarCubit>().changeIndex(index);
-                      if (_focusNodeForExplore?.hasFocus == true) {
-                        _focusNodeForExplore?.unfocus();
+                      if (_focusNodeForExplore.hasFocus == true) {
+                        _focusNodeForExplore.unfocus();
                       }
                       _currentPage = index;
                     });

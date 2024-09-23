@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/common/cached_image.dart';
-import 'package:social_media_app/features/post/presentation/widgets/edit_post/edit_screen_feed_option.dart';
 
 import '../../../common/view_media.dart';
 

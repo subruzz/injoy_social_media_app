@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class NoPostsMessage extends StatelessWidget {
   final String userName;
-
-  const NoPostsMessage({super.key, required this.userName});
+  final bool isShorts;
+  const NoPostsMessage(
+      {super.key, required this.userName, this.isShorts = false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,8 @@ class NoPostsMessage extends StatelessWidget {
                           .titleMedium
                           ?.copyWith(fontWeight: FontWeight.bold)),
                   TextSpan(
-                    text: ' hasn\'t shared \nany posts yet.',
+                    text:
+                        ' hasn\'t shared \nany ${isShorts ? 'Shorts' : 'Posts'} yet.',
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                 ],

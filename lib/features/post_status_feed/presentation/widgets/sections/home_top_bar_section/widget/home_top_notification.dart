@@ -39,11 +39,6 @@ class _HomeTopNotificationState extends State<HomeTopNotification> {
             children: [
               CustomSvgIcon(
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => ErrorPopup(),
-                  );
-                  return;
                   Navigator.pushNamed(context, MyAppRouteConst.notificationPage,
                       arguments: {'notificationcubit': _notificationCubit});
                 },

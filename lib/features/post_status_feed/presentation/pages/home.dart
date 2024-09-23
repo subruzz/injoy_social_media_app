@@ -4,6 +4,7 @@ import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
+import 'package:social_media_app/core/widgets/loading/refresh_indicator.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/bloc/following_post_feed/following_post_feed_bloc.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/floating_button.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_top_bar_section/home_top_bar.dart';
@@ -56,12 +57,10 @@ class _HomePageState extends State<HomePage> {
     final l10n = context.l10n;
     final me = context.read<AppUserBloc>().appUser;
     return Scaffold(
-      floatingActionButton: 
-          FloatingButton(
-              l10n: l10n!,
-            ),
-         
-      body: RefreshIndicator(
+      floatingActionButton: FloatingButton(
+        l10n: l10n!,
+      ),
+      body: RefreshIndicatorWrapper(
         onRefresh: () async {
           if (context.mounted) {
             context.read<FollowingPostFeedBloc>().add(FollowingPostFeedGetEvent(
@@ -72,6 +71,7 @@ class _HomePageState extends State<HomePage> {
           }
         },
         child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           controller: _scrollController,
           slivers: [
             if (Responsive.isMobile(context)) const HomeTopBar(),

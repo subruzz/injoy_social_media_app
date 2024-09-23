@@ -43,7 +43,6 @@ class _AiChatButtonState extends State<AiChatButton>
       Navigator.pushNamed(context, MyAppRouteConst.aiChatPage);
     }, child: BlocBuilder<BottomBarCubit, BottomBarState>(
       builder: (context, state) {
-        print('value is ${state.index}');
         return Container(
           width: isThatMobile ? 40.w : 40,
           height: isThatMobile ? 40.h : 40,

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,13 +9,15 @@ import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/utils/extensions/video_duration.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
+import 'package:social_media_app/core/widgets/common/app_back_button.dart';
 import 'package:social_media_app/core/widgets/common/app_svg.dart';
 import 'package:social_media_app/core/widgets/common/common_text.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/widgets/each_post/post_content_section/widgets/post_hashtag.dart';
 import 'package:social_media_app/core/widgets/each_post/post_top_section/widgets/post_option_button.dart';
+import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
+import 'package:social_media_app/features/profile/presentation/pages/profile_page_wrapper.dart';
 import 'package:video_player/video_player.dart';
-
 import '../../../features/bottom_nav/presentation/cubit/bottom_bar_cubit.dart';
 import '../../common/entities/post.dart';
 import '../../common/entities/user_entity.dart';
@@ -43,8 +44,10 @@ class VideoPlayerWidget extends StatefulWidget {
   final void Function(void Function())? onPause;
   final PageController? pageController;
   final int? currentIndex;
+  final bool isItMine;
   const VideoPlayerWidget({
     super.key,
+    this.isItMine = false,
     this.vdo,
     this.isItFromBottomBar = false,
     this.reel,
@@ -143,7 +146,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (!_videoInitialized || context.read<BottomBarCubit>().state.index != 2) {
+    if (widget.isItFromBottomBar &&
+        context.read<BottomBarCubit>().state.index != 2) return;
+    if (!_videoInitialized) {
       return;
     }
     if (state == AppLifecycleState.resumed) {
@@ -228,18 +233,24 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                 }
               },
               child: Stack(
-                alignment:
-                    Alignment.center, // Aligns the play icon to the center
+                alignment: Alignment.center,
                 children: [
                   !_videoInitialized && widget.reel != null
-                      ? Center(
-                          child: SizedBox(
-                            height: double.infinity,
-                            width: double.infinity,
-                            child: CachedImage(
-                              img: widget.reel!.extra ?? '',
-                              fit: BoxFit.contain,
-                            ),
+                      ? SizedBox(
+                          height: double.infinity,
+                          width: double.infinity,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              CachedImage(
+                                img: widget.reel!.extra ?? '',
+                                fit: BoxFit.fill,
+                              ),
+                              const Align(
+                                alignment: Alignment.center,
+                                child: CircularLoadingGrey(),
+                              )
+                            ],
                           ),
                         )
                       : widget.vdo != null && _videoInitialized
@@ -257,6 +268,16 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                       size: 50.0,
                       color: Colors.white,
                     ),
+                   SafeArea(
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.arrow_back)),
+                    ),
+                  ),
                   if (_videoInitialized)
                     Positioned(
                       bottom: 0,
@@ -277,70 +298,111 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                       bottom: 20,
                       left: 10,
                       right: 60,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, MyAppRouteConst.otherUserProfile,
-                                      arguments: {
-                                        'user': PartialUser(
-                                            id: widget.reel!.creatorUid,
-                                            userName: widget.reel!.userFullName,
-                                            fullName: widget.reel!.userFullName,
-                                            profilePic:
-                                                widget.reel!.userProfileUrl)
-                                      });
-                                },
-                                child: CircularUserProfile(
-                                    size: 22,
-                                    profile: widget.reel!.userProfileUrl),
-                              ),
-                              AppSizedBox.sizedBox10W,
-                              Expanded(
-                                child: CustomText(
-                                  maxLines: 1,
-                                  text: addAtSymbol(widget.reel!.username),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium
-                                      ?.copyWith(
-                                          fontSize:
-                                              isThatTabOrDeskTop ? 15 : null),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    if (_videoInitialized &&
+                                        _controller.value.isPlaying) {
+                                      _controller.pause();
+                                    }
+                                    if (widget.reel!.creatorUid ==
+                                        context
+                                            .read<AppUserBloc>()
+                                            .appUser
+                                            .id) {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (context) {
+                                          return const ProfilePageWrapper();
+                                        },
+                                      ));
+                                      return;
+                                    }
+                                    Navigator.pushNamed(context,
+                                        MyAppRouteConst.otherUserProfile,
+                                        arguments: {
+                                          'user': PartialUser(
+                                              id: widget.reel!.creatorUid,
+                                              userName:
+                                                  widget.reel!.userFullName,
+                                              fullName:
+                                                  widget.reel!.userFullName,
+                                              profilePic:
+                                                  widget.reel!.userProfileUrl)
+                                        });
+                                  },
+                                  child: CircularUserProfile(
+                                      size: 22,
+                                      profile: widget.reel!.userProfileUrl),
                                 ),
-                              ),
-                              AppSizedBox.sizedBox10W,
-                              if (widget.reel!.creatorUid != me.id)
+                                AppSizedBox.sizedBox10W,
                                 Expanded(
-                                  child: FollowUnfollowHelper(
-                                      wantWhiteBorder: true,
-                                      color: Colors.transparent,
-                                      noRad: true,
-                                      user: PartialUser(
-                                          id: widget.reel!.creatorUid)),
-                                )
-                            ],
-                          ),
-                          AppSizedBox.sizedBox10H,
-                          Column(
-                            children: [
-                              if (widget.reel!.description != null)
-                                ExpandableText(
-                                    otherW: widget.reel!.hashtags.isEmpty
-                                        ? null
-                                        : PostHashtag(
-                                            hashtags: widget.reel!.hashtags),
-                                    text: widget.reel!.description ?? '',
-                                    trimLines: 2),
-                              if (widget.reel!.description == null)
-                                PostHashtag(hashtags: widget.reel!.hashtags),
-                            ],
-                          )
-                        ],
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      CustomText(
+                                        maxLines: 1,
+                                        text:
+                                            addAtSymbol(widget.reel!.username),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium
+                                            ?.copyWith(
+                                                fontSize: isThatTabOrDeskTop
+                                                    ? 15
+                                                    : null),
+                                      ),
+                                      if (widget.reel!.location != null)
+                                        CustomText(
+                                          maxLines: 1,
+                                          text: '📍${widget.reel!.location}',
+                                          style: AppTextTheme
+                                                  .getResponsiveTextTheme(
+                                                      context)
+                                              .bodyMedium
+                                              ?.copyWith(),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                                AppSizedBox.sizedBox10W,
+                                if (widget.reel!.creatorUid != me.id)
+                                  Expanded(
+                                    child: FollowUnfollowHelper(
+                                        wantWhiteBorder: true,
+                                        color: Colors.transparent,
+                                        noRad: true,
+                                        user: PartialUser(
+                                            id: widget.reel!.creatorUid)),
+                                  )
+                              ],
+                            ),
+                            AppSizedBox.sizedBox10H,
+                            Column(
+                              children: [
+                                if (widget.reel!.description != null)
+                                  ExpandableText(
+                                      otherW: widget.reel!.hashtags.isEmpty
+                                          ? null
+                                          : PostHashtag(
+                                              hashtags: widget.reel!.hashtags),
+                                      text: widget.reel!.description ?? '',
+                                      trimLines: 2),
+                                if (widget.reel!.description == null)
+                                  PostHashtag(hashtags: widget.reel!.hashtags),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   if (!widget.onlyVdo && widget.reel != null)
@@ -364,12 +426,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
                             isReel: true,
                           ),
                           AppSizedBox.sizedBox20H,
-                          // if (widget.pageController != null)
-                          //   PostOptionButton(
-                          //       isShorts: true,
-                          //       post: widget.reel!,
-                          //       currentPostIndex: widget.currentIndex ?? 0,
-                          //       pagecontroller: widget.pageController!)
+                          if (widget.pageController != null && widget.isItMine)
+                            PostOptionButton(
+                                isMyPost: true,
+                                isShorts: true,
+                                post: widget.reel!,
+                                currentPostIndex: widget.currentIndex ?? 0,
+                                pagecontroller: widget.pageController!)
                         ],
                       ),
                     ),

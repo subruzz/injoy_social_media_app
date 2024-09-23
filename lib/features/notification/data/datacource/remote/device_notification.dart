@@ -4,17 +4,13 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart ' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
-import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/features/notification/data/datacource/local/locatl_notification.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 import 'package:social_media_app/features/notification/domain/entities/push_notification.dart';
-import 'package:social_media_app/features/settings/presentation/pages/settings_actvity_page.dart';
 import 'package:social_media_app/main.dart';
-
 import '../../../../../core/const/app_secrets/service.dart';
 import '../../../../chat/presentation/pages/personal_chat_builder.dart';
 import '../../../../explore/presentation/widgets/all_post_view.dart';

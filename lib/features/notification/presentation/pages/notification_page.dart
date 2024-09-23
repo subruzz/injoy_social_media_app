@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +7,6 @@ import 'package:social_media_app/core/widgets/common/common_empty_holder.dart';
 import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
-import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/utils/extensions/time_ago.dart';
 import 'package:social_media_app/core/utils/routes/tranistions/app_routes_const.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
@@ -48,11 +46,12 @@ class NotificationPage extends StatelessWidget {
               if (state.notifications.isEmpty) {
                 return Center(
                   child: CommonEmptyHolder(
-                      size: 70,
-                      isGif: true,
+                      size: 180,
+                      showText: false,
+                      showLottie: true,
                       color: AppDarkColor().buttonBackground.withOpacity(.8),
                       message: 'No new notifications',
-                      asset: AppAssetsConst.nonoti),
+                      asset: 'assets/lotties/no_noti.json'),
                 );
               }
               return CustomAppPadding(

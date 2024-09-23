@@ -114,6 +114,7 @@ class _ExplorePageState extends State<ExplorePage>
             child: CustomAppPadding(
               padding: AppPadding.medium,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   CustomTextField(
                     focusNode: widget.focusNodeForExplore,

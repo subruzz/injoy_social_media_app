@@ -13,8 +13,9 @@ class ExploreSearchLoading extends StatelessWidget {
     return CustomAppPadding(
       padding: AppPadding.medium,
       child: Align(
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.topLeft,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const CircularLoadingGrey(
                 size: 25,
