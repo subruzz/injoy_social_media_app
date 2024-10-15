@@ -1,16 +1,24 @@
-# social_media_app
+# InJoy - Social Media App
 
-A new Flutter project.
+A new Flutter project designed to connect users through engaging content and seamless communication.
 
-## Getting Started
+## Key Features
 
-This project is a starting point for a Flutter application.
+- **Post and Share**: Share updates, thoughts, and experiences with your followers.
+- **Short Videos**: Create and upload short videos to express your creativity.
+- **Gemini Chat**: Connect with friends through instant messaging.
+- **Notifications**: Stay updated with real-time notifications for interactions.
+- **Multi-Language Support**: Engage users from different backgrounds with language options.
+- **Premium Subscription**: Access exclusive features for a premium experience.
 
-A few resources to get you started if this is your first Flutter project:
+## Other Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **User Profiles**: Create and customize your personal profile.
+- **Following and Followers**: Connect with others and grow your network.
+- **Interactive Feed**: Discover posts from your connections and trending content.
+- **Search Functionality**: Easily find users, posts, and hashtags.
+- **Rich Media Support**: Share images, videos, and links to enrich your posts.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
