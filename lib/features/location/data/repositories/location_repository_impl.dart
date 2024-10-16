@@ -1,7 +1,6 @@
 // lib/features/location/data/repositories/location_repository_impl.dart
 
 import 'package:fpdart/fpdart.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:social_media_app/core/const/enums/location_enum.dart';
 import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/core/utils/errors/failure.dart';

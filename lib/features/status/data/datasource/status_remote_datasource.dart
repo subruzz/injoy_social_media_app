@@ -88,7 +88,7 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
       for (int i = 0; i < assets.length; i++) {
         final res = await serviceLocator<FirebaseStorageService>()
             .uploadSingleAsset(
-                asset: assets[i].selectedFile!,
+                asset: assets[i].selectedFile,
                 reference:
                     '${FirebaseFirestoreConst.statusImages}/$uid/${FirebaseFirestoreConst.statusImages}');
         if (res == null) continue;
@@ -173,10 +173,7 @@ class StatusRemoteDatasourceImpl implements StatusRemoteDatasource {
       // List to store maps of image IDs and their download URLs
       List<Map<String, String>> postImageUrls = [];
       // Reference to the Firebase Storage location for status images under user's ID
-      Reference ref = firebaseStorage
-          .ref()
-          .child(FirebaseFirestoreConst.statusImages)
-          .child(uId);
+   
 
       // for (var image in postImages) {
       //   //get the  file from the AssetEntity

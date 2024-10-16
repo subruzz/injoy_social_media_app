@@ -48,7 +48,6 @@ class PostRepostioryImpl implements PostRepository {
 
   @override
   Future<Either<Failure, List<PostEntity>>> getAllPosts(String uid) {
-    // TODO: implement getAllPosts
     throw UnimplementedError();
   }
 

@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/common/usecases/usecase.dart';
-import 'package:social_media_app/core/utils/shared_preference/app_language.dart';
 import 'package:social_media_app/features/auth/domain/usecases/current_user.dart';
 import 'package:social_media_app/features/auth/domain/usecases/logout_user.dart';
 

@@ -1,10 +1,7 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
-import 'package:social_media_app/core/widgets/common/common_text.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
@@ -45,7 +42,6 @@ class EachComment extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onLongPressStart: (details) async {
-          log(comment.creatorId);
           if (comment.creatorId != myId) return;
           HapticFeedback.heavyImpact();
           final offset = details.globalPosition;

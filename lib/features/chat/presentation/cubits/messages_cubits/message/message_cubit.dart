@@ -19,13 +19,10 @@ import 'package:social_media_app/features/chat/domain/entities/message_entity.da
 import 'package:social_media_app/features/chat/domain/usecases/block_unblock_chat.dart';
 import 'package:social_media_app/features/chat/domain/usecases/delete_message_usecase.dart';
 import 'package:social_media_app/features/chat/domain/usecases/delete_single_chat.dart';
-import 'package:social_media_app/features/chat/domain/usecases/seen_message_update_usecase.dart';
 import 'package:social_media_app/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/get_message/get_message_cubit.dart';
 import 'package:social_media_app/core/services/assets/asset_model.dart';
-import 'package:social_media_app/features/settings/domain/usecases/delete_chat_usecase.dart';
 
-import '../../../../../../core/common/entities/user_entity.dart';
 import '../../../../../../core/utils/di/di.dart';
 import '../../../../../notification/domain/entities/customnotifcation.dart';
 import '../../../../../settings/domain/entity/ui_entity/enums.dart';
@@ -37,7 +34,6 @@ class MessageCubit extends Cubit<MessageState> {
   final AppUserBloc _appUserBloc;
   final SendMessageUseCase _sendMessageUseCase;
   final DeleteMessageUsecase _deleteMessageUsecase;
-  final SeenMessageUpdateUsecase _seenMessageUpdateUsecase;
   final BlockUnblockChatUseCase _blockUnblockChatUseCase;
   final DeleteSingleChatUseCase _deleteChatUsecase;
   Timer? _timer;
@@ -47,7 +43,6 @@ class MessageCubit extends Cubit<MessageState> {
     _messageReply = _messageReply;
   }
 
-  StreamSubscription<AppUser>? _userSubscription;
 
   final ValueNotifier<MessageReplyClicked?> messageReplyNotifier =
       ValueNotifier(null);
@@ -57,7 +52,6 @@ class MessageCubit extends Cubit<MessageState> {
   MessageCubit(
       this._sendMessageUseCase,
       this._deleteMessageUsecase,
-      this._seenMessageUpdateUsecase,
       this._appUserBloc,
       this._blockUnblockChatUseCase,
       this._deleteChatUsecase)

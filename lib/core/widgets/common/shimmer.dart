@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/common/app_padding.dart';
 

@@ -78,7 +78,6 @@ class CallRepositoryImpl implements CallRepository {
 
   @override
   Stream<Either<Failure, List<CallEntity>>> getMyCallHistory(String uid) {
-    // TODO: implement getMyCallHistory
     throw UnimplementedError();
   }
 }

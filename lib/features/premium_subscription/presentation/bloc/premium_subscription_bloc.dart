@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/common/usecases/usecase.dart';
-import 'package:social_media_app/core/const/enums/location_enum.dart';
 import 'package:social_media_app/features/premium_subscription/domain/entities/payment_intent_basic.dart';
 import 'package:social_media_app/features/premium_subscription/domain/usecases/create_payment_intent.dart';
 import 'package:social_media_app/features/premium_subscription/domain/usecases/setup_stripe_for_payment.dart';
@@ -37,7 +34,6 @@ class PremiumSubscriptionBloc
     final res = await _createPaymentIntentUseCase(
         CreatePaymentIntentParams(premType: _premType));
     res.fold((failure) {
-      log(failure.message);
       return emit(PremiumSubscriptionFailure(failure.message));
     }, (success) {
       emit(PremiumSubscriptionIntentSuccess(success));

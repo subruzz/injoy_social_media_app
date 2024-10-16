@@ -16,6 +16,7 @@ enum NotificationType {
   }
 }
 
+// ignore: must_be_immutable
 class NotificationCheck extends Equatable {
   String receiverId;
   String senderId;
@@ -42,6 +43,7 @@ class NotificationCheck extends Equatable {
       ];
 }
 
+// ignore: must_be_immutable
 class CustomNotification extends NotificationCheck {
   String notificationUid;
   String text;

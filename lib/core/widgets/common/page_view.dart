@@ -60,7 +60,7 @@ class VideoWidget extends StatefulWidget {
   const VideoWidget({super.key, required this.videoFile});
 
   @override
-  _VideoWidgetState createState() => _VideoWidgetState();
+  State<VideoWidget> createState() => _VideoWidgetState();
 }
 
 class _VideoWidgetState extends State<VideoWidget> {

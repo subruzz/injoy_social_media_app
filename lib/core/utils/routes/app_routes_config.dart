@@ -20,7 +20,6 @@ import 'package:social_media_app/features/premium_subscription/presentation/page
 import 'package:social_media_app/features/profile/presentation/pages/add_profile_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/date_of_birth_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/edit_profile_page.dart';
-import 'package:social_media_app/features/profile/presentation/pages/interest_selection_page.dart';
 import 'package:social_media_app/features/profile/presentation/pages/other_user_profile.dart';
 import 'package:social_media_app/features/profile/presentation/pages/profile_loading.dart';
 import 'package:social_media_app/features/settings/presentation/pages/account_settings_page.dart';

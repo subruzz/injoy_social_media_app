@@ -145,8 +145,8 @@ class _PersonChatPageState extends State<PersonChatPage> {
                             },
                             toggleButton: _toggleButton)
                         : state.statusInfo?.isBlockedByMe == true
-                            ? Text('You have blocked this user.')
-                            : Text('You have been blocked by this user.');
+                            ? const Text('You have blocked this user.')
+                            : const Text('You have been blocked by this user.');
                   },
                 ),
               ],
@@ -191,31 +191,6 @@ class _PersonChatPageState extends State<PersonChatPage> {
   }
 
   void onMessageSwipe({required MessageEntity message}) {}
-  _attachWindowItem(
-      {IconData? icon, Color? color, String? title, VoidCallback? onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            width: 55,
-            height: 55,
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40), color: color),
-            child: Icon(icon),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            "$title",
-            style: const TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ],
-      ),
-    );
-  }
 
   void _sendTextMsg() {
     _sendMessage(
@@ -240,7 +215,7 @@ class _PersonChatPageState extends State<PersonChatPage> {
 class DateHeader extends StatelessWidget {
   final String date;
 
-  const DateHeader({Key? key, required this.date}) : super(key: key);
+  const DateHeader({super.key, required this.date});
 
   @override
   Widget build(BuildContext context) {

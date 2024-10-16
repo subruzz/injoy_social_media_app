@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/core/utils/errors/failure.dart';

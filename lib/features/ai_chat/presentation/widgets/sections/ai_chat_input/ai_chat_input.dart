@@ -16,7 +16,6 @@ class AiChatInput extends StatefulWidget {
 
 class _AiChatInputState extends State<AiChatInput> {
   final _aiChatController = TextEditingController();
-  final _focusNode = FocusNode();
   @override
   void dispose() {
     _aiChatController.dispose();

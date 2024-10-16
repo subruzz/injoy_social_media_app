@@ -95,7 +95,6 @@ class UserDataDatasourceImpl implements UserDataDatasource {
   @override
   Future<List<PostModel>> getMyLikedPosts(String myId) async {
     final userCollection = FirebaseFirestore.instance.collection('users');
-    final postCollection = FirebaseFirestore.instance.collection('posts');
 
     try {
       // Reference to the user's likedPosts subcollection

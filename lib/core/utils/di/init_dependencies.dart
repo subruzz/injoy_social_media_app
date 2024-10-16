@@ -128,8 +128,6 @@ void _initProfile() {
         () => UnfollowUserUseCase(userProfileRepository: serviceLocator()))
     ..registerFactory(() => FollowunfollowCubit(
           serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
         ))
     ..registerFactory(() => GetOtherUserPostsCubit(serviceLocator()))
     ..registerFactory(
@@ -363,7 +361,7 @@ void _chat() {
         () => BlockUnblockChatUseCase(chatRepository: serviceLocator()))
     ..registerFactory(() => GetMessageCubit(serviceLocator()))
     ..registerFactory(() => MessageCubit(serviceLocator(), serviceLocator(),
-        serviceLocator(), serviceLocator(), serviceLocator(),serviceLocator()))
+        serviceLocator(), serviceLocator(), serviceLocator(),))
     // ..registerFactory(
     //     () => MessageAttributeBloc(serviceLocator(), serviceLocator()))
     ..registerFactory(() => ChatCubit(serviceLocator(), serviceLocator()));

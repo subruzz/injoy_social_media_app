@@ -19,7 +19,7 @@ class LibraryRepoImpl implements LibraryRepostory {
       final res =
           await _libraryDataSource.getSavedPosts(savedPosts: savedPostsId);
       return right(res);
-    } on MainException catch (e) {
+    } on MainException catch (_) {
       return left(Failure());
     }
   }
@@ -30,7 +30,7 @@ class LibraryRepoImpl implements LibraryRepostory {
     try {
       final res = await _libraryDataSource.getLikedPosts(myId: myId);
       return right(res);
-    } on MainException catch (e) {
+    } on MainException catch (_) {
       return left(Failure());
     }
   }

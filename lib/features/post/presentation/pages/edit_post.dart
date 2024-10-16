@@ -18,7 +18,6 @@ import 'package:social_media_app/features/post/presentation/widgets/edit_post/ed
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/hashtag_section/widget/select_hashtag.dart';
 import 'package:social_media_app/features/post/presentation/widgets/create_post/section/hashtag_section/widget/selected_hashtags.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_data/get_user_posts_bloc/get_user_posts_bloc.dart';
-import '../../../../core/utils/other/debouncer.dart';
 import '../widgets/create_post/section/create_post_input_section/widgets/desc_text_field.dart';
 
 class EditPostPage extends StatefulWidget {
@@ -150,7 +149,7 @@ class _EditPostPageState extends State<EditPostPage> {
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: DescriptionTextfield(
-                  l10n: l10n!,
+                  l10n: l10n,
                   onChanged: (value) {},
                   descriptionController: _descriptionController),
             ),

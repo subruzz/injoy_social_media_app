@@ -16,6 +16,7 @@ import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/lik
 import 'package:social_media_app/features/status/presentation/bloc/status_bloc/status_bloc.dart';
 import 'package:social_media_app/features/profile/presentation/bloc/user_profile/user_profile_bloc/profile_bloc.dart';
 
+// ignore: depend_on_referenced_packages
 import 'package:provider/single_child_widget.dart';
 
 import 'cubit/connectivity_cubit.dart';

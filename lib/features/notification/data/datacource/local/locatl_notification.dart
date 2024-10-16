@@ -2,11 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:social_media_app/features/notification/data/datacource/remote/device_notification.dart';
-import '../../../../../main.dart';
-import '../../../../settings/presentation/pages/settings_actvity_page.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseBackgroundNotification(RemoteMessage message) async {
@@ -50,10 +47,7 @@ class LocatlNotification {
     }
   }
 
-  void _handleMessage(RemoteMessage message) async {
-    Navigator.of(navigatorKey.currentState!.context).push(MaterialPageRoute(
-        builder: (context) => SettingsAndActivityPage())); // a
-  }
+
 
   static Future<void> showNotification(RemoteMessage message) async {
     AndroidNotificationChannel channel = const AndroidNotificationChannel(

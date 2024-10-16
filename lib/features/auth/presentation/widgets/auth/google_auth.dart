@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
-import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/common_text.dart';
 import 'package:social_media_app/core/const/app_msg/app_ui_string_const.dart';
 import 'package:social_media_app/core/widgets/messenger/messenger.dart';

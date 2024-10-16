@@ -159,11 +159,11 @@ class _LanguageSelectionDialogState extends State<LanguageSelectionDialog> {
           onClick: () {
             Locale newLocale;
             if (_selectedLanguage == 'Malayalam') {
-              newLocale = Locale('ml');
+              newLocale =const  Locale('ml');
             } else if (_selectedLanguage == 'Hindi') {
-              newLocale = Locale('hi');
+              newLocale = const Locale('hi');
             } else {
-              newLocale = Locale('en');
+              newLocale =const  Locale('en');
             }
 
             context.read<AppLanguageCubit>().changeLanguage(newLocale);

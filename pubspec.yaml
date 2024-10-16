@@ -37,7 +37,6 @@ dependencies:
   get_it: ^7.7.0 # Dependency injection for Flutter
   giphy_picker: ^3.0.2 # Pick GIFs from Giphy
   google_sign_in: ^6.2.1 # Google sign-in authentication
-  googleapis: ^13.2.0 # Access Google APIs
   googleapis_auth: ^1.6.0 # Authentication for Google APIs
   http: ^1.2.2 # Simplified HTTP client for Dart
   image_cropper: ^7.1.0 # Crop images before use

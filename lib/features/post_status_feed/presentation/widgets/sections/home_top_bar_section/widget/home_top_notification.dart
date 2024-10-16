@@ -9,7 +9,6 @@ import '../../../../../../../core/const/assets/app_assets.dart';
 import '../../../../../../../core/theme/color/app_colors.dart';
 import '../../../../../../../core/utils/di/di.dart';
 import '../../../../../../../core/widgets/common/app_svg.dart';
-import '../../../../../../../core/widgets/dialog/app_dialogs.dart';
 import '../../../../../../notification/presentation/pages/cubit/notification_cubit/notification_cubit.dart';
 
 class HomeTopNotification extends StatefulWidget {

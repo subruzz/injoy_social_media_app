@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +7,12 @@ import 'package:social_media_app/core/const/app_config/app_border_radius.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/const/app_config/app_sizedbox.dart';
 import 'package:social_media_app/core/const/enums/message_type.dart';
-import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/cubits/messages_cubits/message/message_cubit.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_side_bar.dart';
-import 'package:social_media_app/core/services/assets/asset_model.dart';
 
 import '../../../../../../../../core/const/chat_const/chat_const.dart';
 
@@ -83,7 +80,6 @@ class ReplyPreviewWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Builder(builder: (context) {
-                      log('check if ${repliedmessageCreator == context.read<AppUserBloc>().appUser.id}');
                       return HeaderRow(
                         userName: !isReplyChat
                             ? userName

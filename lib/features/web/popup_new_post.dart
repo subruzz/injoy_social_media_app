@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/const/app_config/web_design_const.dart';
 import 'package:social_media_app/core/services/assets/asset_services.dart';
-import 'package:social_media_app/core/utils/responsive/constants.dart';
-import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 import 'package:social_media_app/core/widgets/common/app_bar_common_icon.dart';
 import 'package:social_media_app/core/widgets/common/empty_display.dart';
 import 'package:social_media_app/core/widgets/loading/circular_loading.dart';
@@ -108,7 +106,7 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                                             description: _captionController.text.trim(),
                                             userProfileUrl: me.profilePic,
                                             isReel: false,
-                                            hashtags: [],
+                                            hashtags: const [],
                                             latitude: null,
                                             longitude: null,
                                             location: null,
@@ -154,7 +152,7 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                     ],
                   ),
                 ),
-                Divider(color: const Color.fromARGB(255, 34, 1, 1)),
+              const  Divider(color:  Color.fromARGB(255, 34, 1, 1)),
                 Expanded(
                   child: isSmallScreen
                       ? Column(
@@ -171,16 +169,14 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                                             List<Uint8List>? selectedImages = await AssetServices.pickMultipleImagesAsBytes();
                                             if (selectedImages == null) return;
                                             _selectedPostImages.value = selectedImages;
-                                            _jumpToFirstPage(); // Ensure this is called after the PageView is built
-                                          } catch (e) {
-                                            // Handle errors
-                                            print('Error selecting images: $e');
+                                            _jumpToFirstPage(); 
+                                          } catch (_) {
                                           }
                                         },
-                                        child: ColoredBox(
+                                        child: const ColoredBox(
                                           color: Colors.blue,
                                           child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
+                                            padding:  EdgeInsets.all(10.0),
                                             child: Text(
                                               'Select Image',
                                               style: TextStyle(color: Colors.white),
@@ -206,10 +202,10 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                                             top: 0,
                                             bottom: 0,
                                             child: GestureDetector(
-                                              child: Icon(Icons.arrow_back),
+                                              child:const Icon(Icons.arrow_back),
                                               onTap: () {
                                                 _pageController.previousPage(
-                                                  duration: Duration(milliseconds: 300),
+                                                  duration:const Duration(milliseconds: 300),
                                                   curve: Curves.easeInOut,
                                                 );
                                               },
@@ -221,10 +217,10 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                                             top: 0,
                                             bottom: 0,
                                             child: GestureDetector(
-                                              child: Icon(Icons.arrow_forward),
+                                              child:const Icon(Icons.arrow_forward),
                                               onTap: () {
                                                 _pageController.nextPage(
-                                                  duration: Duration(milliseconds: 300),
+                                                  duration:const Duration(milliseconds: 300),
                                                   curve: Curves.easeInOut,
                                                 );
                                               },
@@ -240,12 +236,12 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                               padding: const EdgeInsets.symmetric(horizontal: 10.0),
                               child: TextField(
                                 controller: _captionController,
-                                style: TextStyle(
+                                style:const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.normal,
                                 ),
-                                decoration: InputDecoration(
+                                decoration:const InputDecoration(
                                   hintText: 'Add caption',
                                   hintStyle: TextStyle(
                                     color: Colors.grey,
@@ -272,16 +268,14 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                                             List<Uint8List>? selectedImages = await AssetServices.pickMultipleImagesAsBytes();
                                             if (selectedImages == null) return;
                                             _selectedPostImages.value = selectedImages;
-                                            _jumpToFirstPage(); // Ensure this is called after the PageView is built
-                                          } catch (e) {
-                                            // Handle errors
-                                            print('Error selecting images: $e');
+                                            _jumpToFirstPage(); 
+                                          } catch (_) {
                                           }
                                         },
-                                        child: ColoredBox(
+                                        child:const ColoredBox(
                                           color: Colors.blue,
                                           child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
+                                            padding:  EdgeInsets.all(10.0),
                                             child: Text(
                                               'Select Image',
                                               style: TextStyle(color: Colors.white),
@@ -307,10 +301,10 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                                             top: 0,
                                             bottom: 0,
                                             child: GestureDetector(
-                                              child: Icon(Icons.arrow_back),
+                                              child:const Icon(Icons.arrow_back),
                                               onTap: () {
                                                 _pageController.previousPage(
-                                                  duration: Duration(milliseconds: 300),
+                                                  duration:const Duration(milliseconds: 300),
                                                   curve: Curves.easeInOut,
                                                 );
                                               },
@@ -322,10 +316,10 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                                             top: 0,
                                             bottom: 0,
                                             child: GestureDetector(
-                                              child: Icon(Icons.arrow_forward),
+                                              child: const Icon(Icons.arrow_forward),
                                               onTap: () {
                                                 _pageController.nextPage(
-                                                  duration: Duration(milliseconds: 300),
+                                                  duration:const Duration(milliseconds: 300),
                                                   curve: Curves.easeInOut,
                                                 );
                                               },
@@ -337,7 +331,7 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                                 },
                               ),
                             ),
-                            VerticalDivider(),
+                          const   VerticalDivider(),
                             Expanded(
                               flex: 2,
                               child: Container(
@@ -347,12 +341,12 @@ class _PopupNewPostWebState extends State<PopupNewPostWeb> {
                                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                   child: TextField(
                                     controller: _captionController,
-                                    style: TextStyle(
+                                    style:const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.normal,
                                     ),
-                                    decoration: InputDecoration(
+                                    decoration:const InputDecoration(
                                       hintText: 'Add caption',
                                       hintStyle: TextStyle(
                                         color: Colors.grey,

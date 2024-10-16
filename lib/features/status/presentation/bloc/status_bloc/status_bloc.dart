@@ -1,13 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:photo_manager/photo_manager.dart';
-import 'package:social_media_app/core/common/entities/status_entity.dart';
 import 'package:social_media_app/core/const/app_msg/app_error_msg.dart';
 import 'package:social_media_app/core/utils/other/id_generator.dart';
 import 'package:social_media_app/core/common/entities/single_status_entity.dart';

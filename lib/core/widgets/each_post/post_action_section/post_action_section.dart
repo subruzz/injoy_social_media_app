@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/common/entities/post.dart';
@@ -13,7 +11,6 @@ import 'package:social_media_app/core/widgets/common/app_svg.dart';
 import 'package:social_media_app/features/post/presentation/bloc/posts_blocs/save_post/save_post_cubit.dart';
 import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_comment_button.dart';
 import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_like_button.dart';
-import 'package:social_media_app/core/widgets/each_post/post_action_section/widgets/post_send_button.dart';
 
 class SocialActions extends StatelessWidget {
   const SocialActions({

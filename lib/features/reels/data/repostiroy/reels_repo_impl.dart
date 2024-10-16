@@ -19,7 +19,7 @@ class ReelsRepoImpl implements ReelsRepository {
       final res =
           await _reelsDataSource.getRandomReels(excludedId, myId, lastDocument);
       return right(res);
-    } on MainException catch (e) {
+    } on MainException catch (_) {
       return left(Failure());
     }
   }

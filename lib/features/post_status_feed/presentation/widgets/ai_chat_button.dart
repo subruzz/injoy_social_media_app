@@ -21,15 +21,11 @@ class AiChatButton extends StatefulWidget {
 
 class _AiChatButtonState extends State<AiChatButton>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 6),
-    );
+ 
   }
 
   @override

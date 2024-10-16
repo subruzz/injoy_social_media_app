@@ -1,5 +1,4 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:fpdart/src/either.dart';
 import 'package:social_media_app/core/utils/errors/firebase_auth_errors.dart';
 import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/core/utils/errors/failure.dart';
@@ -112,7 +111,6 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, AppUser>> verifyPassword(
       String code, String newPassword) async {
-    // TODO: implement verifyPassword
     throw UnimplementedError();
   }
 

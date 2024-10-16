@@ -1,11 +1,8 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_media_app/core/const/app_config/app_padding.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
-import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/widgets/animation/animated_border.dart';
 import 'package:social_media_app/core/widgets/animation/border_widget.dart';
 import 'package:social_media_app/core/widgets/common/app_padding.dart';
 import 'package:social_media_app/features/post_status_feed/presentation/widgets/sections/home_status_section/widgets/create_status_button.dart';
@@ -53,7 +50,6 @@ class MyStatusViewState extends State<MyStatusView> {
                     child: GestureDetector(
                         onTap: () {
                           if (state is GetMyStatusSuccess) {
-                            log('state isthis $state and length of the items is ${state.myStatus.length}');
                           }
                           if (state is GetMyStatusSuccess &&
                               state.myStatus.isNotEmpty) {

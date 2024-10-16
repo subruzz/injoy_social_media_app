@@ -51,7 +51,7 @@ class _CropImagePageState extends State<CropImagePage> {
                 }
 
                 final croppedImage = await cropImage(widget
-                    .selectedImages.selectedFiles[currentIndex].selectedFile!);
+                    .selectedImages.selectedFiles[currentIndex].selectedFile);
                 // Update the selected image list
                 setState(() {
                   widget.selectedImages.selectedFiles[currentIndex]

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:social_media_app/core/common/entities/user_entity.dart';
-import 'package:social_media_app/core/const/fireabase_const/firebase_collection.dart';
-import 'package:social_media_app/core/const/enums/location_enum.dart';
 import 'package:social_media_app/core/utils/errors/exception.dart';
 import 'package:social_media_app/features/premium_subscription/domain/entities/payment_intent_basic.dart';
 import 'package:http/http.dart' as http;
@@ -33,7 +30,6 @@ class PremiumSubscriptionDatasourceImpl
   @override
   Future<PaymentIntentBasic> createPaymentIntent(
       PremiumSubType premType) async {
-    log(premType.toString());
     String amount = getAmount(premType);
 
     try {
@@ -51,7 +47,6 @@ class PremiumSubscriptionDatasourceImpl
           body: body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var json = jsonDecode(response.body);
-        log(jsonEncode(json));
         if (json['id'] == null || json['client_secret'] == null) {
           throw const MainException();
         }
@@ -59,11 +54,9 @@ class PremiumSubscriptionDatasourceImpl
       } else {
         throw const MainException();
       }
-    } on StripeConfigException catch (e) {
-      log(e.toString());
+    } on StripeConfigException catch (_) {
       throw const MainException();
     } catch (e) {
-      log(e.toString());
       throw const MainException();
     }
   }
@@ -109,7 +102,6 @@ class PremiumSubscriptionDatasourceImpl
       return await updateUserPremiumStatus(
           hasPremium: true, userId: userId, premType: premType);
     } catch (e) {
-      log('stripe error ${e.toString()}');
       throw const MainException(errorMsg: 'Payment failed,Please try again!');
     }
   }

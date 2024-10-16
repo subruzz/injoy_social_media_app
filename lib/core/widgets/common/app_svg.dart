@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/utils/responsive/constants.dart';
-import 'package:social_media_app/core/utils/responsive/responsive_helper.dart';
 
 class CustomSvgIcon extends StatelessWidget {
   final String assetPath;

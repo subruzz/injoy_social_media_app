@@ -30,7 +30,7 @@ class PostInputSection extends StatelessWidget {
             borderRadius: AppBorderRadius.small,
             child: Image.file(
               height: 50,
-              assetEntity.selectedFile!,
+              assetEntity.selectedFile,
             ),
           )
       ],

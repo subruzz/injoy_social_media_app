@@ -1,6 +1,7 @@
 import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 
+// ignore: must_be_immutable
 class PostModel extends PostEntity {
   PostModel(
       {required super.postId,
@@ -50,6 +51,7 @@ class PostModel extends PostEntity {
   }
 
   // 2. To JSON (Firestore)
+  @override
   Map<String, dynamic> toJson() {
     return {
       'isThatvdo': isThatvdo,

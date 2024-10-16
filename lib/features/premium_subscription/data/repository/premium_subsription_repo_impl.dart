@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:social_media_app/core/utils/errors/exception.dart';
@@ -8,7 +7,6 @@ import 'package:social_media_app/features/premium_subscription/domain/entities/p
 import 'package:social_media_app/features/premium_subscription/domain/repositories/premium_subscription_repository.dart';
 
 import '../../../../core/common/entities/user_entity.dart';
-import '../../../../core/const/enums/location_enum.dart';
 import '../../../../core/const/enums/premium_type.dart';
 
 class PremiumSubsriptionRepoImpl implements PremiumSubscriptionRepository {
@@ -28,7 +26,6 @@ class PremiumSubsriptionRepoImpl implements PremiumSubscriptionRepository {
     } on MainException catch (e) {
       return left(Failure(e.errorMsg));
     } catch (e) {
-      log(e.toString());
 
       return left(Failure(e.toString()));
     }

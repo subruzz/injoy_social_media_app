@@ -1,9 +1,7 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:social_media_app/core/utils/shared_preference/chat_wallapaper.dart';
 
 part 'chat_wallapaper_state.dart';
@@ -35,7 +33,6 @@ class ChatWallapaperCubit extends Cubit<ChatWallapaperState> {
 
       emit(ChatWallapaperSuccess(wallapaperPath: chatImage));
     } catch (e) {
-      log(e.toString());
       emit(ChatWallapaperError());
     }
   }

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/domain/entity/uservisit.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/domain/usecases/add_visited_user.dart';
 import 'package:social_media_app/features/who_visited_premium_feature/domain/usecases/get_all_visited_user.dart';

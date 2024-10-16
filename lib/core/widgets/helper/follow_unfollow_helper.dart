@@ -1,13 +1,10 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 import 'package:social_media_app/core/utils/extensions/localization.dart';
 import 'package:social_media_app/core/common/shared_providers/blocs/app_user/app_user_bloc.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
-import 'package:social_media_app/core/utils/responsive/constants.dart';
 import 'package:social_media_app/core/widgets/common/common_text.dart';
 
 import '../../../features/profile/presentation/bloc/other_user/follow_unfollow/followunfollow_cubit.dart';
@@ -54,7 +51,6 @@ class FollowUnfollowHelper extends StatelessWidget {
         onClick: () {
           final me = context.read<AppUserBloc>().appUser;
           final amIFollowing = me.following.contains(user.id);
-          log(amIFollowing.toString());
           if (amIFollowing) {
             me.following.remove(user.id);
           } else {

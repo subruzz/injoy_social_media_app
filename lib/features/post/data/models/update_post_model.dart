@@ -7,6 +7,7 @@ class UpdatePostModel extends UpdatePostEntity {
     required super.oldPostHashtags,
   });
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'isEdited': true,

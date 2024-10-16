@@ -6,11 +6,11 @@ class BottomSheetWrapper extends StatelessWidget {
   final bool enableDrag;
 
   const BottomSheetWrapper({
-    Key? key,
+    super.key,
     required this.child,
     this.isScrollControlled = true,
     this.enableDrag = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,8 @@ class BottomSheetWrapper extends StatelessWidget {
         return SingleChildScrollView(
           controller: scrollController,
           child: Container(
-            padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
+            padding:const  EdgeInsets.all(16.0),
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
             ),

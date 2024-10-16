@@ -7,10 +7,11 @@ class MediaGalleryView extends StatefulWidget {
   final List<MessageEntity> messages;
   final int initialIndex;
 
-  MediaGalleryView({required this.messages, required this.initialIndex});
+  const MediaGalleryView(
+      {super.key, required this.messages, required this.initialIndex});
 
   @override
-  _MediaGalleryViewState createState() => _MediaGalleryViewState();
+  State<MediaGalleryView> createState() => _MediaGalleryViewState();
 }
 
 class _MediaGalleryViewState extends State<MediaGalleryView> {
@@ -38,7 +39,7 @@ class _MediaGalleryViewState extends State<MediaGalleryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Media Gallery"),
+        title: const Text("Media Gallery"),
       ),
       body: PageView.builder(
         controller: _pageController,
@@ -60,7 +61,7 @@ class _MediaGalleryViewState extends State<MediaGalleryView> {
             // autoPlay: widget.initialIndex == _mediaMessages.indexOf(message), // Autoplay for the initial video
             );
       default:
-        return SizedBox.shrink(); // Placeholder for other message types
+        return const  SizedBox.shrink(); // Placeholder for other message types
     }
   }
 }

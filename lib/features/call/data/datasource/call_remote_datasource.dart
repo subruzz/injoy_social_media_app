@@ -100,7 +100,7 @@ class CallRemoteDatasourceImpl implements CallRemoteDatasource {
           .map((querySnapshot) => querySnapshot.docs
               .map((e) => CallModel.fromSnapshot(e))
               .toList());
-    } on SocketException catch (e) {
+    } on SocketException catch (_) {
       throw const MainException();
     } catch (e) {
       throw const MainException();
@@ -145,7 +145,6 @@ class CallRemoteDatasourceImpl implements CallRemoteDatasource {
 
   @override
   Future<void> updateCallHistoryStatus(CallEntity call) async {
-    // TODO: implement updateCallHistoryStatus
     throw UnimplementedError();
   }
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -31,18 +30,14 @@ class DeviceNotification {
       sound: true,
     );
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      log('permission available');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      log('only provisional');
     }
   }
 
   static void deviceNotificationInit() {
     //foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      String payload = jsonEncode(message.data);
-      log('  palyload is ${message.data}');
 
       if (message.notification != null) {
         LocatlNotification.showNotification(
@@ -56,7 +51,6 @@ class DeviceNotification {
 
   static void tokenRefresh(String myId) {
     _firebaseMessaging.onTokenRefresh.listen((value) async {
-      log('device token changed');
       FirebaseFirestore.instance
           .collection('users')
           .doc(myId)
@@ -69,7 +63,6 @@ class DeviceNotification {
         await FirebaseMessaging.instance.getInitialMessage();
 
     if (message != null) {
-      log('App opened from terminated state by a notification');
       Future.delayed(Duration.zero, () {
         handleNotificationNavigation(message.data);
       });
@@ -124,7 +117,6 @@ class DeviceNotification {
         ),
       );
     } else {
-      log('Unknown notification type');
     }
   }
 
@@ -160,22 +152,20 @@ class DeviceNotification {
         String? commentId,
         bool isThatVdo
       })? post}) async {
-    String notificationRoute;
-    String routeParameterId;
-    switch (notification.notificationType) {
-      case NotificationType.chat:
-        notificationRoute = "chat";
-        routeParameterId = notification.uniqueId;
-        break;
-      case NotificationType.profile:
-        notificationRoute = "profile";
-        routeParameterId = notification.uniqueId;
-        break;
-      case NotificationType.post:
-        notificationRoute = "post";
-        routeParameterId = notification.uniqueId;
-        break;
-    }
+    // switch (notification.notificationType) {
+    //   case NotificationType.chat:
+    //     notificationRoute = "chat";
+    //     routeParameterId = notification.uniqueId;
+    //     break;
+    //   case NotificationType.profile:
+    //     notificationRoute = "profile";
+    //     routeParameterId = notification.uniqueId;
+    //     break;
+    //   case NotificationType.post:
+    //     notificationRoute = "post";
+    //     routeParameterId = notification.uniqueId;
+    //     break;
+    // }
 
     PushNotification detail = PushNotification(
         chatNotification: chatNotification,
@@ -204,12 +194,9 @@ class DeviceNotification {
         body: jsonEncode(notification.toMap()),
       );
       if (response.statusCode == 200) {
-        log('success ');
       } else {
-        log('error while sening notif${response.statusCode}');
       }
-    } catch (e) {
-      log('error while sening notif${e.toString()}');
+    } catch (_) {
     }
   }
 }

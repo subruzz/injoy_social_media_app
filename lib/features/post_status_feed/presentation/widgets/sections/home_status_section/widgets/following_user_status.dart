@@ -18,7 +18,7 @@ class FollowingUserStatus extends StatelessWidget {
     return BlocBuilder<GetAllStatusBloc, GetAllStatusState>(
       builder: (context, state) {
         if (state is GetAllStatusFailure) {
-          return Text('error');
+          return const  Text('error');
         }
         if (state is GetAllStatusSuccess) {
           log(state.allStatus.toString());

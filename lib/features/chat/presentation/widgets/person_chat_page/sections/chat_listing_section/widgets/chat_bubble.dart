@@ -11,9 +11,6 @@ import 'package:social_media_app/core/widgets/common/view_media.dart';
 import 'package:social_media_app/features/chat/domain/entities/message_entity.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_audio_widget.dart';
 import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_photo_widget.dart';
-import 'package:social_media_app/features/chat/presentation/widgets/person_chat_page/sections/chat_listing_section/widgets/chat_video_widget.dart';
-import 'package:social_media_app/core/services/assets/asset_model.dart';
-import 'package:social_media_app/features/reels/presentation/pages/video_page.dart';
 
 import '../../../../../../../../core/const/chat_const/chat_const.dart';
 import '../../../../../../../../core/widgets/common/video_playing_widget.dart';

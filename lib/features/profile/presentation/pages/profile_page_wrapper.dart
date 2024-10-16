@@ -159,7 +159,7 @@ class CustomBottomSheet {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SettingsAndActivityPage(),
+                        builder: (context) => const SettingsAndActivityPage(),
                       ));
                 },
               ),

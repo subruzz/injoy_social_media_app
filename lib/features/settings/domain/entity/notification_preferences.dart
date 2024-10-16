@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class NotificationPreferences extends Equatable {
   bool isNotificationPaused;
   bool isMessageNotificationPaused;

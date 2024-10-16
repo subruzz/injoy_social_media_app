@@ -70,7 +70,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     super.initState();
-    _trimVideo(widget.selectedImages.first.selectedFile!.path);
+    _trimVideo(widget.selectedImages.first.selectedFile.path);
   }
 
   @override

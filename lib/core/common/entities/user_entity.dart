@@ -4,6 +4,7 @@ import 'package:social_media_app/features/settings/domain/entity/notification_pr
 
 import '../../const/enums/premium_type.dart';
 
+// ignore: must_be_immutable
 class AppUser extends Equatable {
   final String id;
   final String email;

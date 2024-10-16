@@ -1,6 +1,7 @@
 import 'package:social_media_app/core/common/entities/user_entity.dart';
 import 'package:social_media_app/features/settings/domain/entity/notification_preferences.dart';
 
+// ignore: must_be_immutable
 class AppUserModel extends AppUser {
   AppUserModel({
     required super.id,

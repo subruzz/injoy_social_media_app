@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:social_media_app/core/common/entities/post.dart';
 import 'package:social_media_app/core/common/models/partial_user_model.dart';
 
 class PushNotification {

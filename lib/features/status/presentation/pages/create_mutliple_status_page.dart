@@ -82,7 +82,7 @@ class _CreateMutlipleStatusPageState extends State<CreateMutlipleStatusPage> {
           }
 
           final croppedImage =
-              await cropImage(widget.assets[_pageIndex].selectedFile!);
+              await cropImage(widget.assets[_pageIndex].selectedFile);
           //! use valuenotifier instead of setstate
           setState(() {
             widget.assets[_pageIndex].selectedFile = croppedImage;

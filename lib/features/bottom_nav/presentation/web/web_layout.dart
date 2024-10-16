@@ -182,7 +182,7 @@ class _WebLayoutState extends State<WebLayout> {
                                 showText: !showTheExtraSide,
                                 changePage: () {
                                   Navigator.of(context).push(HeroDialogRoute(
-                                      builder: (context) => PopupNewPostWeb()));
+                                      builder: (context) => const PopupNewPostWeb()));
                                 },
                                 text: 'Create',
                                 asset: AppAssetsConst.add),

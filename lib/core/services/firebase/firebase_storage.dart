@@ -71,7 +71,7 @@ class FirebaseStorageService {
           final thumbnailCloud = await uploadSingleAsset(asset: File(thumbnailLocal!), reference: '$reference/thumbnail');
           assetItem = assetItem.copyWith(extra: thumbnailCloud);
         }
-        final vdo = await uploadSingleAsset(isPhoto: false, asset: assets.first.selectedFile!, reference: reference);
+        final vdo = await uploadSingleAsset(isPhoto: false, asset: assets.first.selectedFile, reference: reference);
         assetItem = assetItem.copyWith(url: vdo);
       }
 
@@ -120,7 +120,6 @@ class FirebaseStorageService {
       });
       return downLURl;
     } catch (e) {
-      print('value of assets are ${e.toString()}');
       throw Exception('Error uploading asset: ${e.toString()}');
     }
   }

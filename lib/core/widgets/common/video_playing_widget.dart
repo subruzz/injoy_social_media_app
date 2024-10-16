@@ -9,7 +9,6 @@ import 'package:social_media_app/core/const/assets/app_assets.dart';
 import 'package:social_media_app/core/utils/extensions/video_duration.dart';
 import 'package:social_media_app/core/theme/color/app_colors.dart';
 import 'package:social_media_app/core/theme/widget_themes/text_theme.dart';
-import 'package:social_media_app/core/widgets/common/app_back_button.dart';
 import 'package:social_media_app/core/widgets/common/app_svg.dart';
 import 'package:social_media_app/core/widgets/common/common_text.dart';
 import 'package:social_media_app/core/widgets/common/add_at_symbol.dart';

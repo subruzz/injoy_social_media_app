@@ -28,8 +28,6 @@ class _AiChatPageState extends State<AiChatPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _scrollBottom(first: true));
     return Scaffold(
       endDrawer: AiChatDrawer(
         l10n: l10n!,
@@ -60,14 +58,14 @@ class _AiChatPageState extends State<AiChatPage> {
     );
   }
 
-  void _scrollBottom({bool first = false}) {
+   void _scrollBottom({bool first = false}) {
     if (_scrollC.hasClients) {
       final bottomOffset = _scrollC.position.maxScrollExtent +
           MediaQuery.of(context).viewInsets.bottom;
       _scrollC.animateTo(
         bottomOffset,
         duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInCirc,
+        curve: Curves.fastOutSlowIn,
       );
     }
   }

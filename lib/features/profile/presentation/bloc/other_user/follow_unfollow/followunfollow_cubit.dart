@@ -175,8 +175,6 @@ import 'package:social_media_app/core/utils/di/di.dart';
 import 'package:social_media_app/core/utils/other/id_generator.dart';
 import 'package:social_media_app/features/notification/domain/entities/customnotifcation.dart';
 import 'package:equatable/equatable.dart';
-import 'package:social_media_app/features/profile/domain/usecases/other_user/follow_user.dart';
-import 'package:social_media_app/features/profile/domain/usecases/other_user/unfollow_user.dart';
 import 'package:social_media_app/features/settings/domain/entity/ui_entity/enums.dart';
 
 import '../../../../../../core/common/functions/firebase_helper.dart';
@@ -184,16 +182,13 @@ import '../../../../../../core/common/functions/firebase_helper.dart';
 part 'followunfollow_state.dart';
 
 class FollowunfollowCubit extends Cubit<FollowunfollowState> {
-  final FollowUserUseCase _followUserUseCase;
-  final UnfollowUserUseCase _unfollowUserUseCase;
   final AppUserBloc appUserBloc;
 
   // Map to store debouncers for each user
   final Map<String, Debouncer> _debouncers = {};
 
   FollowunfollowCubit(
-    this._followUserUseCase,
-    this._unfollowUserUseCase,
+   
     this.appUserBloc,
   ) : super(FollowunfollowInitial());
 

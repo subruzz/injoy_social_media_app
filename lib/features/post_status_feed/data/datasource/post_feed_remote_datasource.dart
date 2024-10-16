@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -97,7 +96,6 @@ class PostFeedRemoteDatasourceImpl implements PostFeedRemoteDatasource {
 
   @override
   Future<List<PostModel>> fetchSuggestedPosts(AppUser user) async {
-    final postCollection = _firestore.collection('posts');
 
     return [];
     //   List<Future<QuerySnapshot>> queryFutures = [];

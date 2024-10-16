@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -44,7 +43,6 @@ class FollowingPostFeedBloc
         limit = limit + 3;
 
         if (success.posts.isEmpty) {
-          log('post is empty');
           return add(GetAllUsers(id: event.uId, following: event.following));
         } else {
           return emit(FollowingPostFeedSuccess(
@@ -56,11 +54,7 @@ class FollowingPostFeedBloc
       limit = limit + 3;
 
       final currentState = state;
-      log('current state is $currentState');
       if (currentState is FollowingPostFeedSuccess && event.isLoadMore) {
-        log('in the bloc currently we have ${currentState.followingPosts.length} and new is ${success.posts.length}');
-        final allPosts = currentState.followingPosts + success.posts;
-        log('all posts is ${success.posts.length}');
 
         emit(FollowingPostFeedSuccess(
             followingPosts: success.posts,
